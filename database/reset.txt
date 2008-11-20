@@ -1,0 +1,20 @@
+// title:  reset.txt
+// author: Ryan Lin
+// date:   Nov 6, 2008
+// about:  Reset a database back to a clean slate.
+// ============================================================================
+
+Reset a website:
+
+	DELETE FROM keywords;
+	DELETE FROM links;
+	DELETE FROM posts;
+	DELETE FROM threads;
+	DELETE FROM users;
+	UPDATE analysis SET value = 0.0;
+
+Reset a community:
+
+	DELETE FROM communities;
+	DELETE FROM websites;
+	DELETE FROM users;
