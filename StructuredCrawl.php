@@ -29,8 +29,8 @@ class StructuredCrawl {
   private $callbacks;    // Contains a mapping of levels to callback functions
   private $num_levels;    // The number of levels in this crawl
   private $pages_crawled; // The current number of pages crawled in this
+  private $max_pages_to_crawl; // The current number of pages crawled in this
   
-  const MAX_PAGES_TO_CRAWL = 50;
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // PUBLIC  FUNCTIONS ..........................................................
@@ -42,7 +42,7 @@ class StructuredCrawl {
   //    ret:   void
   //    about: Constructor. Initializes the object
   // ------------------------------------------------------------------------	
-  public function StructuredCrawl($levels) {
+  public function StructuredCrawl($levels, $max_pages_to_crawl) {
     $this->url_map = array();
     $this->url_stacks = array();
     $this->url_types = array();
@@ -56,6 +56,7 @@ class StructuredCrawl {
 
     $this->num_levels = $levels;
     $this->pages_crawled = 0;
+    $this->max_pages_to_crawl = $max_pages_to_crawl;
   }
 
 

@@ -64,17 +64,25 @@ class ForumThreadProcessor implements Processor {
 	// check for duplicate
 	$q = 'SELECT id
 			      FROM threads
-			      WHERE title = "' . $threadTitle[1][$i] . '"';
+			      WHERE url = "' . $threadUrl[1][$i] . '"';
 	
 	$q = $this->database->query($q);
 	
 	// only insert if it's new
 	if(mysql_num_rows($q) == 0)	
 	  {		
-	    $q = 'INSERT INTO threads (posts, views, title)
+	    /* $q = 'INSERT INTO threads (posts, views, title)
 				      VALUES("' . $numPosts[1][$i]    . '",
 				             "' . $numViews[1][$i]    . '", 
 				             "' . $threadTitle[1][$i] . '")';
+	    */
+	    $q = 'INSERT INTO threads (posts, views, title, url)
+				      VALUES("' . $numPosts[1][$i]    . '",
+				             "' . 0    . '", 
+				             "",
+                                             "' . $threadUrl[1][$i]   . '")';
+				            
+				           
 	    
 	    $this->database->query($q);
 	    

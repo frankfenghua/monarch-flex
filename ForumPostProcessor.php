@@ -26,7 +26,7 @@ class ForumPostProcessor implements Processor {
 	private $allowedWords; // array of keywords which we are scraping for 
 	private $badWords;     // array of negative words (linguistic analysis)
 	private $goodWords;    // array of positive words (linguistic analysis)
-  private $start_time;  // Time this processor was created
+	private $start_time;  // Time this processor was created
 
   public function ForumPostProcessor($domain) {
     $this->domain       = $domain;
@@ -42,8 +42,17 @@ class ForumPostProcessor implements Processor {
 
   public function process($html) {
     // $this->dummy($html);
-    $dummyThreadID = 1;
-    $this->scrapePosts($dummyThreadID, $html);
+
+    // Find the thread ID for this page using the link
+    $threadUrl = $this->plugin['parentUrl'];
+    preg_match_all($threadUrl, $html, $matches);
+    print_r($matches);
+	$q = 'SELECT id
+			      FROM threads
+			      WHERE url = "' . $matches[1][0] . '"';
+	$q = $this->database->fetch($q);
+	$threadID = $q[0] ? $q[0] : -1;
+	$this->scrapePosts($threadID, $html);
   }
 
 	// ========================================================================
@@ -73,7 +82,7 @@ class ForumPostProcessor implements Processor {
 		
 		if($this->plugin['replyMessage'] != NULL)
 			preg_match_all($this->plugin['replyMessage'], $html, $replyMessages);
-		
+
 		// insert the starting post
 		$this->insertPost($firstPostAuthor[1][0], $firstPostTime[1][0], $firstPostMessage[1][0], $threadId);
 		
@@ -93,23 +102,22 @@ class ForumPostProcessor implements Processor {
 	//             session and the last session.
 	// ------------------------------------------------------------------------	
   public function insertKeywords($html) {
-    echo "Collecting Keywords";
-    // remove punctuation and HTML
+    // echo "Collecting Keywords";
+    // remove whitespace and HTML
     $body = preg_replace('/[\s]+/', ' ', $html);
+    $body = preg_replace('/[!-~]+/', ' ', $html);
     $body = preg_replace('/<[^>]+>/', ' ', $html);
     
     preg_match_all('/[a-zA-Z]+/',$body,$body);
     
-    foreach($body[0] as $word)
+    for($position = 0; $position < sizeof($body[0]); $position++)
       {	
-	// don't care about capitalization
-	$word = strtolower($word);
-	
+	$word = strtolower($body[0][$position]);
 	// only record keywords we're specifically scraping for
-	if(array_key_exists($word, $this->allowedWords))
+	if(in_array($word, $this->allowedWords))
 	  {
-	    echo "Saw word: ".$word;
-	    $rating = $this->rating($word, $body_words[0]);
+	    // echo "Saw word: ".$word;
+	    $rating = $this->rating($position, $body[0]);
 	    
 	    $q = 'SELECT id
 				      FROM keywords
@@ -338,7 +346,7 @@ class ForumPostProcessor implements Processor {
 	{
 		$q = 'SELECT startPage, linkStructure, nextPageOfThreads, nextPageOfPosts, threadUrl, 
 		      threadNumPosts, threadNumViews, threadTitle, firstPostAuthor, firstPostTime,
-		      firstPostMessage, replyAuthor, replyTime, replyMessage 
+		      firstPostMessage, replyAuthor, replyTime, replyMessage, parentUrl
 		      FROM regexes
 		      WHERE id = 0';
 			
@@ -384,22 +392,15 @@ class ForumPostProcessor implements Processor {
 	//           * if $word belonged to goodWords or badWords, there is a 
 	//             chance of division by zero.
 	// ------------------------------------------------------------------------
-	private function rating($word, $body)
+	private function rating($position, $body)
 	{
-	  echo "Rating " . $word;
+	  // echo "Rating " . $body[$position];
 		$rating = 0;
 
 		$scannedWord = "";
-		$locationWord = 0;
+		$locationWord = $position;
 		$locationAdjective = 0;
 	
-		// find location of the word in the body
-		while($scannedWord != $word)
-		{
-			$scannedWord = $body[$locationWord];
-			$locationWord++;
-		}
-		
 		// scan through the whole body
 		foreach($body as $adjective)
 		{
