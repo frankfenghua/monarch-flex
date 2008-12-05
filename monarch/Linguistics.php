@@ -24,8 +24,7 @@ class Linguistics
 	
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // PUBLIC FUNCTIONS ...............................................................
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// ============================================================================
 	// Linguistics
 	//    args:  none
@@ -38,7 +37,7 @@ class Linguistics
 		$this->database = new Database('master');
 		
 		// load english dictionary
-		$dictionary = @fopen("englishDictionary/englishDictionary.txt", "r");
+		$dictionary = @fopen("/usr/share/dict/linux.words", "r");
 		
 		if($dictionary) 
 		{
@@ -98,54 +97,69 @@ class Linguistics
 	//    args:  * string - the word which you want to know the rating of
 	//           * strings - the body of text that the word belongs to
 	//    ret:   int - the magnitude of sign of this number tell how good (+)
-	//                 or how bad (-) this word is spoken about.
+	//                 or how bad (-) this word is spoken about. Returns 0.0 if
+	//                 keyword is not even found in the body.
 	//    about: Removes all symbols or words that could confuse PHP's 
 	//           strtotime() and returns the Unix timestamp.
 	//    fix:   * "like" is not necessarily a positive word because it could 
 	//             be used as a synonym of "similar" instead of "love".
 	//           * do stemming and augmenting of goodWords.
 	//           * bad running time
-	//           * not scientificly proven algorithm
 	//           * if $word belonged to goodWords or badWords, there is a 
 	//             chance of division by zero.
 	//           * not normalized to [0.0 - 1.0] range
 	//           * "very" and "so" does not have to precede adjective. Ex: I like it very much.
 	// ------------------------------------------------------------------------
+	// public function goodness($keyword, $body)
 	public function goodness($keyword, $body)
 	{
 		// make everything lowercase so == can be used correctly
 		$keyword = strtolower($keyword);
-		
+
+		// $body = explode($body, ' ');
+		preg_match_all('/[a-zA-Z]+/', $body, $body_words);
+		$body = $body_words[0];
+
 		for($i = 0; $i < sizeof($body); $i++)
 			$body[$i] = strtolower($body[$i]);
-		
-		$body = explode($body, ' ');
 		
 		$finalScore = 0;
 	
 		// find location of the word in the body
-		while($scannedWord != $keyword)
-		{
-			$scannedWord = $body[$locationKeyword];
-			$locationKeyword++;
-		}
+		// $locationKeyword = array_search($keyword, $body);
+		$keywordLocations = array_keys($body, $keyword);
 		
+		// $locationAdjective = 0;
+
+		foreach($keywordLocations as $locationKeyword)
+		{
+			$locationAdjective = 0;
+
 		// scan through the whole body
 		foreach($body as $adjective)
 		{
+			
+
+			// can't use keyword itself as an adjective
+			if($locationAdjective == $locationKeyword)
+			{
+				$locationAdjective++;
+				continue;
+			}
+
 			// an adjective is amplified if preceded by "very" or "so"
 			if($locationAdjective > 0 && ($body[$locationAdjective - 1] == 'very' || $body[$locationAdjective - 1] == 'so'))
 				$severity = 2;
 			else
-				$serverity = 1;
+				$severity = 1;
 		
 			$rating = 1 / abs($locationAdjective - $locationKeyword) * $severity;
-		
+
 			// goodness of a word is inversely proportional to it's distance from a good word
 			if(in_array($adjective, $this->goodWords))
 			{
 				// "not" makes a good word bad
-				if($locationAdjective > 0 && $body[$locationAdjective - 1] != 'not' && $body[$locationAdjective - 1] != "don't")				
+				if($locationAdjective > 0 && $body[$locationAdjective - 1] != 'not' && $body[$locationAdjective - 1] != "don't")
 					$finalScore += $rating;
 				else
 					$finalScore -= $rating;
@@ -163,6 +177,8 @@ class Linguistics
 			
 			$locationAdjective++;
 		}
+
+		}
 		
 		return $finalScore;
 	}
@@ -178,13 +194,25 @@ class Linguistics
 	//    about: How well does this author capitalize the next letter after ending
 	//           a sentence? Gives a percentage of the sentences that were 
 	//           capitalized correctly.
+	//    fix:   make sure passed in text has no html
 	// ----------------------------------------------------------------------------
-	private function capitalization($text)
+	public function capitalization($text)
 	{
-		preg_match_all('#([?\.!]+)#', $text, $allSentences);
-		preg_match_all('#[?\.!]+(?:<br>|<br />|<br/>|\n)*([a-zA-Z0-9])#', $text, $startingCharacters);
-		
+		preg_match_all('#[^\?\.!]+#', $text, $allSentences);
+
+		foreach($allSentences[0] as $sentence)
+		{
+			if(in_array(substr(trim($sentence), 0, 1), $this->lowercaseLetters))
+				$numMistakes++;
+		}
+
 		$numSentences = sizeof($allSentences[0]);
+		
+		/*
+		// preg_match_all('#[?\.!]+(?:<br>|<br />|<br/>|\n)*([a-zA-Z0-9])#', $text, $startingCharacters);
+		preg_match_all('#[\?\.!]+(?:\n)*([a-zA-Z0-9])#', $text, $startingCharacters);
+		
+		
 		
 		foreach($startingCharacters as $startCharacter)
 		{
@@ -193,10 +221,9 @@ class Linguistics
 		}
 		
 		// check that first word of the first sentence is capitalized.
-		$text = explode(' ', $text);
-		
-		if(!in_array(substr($text[0], 0, 1), $this->lowercaseLetters))
+		if(!in_array(substr($text, 0, 1), $this->lowercaseLetters))
 			$numMistakes++;
+		*/
 		
 		return 1 - ($numMistakes / $numSentences);
 	}
@@ -209,9 +236,10 @@ class Linguistics
 	//           percentage of correctly spelled words.
 	//    FIX:   Does not check for multi-word words such as "a cappella"
 	// ----------------------------------------------------------------------------
-	private function spelling($text)
+	public function spelling($text)
 	{
-		$text = explode(' ', $text);
+		preg_match_all('/[a-zA-Z]+/', $text, $texts);
+		$text = $texts[0];
 		
 		foreach($text as $word)
 		{
@@ -232,28 +260,42 @@ class Linguistics
 	//           Does not account for smileys that use parentheses.
 	//           There's more types of punctuation that can be done.
 	// ----------------------------------------------------------------------------
-	private function punctuation($text)
+	public function punctuation($text)
 	{
 		$numQuotes      = substr_count($text, '"') + substr_count($text, '&quot;');
 		$numStartParens = substr_count($text, '(');
 		$numEndParens   = substr_count($text, ')');
 		
-		if($numQuotes % 2 == 1)
+		if($numQuotes == 0)
 		{
-			$numUnclosedQuotes = 1;
-			$numQuotePairs = ($numQuotes - 1) / 2;
+			$percentClosedQuotes = 1.0;
+		}
+		else	
+		{
+			if($numQuotes % 2 == 1)
+			{
+				$numUnclosedQuotes = 1;
+				$numQuotePairs = ($numQuotes - 1) / 2;
+			}
+			else
+			{
+				$numUnclosedQuotes = 0;
+				$numQuotePairs = $numQuotes / 2;
+			}
+
+			$percentClosedQuotes = 1 - ($numUnclosedQuotes / ($numQuotePairs + $numUnclosedQuotes));
+		}
+		
+		if($numStartParens + $numEndParens == 0)
+		{
+			$percentClosedParens = 1.0;
 		}
 		else
-		{
-			$numUnclosedQuotes = 0;
-			$numQuotePairs = $numQuotes / 2;
+		{	
+			$numUnclosedParens   = abs($numStartParens - $numEndParens);
+			$numParensPairs      = min($numStartParens, $numEndParens) / 2;
+			$percentClosedParens = 1 - ($numUnclosedParens / ($numUnclosedParens + $numParensPairs));
 		}
-			
-		$percentClosedQuotes = 1 - ($numUnclosedQuotes / ($numQuotePairs + $numUnclosedQuotes));
-			
-		$numUnclosedParens   = abs($numStartParens - $numEndParens);
-		$numParensPairs      = min($numStartParens, $numEndParens) / 2;
-		$percentClosedParens = 1 - ($numUnclosedParens / ($numUnclosedParens + $numParensPairs));
 		
 		// average
 		return (($percentClosedParens + $percentClosedQuotes) / 2);

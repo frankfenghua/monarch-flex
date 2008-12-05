@@ -8,7 +8,7 @@ require_once '../ForumThreadProcessor.php';
 
 $THREAD_LEVEL = 0;
 $POST_LEVEL = 1;
-$NUM_LEVELS = 1;
+$NUM_LEVELS = 2;
 $MAX_PAGES_TO_CRAWL = 40;
 
 $p_processor = new ForumPostProcessor('threadless_test');

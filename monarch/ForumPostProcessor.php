@@ -119,10 +119,9 @@ class ForumPostProcessor implements Processor {
 	    // echo "Saw word: ".$word;
 	    $rating = $this->rating($position, $body[0]);
 	    
-	    $q = 'SELECT id
-				      FROM keywords
-				      WHERE word = "' . $word          . '"';
-	    //      AND time = "' . $this->timeStart . '"';
+	    $q = 'SELECT id FROM keywords
+		      WHERE word = "' . $word          . '"
+                      AND time = "' . $this->timeStart . '"';
 	    
 	    $q = $this->database->query($q);
 	    
@@ -244,10 +243,19 @@ class ForumPostProcessor implements Processor {
 	private function insertLinks($body)
 	{
 		// search for base links
+		// threadless.com
+		// threadless.com/whatever
+		// www.threadless.com/whatever
+		// http://www.threadless.com/whatever
+		// http://threadles.com/whatever
 		preg_match_all('#(http://)?(www\.)?(.*?\.[a-zA-Z]{3})#', $body, $links);
 		
-		foreach($links[2] as $link)
+		print_r($links[3]);
+
+		foreach($links[3] as $link)
 		{
+			$link = mysql_real_escape_string($link);
+
 			$q = 'SELECT id 
 			      FROM links
 			      WHERE baseUrl = "' . $link .'"';

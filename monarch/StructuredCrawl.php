@@ -166,7 +166,7 @@ class StructuredCrawl {
     // Find next page to crawl and continue crawling
     $url = $this->nextUrl();
 
-    if(!$url || $this->pagesCrawled >= self::MAX_PAGES_TO_CRAWL) { // Base case
+    if(!$url || $this->pagesCrawled >= $this->max_pages_to_crawl) { // Base case
       echo 'Max pages crawled <br/>';
       return;
     }
