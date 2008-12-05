@@ -20,7 +20,7 @@ $d = 'My spelling is good. My posts can be trusted';
 $e = 'I am bad at " punctuation ) and (cannot) be "trusted"';
 $f = 'I am good at "punctuation" and (can) be trusted';
 $i = 'i rush when typing. often i don\'t capitalize. don\'t trust me.';
-$j = 'I am a careful writer! I take my time to capitalize. Truse me!';
+$j = 'I am a careful writer! I take my time to capitalize. Trust me!';
 
 echo '<h1>linguistics test</h1>';
 echo '<h2>trash talking</h3>';

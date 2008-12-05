@@ -18,7 +18,7 @@ class Linguistics
 
 	private $badWords;          // array of negative words (linguistic analysis)
 	private $goodWords;         // array of positive words (linguistic analysis)
-	// private $englishDictionary; // array of all the words in the english dictionary
+	private $englishDictionary; // array of all the words in the english dictionary
 	private $database;          // used for accessing the linguistic tables
 	private $lowercaseLetters;  // a through z
 	
@@ -37,14 +37,24 @@ class Linguistics
 	{
 		$this->database = new Database('master');
 		
-		// load English dictionary
+		// load english dictionary
 		/*
-		$q = 'SELECT word FROM englishDictionary';
+		$dictionary = @fopen("englishDictionary/englishDictionary.txt", "r");
 		
-		$q = $database->query($q);
-		
-		while($row = mysql_fetch_array($q))
-			$this->englishDictionary[] = $row['word'];
+		if($dictionary) 
+		{
+			while(!feof($dictionary)) 
+			{
+				$word = trim(strtolower(fgets($dictionary)));
+			
+				if($word != '')
+					$this->englishDictionary[] = $word;
+			}
+			
+			fclose($dictionary);
+		}
+		else
+			die('english dictionary file could not be opened.');
 		*/
 		
 		// load good words	
@@ -66,6 +76,7 @@ class Linguistics
 		// load all lowercase letters
 		$this->lowercaseLetters = explode(' ', 'a b c d e f g h i j k l m n o p q r s t u v w x y z');
 	}
+	
 	
 	// ============================================================================
 	// englishProficiency
@@ -198,6 +209,7 @@ class Linguistics
 	//    ret:   double - [0.0 - 1.0]
 	//    about: Checks how well this person's spelling is. Tells you the 
 	//           percentage of correctly spelled words.
+	//    FIX:   Does not check for multi-word words such as "a cappella"
 	// ----------------------------------------------------------------------------
 	private function spelling($text)
 	{
@@ -205,9 +217,7 @@ class Linguistics
 		
 		foreach($text as $word)
 		{
-			$q = 'SELECT word FROM englishdictionary WHERE word = "' . strtolower($word) . '"';
-			
-			if(mysql_num_rows($database->query($q)) > 0)
+			if(in_array(strtolower($word), $this->englishDictionary))
 				$numSpelledCorrect++;
 		}
 		
