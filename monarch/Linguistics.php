@@ -38,7 +38,6 @@ class Linguistics
 		$this->database = new Database('master');
 		
 		// load english dictionary
-		/*
 		$dictionary = @fopen("englishDictionary/englishDictionary.txt", "r");
 		
 		if($dictionary) 
@@ -55,7 +54,6 @@ class Linguistics
 		}
 		else
 			die('english dictionary file could not be opened.');
-		*/
 		
 		// load good words	
 		$q = 'SELECT word FROM goodwords';
