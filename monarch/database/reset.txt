@@ -1,20 +1,45 @@
 // title:  reset.txt
 // author: Ryan Lin
 // date:   Nov 6, 2008
-// about:  Reset a database back to a clean slate.
+// about:  Reset a database back to a clean slate. Will still keep data that is
+//         needed, such as badwords/goodwords/analysis categories.
 // ============================================================================
 
-Reset a website:
+// ~~~~~~~~~~~~~~~~~~~~~~
+// reset back to nothing:
+// ~~~~~~~~~~~~~~~~~~~~~~
 
-	DELETE FROM keywords;
-	DELETE FROM links;
-	DELETE FROM posts;
-	DELETE FROM threads;
-	DELETE FROM users;
-	UPDATE analysis SET value = 0.0;
+	website database:
+	
+		DELETE FROM keywords;
+		DELETE FROM links;
+		DELETE FROM posts;
+		DELETE FROM regexes
+		DELETE FROM threads;
+		DELETE FROM users;
+		UPDATE analysis SET value = 0.0;
+	
+	master database:
+	
+		DELETE FROM allowedkeywords
+		DELETE FROM communities;
+		DELETE FROM websites;
+		DELETE FROM users;
+		
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// reset back to only having a clean threadless
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Reset a community:
-
-	DELETE FROM communities;
-	DELETE FROM websites;
-	DELETE FROM users;
+	website database:
+	
+		DELETE FROM keywords;
+		DELETE FROM links;
+		DELETE FROM posts;
+		DELETE FROM threads;
+		DELETE FROM users;
+		UPDATE analysis SET value = 0.0;
+	
+	master database:
+	
+		DELETE FROM users;
+		

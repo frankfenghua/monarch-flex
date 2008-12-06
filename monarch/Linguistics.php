@@ -24,7 +24,8 @@ class Linguistics
 	
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // PUBLIC FUNCTIONS ...............................................................
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 	// ============================================================================
 	// Linguistics
 	//    args:  none
@@ -37,7 +38,7 @@ class Linguistics
 		$this->database = new Database('master');
 		
 		// load english dictionary
-		$dictionary = @fopen("/usr/share/dict/linux.words", "r");
+		$dictionary = @fopen("englishDictionary/englishDictionary.txt", "r");
 		
 		if($dictionary) 
 		{
