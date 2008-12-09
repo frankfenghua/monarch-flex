@@ -142,8 +142,6 @@ class Linguistics
 		// scan through the whole body
 		foreach($body as $adjective)
 		{
-			
-
 			// can't use keyword itself as an adjective
 			if($locationAdjective == $locationKeyword)
 			{
