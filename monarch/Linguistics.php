@@ -37,8 +37,11 @@ class Linguistics
 	{
 		$this->database = new Database('master');
 		
-		// load english dictionary
+		// load english dictionary 
 		$dictionary = @fopen("englishDictionary/englishDictionary.txt", "r");
+		
+		if(!$dictionary)
+			$dictionary = @fopen("../englishDictionary/englishDictionary.txt", "r");
 		
 		if($dictionary) 
 		{
@@ -96,7 +99,7 @@ class Linguistics
 	// ========================================================================
 	// goodness
 	//    args:  * string - the word which you want to know the rating of
-	//           * strings - the body of text that the word belongs to
+	//           * string - the body of text that the word belongs to
 	//    ret:   int - the magnitude of sign of this number tell how good (+)
 	//                 or how bad (-) this word is spoken about. Returns 0.0 if
 	//                 keyword is not even found in the body.

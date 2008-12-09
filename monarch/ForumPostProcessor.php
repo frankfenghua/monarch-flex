@@ -10,6 +10,7 @@
   ////////////////////////////////////////////////////////////////////
 
 require_once 'database/Database.php';
+require_once 'Linguistics.php';
 require_once 'Processor.php';
 
 class ForumPostProcessor implements Processor {
@@ -24,29 +25,32 @@ class ForumPostProcessor implements Processor {
 	private $delay;        // time to wait before traversing to another page
 	private $timeStart;    // the time when we started scraping (used for time based statistics)
 	private $allowedWords; // array of keywords which we are scraping for 
-	private $badWords;     // array of negative words (linguistic analysis)
-	private $goodWords;    // array of positive words (linguistic analysis)
+	// private $badWords;     // array of negative words (linguistic analysis)
+	// private $goodWords;    // array of positive words (linguistic analysis)
 	private $start_time;  // Time this processor was created
+	private $linguistics;  // calculates stats for 
 
+  // FIX: where is the function header?
   public function ForumPostProcessor($domain) {
     $this->domain       = $domain;
     $this->database     = new Database('master');
     $this->allowedWords = $this->loadAllowedWords();
-    $this->badWords     = $this->loadBadWords();
-    $this->goodWords    = $this->loadGoodWords();
+    // $this->badWords     = $this->loadBadWords();
+    // $this->goodWords    = $this->loadGoodWords();
     $this->database     = new Database($domain);
     $this->plugin       = $this->loadPlugin();
-    
     $this->timeStart    = time();
+	$this->linguistics  = new Linguistics();
   }
 
+  // FIX: where is the function header?
   public function process($html) {
     // $this->dummy($html);
 
     // Find the thread ID for this page using the link
     $threadUrl = $this->plugin['parentUrl'];
     preg_match_all($threadUrl, $html, $matches);
-    print_r($matches);
+    // print_r($matches);
 	$q = 'SELECT id
 			      FROM threads
 			      WHERE url = "' . $matches[1][0] . '"';
@@ -101,52 +105,63 @@ class ForumPostProcessor implements Processor {
 	//           * Need to only store keywords that were said between this 
 	//             session and the last session.
 	// ------------------------------------------------------------------------	
-  public function insertKeywords($html) {
-    // echo "Collecting Keywords";
-    // remove whitespace and HTML
-    $body = preg_replace('/[\s]+/', ' ', $html);
-    $body = preg_replace('/[!-~]+/', ' ', $html);
-    $body = preg_replace('/<[^>]+>/', ' ', $html);
-    
-    preg_match_all('/[a-zA-Z]+/',$body,$body);
-    
-    for($position = 0; $position < sizeof($body[0]); $position++)
-      {	
-	$word = strtolower($body[0][$position]);
-	// only record keywords we're specifically scraping for
-	if(in_array($word, $this->allowedWords))
-	  {
-	    // echo "Saw word: ".$word;
-	    $rating = $this->rating($position, $body[0]);
-	    
-	    $q = 'SELECT id FROM keywords
-		      WHERE word = "' . $word          . '"
-                      AND time = "' . $this->timeStart . '"';
-	    
-	    $q = $this->database->query($q);
-	    
-	    // word has never been seen before in this session - create a new entry
-	    if(mysql_num_rows($q) == 0)
-	      {
-		$q = 'INSERT INTO keywords (word, time, rating)
-					      VALUES("' . $word                       . '",
-					             "' . $this->timeStart            . '",
-					             "' . $rating . '")';
-	      }
-	    // word has already been seen before in this session - increment its count
-	    else
-	      {
-		$q = 'UPDATE keywords
-					      SET count = count + 1,
-					      rating = rating + ' . $rating  . '
-					      WHERE word = "' . $word . '"
-					      AND time = "' . $this->timeStart . '"';
-	      }
-	    
-	    $this->database->query($q);
-	  }
-      }
-  }
+	public function insertKeywords($html) 
+	{
+		// echo "Collecting Keywords";
+		// remove whitespace and HTML
+		$body = preg_replace('/[\s]+/', ' ', $html);
+		$body = preg_replace('/[!-~]+/', ' ', $html);
+		$body = preg_replace('/<[^>]+>/', ' ', $html);
+		
+		preg_match_all('/[a-zA-Z]+/', $body, $words);
+		
+		foreach($words[0] as $word)
+		{	
+			// don't care about capitalization  
+			$word = strtolower($word);
+			
+			// only record keywords we're specifically scraping for
+			if(in_array($word, $this->allowedWords))
+			{
+				// echo "Saw word: ".$word;
+				$goodness = $this->linguistics->goodness($word, $body);
+				
+				$q = 'SELECT id FROM keywords
+					WHERE word = "' . $word          . '"
+					AND time = "' . $this->timeStart . '"';
+				
+				$q = $this->database->query($q);
+				
+				// word has never been seen before in this session - create a new entry
+				if(mysql_num_rows($q) == 0)
+				{
+					$q = 'INSERT INTO keywords (word)
+						VALUES("' . $word . '")';
+					
+					$q = $this->database->query($q);
+					
+					$keywordId = mysql_insert_id();
+					
+					$q = 'INSERT INTO keywordstats (keyword, time)
+						VALUES("' . $keywordId  . '",
+						"' . $this->timeStart . '")';
+						
+					$q = $this->database->query($q);
+				}
+				
+				// FIX: englishProficiency is in [0.0 - 1.0], so I subtract 0.5 to not make this rating be centered around 0.0. Is this the best way?
+				
+				$q = 'UPDATE keywordstats
+					SET count = count + 1,
+					goodness = goodness + ' . $goodness  . '
+					englishProficiency = englishProficiency + ' . $englishProficiency . ' - 0.5  
+					WHERE word = "' . $word . '"
+					AND time = "' . $this->timeStart . '"';
+			
+				$this->database->query($q);
+			}
+		}
+	}
 
 	
 	// ========================================================================
@@ -248,11 +263,15 @@ class ForumPostProcessor implements Processor {
 		// www.threadless.com/whatever
 		// http://www.threadless.com/whatever
 		// http://threadles.com/whatever
-		preg_match_all('#(http://)?(www\.)?(.*?\.[a-zA-Z]{3})#', $body, $links);
 		
-		print_r($links[3]);
+		// preg_match_all('#(http://)?(www\.)?(.*?\.[a-zA-Z]{3})#', $body, $links);
+		
+		// FIX: right now it stores the whole URL. Temporary fix so this function doesn't crash.
+		$numLinks = preg_match_all('#(href|src)="([^"]+)"#i', $body, $links);	
+		
+		// print_r($links[2]);
 
-		foreach($links[3] as $link)
+		foreach($links[2] as $link)
 		{
 			$link = mysql_real_escape_string($link);
 
@@ -298,7 +317,7 @@ class ForumPostProcessor implements Processor {
 		$q = $this->database->query($q);
 
 		while($row = mysql_fetch_array($q))
-			$allowedWords[] = $row['word'];
+			$allowedWords[] = strtolower($row['word']);
 		
 		return $allowedWords;
 	}
@@ -310,6 +329,7 @@ class ForumPostProcessor implements Processor {
 	//    about: Returns a list of positive English words, which we've defined.
 	//           Used for linguistic analysis.
 	// ------------------------------------------------------------------------	
+	/*
 	private function loadGoodWords()
 	{
 		$q = 'SELECT word
@@ -322,6 +342,7 @@ class ForumPostProcessor implements Processor {
 		
 		return $goodWords;
 	}
+	*/
 	
 	// ========================================================================
 	// loadBadWords
@@ -330,6 +351,7 @@ class ForumPostProcessor implements Processor {
 	//    about: Returns a list of negative English words, which we've defined.
 	//           Used for linguistic analysis.
 	// ------------------------------------------------------------------------	
+	/*
 	private function loadBadWords()
 	{
 		$q = 'SELECT word
@@ -342,6 +364,7 @@ class ForumPostProcessor implements Processor {
 		
 		return $badWords;
 	}
+	*/
 
 	// ========================================================================
 	// loadPlugin
@@ -400,6 +423,7 @@ class ForumPostProcessor implements Processor {
 	//           * if $word belonged to goodWords or badWords, there is a 
 	//             chance of division by zero.
 	// ------------------------------------------------------------------------
+	/*
 	private function rating($position, $body)
 	{
 	  // echo "Rating " . $body[$position];
@@ -428,5 +452,6 @@ class ForumPostProcessor implements Processor {
 		
 		return $rating;
 	}
+	*/
 }
 ?>

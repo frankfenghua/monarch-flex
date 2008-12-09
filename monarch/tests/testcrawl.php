@@ -11,8 +11,8 @@ $POST_LEVEL = 1;
 $NUM_LEVELS = 2;
 $MAX_PAGES_TO_CRAWL = 40;
 
-$p_processor = new ForumPostProcessor('threadless_test');
-$t_processor = new ForumThreadProcessor('threadless_test');
+$p_processor = new ForumPostProcessor('threadless');
+$t_processor = new ForumThreadProcessor('threadless');
 
 $crawl = new StructuredCrawl($NUM_LEVELS, $MAX_PAGES_TO_CRAWL);
   
