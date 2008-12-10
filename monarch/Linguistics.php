@@ -120,11 +120,19 @@ class Linguistics
 		$keyword = strtolower($keyword);
 
 		// $body = explode($body, ' ');
-		preg_match_all('/[a-zA-Z]+/', $body, $body_words);
+		// preg_match_all('/[a-zA-Z]+/', $body, $body_words);
+		preg_match_all('/[^ ]+/', $body, $body_words);
 		$body = $body_words[0];
 
+		// case insensitivity and remove punctuation
 		for($i = 0; $i < sizeof($body); $i++)
+		{
 			$body[$i] = strtolower($body[$i]);
+			
+			preg_match_all('#\W*([^\W]+)\W*#', $body[$i], $noPunctuation);
+			
+			$body[$i] = $noPunctuation[1][0];
+		}
 		
 		$finalScore = 0;
 	

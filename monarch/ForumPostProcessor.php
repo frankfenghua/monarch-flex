@@ -203,16 +203,19 @@ class ForumPostProcessor implements Processor {
 		$body = preg_replace('#"[^>]*>#', ' ', $body);
 		$body = strip_tags($body);
 		$body = preg_replace('/[\s]+/', ' ', $body);
+		$body = trim($body);
 		
+		/*
 		echo '<h1>$body before explode</h1>' . $body . '<br>';
 		
 		$body = explode(' ', $body);
 		
 		echo '<h1>$body after explode</h1>' . $body . '<br>';
+		*/
 
 		foreach($fullUrls[1] as $fullUrl)
 		{
-			$positionsLinkInBody = array_keys($body, $fullUrl);
+			// $positionsLinkInBody = array_keys($body, $fullUrl);
 			
 			// get base url
 			$cleanLink = str_ireplace('http://', '', $fullUrl);
@@ -225,14 +228,17 @@ class ForumPostProcessor implements Processor {
 			$baseUrl = $baseUrl[1][0];
 
 			$baseUrl = mysql_real_escape_string($baseUrl);
-	
-			echo '<h1>$positionsLinkInBody</h1>' . $positionsLinkInBody . '<br>';
+
+			// foreach($positionsLinkInBody as $positionLinkInBody) 
+			//	$goodness += $this->linguistics->goodnessFromIndex($positionLinkInBody, $body);
+
 			echo '<h1>$fullUrl</h1>' . $fullUrl . '<br>';
+			echo '<h1>$body</h1>' . $body . '<br>';
 
-			foreach($positionsLinkInBody as $positionLinkInBody) 
-				$goodness += $this->linguistics->goodnessFromIndex($positionLinkInBody, $body);
+			$goodness = $this->linguistics->goodness($fullUrl, $body);
 
-			$englishProficiency = $this->linguistics->englishProficiency(implode(' ', $body));
+			// $englishProficiency = $this->linguistics->englishProficiency(implode(' ', $body));
+			$englishProficiency = $this->linguistics->englishProficiency($body);
 			
 			$q = 'SELECT id 
 				FROM links 
@@ -263,6 +269,8 @@ class ForumPostProcessor implements Processor {
 				WHERE ls.link = "' . $linkId . '"
 				AND ls.stat = s.id
 				AND s.time = "' . $this->timeStart . '"';
+			
+			$q = $this->database->query($q);
 			
 			// link has not been seen in this particular session
 			if(mysql_num_rows($q) == 0)
@@ -312,11 +320,13 @@ class ForumPostProcessor implements Processor {
 	public function insertKeywords($html) 
 	{
 		// remove whitespace and HTML
+		/*
 		$body = preg_replace('/[\s]+/', ' ', $html);
 		$body = preg_replace('/[!-~]+/', ' ', $html);
-		$body = strip_tags($body);
+		*/
+		$body = strip_tags($html);
 		
-		preg_match_all('/[a-zA-Z]+/', $body, $words);
+		preg_match_all('/[a-z]+/i', $body, $words);
 		
 		foreach($words[0] as $word)
 		{	
@@ -334,7 +344,7 @@ class ForumPostProcessor implements Processor {
 				
 				$q = $this->database->query($q);
 				
-				// word has never been seen before in this session
+				// word has never been seen before in previous sessions
 				if(mysql_num_rows($q) == 0)
 				{
 					$q = 'INSERT INTO keywords (word)
@@ -344,6 +354,7 @@ class ForumPostProcessor implements Processor {
 					
 					$keywordId = mysql_insert_id();
 				}
+				// word has been seen before in previous sessions
 				else
 				{
 					$q = mysql_fetch_array($q);
@@ -356,12 +367,16 @@ class ForumPostProcessor implements Processor {
 					WHERE ks.keyword = "' . $keywordId . '"
 					AND ks.stat = s.id
 					AND s.time = "' . $this->timeStart . '"';
+					
+				$q = $this->database->query($q);
 				
 				// keyword has not been seen in this particular session
 				if(mysql_num_rows($q) == 0)
 				{
 					$q = 'INSERT INTO stats (time)
 						VALUES("' . $this->timeStart . '")';
+				
+					// printf('<h2>%s</h2>', $q);
 
 					$q = $this->database->query($q);
 

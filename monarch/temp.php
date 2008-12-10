@@ -27,6 +27,7 @@ ini_set('display_errors','1');
 	$body = preg_replace('#"[^>]*>#', ' ', $body);
 	$body = strip_tags($body);
 	$body = preg_replace('/[\s]+/', ' ', $body);
+	$body = trim($body);
 	$body = explode(' ', $body);
 	
 	print_r($body);
