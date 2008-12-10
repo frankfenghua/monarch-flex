@@ -99,7 +99,8 @@ class Linguistics
 	// ========================================================================
 	// goodness
 	//    args:  * string - the word which you want to know the rating of
-	//           * string - the body of text that the word belongs to
+	//           * string - the body of text that the word belongs to. Must not
+	//                      contain HTML or other weird characters. 
 	//    ret:   int - the magnitude of sign of this number tell how good (+)
 	//                 or how bad (-) this word is spoken about. Returns 0.0 if
 	//                 keyword is not even found in the body.
@@ -116,7 +117,6 @@ class Linguistics
 	// ------------------------------------------------------------------------
 	public function goodness($keyword, $body)
 	{
-
 		// make everything lowercase so == can be used correctly
 		$keyword = strtolower($keyword);
 

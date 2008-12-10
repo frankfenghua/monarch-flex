@@ -25,8 +25,6 @@ class ForumPostProcessor implements Processor {
 	private $delay;        // time to wait before traversing to another page
 	private $timeStart;    // the time when we started scraping (used for time based statistics)
 	private $allowedWords; // array of keywords which we are scraping for 
-	// private $badWords;     // array of negative words (linguistic analysis)
-	// private $goodWords;    // array of positive words (linguistic analysis)
 	private $start_time;  // Time this processor was created
 	private $linguistics;  // calculates stats for 
 
@@ -40,8 +38,6 @@ class ForumPostProcessor implements Processor {
 		$this->domain       = $domain;
 		$this->database     = new Database('master');
 		$this->allowedWords = $this->loadAllowedWords();
-		// $this->badWords     = $this->loadBadWords();
-		// $this->goodWords    = $this->loadGoodWords();
 		$this->database     = new Database($domain);
 		$this->plugin       = $this->loadPlugin();
 		$this->timeStart    = time();
@@ -204,19 +200,9 @@ class ForumPostProcessor implements Processor {
 		$body = strip_tags($body);
 		$body = preg_replace('/[\s]+/', ' ', $body);
 		$body = trim($body);
-		
-		/*
-		echo '<h1>$body before explode</h1>' . $body . '<br>';
-		
-		$body = explode(' ', $body);
-		
-		echo '<h1>$body after explode</h1>' . $body . '<br>';
-		*/
 
 		foreach($fullUrls[1] as $fullUrl)
 		{
-			// $positionsLinkInBody = array_keys($body, $fullUrl);
-			
 			// get base url
 			$cleanLink = str_ireplace('http://', '', $fullUrl);
 			$cleanLink = str_ireplace('www.', '', $cleanLink);
@@ -228,9 +214,6 @@ class ForumPostProcessor implements Processor {
 			$baseUrl = $baseUrl[1][0];
 
 			$baseUrl = mysql_real_escape_string($baseUrl);
-
-			// foreach($positionsLinkInBody as $positionLinkInBody) 
-			//	$goodness += $this->linguistics->goodnessFromIndex($positionLinkInBody, $body);
 
 			echo '<h1>$fullUrl</h1>' . $fullUrl . '<br>';
 			echo '<h1>$body</h1>' . $body . '<br>';
@@ -319,11 +302,6 @@ class ForumPostProcessor implements Processor {
 	// ------------------------------------------------------------------------	
 	public function insertKeywords($html) 
 	{
-		// remove whitespace and HTML
-		/*
-		$body = preg_replace('/[\s]+/', ' ', $html);
-		$body = preg_replace('/[!-~]+/', ' ', $html);
-		*/
 		$body = strip_tags($html);
 		
 		preg_match_all('/[a-z]+/i', $body, $words);
