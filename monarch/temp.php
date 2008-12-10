@@ -28,7 +28,29 @@ ini_set('display_errors','1');
 	$body = strip_tags($body);
 	$body = preg_replace('/[\s]+/', ' ', $body);
 	$body = trim($body);
-	$body = explode(' ', $body);
+
+	preg_match_all('/[^ ]+/', $body, $body_words);
+
+		$body = $body_words[0];
+
+		// case insensitivity and remove punctuation
+		for($i = 0; $i < sizeof($body); $i++)
+		{
+			$body[$i] = strtolower($body[$i]);
+			
+			//preg_match_all('#\W*([a-z]+)#i', $body[$i], $noPunctuationBegin);
+
+			//$body[$i] = $noPunctuationBegin[1][0];			
+			
+			preg_match_all('#[a-z0-9]\.[a-z0-9]#i', $body[$i], $itIsALink);
+			
+			if(sizeof($itIsALink[0]) == 0)
+			{
+				preg_match_all('#\W*([a-z]+)\W*#i', $body[$i], $noPunctuation);
+				$body[$i] = $noPunctuation[1][0];
+			}
+
+		}
 	
 	print_r($body);
 	
