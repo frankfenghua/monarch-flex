@@ -132,9 +132,15 @@ class Linguistics
 		// find location of the word in the body
 		// $locationKeyword = array_search($keyword, $body);
 		$keywordLocations = array_keys($body, $keyword);
+
+		foreach($keywordLocations as $locationKeyword) {
+			$finalScore += $this->goodnessFromIndex($locationKeyword, $body);
+		}
+
+		return $finalScore;
 		
 		// $locationAdjective = 0;
-
+/*
 		foreach($keywordLocations as $locationKeyword)
 		{
 			$locationAdjective = 0;
@@ -182,13 +188,62 @@ class Linguistics
 
 		}
 		
-		return $finalScore;
+		return $finalScore; */
 	}
+
+	
 	
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // PRIVATE FUNCTIONS ..............................................................
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+// Accepts an array of English words and an index within that array and returns
+// the goodness value of that index
+public function goodnessFromIndex($locationKeyword, $body) {
+		// scan through the whole body
+		foreach($body as $adjective)
+		{
+			// can't use keyword itself as an adjective
+			if($locationAdjective == $locationKeyword)
+			{
+				$locationAdjective++;
+				continue;
+			}
+
+			// an adjective is amplified if preceded by "very" or "so"
+			if($locationAdjective > 0 && ($body[$locationAdjective - 1] == 'very' || $body[$locationAdjective - 1] == 'so'))
+				$severity = 2;
+			else
+				$severity = 1;
+		
+			$rating = 1 / abs($locationAdjective - $locationKeyword) * $severity;
+
+			// goodness of a word is inversely proportional to it's distance from a good word
+			if(in_array($adjective, $this->goodWords))
+			{
+				// "not" makes a good word bad
+				if($locationAdjective > 0 && $body[$locationAdjective - 1] != 'not' && $body[$locationAdjective - 1] != "don't")
+					$finalScore += $rating;
+				else
+					$finalScore -= $rating;
+			}
+			
+			// badness of a word is inversely proportional to it's distance from a bad word
+			if(in_array($adjective, $this->badWords))
+			{	
+				// "not" makes a bad word good
+				if($locationAdjective > 0 && ($body[$locationAdjective - 1] == 'not' || $body[$locationAdjective - 1] == "don't"))				
+					$finalScore += $rating;
+				else
+					$finalScore -= $rating;
+			}
+			
+			$locationAdjective++;
+		}
+
+		return $finalScore;
+}
+///////////////////////////////////////////////////////////////////////////////////
 	// ============================================================================
 	// capitalization
 	//    args:  string - a block of text

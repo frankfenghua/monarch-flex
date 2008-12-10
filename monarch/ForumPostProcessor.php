@@ -125,10 +125,10 @@ class ForumPostProcessor implements Processor {
 			{
 				// echo "Saw word: ".$word;
 				$goodness = $this->linguistics->goodness($word, $body);
+				$englishProficiency = $this->linguistics->englishProficiency($body);
 				
 				$q = 'SELECT id FROM keywords
-					WHERE word = "' . $word          . '"
-					AND time = "' . $this->timeStart . '"';
+					WHERE word = "' . $word          . '"';
 				
 				$q = $this->database->query($q);
 				
@@ -141,22 +141,27 @@ class ForumPostProcessor implements Processor {
 					$q = $this->database->query($q);
 					
 					$keywordId = mysql_insert_id();
+
+					$q = 'INSERT INTO stats (time)
+						VALUES("' . $this->timeStart . '")';
+
+					$q = $this->database->query($q);
+
+					$statId = mysql_insert_id();
 					
-					$q = 'INSERT INTO keywordstats (keyword, time)
+					$q = 'INSERT INTO keywordstats (keyword, stat)
 						VALUES("' . $keywordId  . '",
-						"' . $this->timeStart . '")';
+						"' . $statId . '")';
 						
 					$q = $this->database->query($q);
 				}
 				
-				// FIX: englishProficiency is in [0.0 - 1.0], so I subtract 0.5 to not make this rating be centered around 0.0. Is this the best way?
-				
-				$q = 'UPDATE keywordstats
+				// FIX: englishProficiency needs to be / by count on the GUI.
+				$q = 'UPDATE stats
 					SET count = count + 1,
-					goodness = goodness + ' . $goodness  . '
-					englishProficiency = englishProficiency + ' . $englishProficiency . ' - 0.5  
-					WHERE word = "' . $word . '"
-					AND time = "' . $this->timeStart . '"';
+					goodness = goodness + ' . $goodness  . ', 
+					englishProficiency = englishProficiency + ' . $englishProficiency . '
+					WHERE id = "' . $statId . '"';
 			
 				$this->database->query($q);
 			}
@@ -264,36 +269,108 @@ class ForumPostProcessor implements Processor {
 		// http://www.threadless.com/whatever
 		// http://threadles.com/whatever
 		
-		// preg_match_all('#(http://)?(www\.)?(.*?\.[a-zA-Z]{3})#', $body, $links);
-		
-		// FIX: right now it stores the whole URL. Temporary fix so this function doesn't crash.
+		// echo "Collecting Keywords";
+		// remove whitespace and +HTML
+		$body = preg_replace('/[\s]/', ' ', $body);
+		// $body = preg_replace('/[!-~]+/', ' ', $html);
+
 		$numLinks = preg_match_all('#(href|src)="([^"]+)"#i', $body, $links);	
+
+		// echo '<h1>links in this post</h1>' . 
 		
-		// print_r($links[2]);
+		echo '<h1>size of links[2]</h1>';
+			print(sizeof($links[2]));
 
 		foreach($links[2] as $link)
 		{
-			$link = mysql_real_escape_string($link);
+			$oredLinks .= str_replace('.', '\.', $link) . '|';
+		}
 
-			$q = 'SELECT id 
-			      FROM links
-			      WHERE baseUrl = "' . $link .'"';
+		// FIX: prevent having to learn substr
+		$oredLinks .= 'asiu2397zmazzzd';
+
+		echo '<h1>oredLinks</h1>';
+			print_r($oredLinks);
+
+		$body = preg_replace('/<^(' . $oredLinks . ')+>/', '', $html);
+
+		foreach($links[2] as $link)
+		{
+			$body = preg_replace('/<[^>]+>/', ' ', $html);	
+			// get base url
+			$cleanLink = str_ireplace('http://', '', $link);
+			$cleanLink = str_ireplace('www.', '', $cleanLink);
 			
-			// this is a link we've never seen before - create a new entry
-			if(mysql_num_rows($this->database->query($q)) == 0)
+			$suffixes = 'com|net|info|org|me|tv|mobi|biz|us|ca|asia|ws|ag|am|at|be|cc|cn|de|eu|fm|fm|gs|jobs|jp|ms|nu|co|nz|tc|tw|idv|uk|vg';
+
+			// sub.apple.co.uk
+			preg_match_all(sprintf('#(?:[a-z]+\.)?([a-z0-9\-]+\.(?:%s)(\.(?:%s))?)#i', $suffixes, $suffixes), $link, $baseUrl);
+
+						
+			$baseUrl = $baseUrl[1][0];
+
+			$baseUrl = mysql_real_escape_string($baseUrl);
+
+			$body = explode(' ', $body);
+			
+			echo '<h1>body</h1>';
+			print_r($body);
+
+			for($i = 0; $i < sizeof($body); $i++)
 			{
-				$q = 'INSERT INTO links (baseUrl)
-				      VALUES("' . $link . '")';
-			}
-			// we already have a record of this link - increase it's count
-			else
-			{
-				$q = 'UPDATE links
-				      SET count = count + 1
-				      WHERE baseUrl = "' . $link . '"';
+				if(strpos($body[$i], $link) !== false)
+					$linkPositions[] = $i;
 			}
 			
-			$this->database->query($q);
+
+			$goodness = 0;
+
+
+			foreach($linkPositions as $linkPosition) 
+			{
+				$goodness += $this->linguistics->goodnessFromIndex($linkPosition, $body);
+				echo '<h1>goodness of link</h1> ' . $this->linguistics->goodnessFromIndex($linkPosition, $body);
+			}
+
+				$englishProficiency = $this->linguistics->englishProficiency($body);
+				
+				$q = 'SELECT id FROM links
+					WHERE baseUrl = "' . $baseUrl  . '"';
+				
+				$q = $this->database->query($q);
+				
+				// word has never been seen before in this session - create a new entry
+				if(mysql_num_rows($q) == 0)
+				{
+					$q = 'INSERT INTO links (baseUrl)
+						VALUES("' . $baseUrl . '")';
+					
+					$q = $this->database->query($q);
+					
+					$linkId = mysql_insert_id();
+
+					$q = 'INSERT INTO stats (time)
+						VALUES("' . $this->timeStart . '")';
+
+					$q = $this->database->query($q);
+
+					$statId = mysql_insert_id();
+					
+					$q = 'INSERT INTO linkstats (link, stat)
+						VALUES("' . $linkId  . '",
+						"' . $statId . '")';
+						
+					$q = $this->database->query($q);
+				}
+				
+				// FIX: englishProficiency needs to be / by count on the GUI.
+				$q = 'UPDATE stats
+					SET count = count + 1,
+					goodness = goodness + ' . $goodness  . ', 
+					englishProficiency = englishProficiency + ' . $englishProficiency . '
+					WHERE id = "' . $statId . '"';
+			
+				$this->database->query($q);		
 		}
 	}
 

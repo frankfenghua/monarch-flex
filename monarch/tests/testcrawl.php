@@ -1,5 +1,4 @@
-<?php
-error_reporting(E_ALL);
+<?phperror_reporting(E_ALL);
 ini_set('display_errors','1');
 
 require_once '../StructuredCrawl.php';
@@ -9,7 +8,7 @@ require_once '../ForumThreadProcessor.php';
 $THREAD_LEVEL = 0;
 $POST_LEVEL = 1;
 $NUM_LEVELS = 2;
-$MAX_PAGES_TO_CRAWL = 40;
+$MAX_PAGES_TO_CRAWL = 20;
 
 $p_processor = new ForumPostProcessor('threadless');
 $t_processor = new ForumThreadProcessor('threadless');
@@ -20,6 +19,7 @@ $crawl->addURLType('/class="forum_title" href="([^"]+)"/',1,0);
 $crawl->addURLType('/class="pagea " href="([^"]+)"/',0,0);
 $crawl->addURLType('/class="pagea" href="([^"]+)"/',1,1);
 
+echo "H";
 $crawl->addCallback($p_processor,$POST_LEVEL);
 $crawl->addCallback($t_processor,$THREAD_LEVEL);
 $crawl->beginCrawlFromPage('http://threadless.com/blogs/blogs');

@@ -104,7 +104,7 @@ class StructuredCrawl {
   //           the PageProcessor object will be called on the contents.
   // ------------------------------------------------------------------------	
   public function addCallback($callback, $level) {
-    var_dump($callback);
+    // var_dump($callback);
     $this->callbacks[$level] = $callback;
   }
   

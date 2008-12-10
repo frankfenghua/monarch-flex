@@ -33,7 +33,10 @@
 	website database:
 	
 		DELETE FROM keywords;
+		DELETE FROM keywordstats;
+		DELETE FROM linkstats;
 		DELETE FROM links;
+		DELETE FROM stats;
 		DELETE FROM posts;
 		DELETE FROM threads;
 		DELETE FROM users;
