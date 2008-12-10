@@ -197,21 +197,22 @@ class ForumPostProcessor implements Processor {
 		// find all full URL's
 		preg_match_all('#(?:href|src)="([^"]+)"#i', $body, $fullUrls);
 		
-		echo '<h1>$body</h1>' . $body . '<br>';
-		
 		// remove all HTML but the full URL's
 		$body = preg_replace('#<a.*href[ ]*=[ ]*"#i', '', $body);
 		$body = preg_replace('#<img.*src[ ]*=[ ]*"#i', '', $body);
 		$body = preg_replace('#"[^>]*>#', ' ', $body);
-		$body = preg_replace('/[\s]+/', ' ', $body);
 		$body = strip_tags($body);
+		$body = preg_replace('/[\s]+/', ' ', $body);
+		
+		echo '<h1>$body before explode</h1>' . $body . '<br>';
+		
 		$body = explode(' ', $body);
 		
-		echo '<h1>$body</h1>' . $body . '<br>';
+		echo '<h1>$body after explode</h1>' . $body . '<br>';
 
 		foreach($fullUrls[1] as $fullUrl)
 		{
-			$positionsLinkInBody = array_keys($body, $fullUrl); 
+			$positionsLinkInBody = array_keys($body, $fullUrl);
 			
 			// get base url
 			$cleanLink = str_ireplace('http://', '', $fullUrl);
@@ -226,9 +227,7 @@ class ForumPostProcessor implements Processor {
 			$baseUrl = mysql_real_escape_string($baseUrl);
 	
 			echo '<h1>$positionsLinkInBody</h1>' . $positionsLinkInBody . '<br>';
-			echo '<h1>$body</h1>' . $body . '<br>';
 			echo '<h1>$fullUrl</h1>' . $fullUrl . '<br>';
-
 
 			foreach($positionsLinkInBody as $positionLinkInBody) 
 				$goodness += $this->linguistics->goodnessFromIndex($positionLinkInBody, $body);
