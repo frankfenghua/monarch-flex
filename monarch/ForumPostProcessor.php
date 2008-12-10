@@ -113,12 +113,30 @@ class ForumPostProcessor implements Processor {
 	// ------------------------------------------------------------------------	
 	private function insertPost($author, $time, $message, $threadId)
 	{
+
 		// attempt to find existing record of this user
 		$q = 'SELECT created, id 
 			  FROM users
 			  WHERE name = "' . $author . '"';
 		
 		$q = $this->database->query($q);
+
+		// do not re-scrape this post if we've already encountered it.
+		$d = mysql_fetch_array($q);
+		$userId = $d['id'];
+		
+		$d = 'SELECT id 
+			FROM posts
+			WHERE user = "' . $userId . '"
+			AND time = "' . $this->cleanTime($time) . '"';
+
+		$d = $this->database->query($d);
+		
+		if(mysql_num_rows($d) > 0)
+		{
+			echo '<h1>duplicate post found</h1>';
+			return;
+		}
 		
 		// user does not exist - create new one 
 		if(mysql_num_rows($q) == 0)
@@ -190,6 +208,8 @@ class ForumPostProcessor implements Processor {
 	// ------------------------------------------------------------------------
 	private function insertLinks($body)
 	{
+		return;
+
 		// find all full URL's
 		preg_match_all('#(?:href|src)="([^"]+)"#i', $body, $fullUrls);
 		
@@ -212,15 +232,9 @@ class ForumPostProcessor implements Processor {
 			preg_match_all(sprintf('#(?:[a-z]+\.)?([a-z0-9\-]+\.(?:%s)(\.(?:%s))?)#i', $suffixes, $suffixes), $cleanLink, $baseUrl);
 	
 			$baseUrl = $baseUrl[1][0];
-
 			$baseUrl = mysql_real_escape_string($baseUrl);
 
-			echo '<h1>$fullUrl</h1>' . $fullUrl . '<br>';
-			echo '<h1>$body</h1>' . $body . '<br>';
-
 			$goodness = $this->linguistics->goodness($fullUrl, $body);
-
-			// $englishProficiency = $this->linguistics->englishProficiency(implode(' ', $body));
 			$englishProficiency = $this->linguistics->englishProficiency($body);
 			
 			$q = 'SELECT id 

@@ -20,8 +20,10 @@ ini_set('display_errors','1');
 	
 	$body = 'One of the themes for the next issue is Beloved, and it would be super fucking awesome to win, although I really don\'t have a chance in hell.  It would be really cool of you if you\'d vote for me, though.  I\'d give you lots of cool points.<br />
 <br />
-<a href="http://www.jpgmag.com/photos/1171002"><img src="http://photos.jpgmag.com/1171002_90488_4329d3d61a_m.jpg" /></a><br>';
+<a href="http://www.jpgmag.com/photos/1171002"><img src="http://photos.jpgmag.com/1171002_90488_4329d3d61a_m.jpg" /></a><br> fuck you';
 	
+	
+
 	$body = preg_replace('#<a.*href[ ]*=[ ]*"#i', '', $body);
 	$body = preg_replace('#<img.*src[ ]*=[ ]*"#i', '', $body);
 	$body = preg_replace('#"[^>]*>#', ' ', $body);
@@ -29,6 +31,13 @@ ini_set('display_errors','1');
 	$body = preg_replace('/[\s]+/', ' ', $body);
 	$body = trim($body);
 
+	echo '<h1>cleaned body </h1>' . $body;	
+
+	$body = preg_replace('#(?:http://www\.|http://|www\.).+ #i', '', $body);
+
+	echo '<h1>links removed </h1>' . $body;
+
+	/*
 	preg_match_all('/[^ ]+/', $body, $body_words);
 
 		$body = $body_words[0];
@@ -51,6 +60,7 @@ ini_set('display_errors','1');
 			}
 
 		}
+	*/
 	
 	print_r($body);
 	
