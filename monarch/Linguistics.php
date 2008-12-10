@@ -114,7 +114,6 @@ class Linguistics
 	//           * not normalized to [0.0 - 1.0] range
 	//           * "very" and "so" does not have to precede adjective. Ex: I like it very much.
 	// ------------------------------------------------------------------------
-	// public function goodness($keyword, $body)
 	public function goodness($keyword, $body)
 	{
 		// make everything lowercase so == can be used correctly

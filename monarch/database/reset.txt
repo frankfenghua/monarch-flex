@@ -13,11 +13,20 @@
 	
 		DELETE FROM keywords;
 		DELETE FROM links;
+		DELETE FROM keywordstats;
+		DELETE FROM linkstats;
+		DELETE FROM stats;
 		DELETE FROM posts;
 		DELETE FROM regexes
 		DELETE FROM threads;
 		DELETE FROM users;
 		UPDATE analysis SET value = 0.0;
+		ALTER TABLE keywords AUTO_INCREMENT = 1;
+		ALTER TABLE links AUTO_INCREMENT = 1;
+		ALTER TABLE posts AUTO_INCREMENT = 1;
+		ALTER TABLE stats AUTO_INCREMENT = 1;
+		ALTER TABLE threads AUTO_INCREMENT = 1;
+		ALTER TABLE users AUTO_INCREMENT = 1;
 	
 	master database:
 	
@@ -41,7 +50,13 @@
 		DELETE FROM threads;
 		DELETE FROM users;
 		UPDATE analysis SET value = 0.0;
-	
+		ALTER TABLE keywords AUTO_INCREMENT = 1;
+		ALTER TABLE links AUTO_INCREMENT = 1;
+		ALTER TABLE posts AUTO_INCREMENT = 1;
+		ALTER TABLE stats AUTO_INCREMENT = 1;
+		ALTER TABLE threads AUTO_INCREMENT = 1;
+		ALTER TABLE users AUTO_INCREMENT = 1;
+		
 	master database:
 	
 		DELETE FROM users;

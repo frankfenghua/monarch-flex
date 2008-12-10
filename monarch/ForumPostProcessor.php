@@ -30,34 +30,40 @@ class ForumPostProcessor implements Processor {
 	private $start_time;  // Time this processor was created
 	private $linguistics;  // calculates stats for 
 
-  // FIX: where is the function header?
-  public function ForumPostProcessor($domain) {
-    $this->domain       = $domain;
-    $this->database     = new Database('master');
-    $this->allowedWords = $this->loadAllowedWords();
-    // $this->badWords     = $this->loadBadWords();
-    // $this->goodWords    = $this->loadGoodWords();
-    $this->database     = new Database($domain);
-    $this->plugin       = $this->loadPlugin();
-    $this->timeStart    = time();
-	$this->linguistics  = new Linguistics();
-  }
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// MAIN FUNCTIONS .............................................................
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~	
 
-  // FIX: where is the function header?
-  public function process($html) {
-    // $this->dummy($html);
+	// FIX: where is the function header?
+	public function ForumPostProcessor($domain) 
+	{
+		$this->domain       = $domain;
+		$this->database     = new Database('master');
+		$this->allowedWords = $this->loadAllowedWords();
+		// $this->badWords     = $this->loadBadWords();
+		// $this->goodWords    = $this->loadGoodWords();
+		$this->database     = new Database($domain);
+		$this->plugin       = $this->loadPlugin();
+		$this->timeStart    = time();
+		$this->linguistics  = new Linguistics();
+	}
 
-    // Find the thread ID for this page using the link
-    $threadUrl = $this->plugin['parentUrl'];
-    preg_match_all($threadUrl, $html, $matches);
-    // print_r($matches);
-	$q = 'SELECT id
-			      FROM threads
-			      WHERE url = "' . $matches[1][0] . '"';
-	$q = $this->database->fetch($q);
-	$threadID = $q[0] ? $q[0] : -1;
-	$this->scrapePosts($threadID, $html);
-  }
+	// FIX: where is the function header?
+	public function process($html) 
+	{
+		// $this->dummy($html);
+		
+		// Find the thread ID for this page using the link
+		$threadUrl = $this->plugin['parentUrl'];
+		preg_match_all($threadUrl, $html, $matches);
+		// print_r($matches);
+		$q = 'SELECT id
+			FROM threads
+			WHERE url = "' . $matches[1][0] . '"';
+		$q = $this->database->fetch($q);
+		$threadID = $q[0] ? $q[0] : -1;
+		$this->scrapePosts($threadID, $html);
+	}
 
 	// ========================================================================
 	// scrapePosts
@@ -94,80 +100,6 @@ class ForumPostProcessor implements Processor {
 		for($i = 0; $i < sizeof($replyAuthors[1]); $i++)
 			$this->insertPost($replyAuthors[1][$i], $replyTimes[1][$i], $replyMessages[1][$i], $threadId);
 	}
-
-	// ========================================================================
-	// insertKeywords
-	//    args:  string - message body text
-	//           int - unix timestamp of the message
-	//    ret:   void
-	//    about: Inserts stats each word found in the message body. 
-	//    fix:   * Why are spaces still being counted as a word?
-	//           * Need to only store keywords that were said between this 
-	//             session and the last session.
-	// ------------------------------------------------------------------------	
-	public function insertKeywords($html) 
-	{
-		// echo "Collecting Keywords";
-		// remove whitespace and HTML
-		$body = preg_replace('/[\s]+/', ' ', $html);
-		$body = preg_replace('/[!-~]+/', ' ', $html);
-		$body = preg_replace('/<[^>]+>/', ' ', $html);
-		
-		preg_match_all('/[a-zA-Z]+/', $body, $words);
-		
-		foreach($words[0] as $word)
-		{	
-			// don't care about capitalization  
-			$word = strtolower($word);
-			
-			// only record keywords we're specifically scraping for
-			if(in_array($word, $this->allowedWords))
-			{
-				// echo "Saw word: ".$word;
-				$goodness = $this->linguistics->goodness($word, $body);
-				$englishProficiency = $this->linguistics->englishProficiency($body);
-				
-				$q = 'SELECT id FROM keywords
-					WHERE word = "' . $word          . '"';
-				
-				$q = $this->database->query($q);
-				
-				// word has never been seen before in this session - create a new entry
-				if(mysql_num_rows($q) == 0)
-				{
-					$q = 'INSERT INTO keywords (word)
-						VALUES("' . $word . '")';
-					
-					$q = $this->database->query($q);
-					
-					$keywordId = mysql_insert_id();
-
-					$q = 'INSERT INTO stats (time)
-						VALUES("' . $this->timeStart . '")';
-
-					$q = $this->database->query($q);
-
-					$statId = mysql_insert_id();
-					
-					$q = 'INSERT INTO keywordstats (keyword, stat)
-						VALUES("' . $keywordId  . '",
-						"' . $statId . '")';
-						
-					$q = $this->database->query($q);
-				}
-				
-				// FIX: englishProficiency needs to be / by count on the GUI.
-				$q = 'UPDATE stats
-					SET count = count + 1,
-					goodness = goodness + ' . $goodness  . ', 
-					englishProficiency = englishProficiency + ' . $englishProficiency . '
-					WHERE id = "' . $statId . '"';
-			
-				$this->database->query($q);
-			}
-		}
-	}
-
 	
 	// ========================================================================
 	// insertPost
@@ -262,93 +194,173 @@ class ForumPostProcessor implements Processor {
 	// ------------------------------------------------------------------------
 	private function insertLinks($body)
 	{
-		// search for base links
-		// threadless.com
-		// threadless.com/whatever
-		// www.threadless.com/whatever
-		// http://www.threadless.com/whatever
-		// http://threadles.com/whatever
+		// find all full URL's
+		preg_match_all('#(?:href|src)="([^"]+)"#i', $body, $fullUrls);
 		
-		// echo "Collecting Keywords";
-		// remove whitespace and +HTML
-		$body = preg_replace('/[\s]/', ' ', $body);
-		// $body = preg_replace('/[!-~]+/', ' ', $html);
-
-		$numLinks = preg_match_all('#(href|src)="([^"]+)"#i', $body, $links);	
-
-		// echo '<h1>links in this post</h1>' . 
+		echo '<h1>$body</h1>' . $body . '<br>';
 		
-		echo '<h1>size of links[2]</h1>';
-			print(sizeof($links[2]));
+		// remove all HTML but the full URL's
+		$body = preg_replace('#<a.*href[ ]*=[ ]*"#i', '', $body);
+		$body = preg_replace('#<img.*src[ ]*=[ ]*"#i', '', $body);
+		$body = preg_replace('#"[^>]*>#', ' ', $body);
+		$body = preg_replace('/[\s]+/', ' ', $body);
+		$body = strip_tags($body);
+		$body = explode(' ', $body);
+		
+		echo '<h1>$body</h1>' . $body . '<br>';
 
-		foreach($links[2] as $link)
+		foreach($fullUrls[1] as $fullUrl)
 		{
-			$oredLinks .= str_replace('.', '\.', $link) . '|';
-		}
-
-		// FIX: prevent having to learn substr
-		$oredLinks .= 'asiu2397zmazzzd';
-
-		echo '<h1>oredLinks</h1>';
-			print_r($oredLinks);
-
-		$body = preg_replace('/<^(' . $oredLinks . ')+>/', '', $html);
-
-		foreach($links[2] as $link)
-		{
-			$body = preg_replace('/<[^>]+>/', ' ', $html);	
+			$positionsLinkInBody = array_keys($body, $fullUrl); 
+			
 			// get base url
-			$cleanLink = str_ireplace('http://', '', $link);
+			$cleanLink = str_ireplace('http://', '', $fullUrl);
 			$cleanLink = str_ireplace('www.', '', $cleanLink);
 			
 			$suffixes = 'com|net|info|org|me|tv|mobi|biz|us|ca|asia|ws|ag|am|at|be|cc|cn|de|eu|fm|fm|gs|jobs|jp|ms|nu|co|nz|tc|tw|idv|uk|vg';
 
-			// sub.apple.co.uk
-			preg_match_all(sprintf('#(?:[a-z]+\.)?([a-z0-9\-]+\.(?:%s)(\.(?:%s))?)#i', $suffixes, $suffixes), $link, $baseUrl);
-
-						
+			preg_match_all(sprintf('#(?:[a-z]+\.)?([a-z0-9\-]+\.(?:%s)(\.(?:%s))?)#i', $suffixes, $suffixes), $cleanLink, $baseUrl);
+	
 			$baseUrl = $baseUrl[1][0];
 
 			$baseUrl = mysql_real_escape_string($baseUrl);
+	
+			echo '<h1>$positionsLinkInBody</h1>' . $positionsLinkInBody . '<br>';
+			echo '<h1>$body</h1>' . $body . '<br>';
+			echo '<h1>$fullUrl</h1>' . $fullUrl . '<br>';
 
-			$body = explode(' ', $body);
+
+			foreach($positionsLinkInBody as $positionLinkInBody) 
+				$goodness += $this->linguistics->goodnessFromIndex($positionLinkInBody, $body);
+
+			$englishProficiency = $this->linguistics->englishProficiency(implode(' ', $body));
 			
-			echo '<h1>body</h1>';
-			print_r($body);
-
-			for($i = 0; $i < sizeof($body); $i++)
-			{
-				if(strpos($body[$i], $link) !== false)
-					$linkPositions[] = $i;
-			}
+			$q = 'SELECT id 
+				FROM links 
+				WHERE baseUrl = "' . $baseUrl  . '"';
 			
-
-			$goodness = 0;
-
-
-			foreach($linkPositions as $linkPosition) 
+			$q = $this->database->query($q);
+			
+			// link has never been seen in previous sessions
+			if(mysql_num_rows($q) == 0)
 			{
-				$goodness += $this->linguistics->goodnessFromIndex($linkPosition, $body);
-				echo '<h1>goodness of link</h1> ' . $this->linguistics->goodnessFromIndex($linkPosition, $body);
-			}
-
-				$englishProficiency = $this->linguistics->englishProficiency($body);
-				
-				$q = 'SELECT id FROM links
-					WHERE baseUrl = "' . $baseUrl  . '"';
+				$q = 'INSERT INTO links (baseUrl)
+					VALUES("' . $baseUrl . '")';
 				
 				$q = $this->database->query($q);
 				
-				// word has never been seen before in this session - create a new entry
+				$linkId = mysql_insert_id();
+			}
+			// link has been seen in previous sessions
+			else
+			{
+				$q = mysql_fetch_array($q);
+				
+				$linkId = $q['id'];
+			}
+			
+			$q = 'SELECT s.id
+				FROM linkstats AS ls, stats AS s
+				WHERE ls.link = "' . $linkId . '"
+				AND ls.stat = s.id
+				AND s.time = "' . $this->timeStart . '"';
+			
+			// link has not been seen in this particular session
+			if(mysql_num_rows($q) == 0)
+			{
+				$q = 'INSERT INTO stats (time)
+					VALUES("' . $this->timeStart . '")';
+
+				$q = $this->database->query($q);
+
+				$statId = mysql_insert_id();
+				
+				$q = 'INSERT INTO linkstats (link, stat)
+					VALUES("' . $linkId  . '",
+					"' . $statId . '")';
+					
+				$q = $this->database->query($q);
+			}
+			// link has been seen in this particular session
+			else
+			{
+				$q = mysql_fetch_array($q);
+					
+				$statId = $q['id'];
+			}
+			
+			// FIX: englishProficiency needs to be / by count on the GUI.
+			$q = 'UPDATE stats
+				SET count = count + 1,
+				goodness = goodness + ' . $goodness  . ', 
+				englishProficiency = englishProficiency + ' . $englishProficiency . '
+				WHERE id = "' . $statId . '"';
+		
+			$this->database->query($q);		
+		}
+	}
+	
+	// ========================================================================
+	// insertKeywords
+	//    args:  string - message body text
+	//           int - unix timestamp of the message
+	//    ret:   void
+	//    about: Inserts stats each word found in the message body. 
+	//    fix:   * Why are spaces still being counted as a word?
+	//           * Need to only store keywords that were said between this 
+	//             session and the last session.
+	// ------------------------------------------------------------------------	
+	public function insertKeywords($html) 
+	{
+		// remove whitespace and HTML
+		$body = preg_replace('/[\s]+/', ' ', $html);
+		$body = preg_replace('/[!-~]+/', ' ', $html);
+		$body = strip_tags($body);
+		
+		preg_match_all('/[a-zA-Z]+/', $body, $words);
+		
+		foreach($words[0] as $word)
+		{	
+			// don't care about capitalization  
+			$word = strtolower($word);
+			
+			// only record keywords we're specifically scraping for
+			if(in_array($word, $this->allowedWords))
+			{
+				$goodness = $this->linguistics->goodness($word, $body);
+				$englishProficiency = $this->linguistics->englishProficiency($body);
+				
+				$q = 'SELECT id FROM keywords
+					WHERE word = "' . $word . '"';
+				
+				$q = $this->database->query($q);
+				
+				// word has never been seen before in this session
 				if(mysql_num_rows($q) == 0)
 				{
-					$q = 'INSERT INTO links (baseUrl)
-						VALUES("' . $baseUrl . '")';
+					$q = 'INSERT INTO keywords (word)
+						VALUES("' . $word . '")';
 					
 					$q = $this->database->query($q);
 					
-					$linkId = mysql_insert_id();
-
+					$keywordId = mysql_insert_id();
+				}
+				else
+				{
+					$q = mysql_fetch_array($q);
+				
+					$keywordId = $q['id'];
+				}
+				
+				$q = 'SELECT s.id
+					FROM keywordstats AS ks, stats AS s
+					WHERE ks.keyword = "' . $keywordId . '"
+					AND ks.stat = s.id
+					AND s.time = "' . $this->timeStart . '"';
+				
+				// keyword has not been seen in this particular session
+				if(mysql_num_rows($q) == 0)
+				{
 					$q = 'INSERT INTO stats (time)
 						VALUES("' . $this->timeStart . '")';
 
@@ -356,11 +368,18 @@ class ForumPostProcessor implements Processor {
 
 					$statId = mysql_insert_id();
 					
-					$q = 'INSERT INTO linkstats (link, stat)
-						VALUES("' . $linkId  . '",
+					$q = 'INSERT INTO keywordstats (keyword, stat)
+						VALUES("' . $keywordId  . '",
 						"' . $statId . '")';
 						
 					$q = $this->database->query($q);
+				}
+				// keyword has been seen in this particular session
+				else
+				{
+					$q = mysql_fetch_array($q);
+						
+					$statId = $q['id'];
 				}
 				
 				// FIX: englishProficiency needs to be / by count on the GUI.
@@ -370,9 +389,11 @@ class ForumPostProcessor implements Processor {
 					englishProficiency = englishProficiency + ' . $englishProficiency . '
 					WHERE id = "' . $statId . '"';
 			
-				$this->database->query($q);		
+				$this->database->query($q);
+			}
 		}
 	}
+
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // INITIALIZATION FUNCTIONS ...................................................
@@ -399,49 +420,6 @@ class ForumPostProcessor implements Processor {
 		return $allowedWords;
 	}
 	
-	// ========================================================================
-	// loadGoodWords
-	//    args:  none
-	//    ret:   array of strings
-	//    about: Returns a list of positive English words, which we've defined.
-	//           Used for linguistic analysis.
-	// ------------------------------------------------------------------------	
-	/*
-	private function loadGoodWords()
-	{
-		$q = 'SELECT word
-		      FROM goodwords';
-		
-		$q = $this->database->query($q);
-		
-		while($row = mysql_fetch_array($q))
-			$goodWords[] = $row['word'];
-		
-		return $goodWords;
-	}
-	*/
-	
-	// ========================================================================
-	// loadBadWords
-	//    args:  none
-	//    ret:   array of strings
-	//    about: Returns a list of negative English words, which we've defined.
-	//           Used for linguistic analysis.
-	// ------------------------------------------------------------------------	
-	/*
-	private function loadBadWords()
-	{
-		$q = 'SELECT word
-		      FROM badwords';
-		
-		$q = $this->database->query($q);
-		
-		while($row = mysql_fetch_array($q))
-			$badWords[] = $row['word'];
-		
-		return $badWords;
-	}
-	*/
 
 	// ========================================================================
 	// loadPlugin
@@ -484,51 +462,5 @@ class ForumPostProcessor implements Processor {
 		return strtotime($englishTime);
 	}
 	
-	// ========================================================================
-	// rating
-	//    args:  * string - the word which you want to know the rating of
-	//           * array of strings - the body of text that the word belongs to
-	//    ret:   int - the magnitude of sign of this number tell how good (+)
-	//                 or how bad (-) this word is spoken about.
-	//    about: Removes all symbols or words that could confuse PHP's 
-	//           strtotime() and returns the Unix timestamp.
-	//    fix:   * "like" is not necessarily a positive word because it could 
-	//             be used as a synonym of "similar" instead of "love".
-	//           * do stemming and augmenting of goodWords.
-	//           * bad running time
-	//           * not scientificly proven algorithm
-	//           * if $word belonged to goodWords or badWords, there is a 
-	//             chance of division by zero.
-	// ------------------------------------------------------------------------
-	/*
-	private function rating($position, $body)
-	{
-	  // echo "Rating " . $body[$position];
-		$rating = 0;
-
-		$scannedWord = "";
-		$locationWord = $position;
-		$locationAdjective = 0;
-	
-		// scan through the whole body
-		foreach($body as $adjective)
-		{
-			// don't care about capitalization
-			$adjective = strtolower($adjective);
-		
-			// goodness of a word is inversely proportional to it's distance from a good word
-			if(in_array($adjective, $this->goodWords))
-				$rating += 1 / abs($locationAdjective - $locationWord);
-			
-			// badness of a word is inversely proportional to it's distance from a bad word
-			if(in_array($adjective, $this->badWords))
-				$rating -= 1 / abs($locationAdjective - $locationWord);
-			
-			$locationAdjective++;
-		}
-		
-		return $rating;
-	}
-	*/
 }
 ?>

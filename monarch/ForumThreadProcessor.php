@@ -78,9 +78,9 @@ class ForumThreadProcessor implements Processor {
 	    */
 	    $q = 'INSERT INTO threads (posts, views, title, url)
 				      VALUES("' . $numPosts[1][$i]    . '",
-				             "' . 0    . '", 
+				             "' . 0                   . '", 
 				             "",
-                                             "' . $threadUrl[1][$i]   . '")';
+                             "' . $threadUrl[1][$i]   . '")';
 				            
 				           
 	    

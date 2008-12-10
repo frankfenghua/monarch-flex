@@ -24,9 +24,9 @@ class Database
 	// ------------------------------------------------------------------------
 	public function Database($name)
 	{
-		$server        = 'localhost';
-		$user          = 'ryan';
-		$password      = 'adobe';
+		$server   = 'localhost';
+		$user     = 'ryan';
+		$password = 'adobe';
 		
 		$this->connect = @mysql_connect($server, $user, $password) 
 			or die('Could not connect to the master database.');
