@@ -190,8 +190,8 @@ class ForumPostProcessor implements Processor {
 	// ------------------------------------------------------------------------	
 	private function insertMessage($body, $time)
 	{
-		$this->insertLinks($body);
 		$this->insertKeywords($body, $time);
+		$this->insertLinks($body);
 	}
 
 	
@@ -208,8 +208,6 @@ class ForumPostProcessor implements Processor {
 	// ------------------------------------------------------------------------
 	private function insertLinks($body)
 	{
-		return;
-
 		// find all full URL's
 		preg_match_all('#(?:href|src)="([^"]+)"#i', $body, $fullUrls);
 		

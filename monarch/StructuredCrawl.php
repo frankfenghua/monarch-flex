@@ -143,7 +143,7 @@ class StructuredCrawl {
       if($urls) {
 	foreach($urls as $u) {
 	    $u = URL::translateURLBasedOnCurrent($u, $url->getName());
-	    echo 'Added url'.$u.' <br/>';
+	    echo 'Added url ' . $u . ' <br/>';
 	    $this->addUrl($u,$u_type->getLevel());
 	}
       }
