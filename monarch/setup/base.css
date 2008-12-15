@@ -1,0 +1,29 @@
+/* title:  base.css
+   author: Ryan Lin
+   date:   07/01/08
+   about:  common base definitions I use for all my sites
+========================================================== */
+
+* { 
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	font-size: 62.5%;
+}
+
+img {
+	vertical-align: middle;
+}
+
+.clear {
+	clear: both;
+	height: 1%;
+}
+
+.half {
+	float: left;
+	width: 49.9%;
+}
+

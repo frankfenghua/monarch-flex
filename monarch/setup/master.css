@@ -1,0 +1,145 @@
+/* title:  master.css
+   author: Ryan Lin
+   date:   10/19/08
+   about:  Main style for the plugin editor
+========================================================== */
+
+html {
+	height: 100%;
+	background: #000;
+}
+
+body {
+	background: #000 url(images/background.jpg) no-repeat top;
+	height: 100%;
+	color: #efefef;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+
+a:link {
+	color: #22ceff;
+}
+
+a:visited {
+	color: #22ceff;
+}
+
+ul {
+	margin: 0 0 0 2em;
+	line-height: 1.6em;
+}
+
+#contain {
+	width: 770px;
+	padding: 0 0 50px 0;
+	margin: auto;
+}
+
+#homeLink {
+	width: 500px;
+	height: 85px;
+	display: block;
+	margin: auto;
+}
+
+#instructions {
+	height: 22em;
+}
+
+#instructions div {
+	float: left;
+	width: 44%;
+	margin: 2em;
+	line-height: 1.4em;
+}
+
+.in {
+	padding: 0 1em;
+}
+
+i {
+	display: block;
+	color: #ccc;
+}
+
+b {
+	display: block;
+	font-size: 1.4em;
+	margin: 1em 0 0.4em 0;
+	text-transform: capitalize;
+	color: #f2c528;
+}
+
+strong {
+	font-weight: bold;
+	color: #f2c528;
+	display: block;
+	text-align: right;
+	width: 3em;
+	float: left;
+	padding: 0 0.4em 0 0;
+}
+
+h1 {
+	font-size: 3em;
+	text-align: center;
+	text-transform: capitalize;
+	border-bottom: 1px dotted #efefef;
+	padding: 0.6em 0 0.2em 0;
+	margin: 0 0 1em 0;
+}
+
+h2 {
+	font-size: 2em;
+	color: #6e80c4;
+	margin: 1.4em 0 0.2em 0;
+	text-transform: capitalize;
+	border-bottom: 1px solid #6e80c4;
+}
+
+h3 {
+	font-size: 1.6em;
+	margin: 0 0 0.6em 0;
+	font-weight: bold;
+	color: #b475c5;
+	border-bottom: 1px dotted #b475c5;
+	padding: 0 0 0.2em 0;
+}
+
+textarea, input[type="text"], input[type="password"] {
+	width: 90%;
+	padding: 0.4em;
+	background: #fff url(images/formTextBackground.png) repeat-x top;
+	border: 1px solid #333;
+	color: #333;
+}
+
+input[type="text"], input[type="password"], input[type="radio"], em, textarea, select {
+	font-size: 1.1em;
+	margin: 0 0 0 1em;
+}
+
+textarea {
+	height: 14em;
+	padding: 0;
+}
+
+em {
+	color: #ccc;
+}
+
+.formButton {
+	padding: 1em 0;
+	height: 2em;
+}
+
+.formButton input {
+	float: right;
+	padding: 0.2em;
+	font-size: 1.4em;
+	float: right;
+}
+
+.error {
+	color: #FF0000;
+}
