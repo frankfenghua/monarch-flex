@@ -20,7 +20,6 @@ class Linguistics
 	private $goodWords;         // array of positive words (linguistic analysis)
 	private $englishDictionary; // array of all the words in the english dictionary
 	private $database;          // used for accessing the linguistic tables
-	private $lowercaseLetters;  // a through z
 	
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // PUBLIC FUNCTIONS ...............................................................
@@ -73,9 +72,6 @@ class Linguistics
 		
 		while($row = mysql_fetch_array($q))
 			$this->badWords[] = $row['word'];
-			
-		// load all lowercase letters
-		$this->lowercaseLetters = explode(' ', 'a b c d e f g h i j k l m n o p q r s t u v w x y z');
 	}
 	
 	
@@ -144,7 +140,8 @@ class Linguistics
 	
 		// find location of the word in the body
 		$keywordLocations = array_keys($body, $keyword);
-
+
+
 		foreach($keywordLocations as $locationKeyword)
 		{
 			$locationAdjective = 0;
@@ -211,9 +208,20 @@ class Linguistics
 	{
 		preg_match_all('#[^\?\.!]+#', $text, $allSentences);
 
+		// check if 1st char in each sentence is lowercase (or punctuation / numeric) and mark that as a mistake
 		foreach($allSentences[0] as $sentence)
 		{
-			if(in_array(substr(trim($sentence), 0, 1), $this->lowercaseLetters))
+			$firstCharInSentence = substr(trim($sentence), 0, 1);
+			
+			//echo '<p>first char in sentence: ' . $firstCharInSentence . '</p>';
+			
+			preg_match_all('#[a-z0-9\W]#', $firstCharInSentence, $lowercasedStarter);
+			
+			//echo '<p>sizeof($lowercasedStarter): ' . sizeof($lowercasedStarter) . '</p>';
+			
+			//print_r($lowercasedStarter);
+			
+			if(sizeof($lowercasedStarter[0]) == 1)
 				$numMistakes++;
 		}
 
