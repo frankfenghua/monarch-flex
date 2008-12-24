@@ -32,61 +32,60 @@ class ForumThreadProcessor implements Processor {
     $this->scrapeThreads($html);
   }
 
-  // ========================================================================
-  // scrapeThreads
-  //    args:  string - HTML of a page of threads
-  //    ret:   void
-  //    about: Scrapes the threads page for basic thread stats. Calls
-  //           scrapeThread (singular) to actually go into a thread. Will have
-  //           a delay before entering each thread.
-  //    fix:   * Checking thread title for duplicates is not robust since 
-  //             people can edit their titles. 
-  //           * New replies can be added to a thread which we've alrady 
-  //             scraped for. Currently, we would not be checking those new
-  //             replies.
-  // ------------------------------------------------------------------------	
-  private function scrapeThreads($html)
-  {	
-    if($this->plugin['threadUrl'] != NULL)
-      preg_match_all($this->plugin['threadUrl'], $html, $threadUrl);
-    
-    if($this->plugin['threadTitle'] != NULL)
-      preg_match_all($this->plugin['threadTitle'], $html, $threadTitle);
-    
-    if($this->plugin['threadNumPosts'] != NULL)
-      preg_match_all($this->plugin['threadNumPosts'], $html, $numPosts);
-    
-    if($this->plugin['threadNumViews'] != NULL)	
-      preg_match_all($this->plugin['threadNumViews'], $html, $numViews);
-    
-    for($i = 0; $i < sizeof($threadUrl[1]); $i++)
-      {
-	// check for duplicate
-	$q = 'SELECT id
-			      FROM threads
-			      WHERE url = "' . $threadUrl[1][$i] . '"';
+	// ========================================================================
+	// scrapeThreads
+	//    args:  string - HTML of a page of threads
+	//    ret:   void
+	//    about: Scrapes the threads page for basic thread stats. Calls
+	//           scrapeThread (singular) to actually go into a thread. Will have
+	//           a delay before entering each thread.
+	//    fix:   * Checking thread title for duplicates is not robust since 
+	//             people can edit their titles. 
+	//           * New replies can be added to a thread which we've alrady 
+	//             scraped for. Currently, we would not be checking those new
+	//             replies.
+	// ------------------------------------------------------------------------	
+	private function scrapeThreads($html)
+	{	
+		if($this->plugin['threadUrl'] != NULL)
+			preg_match_all($this->plugin['threadUrl'], $html, $threadUrl);
+		
+		if($this->plugin['threadTitle'] != NULL)
+			preg_match_all($this->plugin['threadTitle'], $html, $threadTitle);
+		
+		if($this->plugin['threadNumPosts'] != NULL)
+			preg_match_all($this->plugin['threadNumPosts'], $html, $numPosts);
+		
+		if($this->plugin['threadNumViews'] != NULL)	
+			preg_match_all($this->plugin['threadNumViews'], $html, $numViews);
 	
-	$q = $this->database->query($q);
-	
-	// only insert if it's new
-	if(mysql_num_rows($q) == 0)	
-	  {		
-	    /* $q = 'INSERT INTO threads (posts, views, title)
-				      VALUES("' . $numPosts[1][$i]    . '",
-				             "' . $numViews[1][$i]    . '", 
-				             "' . $threadTitle[1][$i] . '")';
-	    */
-	    $q = 'INSERT INTO threads (posts, views, title, url)
-				      VALUES("' . $numPosts[1][$i]    . '",
-				             "' . 0                   . '", 
-				             "",
-                             "' . $threadUrl[1][$i]   . '")';
-				            
-				           
-	    
-	    $this->database->query($q);
-	    
-	  }
+	for($i = 0; $i < sizeof($threadUrl[1]); $i++)
+	{
+		// check for duplicate
+		$q = 'SELECT id
+			FROM threads
+			WHERE url = "' . $threadUrl[1][$i] . '"';
+		
+		$q = $this->database->query($q);
+		
+		// only insert if it's new
+		if(mysql_num_rows($q) == 0)	
+		{	
+			// some sites don't keep track of these counts
+			if($numPosts[1][$i] == '')
+				$numPosts[1][$i] = 0;
+			
+			if($numViews[1][$i] == '')
+				$numViews[1][$i] = 0;
+		
+			$q = 'INSERT INTO threads (posts, views, title, url)
+				VALUES("' . mysql_real_escape_string($numPosts[1][$i]) . '",
+				"' . mysql_real_escape_string($numViews[1][$i]) . '", 
+				"' . mysql_real_escape_string($threadTitle[1][$i]) . '", 
+				"' . mysql_real_escape_string($threadUrl[1][$i]) . '")';
+					   
+			$this->database->query($q);
+		  }
       }
   }
   

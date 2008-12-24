@@ -22,11 +22,10 @@ class ForumPostProcessor implements Processor {
 	private $database;     // connection to the master DB or specific community's DB
 	private $domain;       // name of the community
 	private $plugin;       // regular expressions for how to scrape this community
-	private $delay;        // time to wait before traversing to another page
 	private $timeStart;    // the time when we started scraping (used for time based statistics)
 	private $allowedWords; // array of keywords which we are scraping for 
-	private $start_time;  // Time this processor was created
-	private $linguistics;  // calculates stats for 
+	private $start_time;   // Time this processor was created
+	private $linguistics;  // examines what and how the speaker is speaking
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // MAIN FUNCTIONS .............................................................
@@ -113,7 +112,6 @@ class ForumPostProcessor implements Processor {
 	// ------------------------------------------------------------------------	
 	private function insertPost($author, $time, $message, $threadId)
 	{
-
 		// attempt to find existing record of this user
 		$q = 'SELECT created, id 
 			  FROM users
@@ -193,7 +191,6 @@ class ForumPostProcessor implements Processor {
 		$this->insertKeywords($body, $time);
 		$this->insertLinks($body);
 	}
-
 	
 	// ========================================================================
 	// insertLinks

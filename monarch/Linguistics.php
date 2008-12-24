@@ -4,7 +4,9 @@
 // TYPE:   Class
 // AUTHOR: Ryan Lin
 // DATE:   12/03/2008
-// ABOUT:  Various ways to gauge the importance of a speaker.
+// ABOUT:  Various ways to gauge the importance of a speaker. All functions take
+//         normal text as you would find in a book. HTML and other formatting
+//         be removed before using any of these functions.
 // ================================================================================
 
 require_once('database/Database.php');
@@ -116,7 +118,6 @@ class Linguistics
 		// make everything lowercase so == can be used correctly
 		$keyword = strtolower($keyword);
 
-		// preg_match_all('/[a-zA-Z]+/', $body, $body_words);
 		preg_match_all('/[^ ]+/', $body, $body_words);
 		$body = $body_words[0];
 
@@ -138,9 +139,8 @@ class Linguistics
 		
 		$finalScore = 0;
 	
-		// find location of the word in the body
+		// find locations of the word in the body
 		$keywordLocations = array_keys($body, $keyword);
-
 
 		foreach($keywordLocations as $locationKeyword)
 		{
@@ -213,13 +213,7 @@ class Linguistics
 		{
 			$firstCharInSentence = substr(trim($sentence), 0, 1);
 			
-			//echo '<p>first char in sentence: ' . $firstCharInSentence . '</p>';
-			
 			preg_match_all('#[a-z0-9\W]#', $firstCharInSentence, $lowercasedStarter);
-			
-			//echo '<p>sizeof($lowercasedStarter): ' . sizeof($lowercasedStarter) . '</p>';
-			
-			//print_r($lowercasedStarter);
 			
 			if(sizeof($lowercasedStarter[0]) == 1)
 				$numMistakes++;

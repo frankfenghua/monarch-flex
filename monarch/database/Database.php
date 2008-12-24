@@ -59,16 +59,18 @@ class Database
 	// ========================================================================
 	// query
 	//    args:  string - MySQL syntax. Can contain multiple queries separated
+	//                    by semicolons if next agrument is set to true
+	//           bool   - set to true if you have multiple commands separated
 	//                    by semicolons.
 	//    ret:   - MySQL result if the SQL is only one command
 	//           - Obviously can't return the result if you have multiple 
 	//             commands. In this case, returns void. 
 	//    about: Ask database to do something
 	// ------------------------------------------------------------------------
-	public function query($sql)
+	public function query($sql, $multiple = false)
 	{
-		// multi commands detected
-		if(strpos($sql, ';'))
+		// multiple commands
+		if($multiple)
 		{
 			$commands = explode(';', $sql);
 	

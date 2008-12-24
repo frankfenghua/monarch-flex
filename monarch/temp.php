@@ -1,11 +1,10 @@
 <?php
-	// echo file_get_contents('http://www.threadless.com/blogs/blogs');		
+	require_once('database/Database.php');
 	
-	$fh = fopen('http://www.threadless.com/blogs/blogs', 'r');
-	while($theData = fread($fh, 9999))
-		echo $theData;
-	fclose($fh);
+	$db = new Database('threadless');
 	
-
+	$q = 'INSERT INTO threads (title) VALUES("and&and")';
+	
+	$db->query($q);
 ?>
 
