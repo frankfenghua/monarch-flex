@@ -134,7 +134,6 @@ class Linguistics
 				preg_match_all('#\W*([a-z]+)\W*#i', $body[$i], $noPunctuation);
 				$body[$i] = $noPunctuation[1][0];
 			}
-
 		}
 		
 		$finalScore = 0;

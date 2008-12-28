@@ -49,6 +49,7 @@
 		DELETE FROM posts;
 		DELETE FROM threads;
 		DELETE FROM users;
+		DELETE FROM usersstats;
 		UPDATE analysis SET value = 0.0;
 		ALTER TABLE keywords AUTO_INCREMENT = 1;
 		ALTER TABLE links AUTO_INCREMENT = 1;

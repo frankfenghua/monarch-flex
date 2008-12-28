@@ -46,16 +46,15 @@ class ForumPostProcessor implements Processor {
 	// FIX: where is the function header?
 	public function process($html) 
 	{
-		// $this->dummy($html);
-		
 		// Find the thread ID for this page using the link
 		$threadUrl = $this->plugin['parentUrl'];
 		preg_match_all($threadUrl, $html, $matches);
-		// print_r($matches);
+		
 		$q = 'SELECT id
 			FROM threads
 			WHERE url = "' . $matches[1][0] . '"';
 		$q = $this->database->fetch($q);
+		
 		$threadID = $q[0] ? $q[0] : -1;
 		$this->scrapePosts($threadID, $html);
 	}
@@ -103,70 +102,107 @@ class ForumPostProcessor implements Processor {
 	//           string - message that the author wrote
 	//           int - thread ID that this post belongs to
 	//    ret:   void
-	//    about: Inserts stats about a post in the database. If we've never 
-	//           seen this author before, create an entry for him in the user
-	//           table. If we've already seen him before, then update his
-	//           post count.  
-	//   fix:    There will be duplicate SQL error if a guy's username is over
-	//           40 characters (the limit of our varchar for the name).
+	//    about: Updates info about the post author and analyze's his message.
+	//           Will not do anything if we've already scraped this post before.
+	//    FIX:   Duplicate post checking is not robust - some fast people can
+	//           post twice in the same time granularity of the website.
 	// ------------------------------------------------------------------------	
 	private function insertPost($author, $time, $message, $threadId)
 	{
-		// attempt to find existing record of this user
-		$q = 'SELECT created, id 
+		$q = 'SELECT id 
 			  FROM users
 			  WHERE name = "' . $author . '"';
 		
 		$q = $this->database->query($q);
 
-		// do not re-scrape this post if we've already encountered it.
-		$d = mysql_fetch_array($q);
-		$userId = $d['id'];
-		
-		$d = 'SELECT id 
-			FROM posts
-			WHERE user = "' . $userId . '"
-			AND time = "' . $this->cleanTime($time) . '"';
-
-		$d = $this->database->query($d);
-		
-		if(mysql_num_rows($d) > 0)
-		{
-			echo '<h1>duplicate post found</h1>';
-			return;
-		}
-		
-		// user does not exist - create new one 
+		// first time we've seen this author, so impossible to be a duplicate post
 		if(mysql_num_rows($q) == 0)
 		{
-			$u = 'INSERT INTO users (name, created)
+			echo '<h3>new user found</h3>';
+			$userId = -1;
+		}
+		// author has been seen previously, must check if this is a duplicate post
+		else
+		{
+			$q = mysql_fetch_array($q);
+			$userId = $q['id'];
+			
+			$q = 'SELECT id 
+				FROM posts
+				WHERE user = "' . $userId . '"
+				AND time = "' . $this->cleanTime($time) . '"';
+
+			$q = $this->database->query($q);
+		
+			// do not re-scrape this post if we've already encountered it.
+			if(mysql_num_rows($q) > 0)
+			{
+				echo '<h3>duplicate post found</h3>';
+			}
+			else
+			{
+				echo '<h3>new post found</h3>';
+				return;
+			}
+		}
+		
+		$actualUserId = $this->insertUser($author, $userId, $time, $threadId, $message);
+		$this->insertMessage($message, $actualUserId);
+	}
+	
+	// ========================================================================
+	// insertUser
+	//    args:  string - author's username
+	//           int - if user exists, his ID from the database. If he does not
+	//                 exist, -1.
+	//           string - time of in plain english
+	//           int - thread ID that this post belongs to
+	//           string - message that the author wrote
+	//    ret:   int - same as the argument if user already existed or a new ID
+	//                 number if the user was new. 
+	//    about: Inserts stats about a post in the database. If we've never 
+	//           seen this author before, create an entry for him in the user
+	//           table. If we've already seen him before, then update his
+	//           post count.  
+	//   FIX:    There will be duplicate SQL error if a guy's username is over
+	//           40 characters (the limit of our varchar for the name).
+	// ------------------------------------------------------------------------	
+	private function insertUser($author, $userId, $time, $threadId, $message)
+	{	
+		// user does not exist - create new one 
+		if($userId == -1)
+		{
+			$q = 'INSERT INTO users (name, created)
 				  VALUES("' . $author . '", 
 						 "' . time()  . '")';
 			
-			$this->database->query($u);
+			$this->database->query($q);
 			
 			$userId = mysql_insert_id();
 		}
 		// user already exists - update existing record
 		else
 		{
-			$c = mysql_fetch_array($q);
+			$q = 'SELECT created 
+			  FROM users
+			  WHERE name = "' . $author . '"';
+			  
+			$q = $this->database->fetch($q);
 			
-			if($c['created'] > time())
+			// update his best known earliest post time
+			if($q['created'] > time())
 				$currentMinJoinTime = time();
 			else
-				$currentMinJoinTime = $c['created'];
+				$currentMinJoinTime = $q['created'];
 		
-			$u = 'UPDATE users
+			$q = 'UPDATE users
 				  SET posts = posts + 1, 
 				  created = "' . $currentMinJoinTime . '"
-				  WHERE id = "' . $c['id'] . '"';
+				  WHERE id = "' . $userId . '"';
 			
-			$this->database->query($u);
-			
-			$userId = $c['id'];
+			$this->database->query($q);
 		}
-	
+		
 		$q = 'INSERT INTO posts (user, time, length, thread)
 			  VALUES("' . $userId                 . '", 
 					 "' . $this->cleanTime($time) . '", 
@@ -175,20 +211,19 @@ class ForumPostProcessor implements Processor {
 		
 		$this->database->query($q);	
 		
-		$this->insertMessage($message, $this->cleanTime($time));
+		return $userId;
 	}
 
-	
 	// ========================================================================
 	// insertMessage
 	//    args:  string - message body text
-	//           int - unix timestamp of the message
+	//           int - ID of the user who said this message
 	//    ret:   void
 	//    about: Inserts stats for the message body. 
 	// ------------------------------------------------------------------------	
-	private function insertMessage($body, $time)
+	private function insertMessage($body, $userId)
 	{
-		$this->insertKeywords($body, $time);
+		$this->insertKeywords($body, $userId);
 		$this->insertLinks($body);
 	}
 	
@@ -201,7 +236,7 @@ class ForumPostProcessor implements Processor {
 	//           stored as one. Doing so would give us more meaningful stats 
 	//           because there are just billions of links in existence and the
 	//           chances of any two matching up exactly is low.
-	//    fix:   link regex does not work
+	//    FIX:   link regex does not work
 	// ------------------------------------------------------------------------
 	private function insertLinks($body)
 	{
@@ -222,9 +257,11 @@ class ForumPostProcessor implements Processor {
 			$cleanLink = str_ireplace('http://', '', $fullUrl);
 			$cleanLink = str_ireplace('www.', '', $cleanLink);
 			
-			$suffixes = 'com|net|info|org|me|tv|mobi|biz|us|ca|asia|ws|ag|am|at|be|cc|cn|de|eu|fm|fm|gs|jobs|jp|ms|nu|co|nz|tc|tw|idv|uk|vg';
+			$suffixes = 'com|net|info|org|me|tv|mobi|biz|us|ca|asia|ws|ag|am|at|be|cc|';
+			$suffixes .= 'cn|de|eu|fm|fm|gs|jobs|jp|ms|nu|co|nz|tc|tw|idv|uk|vg';
 
-			preg_match_all(sprintf('#(?:[a-z]+\.)?([a-z0-9\-]+\.(?:%s)(\.(?:%s))?)#i', $suffixes, $suffixes), $cleanLink, $baseUrl);
+			preg_match_all(sprintf('#(?:[a-z]+\.)?([a-z0-9\-]+\.(?:%s)(\.(?:%s))?)#i', 
+				$suffixes, $suffixes), $cleanLink, $baseUrl);
 	
 			$baseUrl = $baseUrl[1][0];
 			$baseUrl = mysql_real_escape_string($baseUrl);
@@ -302,14 +339,14 @@ class ForumPostProcessor implements Processor {
 	// ========================================================================
 	// insertKeywords
 	//    args:  string - message body text
-	//           int - unix timestamp of the message
+	//           int - ID of the user who said this message
 	//    ret:   void
 	//    about: Inserts stats each word found in the message body. 
-	//    fix:   * Why are spaces still being counted as a word?
+	//    FIX:   * Why are spaces still being counted as a word?
 	//           * Need to only store keywords that were said between this 
 	//             session and the last session.
 	// ------------------------------------------------------------------------	
-	public function insertKeywords($html) 
+	public function insertKeywords($html, $userId) 
 	{
 		$body = strip_tags($html);
 		
@@ -348,6 +385,8 @@ class ForumPostProcessor implements Processor {
 				
 					$keywordId = $q['id'];
 				}
+				
+				$this->insertUserStats($userId, $keywordId, $goodness, $englishProficiency);
 				
 				$q = 'SELECT s.id
 					FROM keywordstats AS ks, stats AS s
@@ -395,6 +434,48 @@ class ForumPostProcessor implements Processor {
 		}
 	}
 
+	// ========================================================================
+	// insertUserStats
+	//    args:  int - ID of the person who said the keyword
+	//           int - ID of the keyword that was said
+	//           float - goodness value of the keyword in that whole message
+	//           float - english proficiency of the keyword in that whole message
+	//    ret:   void
+	//    about: Updates the database, adjusting the user's perspective on the 
+	//           the given keyword.
+	//    FIX:   Is it OK that the count column in usersstats table only counts
+	//           the number of posts that the user has said this keyword rather
+	//           than the actual number of times this keyword has been said? It
+	//           seems OK because goodness and englishProficiency are really 
+	//           message-wide values, not word specific values.
+	// ------------------------------------------------------------------------	
+	private function insertUserStats($userId, $keywordId, $goodness, $englishProficiency)
+	{
+		$q = 'SELECT user
+			FROM usersstats
+			WHERE user = "' . $userId . '"
+			AND keyword = "' . $keywordId . '"';
+		
+		$q = $this->database->query($q);
+		
+		// user hasn't said this keyword before
+		if(mysql_num_rows($q) == 0)
+		{
+			$q = 'INSERT INTO usersstats (user, keyword)
+				VALUES ("' . $userId . '", "' . $keywordId . '")';
+			
+			$this->database->query($q);
+		}
+		
+		$q = 'UPDATE usersstats
+			SET count = count + 1, 
+			goodness = goodness + ' . $goodness . ',
+			englishProficiency = englishProficiency + ' . $englishProficiency . ' 
+			WHERE user = "' . $userId . '"
+			AND keyword = "' . $keywordId . '"';
+	
+		$this->database->query($q);
+	}
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // INITIALIZATION FUNCTIONS ...................................................
@@ -450,7 +531,7 @@ class ForumPostProcessor implements Processor {
 	//    ret:   int - Unix timestamp
 	//    about: Removes all symbols or words that could confuse PHP's 
 	//           strtotime() and returns the Unix timestamp.
-	//    fix:   Only works for threadless.com's time syntax right now.
+	//    FIX:   Only works for threadless.com's time syntax right now.
 	// ------------------------------------------------------------------------	
 	private function cleanTime($englishTime)
 	{
