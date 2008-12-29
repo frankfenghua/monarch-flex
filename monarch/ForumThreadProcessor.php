@@ -80,22 +80,34 @@ class ForumThreadProcessor implements Processor {
 			// only insert if it's new
 			if(mysql_num_rows($q) == 0)	
 			{	
-				// some sites don't keep track of these counts
-				if($numPosts[1][$i] == '')
-					$numPosts[1][$i] = 0;
-				
-				if($numViews[1][$i] == '')
-					$numViews[1][$i] = 0;
-			
-				$q = 'INSERT INTO threads (posts, views, title, url)
-					VALUES("' . mysql_real_escape_string($numPosts[1][$i]) . '",
-					"' . mysql_real_escape_string($numViews[1][$i]) . '", 
-					"' . mysql_real_escape_string($threadTitle[1][$i]) . '", 
+				$q = 'INSERT INTO threads (title, url)
+					VALUES("' . mysql_real_escape_string($threadTitle[1][$i]) . '", 
 					"' . mysql_real_escape_string($threadUrl[1][$i]) . '")';
 						   
 				$this->database->query($q);
-			  }
-		  }
+				
+				$threadId = mysql_insert_id();
+			}
+			else 
+			{
+				$q = mysql_fetch_array($q);
+				$threadId = $q['id'];
+			}
+			  
+			// some sites don't keep track of these counts
+			if($numPosts[1][$i] == '')
+				$numPosts[1][$i] = 0;
+			
+			if($numViews[1][$i] == '')
+				$numViews[1][$i] = 0;
+			  
+			$q = 'UPDATE threads
+				SET posts = "' . mysql_real_escape_string($numPosts[1][$i]) . '",
+				views = "' . mysql_real_escape_string($numViews[1][$i]) . '"
+				WHERE id = "' . $threadId . '"';
+				
+			$this->database->query($q);
+		}
 	}
   
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

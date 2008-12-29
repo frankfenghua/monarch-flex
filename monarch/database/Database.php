@@ -65,7 +65,8 @@ class Database
 	//    ret:   - MySQL result if the SQL is only one command
 	//           - Obviously can't return the result if you have multiple 
 	//             commands. In this case, returns void. 
-	//    about: Ask database to do something
+	//    about: Ask database to do something. If there is an error, prints out
+	//           the erroneous query along with the reason.
 	// ------------------------------------------------------------------------
 	public function query($sql, $multiple = false)
 	{
@@ -76,12 +77,15 @@ class Database
 	
 			foreach($commands as $command)
 				if(trim($command) != '') 
-					@mysql_query($command, $this->connect) or die('QUERY ERROR: ' . $command);
+					@mysql_query($command, $this->connect) 
+						or die('<font color="#ff0000">QUERY ERROR - ' . mysql_error() . '</font>: ' . $command);
 		}
 		// single command
 		else
 		{
-			$query = @mysql_query($sql, $this->connect) or die('QUERY ERROR: ' . $sql);
+			$query = @mysql_query($sql, $this->connect) 
+				or die('<font color="#ff0000">QUERY ERROR - ' . mysql_error() . '</font>: ' . $sql);
+				
 			return $query;
 		}
 	}

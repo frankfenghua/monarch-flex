@@ -220,7 +220,10 @@ class Linguistics
 
 		$numSentences = sizeof($allSentences[0]);
 		
-		return 1 - ($numMistakes / $numSentences);
+		if($numSentences == 0)
+			return 0;
+		else
+			return 1 - ($numMistakes / $numSentences);
 	}
 
 	// ============================================================================
