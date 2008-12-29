@@ -13,8 +13,6 @@
   //     -creating a StructuredCrawl object
   //     -adding all url types that you want to
   //     -calling beginCrawlFromPage to initiate crawling
-  //  -TODO: Add a way of defining processing on the contents of all pages
-  //     at a certain level.
   //  -TODO: Make url map a database table
   //  -TODO: Implement the callback feature of addURLType
 class StructuredCrawl {
@@ -28,8 +26,9 @@ class StructuredCrawl {
   private $url_types;     // Contains a list of URLType
   private $callbacks;    // Contains a mapping of levels to callback functions
   private $num_levels;    // The number of levels in this crawl
-  private $pages_crawled; // The current number of pages crawled in this
-  private $max_pages_to_crawl; // The current number of pages crawled in this
+  private $toplevel;      // The toplevel in this crawl
+  private $toplevel_pages_crawled; // The current number of pages crawled in this
+  private $max_toplevel_pages; // The current number of pages crawled in this
   
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -42,7 +41,8 @@ class StructuredCrawl {
   //    ret:   void
   //    about: Constructor. Initializes the object
   // ------------------------------------------------------------------------	
-  public function StructuredCrawl($levels, $max_pages_to_crawl) {
+  public function StructuredCrawl($levels, $max_toplevel_pages) {
+    
     $this->url_map = array();
     $this->url_stacks = array();
     $this->url_types = array();
@@ -55,8 +55,9 @@ class StructuredCrawl {
     }
 
     $this->num_levels = $levels;
-    $this->pages_crawled = 0;
-    $this->max_pages_to_crawl = $max_pages_to_crawl;
+    $this->toplevel = 0;
+    $this->toplevel_pages_crawled = 0;
+    $this->max_toplevel_pages = $max_toplevel_pages;
   }
 
 
@@ -69,7 +70,7 @@ class StructuredCrawl {
   public function beginCrawlFromPage($url_name) {
     $newUrl = $this->addUrl($url_name, 0); // add level to toplevel
     $next = $this->nextUrl();
-    $next->output();
+    // $next->output();
     $this->crawlFromPage($next);
   }
 
@@ -119,59 +120,65 @@ class StructuredCrawl {
   //                    (e.g. '#href="([^"]+)"#)
   //                    
   //    ret:   void
-  //    about: Recursive functions which executes crawling. Shortly, it:
+  //    about: Recursive function which executes crawling. Shortly, it:
   //      1) Adds all links contained in the page to the appropriate data
   //          structures
   //      2) TODO: does processing on the page's source     
   //      3) Makes recursive call on the next url to crawl. This url is taken
   //          from the bottom-most non-empty stack. If all url stacks are empty
-  //          or the crawl count has reached the MAX_PAGES_TO_CRAWL constant then
+  //          or the crawl count has reached the MAX_TOPLEVEL_PAGES constant then
   //          we terminate.
   //    Something else that could be done:
   //     Make this iterative instead of recursive
   //           
   // ------------------------------------------------------------------------	
   private function crawlFromPage($url) {
-    echo 'Crawling '.$url->getName().'<br/>';
-    $src = file_get_contents($url->getName());
+    while(($url && $this->toplevel_pages_crawled < $this->max_toplevel_pages) || 
+      $url->getLevel() != $this->toplevel) { 
+      $src = $this->downloadUrl($url->getName());
+      // $src = file_get_contents($url->getName());
 
-    // Look for links matching the url types contained in this level and
-    //  add these links to the $url_map and $url_stacks if they are new
-    foreach($this->url_types[$url->getLevel()] as $u_type) {
-      $u_type->output();
-      $urls = $u_type->getMatches($src);
-      if($urls) {
-	foreach($urls as $u) {
-	    $u = URL::translateURLBasedOnCurrent($u, $url->getName());
-	    echo 'Added url ' . $u . ' <br/>';
-	    $this->addUrl($u,$u_type->getLevel());
-	}
+      // Look for links matching the url types contained in this level and
+      //  add these links to the $url_map and $url_stacks if they are new
+      foreach($this->url_types[$url->getLevel()] as $u_type) {
+        $urls = $u_type->getMatches($src);
+        if($urls) {
+	  foreach($urls as $u) {
+	      $u = URL::translateURLBasedOnCurrent($u, $url->getName());
+	      // echo 'Added url ' . $u . ' <br/>';
+	      $this->addUrl($u,$u_type->getLevel());
+	  }
+        }
+        else {
+	 echo 'No url matches for ';
+ 	 $u_type->output();
+        }
+      }
+
+      // Process page here (analyze content, etc.)
+      // echo 'Processing '.$url->getName().'<br/>';
+      if(array_key_exists($url->getLevel(), $this->callbacks)) {
+        echo 'Calling back<br/>';
+        $this->callbacks[$url->getLevel()]->process($src);
+      }
+
+      // Update members
+      $url->setCrawled();
+      if($url->getLevel() == $toplevel) {
+        echo 'Finished crawling toplevel page: '.$url->getName().'<br/>';
+        $this->toplevel_pages_crawled++;
       }
       else {
-	echo 'No url matches <br/>';
+        echo 'Finished crawling non-toplevel page: '.$url->getName().'<br/>';
       }
+  
+      // Find next page to crawl and continue crawling
+      $url = $this->nextUrl();
     }
-
-    // Process page here (analyze content, etc.)
-    echo 'Processing '.$url->getName().'<br/>';
-    if(array_key_exists($url->getLevel(), $this->callbacks)) {
-      echo 'Calling back<br/>';
-      $this->callbacks[$url->getLevel()]->process($src);
-    }
-
-    // Update members
-    $url->setCrawled();
-    $this->pagesCrawled++;
-
-    // Find next page to crawl and continue crawling
-    $url = $this->nextUrl();
-
-    if(!$url || $this->pagesCrawled >= $this->max_pages_to_crawl) { // Base case
       echo 'Max pages crawled <br/>';
+      echo 'Stopped on URL ';
+      $url->output();
       return;
-    }
-    else
-      $this->crawlFromPage($url);
   }
 
   // ========================================================================
@@ -203,10 +210,28 @@ class StructuredCrawl {
     // print_r($this->url_stacks);
     for ( $cur = $this->num_levels - 1; $cur >= 0; --$cur ) {
       if(sizeof($this->url_stacks[$cur]) > 0) {
-	 return array_pop($this->url_stacks[$cur]);
+	 return array_shift($this->url_stacks[$cur]);
       }
     }
     return NULL;
+  }
+
+  // =======================================================================
+  // downloadUrl
+  //    ret:  String - the contents of the URL
+  //    about: downloads the page contained at the parameter URL and returns
+  //           the contents as a string
+  // -----------------------------------------------------------------------
+  private function downloadUrl($urlString) {
+    $ch = curl_init(); 
+
+    curl_setopt($ch, CURLOPT_URL, $urlString);
+    curl_setopt($ch, CURLOPT_FAILONERROR, 1);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 3);
+    curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/4.0"); // impersonate browser
+    return curl_exec($ch);
   }
 
 }
@@ -260,17 +285,17 @@ class URL {
     // 3) relative : (e.g. '../this/that' or 'that/this'); can be appended to 
     //      current url.
     if(preg_match('/http/',$u_name)) { // case 1
-      echo 'Case 1 <br/>';
+      // echo 'Case 1 <br/>';
       return $u_name;
     }
     else if(preg_match('#^/#',$u_name)) { // case 2
       preg_match('#(http://[^/]+)/#',$curr_url_name, $match);
-      echo 'Case 2 <br/>';
+      // echo 'Case 2 <br/>';
       // print_r($match);
       return $match[1] . $u_name;
     }
     else { // case 3
-      echo 'Case 3 <br/>';
+      // echo 'Case 3 <br/>';
       return $curr_url_name . $u_name;
     }
   }
@@ -295,7 +320,7 @@ class URLType {
   //    about: Returns all urls having the url type of this object
   // ------------------------------------------------------------------------	
   public function getMatches($str) {
-    echo 'Getting matches for '.$this->regex;
+    // echo 'Getting matches for '.$this->regex;
     preg_match_all($this->regex, $str,$match_arr);
     // print_r($match_arr);
     return $match_arr[1];
