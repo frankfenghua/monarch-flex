@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:ns1="http://www.adobe.com/2006/air"
+	addedToStage="init(event)">
+    <mx:Script>
+        <![CDATA[
+        import flash.html.HTMLLoader;
+        import flash.net.URLRequest;  
+		import mx.core.UIComponent;
+        
+        private var html:HTMLLoader;
+        private var urlLoader:URLLoader;
+        private var pageContents:String = "";
+        private var currentMatches:Array;
+		
+		private function init(event:Event):void
+		{
+			html = new HTMLLoader();				
+			html.addEventListener(Event.COMPLETE, onHTMLLoadComplete);
+			
+			// Create UIComponent to add html object to  
+			var myComponent:UIComponent  = new UIComponent();  
+			myComponent.addChild(html);  
+  			
+  			// now add component to stage  
+			htmlBox.addChild(myComponent);  
+			
+		}
+			
+		private function onHTMLLoadComplete(event:Event):void {
+			html.width = 1024;
+    		html.height = 800;
+    		
+    		var tagName:String = /<\W*(\w)+/.exec(regexString.text)[1];
+    		trace(tagName);
+    		var usrRegex:RegExp = new RegExp(regexString.text, "");
+    		
+    		// Begin highlighting matches from root node
+    		trace(html);
+    		highlightMatchesRec(html.window.document.documentElement, usrRegex);
+		}
+		
+		// FUUCK: This needs fixing
+		private function highlightMatches(elemList:Object, regex:RegExp):void {
+			// Highlight all elements in the element list that match the regular expression
+			trace(elemList.length);
+			for(var i:Number = 0; i < elemList.length; i++) {
+				if(elemList[i].innerHTML.search(regex) != -1) {
+					// If there is only one child, highlight it
+					if(elemList[i].children.length == 1) {
+						elemList[i].children[0].style.background = "yellow";
+						trace("Highlighting "+elemList[i].innerHTML.slice(0,10)+" . . . ");
+					}
+					else { // Find child(ren) to highlight and highlight them
+						for(var j:Number=0; j < elemList[i].children.length; j++) {
+							/* if(getChildHTML(elemList[i].innerHTML, j).search(regex) != -1) {
+								// Highlight jth child
+								elemList[i].children[j].style.background = "yellow";
+							}*/
+						}
+					}
+				}
+			}
+		}
+		
+		// FUUCK: This too
+		private function highlightMatchesRec(elem:Object, regex:RegExp):void {	
+			trace("Element type = " + elem.tagName);
+			trace(elem.innerHTML.slice(0, 20) + " . . . ");
+			// If there is no match within this node, return
+			if(elem.innerHTML.search(regex) == -1) {
+				return;
+			}
+			// There is a match so recurse and highlight matches
+			else {
+				var children:Object = elem.getElementsByTagName("*");
+								
+				var childHasMatch:Boolean = false;
+				for(var i:Number = 0; i < children.length; i++) {
+					if(children[i].innerHTML.search(regex) != -1) {
+						childHasMatch = true;
+						highlightMatchesRec(children[i], regex);
+						// return; // Only find the first match						
+					}
+				}
+				
+				// If there are no children which match the regex, run the tag-name-based
+				// algorithm on nodes having the same tag name as this element
+				if(childHasMatch == false) {
+					trace("Tag Name = "+elem.tagName);
+					// highlightMatches(html.window.document.getElementsByTagName(elem.tagName), regex);
+					elem.style.background = "yellow";
+				} 
+			}
+		}
+		
+		private function loadPage(event:Event):void {
+			html.load(new URLRequest(searchTerms.text));
+		}
+		
+		]]>
+    </mx:Script>
+    <mx:VBox height="51" horizontalAlign="left" width="1044">
+    	<mx:HBox>
+    		<mx:Label text="Website" />
+    		<mx:TextInput id="searchTerms" text="http://reddit.com" />
+    	</mx:HBox>
+    	<mx:HBox>
+    		<mx:Label text="Regular Expression" />
+    		<mx:TextInput id="regexString"/>
+    		<mx:Button label="Highlight Matches"
+    			click="loadPage(event)"/>
+    	</mx:HBox>
+    </mx:VBox>
+    <mx:HBox id="htmlBox" horizontalAlign="left" verticalAlign="top" width="1044" height="66">
+    </mx:HBox>
+</mx:WindowedApplication>
