@@ -12,6 +12,7 @@
 require_once 'database/Database.php';
 require_once 'Linguistics.php';
 require_once 'Processor.php';
+require_once 'constants.php';
 
 class ForumPostProcessor implements Processor {
 
@@ -256,12 +257,9 @@ class ForumPostProcessor implements Processor {
 			// get base url
 			$cleanLink = str_ireplace('http://', '', $fullUrl);
 			$cleanLink = str_ireplace('www.', '', $cleanLink);
-			
-			$suffixes = 'com|net|info|org|me|tv|mobi|biz|us|ca|asia|ws|ag|am|at|be|cc|';
-			$suffixes .= 'cn|de|eu|fm|fm|gs|jobs|jp|ms|nu|co|nz|tc|tw|idv|uk|vg';
 
 			preg_match_all(sprintf('#(?:[a-z]+\.)?([a-z0-9\-]+\.(?:%s)(\.(?:%s))?)#i', 
-				$suffixes, $suffixes), $cleanLink, $baseUrl);
+				REGEX_DOMAIN_SUFFIXES, REGEX_DOMAIN_SUFFIXES), $cleanLink, $baseUrl);
 	
 			$baseUrl = $baseUrl[1][0];
 			$baseUrl = mysql_real_escape_string($baseUrl);

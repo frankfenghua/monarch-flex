@@ -2,7 +2,7 @@
 
 // TITLE:  Linguistics.php
 // TYPE:   Class
-// AUTHOR: Ryan Lin
+// AUTHOR: Ryan Lin, Andrew Spencer
 // DATE:   12/03/2008
 // ABOUT:  Various ways to gauge the importance of a speaker. All functions take
 //         normal text as you would find in a book. HTML and other formatting
@@ -10,6 +10,7 @@
 // ================================================================================
 
 require_once('database/Database.php');
+require_once('constants.php');
 
 class Linguistics
 {
@@ -126,12 +127,12 @@ class Linguistics
 		{
 			$body[$i] = strtolower($body[$i]);			
 			
-			preg_match_all('#[a-z0-9]\.[a-z0-9]#i', $body[$i], $itIsALink);
+			preg_match_all('#' . REGEX_SANDWICHED_PERIOD . '#', $body[$i], $itIsALink);
 			
 			// only remove punctuation from both ends if it is a link
 			if(sizeof($itIsALink[0]) == 0)
 			{
-				preg_match_all('#\W*([a-z]+)\W*#i', $body[$i], $noPunctuation);
+				preg_match_all('#\W*([' . REGEX_ENGLISH_WORD . ']+)\W*#', $body[$i], $noPunctuation);
 				$body[$i] = $noPunctuation[1][0];
 			}
 		}
@@ -205,14 +206,14 @@ class Linguistics
 	// ----------------------------------------------------------------------------
 	public function capitalization($text)
 	{
-		preg_match_all('#[^\?\.!]+#', $text, $allSentences);
+		preg_match_all('#[' . REGEX_SENTENCE_WO_PUNCT . ']+#', $text, $allSentences);
 
 		// check if 1st char in each sentence is lowercase (or punctuation / numeric) and mark that as a mistake
 		foreach($allSentences[0] as $sentence)
 		{
 			$firstCharInSentence = substr(trim($sentence), 0, 1);
 			
-			preg_match_all('#[a-z0-9\W]#', $firstCharInSentence, $lowercasedStarter);
+			preg_match_all('#[' . REGEX_INPROPER_FIRST_CHAR_OF_WORD . ']#', $firstCharInSentence, $lowercasedStarter);
 			
 			if(sizeof($lowercasedStarter[0]) == 1)
 				$numMistakes++;
@@ -236,7 +237,7 @@ class Linguistics
 	// ----------------------------------------------------------------------------
 	public function spelling($text)
 	{
-		preg_match_all('/[a-zA-Z]+/', $text, $texts);
+		preg_match_all('#[' . REGEX_ENGLISH_WORD . ']+#', $text, $texts);
 		$text = $texts[0];
 		
 		foreach($text as $word)

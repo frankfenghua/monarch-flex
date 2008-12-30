@@ -21,44 +21,51 @@ class StructuredCrawl {
 // CLASS FIELD MEMBERS ........................................................
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  private $url_map;       // Contains a list of URL objects (once added they are not removed)
-  private $url_stacks;    // Contains a list of URL objects to be explored
-  private $url_types;     // Contains a list of URLType
-  private $callbacks;    // Contains a mapping of levels to callback functions
-  private $num_levels;    // The number of levels in this crawl
-  private $toplevel;      // The toplevel in this crawl
-  private $toplevel_pages_crawled; // The current number of pages crawled in this
-  private $max_toplevel_pages; // The current number of pages crawled in this
-  
+	private $url_map;                // Contains a list of URL objects (once added they are not removed)
+	private $url_stacks;             // Contains a list of URL objects to be explored
+	private $url_types;              // Contains a list of URLType
+	private $callbacks;              // Contains a mapping of levels to callback functions
+	private $num_levels;             // The number of levels in this crawl
+	private $toplevel;               // The toplevel in this crawl
+	private $toplevel_pages_crawled; // The current number of pages crawled in this
+	private $max_toplevel_pages;     // The current number of pages crawled in this
+	private $throttle;               // number of seconds to delay between downloading each page
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // PUBLIC  FUNCTIONS ..........................................................
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  // ========================================================================
-  // StructuredCrawl
-  //    args:  int - the number of levels present in the intended crawl
-  //    ret:   void
-  //    about: Constructor. Initializes the object
-  // ------------------------------------------------------------------------	
-  public function StructuredCrawl($levels, $max_toplevel_pages) {
-    
-    $this->url_map = array();
-    $this->url_stacks = array();
-    $this->url_types = array();
-    $this->callbacks = array();
-
-    for ($level = 0; $level < $levels; $level++) {
-      $this->url_map[$level] = array();
-      $this->url_stacks[$level] = array();
-      $this->url_types[$level] = array();
-    }
-
-    $this->num_levels = $levels;
-    $this->toplevel = 0;
-    $this->toplevel_pages_crawled = 0;
-    $this->max_toplevel_pages = $max_toplevel_pages;
-  }
+	// ========================================================================
+	// StructuredCrawl
+	//    args:  int - the depth of levels present in the intended crawl
+	//           int - the breadth of pages on the top level to crawl.
+	//           int - number of seconds to delay between downloading each page.
+	//                 used to prevent our server or the scrapee's server from
+	//                 getting over-burdened and possibly get our server IP 
+	//                 banned.
+	//    ret:   void
+	//    about: Constructor. Initializes the object
+	// ------------------------------------------------------------------------	
+	public function StructuredCrawl($levels, $max_toplevel_pages, $throttle = 0) 
+	{
+		$this->url_map = array();
+		$this->url_stacks = array();
+		$this->url_types = array();
+		$this->callbacks = array();
+		
+		for ($level = 0; $level < $levels; $level++) 
+		{
+			$this->url_map[$level] = array();
+			$this->url_stacks[$level] = array();
+			$this->url_types[$level] = array();
+		}
+		
+		$this->num_levels = $levels;
+		$this->toplevel = 0;
+		$this->toplevel_pages_crawled = 0;
+		$this->max_toplevel_pages = $max_toplevel_pages;
+		$this->throttle = $throttle;
+	}
 
 
   // ========================================================================
@@ -113,73 +120,86 @@ class StructuredCrawl {
 // PRIVATE  FUNCTIONS ..........................................................
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  // ========================================================================
-  // crawlFromPage
-  //    args:  string - the perl-style regular expression that matches this url type
-  //                    (The match should be a parenthesized group)
-  //                    (e.g. '#href="([^"]+)"#)
-  //                    
-  //    ret:   void
-  //    about: Recursive function which executes crawling. Shortly, it:
-  //      1) Adds all links contained in the page to the appropriate data
-  //          structures
-  //      2) TODO: does processing on the page's source     
-  //      3) Makes recursive call on the next url to crawl. This url is taken
-  //          from the bottom-most non-empty stack. If all url stacks are empty
-  //          or the crawl count has reached the MAX_TOPLEVEL_PAGES constant then
-  //          we terminate.
-  //    Something else that could be done:
-  //     Make this iterative instead of recursive
-  //           
-  // ------------------------------------------------------------------------	
-  private function crawlFromPage($url) {
-    while(($url && $this->toplevel_pages_crawled < $this->max_toplevel_pages) || 
-      $url->getLevel() != $this->toplevel) { 
-      $src = $this->downloadUrl($url->getName());
-      // $src = file_get_contents($url->getName());
-
-      // Look for links matching the url types contained in this level and
-      //  add these links to the $url_map and $url_stacks if they are new
-      foreach($this->url_types[$url->getLevel()] as $u_type) {
-        $urls = $u_type->getMatches($src);
-        if($urls) {
-	  foreach($urls as $u) {
-	      $u = URL::translateURLBasedOnCurrent($u, $url->getName());
-	      // echo 'Added url ' . $u . ' <br/>';
-	      $this->addUrl($u,$u_type->getLevel());
-	  }
-        }
-        else {
-	 echo 'No url matches for ';
- 	 $u_type->output();
-        }
-      }
-
-      // Process page here (analyze content, etc.)
-      // echo 'Processing '.$url->getName().'<br/>';
-      if(array_key_exists($url->getLevel(), $this->callbacks)) {
-        echo 'Calling back<br/>';
-        $this->callbacks[$url->getLevel()]->process($src);
-      }
-
-      // Update members
-      $url->setCrawled();
-      if($url->getLevel() == $toplevel) {
-        echo 'Finished crawling toplevel page: '.$url->getName().'<br/>';
-        $this->toplevel_pages_crawled++;
-      }
-      else {
-        echo 'Finished crawling non-toplevel page: '.$url->getName().'<br/>';
-      }
-  
-      // Find next page to crawl and continue crawling
-      $url = $this->nextUrl();
-    }
-      echo 'Max pages crawled <br/>';
-      echo 'Stopped on URL ';
-      $url->output();
-      return;
-  }
+	// ========================================================================
+	// crawlFromPage
+	//    args:  string - the perl-style regular expression that matches this url type
+	//                    (The match should be a parenthesized group)
+	//                    (e.g. '#href="([^"]+)"#)
+	//                    
+	//    ret:   void
+	//    about: Recursive function which executes crawling. Shortly, it:
+	//      1) Adds all links contained in the page to the appropriate data
+	//          structures
+	//      2) TODO: does processing on the page's source     
+	//      3) Makes recursive call on the next url to crawl. This url is taken
+	//          from the bottom-most non-empty stack. If all url stacks are empty
+	//          or the crawl count has reached the MAX_TOPLEVEL_PAGES constant then
+	//          we terminate.
+	//    Something else that could be done:
+	//     Make this iterative instead of recursive
+	//           
+	// ------------------------------------------------------------------------	
+	private function crawlFromPage($url) 
+	{
+		while(($url && $this->toplevel_pages_crawled < $this->max_toplevel_pages) || 
+			$url->getLevel() != $this->toplevel) 
+		{ 
+			$src = $this->downloadUrl($url->getName());
+			// $src = file_get_contents($url->getName());
+			
+			// Look for links matching the url types contained in this level and
+			//  add these links to the $url_map and $url_stacks if they are new
+			foreach($this->url_types[$url->getLevel()] as $u_type) 
+			{
+				$urls = $u_type->getMatches($src);
+				if($urls) 
+				{
+					foreach($urls as $u) 
+					{
+						$u = URL::translateURLBasedOnCurrent($u, $url->getName());
+						// echo 'Added url ' . $u . ' <br/>';
+						$this->addUrl($u,$u_type->getLevel());
+					}
+				}
+				else 
+				{
+					echo 'No url matches for ';
+					$u_type->output();
+				}
+			}
+		
+			// Process page here (analyze content, etc.)
+			// echo 'Processing '.$url->getName().'<br/>';
+			if(array_key_exists($url->getLevel(), $this->callbacks)) 
+			{
+				echo 'Calling back<br/>';
+				$this->callbacks[$url->getLevel()]->process($src);
+			}
+		
+			// Update members
+			$url->setCrawled();
+			if($url->getLevel() == $toplevel) 
+			{
+				echo 'Finished crawling toplevel page: '.$url->getName().'<br/>';
+				$this->toplevel_pages_crawled++;
+			}
+			else 
+			{
+				echo 'Finished crawling non-toplevel page: '.$url->getName().'<br/>';
+			}
+		
+			// Find next page to crawl and continue crawling
+			$url = $this->nextUrl();
+			
+			// prevent burdening our server or the scrapee's server
+			sleep($this->throttle);
+		}
+		
+		echo 'Max pages crawled <br/>';
+		echo 'Stopped on URL ';
+		$url->output();
+		return;
+	}
 
   // ========================================================================
   // addUrl
