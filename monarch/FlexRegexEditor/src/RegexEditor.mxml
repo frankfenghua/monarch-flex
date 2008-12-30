@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns:ns1="http://www.adobe.com/2006/air"
-	addedToStage="init(event)">
+	addedToStage="init(event)" viewSourceURL="srcview/index.html">
     <mx:Script>
         <![CDATA[
         import flash.html.HTMLLoader;
@@ -24,51 +24,47 @@
   			
   			// now add component to stage  
 			htmlBox.addChild(myComponent);  
-			
 		}
 			
 		private function onHTMLLoadComplete(event:Event):void {
-			html.width = 1024;
-    		html.height = 800;
+			html.width = htmlBox.width;
+    		html.height = 2880;
     		
-    		var tagName:String = /<\W*(\w)+/.exec(regexString.text)[1];
-    		trace(tagName);
     		var usrRegex:RegExp = new RegExp(regexString.text, "");
+    		
+    		// Reinitialize match label and match text
+    		matchesLabel.text = "No captured text";
+    		matchesText.text = "";
     		
     		// Begin highlighting matches from root node
     		trace(html);
     		highlightMatchesRec(html.window.document.documentElement, usrRegex);
 		}
 		
-		// FUUCK: This needs fixing
+
 		private function highlightMatches(elemList:Object, regex:RegExp):void {
 			// Highlight all elements in the element list that match the regular expression
 			trace(elemList.length);
 			for(var i:Number = 0; i < elemList.length; i++) {
-				if(elemList[i].innerHTML.search(regex) != -1) {
-					// If there is only one child, highlight it
-					if(elemList[i].children.length == 1) {
-						elemList[i].children[0].style.background = "yellow";
-						trace("Highlighting "+elemList[i].innerHTML.slice(0,10)+" . . . ");
-					}
-					else { // Find child(ren) to highlight and highlight them
-						for(var j:Number=0; j < elemList[i].children.length; j++) {
-							/* if(getChildHTML(elemList[i].innerHTML, j).search(regex) != -1) {
-								// Highlight jth child
-								elemList[i].children[j].style.background = "yellow";
-							}*/
+				var match:Object = regex.exec(elemList[i].outerHTML);
+				if(match != null) {
+					if(match.length >= 2) {
+						if(matchesLabel.text.charAt(0) == "N") {
+							matchesLabel.text = "Captured Text"; 
 						}
+						matchesText.text += ("\n\n* " + match[1]);
 					}
+					elemList[i].style.background = "yellow";
+					trace("Highlighting "+elemList[i].outerHTML.slice(0,10)+" . . . ");
 				}
 			}
 		}
 		
-		// FUUCK: This too
 		private function highlightMatchesRec(elem:Object, regex:RegExp):void {	
 			trace("Element type = " + elem.tagName);
-			trace(elem.innerHTML.slice(0, 20) + " . . . ");
+			// trace("Element outerHTML = " + elem.outerHTML);
 			// If there is no match within this node, return
-			if(elem.innerHTML.search(regex) == -1) {
+			if(elem.outerHTML.search(regex) == -1) {
 				return;
 			}
 			// There is a match so recurse and highlight matches
@@ -77,10 +73,10 @@
 								
 				var childHasMatch:Boolean = false;
 				for(var i:Number = 0; i < children.length; i++) {
-					if(children[i].innerHTML.search(regex) != -1) {
+					if(children[i].outerHTML.search(regex) != -1) {
 						childHasMatch = true;
 						highlightMatchesRec(children[i], regex);
-						// return; // Only find the first match						
+						return; // find only the first match
 					}
 				}
 				
@@ -88,8 +84,8 @@
 				// algorithm on nodes having the same tag name as this element
 				if(childHasMatch == false) {
 					trace("Tag Name = "+elem.tagName);
-					// highlightMatches(html.window.document.getElementsByTagName(elem.tagName), regex);
-					elem.style.background = "yellow";
+					highlightMatches(html.window.document.getElementsByTagName(elem.tagName), regex);
+					// elem.style.background = "yellow";
 				} 
 			}
 		}
@@ -112,6 +108,12 @@
     			click="loadPage(event)"/>
     	</mx:HBox>
     </mx:VBox>
-    <mx:HBox id="htmlBox" horizontalAlign="left" verticalAlign="top" width="1044" height="66">
+    <mx:HBox id="hBox1" horizontalAlign="left" verticalAlign="top" width="1042" height="100%">
+        <mx:VBox height="100%" width="811" id="htmlBox">
+        </mx:VBox>
+        <mx:VBox height="100%" width="214" id="matchingTextBox">
+            <mx:Label id="matchesLabel" text="" fontSize="10" fontWeight="bold" color="#0C5463"/>
+            <mx:Text width="213" height="100%" id="matchesText" text="" color="#0C5463"/>
+        </mx:VBox>
     </mx:HBox>
 </mx:WindowedApplication>
