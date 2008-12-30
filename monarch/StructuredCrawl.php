@@ -141,8 +141,8 @@ class StructuredCrawl {
 	// ------------------------------------------------------------------------	
 	private function crawlFromPage($url) 
 	{
-		while(($url && $this->toplevel_pages_crawled < $this->max_toplevel_pages) || 
-			$url->getLevel() != $this->toplevel) 
+		while($url && ($this->toplevel_pages_crawled < $this->max_toplevel_pages ||
+      		$url->getLevel() != $this->toplevel))
 		{ 
 			$src = $this->downloadUrl($url->getName());
 			// $src = file_get_contents($url->getName());
