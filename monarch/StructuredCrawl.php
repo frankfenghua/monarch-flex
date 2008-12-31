@@ -14,7 +14,6 @@
   //     -adding all url types that you want to
   //     -calling beginCrawlFromPage to initiate crawling
   //  -TODO: Make url map a database table
-  //  -TODO: Implement the callback feature of addURLType
 class StructuredCrawl {
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
