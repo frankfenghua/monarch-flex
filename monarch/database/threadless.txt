@@ -28,11 +28,9 @@ CREATE TABLE IF NOT EXISTS `links` (
   `baseUrl` varchar(61) COLLATE latin1_german2_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `baseUrl` (`baseUrl`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COLLATE=latin1_german2_ci AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_german2_ci AUTO_INCREMENT=1 ;
 
 
-INSERT INTO `links` (`id`, `baseUrl`) VALUES
-(1, 'typetees.com');
 
 
 
@@ -42,8 +40,6 @@ CREATE TABLE IF NOT EXISTS `linkstats` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
-INSERT INTO `linkstats` (`link`, `stat`) VALUES
-(1, 1);
 
 
 
@@ -93,11 +89,9 @@ CREATE TABLE IF NOT EXISTS `stats` (
   `goodness` float NOT NULL DEFAULT '0',
   `englishProficiency` float unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 
-INSERT INTO `stats` (`id`, `time`, `count`, `goodness`, `englishProficiency`) VALUES
-(1, 1230508667, 1, 0, 0.628936);
 
 
 
@@ -109,6 +103,16 @@ CREATE TABLE IF NOT EXISTS `threads` (
   `title` varchar(50) COLLATE latin1_german2_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_german2_ci AUTO_INCREMENT=1 ;
+
+
+
+
+
+CREATE TABLE IF NOT EXISTS `threadstats` (
+  `thread` int(10) unsigned NOT NULL,
+  `keyword` int(10) unsigned NOT NULL,
+  `stat` int(10) unsigned NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 
 
@@ -128,12 +132,10 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 
 
-CREATE TABLE IF NOT EXISTS `usersstats` (
-  `user` int(11) NOT NULL,
-  `keyword` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `count` smallint(5) unsigned NOT NULL DEFAULT '0',
-  `goodness` float NOT NULL DEFAULT '0',
-  `englishProficiency` float unsigned NOT NULL DEFAULT '0'
+CREATE TABLE IF NOT EXISTS `userstats` (
+  `user` int(10) unsigned NOT NULL,
+  `keyword` int(10) unsigned NOT NULL,
+  `stat` int(10) unsigned NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 

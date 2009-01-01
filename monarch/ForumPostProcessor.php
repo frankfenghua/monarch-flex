@@ -100,7 +100,7 @@ class ForumPostProcessor implements Processor {
 	// insertPost
 	//    args:  string - author's username
 	//           string - time of in plain english
-	//           string - message that the author wrote
+	//           string - message that the author wrote (can contain HTML)
 	//           int - thread ID that this post belongs to
 	//    ret:   void
 	//    about: Updates info about the post author and analyze's his message.
@@ -108,7 +108,7 @@ class ForumPostProcessor implements Processor {
 	//    FIX:   Duplicate post checking is not robust - some fast people can
 	//           post twice in the same time granularity of the website.
 	// ------------------------------------------------------------------------	
-	private function insertPost($author, $time, $message, $threadId)
+	private function insertPost($author, $time, $bodyHtml, $threadId)
 	{
 		$q = 'SELECT id 
 			  FROM users
@@ -131,7 +131,7 @@ class ForumPostProcessor implements Processor {
 			$q = 'SELECT id 
 				FROM posts
 				WHERE user = "' . $userId . '"
-				AND time = "' . $this->cleanTime($time) . '"';
+				AND time = "' . $this->englishToUnixTime($time) . '"';
 
 			$q = $this->database->query($q);
 		
@@ -147,8 +147,9 @@ class ForumPostProcessor implements Processor {
 			}
 		}
 		
-		$actualUserId = $this->insertUser($author, $userId, $time, $threadId, $message);
-		$this->insertMessage($message, $actualUserId);
+		$actualUserId = $this->insertUser($author, $userId, $time, $threadId, $bodyHtml);
+		$this->insertKeywords($bodyHtml, $actualUserId, $threadId);
+		$this->insertLinks($bodyHtml);
 	}
 	
 	// ========================================================================
@@ -158,7 +159,7 @@ class ForumPostProcessor implements Processor {
 	//                 exist, -1.
 	//           string - time of in plain english
 	//           int - thread ID that this post belongs to
-	//           string - message that the author wrote
+	//           string - message that the author wrote (can contain HTML)
 	//    ret:   int - same as the argument if user already existed or a new ID
 	//                 number if the user was new. 
 	//    about: Inserts stats about a post in the database. If we've never 
@@ -168,7 +169,7 @@ class ForumPostProcessor implements Processor {
 	//   FIX:    There will be duplicate SQL error if a guy's username is over
 	//           40 characters (the limit of our varchar for the name).
 	// ------------------------------------------------------------------------	
-	private function insertUser($author, $userId, $time, $threadId, $message)
+	private function insertUser($author, $userId, $time, $threadId, $bodyHtml)
 	{	
 		// user does not exist - create new one 
 		if($userId == -1)
@@ -205,27 +206,14 @@ class ForumPostProcessor implements Processor {
 		}
 		
 		$q = 'INSERT INTO posts (user, time, length, thread)
-			  VALUES("' . $userId                 . '", 
-					 "' . $this->cleanTime($time) . '", 
-					 "' . strlen($message)        . '",
-					 "' . $threadId               . '")';
+			  VALUES("' . $userId . '", 
+					 "' . $this->englishToUnixTime($time) . '", 
+					 "' . strlen($bodyHtml) . '",
+					 "' . $threadId . '")';
 		
 		$this->database->query($q);	
 		
 		return $userId;
-	}
-
-	// ========================================================================
-	// insertMessage
-	//    args:  string - message body text
-	//           int - ID of the user who said this message
-	//    ret:   void
-	//    about: Inserts stats for the message body. 
-	// ------------------------------------------------------------------------	
-	private function insertMessage($body, $userId)
-	{
-		$this->insertKeywords($body, $userId);
-		$this->insertLinks($body);
 	}
 	
 	// ========================================================================
@@ -237,100 +225,40 @@ class ForumPostProcessor implements Processor {
 	//           stored as one. Doing so would give us more meaningful stats 
 	//           because there are just billions of links in existence and the
 	//           chances of any two matching up exactly is low.
-	//    FIX:   link regex does not work
 	// ------------------------------------------------------------------------
-	private function insertLinks($body)
+	private function insertLinks($bodyHtml)
 	{
 		// find all full URL's
-		preg_match_all('#(?:href|src)="([^"]+)"#i', $body, $fullUrls);
+		preg_match_all('#(?:href|src)="([^"]+)"#i', $bodyHtml, $fullUrls);
 		
-		// remove all HTML but the full URL's
-		$body = preg_replace('#<a.*href[ ]*=[ ]*"#i', '', $body);
-		$body = preg_replace('#<img.*src[ ]*=[ ]*"#i', '', $body);
-		$body = preg_replace('#"[^>]*>#', ' ', $body);
-		$body = strip_tags($body);
-		$body = preg_replace('/[\s]+/', ' ', $body);
-		$body = trim($body);
+		$fullUrls = $fullUrls[1];
+		
+		// so the in_array will work below...
+		for($i = 0; $i < sizeof($fullUrls); $i++)
+			$fullUrls[$i] = strtolower($fullUrls[$i]);
+		
+		// remove all HTML but the english words and full URL's
+		$bodyHtml   = preg_replace('#<a.*href[ ]*=[ ]*"#i', '', $bodyHtml);  // remove HTML before anchor URL
+		$bodyHtml   = preg_replace('#<img.*src[ ]*=[ ]*"#i', '', $bodyHtml); // remove HTML before image URL
+		$bodyHtml   = preg_replace('#"[^>]*>#', ' ', $bodyHtml);             // remove HTML after anchor/image URL
+		$bodyHtml   = preg_replace('#[ ]+[\W]+[ ]+#', ' ', $bodyHtml);       // remove stray punctuation (artifact of the above)
+		$bodyNoHtml = strip_tags($bodyHtml);                                 // remove HTML not related to anchor/image
+		$bodyNoHtml = preg_replace('/[\s]+/', ' ', $bodyNoHtml);             // force only one space between each word
+		$bodyNoHtml = trim($bodyNoHtml);                                     // remove white space from the ends
 
-		foreach($fullUrls[1] as $fullUrl)
+		// english proficiency does not vary per occurrence of keyword (it has body-wide scope)	
+		$englishProficiency = $this->linguistics->englishProficiency($bodyHtml);
+		
+		$wordsArray = $this->linguistics->cleanBody($bodyNoHtml);
+		
+		for($linkLocation = 0; $linkLocation < sizeof($wordsArray); $linkLocation++)
 		{
-			// get base url
-			$cleanLink = str_ireplace('http://', '', $fullUrl);
-			$cleanLink = str_ireplace('www.', '', $cleanLink);
-
-			preg_match_all(sprintf('#(?:[a-z]+\.)?([a-z0-9\-]+\.(?:%s)(\.(?:%s))?)#i', 
-				REGEX_DOMAIN_SUFFIXES, REGEX_DOMAIN_SUFFIXES), $cleanLink, $baseUrl);
-	
-			$baseUrl = $baseUrl[1][0];
-			$baseUrl = mysql_real_escape_string($baseUrl);
-
-			$goodness = $this->linguistics->goodness($fullUrl, $body);
-			$englishProficiency = $this->linguistics->englishProficiency($body);
-			
-			$q = 'SELECT id 
-				FROM links 
-				WHERE baseUrl = "' . $baseUrl  . '"';
-			
-			$q = $this->database->query($q);
-			
-			// link has never been seen in previous sessions
-			if(mysql_num_rows($q) == 0)
+			if(in_array($wordsArray[$linkLocation], $fullUrls))
 			{
-				$q = 'INSERT INTO links (baseUrl)
-					VALUES("' . $baseUrl . '")';
-				
-				$q = $this->database->query($q);
-				
-				$linkId = mysql_insert_id();
+				$baseUrl = $this->baseUrl($wordsArray[$linkLocation]);
+				$goodness = $this->linguistics->goodnessByIndex($linkLocation, $wordsArray);
+				$this->insertTimeStat('link', $baseUrl, $goodness, $englishProficiency);
 			}
-			// link has been seen in previous sessions
-			else
-			{
-				$q = mysql_fetch_array($q);
-				
-				$linkId = $q['id'];
-			}
-			
-			$q = 'SELECT s.id
-				FROM linkstats AS ls, stats AS s
-				WHERE ls.link = "' . $linkId . '"
-				AND ls.stat = s.id
-				AND s.time = "' . $this->timeStart . '"';
-			
-			$q = $this->database->query($q);
-			
-			// link has not been seen in this particular session
-			if(mysql_num_rows($q) == 0)
-			{
-				$q = 'INSERT INTO stats (time)
-					VALUES("' . $this->timeStart . '")';
-
-				$q = $this->database->query($q);
-
-				$statId = mysql_insert_id();
-				
-				$q = 'INSERT INTO linkstats (link, stat)
-					VALUES("' . $linkId  . '",
-					"' . $statId . '")';
-					
-				$q = $this->database->query($q);
-			}
-			// link has been seen in this particular session
-			else
-			{
-				$q = mysql_fetch_array($q);
-					
-				$statId = $q['id'];
-			}
-			
-			// FIX: englishProficiency needs to be / by count on the GUI.
-			$q = 'UPDATE stats
-				SET count = count + 1,
-				goodness = goodness + ' . $goodness  . ', 
-				englishProficiency = englishProficiency + ' . $englishProficiency . '
-				WHERE id = "' . $statId . '"';
-		
-			$this->database->query($q);		
 		}
 	}
 	
@@ -338,141 +266,233 @@ class ForumPostProcessor implements Processor {
 	// insertKeywords
 	//    args:  string - message body text
 	//           int - ID of the user who said this message
+	//           int - ID of the thread this post belongs to
 	//    ret:   void
 	//    about: Inserts stats each word found in the message body. 
 	//    FIX:   * Why are spaces still being counted as a word?
 	//           * Need to only store keywords that were said between this 
 	//             session and the last session.
 	// ------------------------------------------------------------------------	
-	public function insertKeywords($html, $userId) 
+	public function insertKeywords($bodyHtml, $userId, $threadId) 
 	{
-		$body = strip_tags($html);
+		// english proficiency does not vary per occurrence of keyword (it has body-wide scope)	
+		$englishProficiency = $this->linguistics->englishProficiency($bodyHtml);
 		
-		preg_match_all('/[a-z]+/i', $body, $words);
+		$wordsArray = $this->linguistics->cleanBody($bodyHtml);
 		
-		foreach($words[0] as $word)
-		{	
-			// don't care about capitalization  
-			$word = strtolower($word);
-			
-			// only record keywords we're specifically scraping for
-			if(in_array($word, $this->allowedWords))
+		for($wordLocation = 0; $wordLocation < sizeof($wordsArray); $wordLocation++)
+		{
+			if(in_array($wordsArray[$wordLocation], $this->allowedWords))
 			{
-				$goodness = $this->linguistics->goodness($word, $body);
-				$englishProficiency = $this->linguistics->englishProficiency($body);
+				$goodness = $this->linguistics->goodnessByIndex($wordLocation, $wordsArray);
+				$keywordId = $this->insertTimeStat('keyword', $wordsArray[$wordLocation], $goodness, $englishProficiency);
 				
-				$q = 'SELECT id FROM keywords
-					WHERE word = "' . $word . '"';
-				
-				$q = $this->database->query($q);
-				
-				// word has never been seen before in previous sessions
-				if(mysql_num_rows($q) == 0)
-				{
-					$q = 'INSERT INTO keywords (word)
-						VALUES("' . $word . '")';
-					
-					$q = $this->database->query($q);
-					
-					$keywordId = mysql_insert_id();
-				}
-				// word has been seen before in previous sessions
-				else
-				{
-					$q = mysql_fetch_array($q);
-				
-					$keywordId = $q['id'];
-				}
-				
-				$this->insertUserStats($userId, $keywordId, $goodness, $englishProficiency);
-				
-				$q = 'SELECT s.id
-					FROM keywordstats AS ks, stats AS s
-					WHERE ks.keyword = "' . $keywordId . '"
-					AND ks.stat = s.id
-					AND s.time = "' . $this->timeStart . '"';
-					
-				$q = $this->database->query($q);
-				
-				// keyword has not been seen in this particular session
-				if(mysql_num_rows($q) == 0)
-				{
-					$q = 'INSERT INTO stats (time)
-						VALUES("' . $this->timeStart . '")';
-				
-					// printf('<h2>%s</h2>', $q);
-
-					$q = $this->database->query($q);
-
-					$statId = mysql_insert_id();
-					
-					$q = 'INSERT INTO keywordstats (keyword, stat)
-						VALUES("' . $keywordId  . '",
-						"' . $statId . '")';
-						
-					$q = $this->database->query($q);
-				}
-				// keyword has been seen in this particular session
-				else
-				{
-					$q = mysql_fetch_array($q);
-						
-					$statId = $q['id'];
-				}
-				
-				// FIX: englishProficiency needs to be / by count on the GUI.
-				$q = 'UPDATE stats
-					SET count = count + 1,
-					goodness = goodness + ' . $goodness  . ', 
-					englishProficiency = englishProficiency + ' . $englishProficiency . '
-					WHERE id = "' . $statId . '"';
-			
-				$this->database->query($q);
+				// note that only keywords has the following two lines
+				// right now we don't care what people / threads are saying about links (should we?)
+				$this->insertUniStat('user', $userId, $keywordId, $goodness, $englishProficiency);
+				$this->insertUniStat('thread', $threadId, $keywordId, $goodness, $englishProficiency);
 			}
 		}
 	}
 
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// HELPER FUNCTIONS ...........................................................
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	
 	// ========================================================================
-	// insertUserStats
-	//    args:  int - ID of the person who said the keyword
-	//           int - ID of the keyword that was said
-	//           float - goodness value of the keyword in that whole message
-	//           float - english proficiency of the keyword in that whole message
-	//    ret:   void
-	//    about: Updates the database, adjusting the user's perspective on the 
-	//           the given keyword.
-	//    FIX:   Is it OK that the count column in usersstats table only counts
-	//           the number of posts that the user has said this keyword rather
-	//           than the actual number of times this keyword has been said? It
-	//           seems OK because goodness and englishProficiency are really 
-	//           message-wide values, not word specific values.
+	// englishToUnixTime
+	//    args:  string - ie: Oct 08 '08 at 11:36am
+	//    ret:   int - Unix timestamp
+	//    about: Removes all symbols or words that could confuse PHP's 
+	//           strtotime() and returns the Unix timestamp.
+	//    FIX:   Only tested for threadless.com's time syntax right now.
 	// ------------------------------------------------------------------------	
-	private function insertUserStats($userId, $keywordId, $goodness, $englishProficiency)
+	private function englishToUnixTime($englishTime)
 	{
-		$q = 'SELECT user
-			FROM usersstats
-			WHERE user = "' . $userId . '"
-			AND keyword = "' . $keywordId . '"';
+		$dirty[] = "'";
+		$dirty[] = 'at';
+		
+		foreach($dirty as $dirt)
+			$englishTime = str_replace($dirt, '', $englishTime);
+		
+		return strtotime($englishTime);
+	}
+	
+	// ========================================================================
+	// insertUniStat
+	//    args:  string - 'thread' or 'user'
+	//           int - ID of the thread which this keyword was seen in
+	//           int - ID of the keyword
+	//           float - goodness rating of the thing
+	//           float - english proficiency rating of the thing
+	//    ret:   void
+	//    about: This function should be only used for thread or user stats, 
+	//           which are not time based. They are just running sums of values
+	//           over the time starting from when the community was created. 
+	//           Creates a stat with the specified values and a link from the 
+	//           thing to the stat. Adds on the values if the stat already 
+	//           exists. We only keep track of how threads and users are 
+	//           talking about keywords, not links.
+	// ------------------------------------------------------------------------	
+	private function insertUniStat($type, $thingId, $keywordId, $goodness, $englishProficiency)
+	{	
+		if($type != 'thread' && $type != 'user')
+			die('ForumPostProcessor->insertUniStat(): unrecognized argument for $type');
+	
+		$q = 'SELECT stat
+			FROM ' . $type . 'stats
+			WHERE ' . $type . ' = ' . $thingId . '
+			AND keyword = ' . $keywordId;
 		
 		$q = $this->database->query($q);
 		
-		// user hasn't said this keyword before
+		// thing does not have any existing stats
 		if(mysql_num_rows($q) == 0)
 		{
-			$q = 'INSERT INTO usersstats (user, keyword)
-				VALUES ("' . $userId . '", "' . $keywordId . '")';
+			$q = 'INSERT INTO stats (time, count, goodness, englishProficiency)
+				VALUES("' . $this->timeStart . '",
+				"1",
+				"' . $goodness . '", 
+				"' . $englishProficiency . '")';
+			
+			$this->database->query($q);
+			
+			$statId = mysql_insert_id();
+			
+			$q = 'INSERT INTO ' . $type . 'stats (' . $type . ', keyword, stat)
+				VALUES("' . $thingId . '",
+				"' . $keywordId . '", 
+				"' . $statId . '")';
 			
 			$this->database->query($q);
 		}
+		// thing has existing stat record
+		else
+		{
+			$q = mysql_fetch_array($q);
+			
+			$statId = $q['stat'];
+			
+			$q = 'UPDATE stats
+				SET time = ' . $this->timeStart . ',
+				count = count + 1,
+				goodness = goodness + ' . $goodness . ',
+				englishProficiency = englishProficiency + ' . $englishProficiency . '
+				WHERE id = ' . $statId;
+				
+			$this->database->query($q);	
+		}
+	}
+	
+	// ========================================================================
+	// insertTimeStat
+	//    args:  string - 'link' or 'keyword'
+	//           string - the baseUrl or keyword that was just found.
+	//           float - goodness rating of the thing
+	//           float - english proficiency rating of the thing
+	//    ret:   the id of the thing that was found
+	//    about: Should only be used by links and keywords, which have changing
+	//           stats over time. Updates the stat matching this crawl session
+	//           time (or creates one if it doesn't exist), then links the 
+	//           thing to this stat (if it doesn't exist).
+	// ------------------------------------------------------------------------	
+	private function insertTimeStat($type, $thing, $goodness, $englishProficiency)
+	{	
+		switch($type)
+		{
+			case 'link':    $typeColumn = 'baseUrl'; break;
+			case 'keyword': $typeColumn = 'word';    break;
+			default:        die('ForumPostProcessor->insertTimeStat: unrecognized argument for $type');
+		}
+			
+		$q = 'SELECT id FROM ' . $type . 's
+			WHERE ' . $typeColumn . ' = "' . $thing . '"';
 		
-		$q = 'UPDATE usersstats
-			SET count = count + 1, 
-			goodness = goodness + ' . $goodness . ',
-			englishProficiency = englishProficiency + ' . $englishProficiency . ' 
-			WHERE user = "' . $userId . '"
-			AND keyword = "' . $keywordId . '"';
+		$q = $this->database->query($q);
+		
+		// thing has never been seen before in previous sessions
+		if(mysql_num_rows($q) == 0)
+		{
+			$q = 'INSERT INTO ' . $type . 's (' . $typeColumn . ')
+				VALUES("' . $thing . '")';
+			
+			$q = $this->database->query($q);
+			
+			$thingId = mysql_insert_id();
+		}
+		// thing has been seen before in previous sessions
+		else
+		{
+			$q = mysql_fetch_array($q);
+		
+			$thingId = $q['id'];
+		}
+		
+		$q = 'SELECT s.id
+			FROM ' . $type . 'stats AS xs, stats AS s
+			WHERE xs.' . $type . ' = "' . $thingId . '"
+			AND xs.stat = s.id
+			AND s.time = "' . $this->timeStart . '"';
+			
+		$q = $this->database->query($q);
+		
+		// thing has not been seen in this particular session
+		if(mysql_num_rows($q) == 0)
+		{
+			$q = 'INSERT INTO stats (time)
+				VALUES("' . $this->timeStart . '")';
+
+			$q = $this->database->query($q);
+
+			$statId = mysql_insert_id();
+			
+			$q = 'INSERT INTO ' . $type . 'stats (' . $type . ', stat)
+				VALUES("' . $thingId  . '",
+				"' . $statId . '")';
+				
+			$q = $this->database->query($q);
+		}
+		// thing has been seen in this particular session
+		else
+		{
+			$q = mysql_fetch_array($q);
+				
+			$statId = $q['id'];
+		}
+		
+		// FIX: englishProficiency needs to be / by count on the GUI, since this is a running sum
+		$q = 'UPDATE stats
+			SET count = count + 1,
+			goodness = goodness + ' . $goodness  . ', 
+			englishProficiency = englishProficiency + ' . $englishProficiency . '
+			WHERE id = "' . $statId . '"';
 	
 		$this->database->query($q);
+		
+		return $thingId;
+	}
+	
+	// ========================================================================
+	// baseUrl
+	//    args:  string - a complete URL
+	//    ret:   string - the base URL
+	//    about: Turns something like "http://www.yahoo.com/folder/page.html"
+	//           into "yahoo.com". We only store base URL's in our database
+	//           because it allows for richer stats. 
+	//    FIX:   don't do mysql_real_escape_string here. It was put in just to
+	//           avoid errors. Escaping should be done when you're doing the 
+	//           actual querying. 
+	// ------------------------------------------------------------------------	
+	private function baseUrl($fullUrl)
+	{
+		$cleanLink = str_ireplace('http://', '', $fullUrl);
+		$cleanLink = str_ireplace('www.', '', $cleanLink);
+
+		preg_match_all(sprintf('#(?:[a-z]+\.)?([a-z0-9\-]+\.(?:%s)(\.(?:%s))?)#i', 
+			REGEX_DOMAIN_SUFFIXES, REGEX_DOMAIN_SUFFIXES), $cleanLink, $baseUrl);
+
+		$baseUrl = $baseUrl[1][0];
+		return mysql_real_escape_string(strtolower($baseUrl));
 	}
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -519,28 +539,5 @@ class ForumPostProcessor implements Processor {
 		return $this->database->fetch($q);
 	}
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// HELPER FUNCTIONS ...........................................................
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	
-	// ========================================================================
-	// cleanTime
-	//    args:  string - ie: Oct 08 '08 at 11:36am
-	//    ret:   int - Unix timestamp
-	//    about: Removes all symbols or words that could confuse PHP's 
-	//           strtotime() and returns the Unix timestamp.
-	//    FIX:   Only works for threadless.com's time syntax right now.
-	// ------------------------------------------------------------------------	
-	private function cleanTime($englishTime)
-	{
-		$dirty[] = "'";
-		$dirty[] = 'at';
-		
-		foreach($dirty as $dirt)
-			$englishTime = str_replace($dirt, '', $englishTime);
-		
-		return strtotime($englishTime);
-	}
-	
 }
 ?>

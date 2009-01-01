@@ -20,6 +20,8 @@
 		DELETE FROM regexes
 		DELETE FROM threads;
 		DELETE FROM users;
+		DELETE FROM userstats;
+		DELETE FROM threadstats;
 		ALTER TABLE keywords AUTO_INCREMENT = 1;
 		ALTER TABLE links AUTO_INCREMENT = 1;
 		ALTER TABLE posts AUTO_INCREMENT = 1;
@@ -48,7 +50,8 @@
 		DELETE FROM posts;
 		DELETE FROM threads;
 		DELETE FROM users;
-		DELETE FROM usersstats;
+		DELETE FROM userstats;
+		DELETE FROM threadstats;
 		ALTER TABLE keywords AUTO_INCREMENT = 1;
 		ALTER TABLE links AUTO_INCREMENT = 1;
 		ALTER TABLE posts AUTO_INCREMENT = 1;
