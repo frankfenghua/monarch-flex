@@ -24,10 +24,10 @@ class StructuredCrawl {
 	private $url_stacks;             // Contains a list of URL objects to be explored
 	private $url_types;              // Contains a list of URLType
 	private $callbacks;              // Contains a mapping of levels to callback functions
-	private $page_limits;            // Contains a mapping of page limits
-	private $page_counts;            // Contains a mapping of page counts
 	private $num_levels;             // The number of levels in this crawl
 	private $toplevel;               // The toplevel in this crawl
+	private $toplevel_pages_crawled; // The current number of pages crawled in this
+	private $max_toplevel_pages;     // The current number of pages crawled in this
 	private $throttle;               // number of seconds to delay between downloading each page
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -45,14 +45,12 @@ class StructuredCrawl {
 	//    ret:   void
 	//    about: Constructor. Initializes the object
 	// ------------------------------------------------------------------------	
-	public function StructuredCrawl($levels, $throttle = 0) 
+	public function StructuredCrawl($levels, $max_toplevel_pages, $throttle = 0) 
 	{
 		$this->url_map = array();
 		$this->url_stacks = array();
 		$this->url_types = array();
 		$this->callbacks = array();
-		$this->page_limits = array();
-		$this->page_counts = array();
 		
 		for ($level = 0; $level < $levels; $level++) 
 		{
@@ -63,6 +61,8 @@ class StructuredCrawl {
 		
 		$this->num_levels = $levels;
 		$this->toplevel = 0;
+		$this->toplevel_pages_crawled = 0;
+		$this->max_toplevel_pages = $max_toplevel_pages;
 		$this->throttle = $throttle;
 	}
 
@@ -114,20 +114,7 @@ class StructuredCrawl {
     // var_dump($callback);
     $this->callbacks[$level] = $callback;
   }
-
-  // ========================================================================
-  // definePageLimit
-  //    args:  level - a page level to set a page limit for
-  //           pageLimit - the number of pages of the given page level that will 
-  //             be allowed to be crawled before the crawl is terminated
-  //    ret:   void
-  //    about: Sets a pageLimit for the given page level. For this limit, if 
-  //           this limit is reached then the crawl will be terminated.
-  // ------------------------------------------------------------------------	
-  public function definePageLimit($level, $pageLimit) {
-    $this->page_limits[$level] = $pageLimit;
-  }
-   
+  
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // PRIVATE  FUNCTIONS ..........................................................
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -153,13 +140,9 @@ class StructuredCrawl {
 	// ------------------------------------------------------------------------	
 	private function crawlFromPage($url) 
 	{
-	  // while($url && ($this->toplevel_pages_crawled < $this->max_toplevel_pages ||
-      			  // $url->getLevel() != $this->toplevel))
-	  while($url && $this->crawlIsWithinLimits($url->getLevel()))
-	    { 	
-       	      // Update page counts
-	      $this->page_counts[$url->getLevel()]++;
-	
+		while($url && ($this->toplevel_pages_crawled < $this->max_toplevel_pages ||
+      		$url->getLevel() != $this->toplevel))
+		{ 
 			$src = $this->downloadUrl($url->getName());
 			// $src = file_get_contents($url->getName());
 			
@@ -197,12 +180,13 @@ class StructuredCrawl {
 			if($url->getLevel() == $toplevel) 
 			{
 				echo 'Finished crawling toplevel page: '.$url->getName().'<br/>';
+				$this->toplevel_pages_crawled++;
 			}
 			else 
 			{
 				echo 'Finished crawling non-toplevel page: '.$url->getName().'<br/>';
 			}
-			
+		
 			// Find next page to crawl and continue crawling
 			$url = $this->nextUrl();
 			
@@ -211,7 +195,8 @@ class StructuredCrawl {
 		}
 		
 		echo 'Max pages crawled <br/>';
-		$this->showCrawlStatistics();
+		echo 'Stopped on URL ';
+		$url->output();
 		return;
 	}
 
@@ -268,33 +253,6 @@ class StructuredCrawl {
     return curl_exec($ch);
   }
 
-  // =======================================================================
-  // crawlIsWithinLimits
-  //    ret:  Boolean - true if this crawl should continue (i.e. no page limits have been reached)
-  //    about: checks to make sure that no page limits have been reached and returns 
-  //           the response
-  // -----------------------------------------------------------------------
-  private function crawlIsWithinLimits($level) {
-    if(array_key_exists($level, $this->page_limits) && $this->page_counts[$level] >= $this->page_limits[$level]) {
-	return false;
-    }
-    else {
-      return true;
-    }
-  }
-
-  // =======================================================================
-  // showCrawlStatistics
-  //    ret:  None
-  //    about: outputs the number of pages of each level that have been 
-  //           crawled
-  // -----------------------------------------------------------------------
-  private function showCrawlStatistics() {
-    echo 'Crawl staticstics: <br/>';
-    foreach ($this->page_counts as $level => $count) {
-      echo '  Level '.$level.' : '.$count.' page(s) <br/>';
-    }
-  }
 }
 
 // URL

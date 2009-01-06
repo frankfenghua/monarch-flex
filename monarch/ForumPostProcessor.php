@@ -119,7 +119,6 @@ class ForumPostProcessor implements Processor {
 		// first time we've seen this author, so impossible to be a duplicate post
 		if(mysql_num_rows($q) == 0)
 		{
-			echo '<h3>new user found</h3>';
 			$userId = -1;
 		}
 		// author has been seen previously, must check if this is a duplicate post
@@ -138,11 +137,11 @@ class ForumPostProcessor implements Processor {
 			// do not re-scrape this post if we've already encountered it.
 			if(mysql_num_rows($q) > 0)
 			{
-				echo '<h3>duplicate post found</h3>';
+				printf('<h4>duplicate post found written by %s on %s</h4>', $author, $time);
 			}
 			else
 			{
-				echo '<h3>new post found</h3>';
+				printf('<h4>new post found written by %s on %s</h4>', $author, $time);
 				return;
 			}
 		}
@@ -258,6 +257,9 @@ class ForumPostProcessor implements Processor {
 				$baseUrl = $this->baseUrl($wordsArray[$linkLocation]);
 				$goodness = $this->linguistics->goodnessByIndex($linkLocation, $wordsArray);
 				$this->insertTimeStat('link', $baseUrl, $goodness, $englishProficiency);
+				
+				printf('<h4>base url seen: %s with goodness: %f and english proficiency: %f</h4>', 
+					$baseUrl, $goodness, $englishProficiency);
 			}
 		}
 	}
@@ -291,6 +293,9 @@ class ForumPostProcessor implements Processor {
 				// right now we don't care what people / threads are saying about links (should we?)
 				$this->insertUniStat('user', $userId, $keywordId, $goodness, $englishProficiency);
 				$this->insertUniStat('thread', $threadId, $keywordId, $goodness, $englishProficiency);
+				
+				printf('<h4>keyword "%s" said by userId #%d with goodness: %f and english proficiency: %f</h4>', 
+					$wordsArray[$wordLocation], $userId, $goodness, $englishProficiency);
 			}
 		}
 	}
@@ -309,13 +314,19 @@ class ForumPostProcessor implements Processor {
 	// ------------------------------------------------------------------------	
 	private function englishToUnixTime($englishTime)
 	{
+		echo '<h4>converted english: "' . $englishTime . '" to Unix: "';
+	
 		$dirty[] = "'";
 		$dirty[] = 'at';
 		
 		foreach($dirty as $dirt)
 			$englishTime = str_replace($dirt, '', $englishTime);
 		
-		return strtotime($englishTime);
+		$unixTime = strtotime($englishTime);
+		
+		echo $unixTime . '"</h4>';
+		
+		return $unixTime;
 	}
 	
 	// ========================================================================
