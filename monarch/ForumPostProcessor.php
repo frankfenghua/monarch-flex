@@ -73,6 +73,9 @@ class ForumPostProcessor implements Processor {
 		if($this->plugin['firstPostAuthor'] != NULL)
 			preg_match_all($this->plugin['firstPostAuthor'], $html, $firstPostAuthor);
 		
+		if($this->plugin['firstPostAuthorUrl'] != NULL)
+			preg_match_all($this->plugin['firstPostAuthorUrl'], $html, $firstPostAuthorUrl);
+		
 		if($this->plugin['firstPostTime'] != NULL)
 			preg_match_all($this->plugin['firstPostTime'], $html, $firstPostTime);
 		
@@ -82,6 +85,9 @@ class ForumPostProcessor implements Processor {
 		if($this->plugin['replyAuthor'] != NULL)
 			preg_match_all($this->plugin['replyAuthor'], $html, $replyAuthors);
 		
+		if($this->plugin['replyAuthorUrl'] != NULL)
+			preg_match_all($this->plugin['replyAuthorUrl'], $html, $replyAuthorsUrls);	
+		
 		if($this->plugin['replyTime'] != NULL)
 			preg_match_all($this->plugin['replyTime'], $html, $replyTimes);
 		
@@ -89,17 +95,18 @@ class ForumPostProcessor implements Processor {
 			preg_match_all($this->plugin['replyMessage'], $html, $replyMessages);
 
 		// insert the starting post
-		$this->insertPost($firstPostAuthor[1][0], $firstPostTime[1][0], $firstPostMessage[1][0], $threadId);
+		$this->insertPost($firstPostAuthor[1][0], $firstPostAuthorUrl[1][0], $firstPostTime[1][0], $firstPostMessage[1][0], $threadId);
 		
 		// insert all the following replies
 		for($i = 0; $i < sizeof($replyAuthors[1]); $i++)
-			$this->insertPost($replyAuthors[1][$i], $replyTimes[1][$i], $replyMessages[1][$i], $threadId);
+			$this->insertPost($replyAuthors[1][$i], $replyAuthorsUrls[1][$i], $replyTimes[1][$i], $replyMessages[1][$i], $threadId);
 	}
 	
 	// ========================================================================
 	// insertPost
 	//    args:  string - author's username
-	//           string - time of in plain english
+	//           string - link to the author's profile page
+	//           string - time of in plain English
 	//           string - message that the author wrote (can contain HTML)
 	//           int - thread ID that this post belongs to
 	//    ret:   void
@@ -108,7 +115,7 @@ class ForumPostProcessor implements Processor {
 	//    FIX:   Duplicate post checking is not robust - some fast people can
 	//           post twice in the same time granularity of the website.
 	// ------------------------------------------------------------------------	
-	private function insertPost($author, $time, $bodyHtml, $threadId)
+	private function insertPost($author, $authorUrl, $time, $bodyHtml, $threadId)
 	{
 		$q = 'SELECT id 
 			  FROM users
@@ -146,7 +153,7 @@ class ForumPostProcessor implements Processor {
 			}
 		}
 		
-		$actualUserId = $this->insertUser($author, $userId, $time, $threadId, $bodyHtml);
+		$actualUserId = $this->insertUser($author, $authorUrl, $userId, $time, $threadId, $bodyHtml);
 		$this->insertKeywords($bodyHtml, $actualUserId, $threadId);
 		$this->insertLinks($bodyHtml);
 	}
@@ -154,6 +161,7 @@ class ForumPostProcessor implements Processor {
 	// ========================================================================
 	// insertUser
 	//    args:  string - author's username
+	//           stinrg - link to the author's profile page
 	//           int - if user exists, his ID from the database. If he does not
 	//                 exist, -1.
 	//           string - time of in plain english
@@ -165,17 +173,21 @@ class ForumPostProcessor implements Processor {
 	//           seen this author before, create an entry for him in the user
 	//           table. If we've already seen him before, then update his
 	//           post count.  
-	//   FIX:    There will be duplicate SQL error if a guy's username is over
-	//           40 characters (the limit of our varchar for the name).
+	//   FIX:    * There will be duplicate SQL error if a guy's username is over
+	//             40 characters (the limit of our varchar for the name).
+	//           * instead of only storing the author's profile page on the 
+	//             first insertion, should we update it each time we see it
+	//             in case it changes somehow?
 	// ------------------------------------------------------------------------	
-	private function insertUser($author, $userId, $time, $threadId, $bodyHtml)
+	private function insertUser($author, $authorUrl, $userId, $time, $threadId, $bodyHtml)
 	{	
 		// user does not exist - create new one 
 		if($userId == -1)
 		{
-			$q = 'INSERT INTO users (name, created)
-				  VALUES("' . $author . '", 
-						 "' . time()  . '")';
+			$q = 'INSERT INTO users (name, url, created)
+				VALUES("' . $author . '", 
+				"' . $authorUrl . '",
+				"' . time() . '")';
 			
 			$this->database->query($q);
 			
@@ -314,19 +326,13 @@ class ForumPostProcessor implements Processor {
 	// ------------------------------------------------------------------------	
 	private function englishToUnixTime($englishTime)
 	{
-		echo '<h4>converted english: "' . $englishTime . '" to Unix: "';
-	
 		$dirty[] = "'";
 		$dirty[] = 'at';
 		
 		foreach($dirty as $dirt)
 			$englishTime = str_replace($dirt, '', $englishTime);
 		
-		$unixTime = strtotime($englishTime);
-		
-		echo $unixTime . '"</h4>';
-		
-		return $unixTime;
+		return strtotime($englishTime);
 	}
 	
 	// ========================================================================
@@ -541,9 +547,7 @@ class ForumPostProcessor implements Processor {
 	// ------------------------------------------------------------------------	
 	private function loadPlugin()
 	{
-		$q = 'SELECT startPage, linkStructure, nextPageOfThreads, nextPageOfPosts, threadUrl, 
-		      threadNumPosts, threadNumViews, threadTitle, firstPostAuthor, firstPostTime,
-		      firstPostMessage, replyAuthor, replyTime, replyMessage, parentUrl
+		$q = 'SELECT *
 		      FROM regexes
 		      WHERE id = 0';
 			
