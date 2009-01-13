@@ -179,12 +179,14 @@ class StructuredCrawl {
 			$url->setCrawled();
 			if($url->getLevel() == $toplevel) 
 			{
-				echo 'Finished crawling toplevel page: '.$url->getName().'<br/>';
+				printf('<h3>Finished crawling toplevel page: <a href="%s">%s</a></h3>: <br/>',
+					$url->getName(), $url->getName());
 				$this->toplevel_pages_crawled++;
 			}
 			else 
 			{
-				echo 'Finished crawling non-toplevel page: '.$url->getName().'<br/>';
+				printf('<h3>Finished crawling non-toplevel page: <a href="%s">%s</a></h3>: <br/>',
+					$url->getName(), $url->getName());
 			}
 		
 			// Find next page to crawl and continue crawling

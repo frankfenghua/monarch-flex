@@ -23,6 +23,8 @@ class Linguistics
 	private $goodWords;         // array of positive words (linguistic analysis)
 	private $englishDictionary; // array of all the words in the english dictionary
 	private $database;          // used for accessing the linguistic tables
+	private $inverters;         // array of words that invert the effect of an adjective
+	private $amplifiers;        // array of words that amplify the effect of an adjective
 	
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // PUBLIC FUNCTIONS ...............................................................
@@ -34,6 +36,15 @@ class Linguistics
 	//    ret:   none
 	//    about: Constructor. Loads up the good/bad words. Will not load the entire
 	//           English dictionary because it's 7MB and that would take forever.
+	//    FIX:   shitload of good amplifiers and inverters that we should use, but
+	//           currently we don't support multi-word modifers. Use thesaurus.com
+	//           to find more.
+	//
+	//           no more than, not a bit, not at all, not by much, not likely, 
+	//           not markedly, not measurably, not much, not notably, not 
+	//           noticeably, not often, not quite, no way, once in a blue moon.
+	// 
+	//           Horrible balance between inverters and amplifiers at the moment. 
 	// ----------------------------------------------------------------------------
 	public function Linguistics()
 	{
@@ -75,8 +86,17 @@ class Linguistics
 		
 		while($row = mysql_fetch_array($q))
 			$this->badWords[] = $row['word'];
+		
+		// modifiers	
+		$this->inverters = explode(' ', 'not don\'t hardly neither nought barely faintly imperceptibly infrequently 
+			rarely scantly seldom sparsely');
+			
+		$this->amplifiers = explode(' ', 'very so much really absolutely acutely amply astonishingly awfully certainly 
+			considerably dearly decidedly deeply eminently emphatically exaggeratedly exceedingly excessively extensively 
+			extraordinarily extremely greatly highly incredibly indispensably largely notably noticeably particularly 
+			positively powerfully pressingly pretty prodigiously profoundly remarkably substantially superlatively 
+			surpassingly surprisingly terribly truly uncommonly unusually vastly wonderfully');
 	}
-	
 	
 	// ============================================================================
 	// englishProficiency
@@ -199,8 +219,8 @@ class Linguistics
 				continue;
 			}
 
-			// an adjective is amplified if preceded by "very" or "so"
-			if($locationAdjective > 0 && ($bodyArray[$locationAdjective - 1] == 'very' || $bodyArray[$locationAdjective - 1] == 'so'))
+			// the adjective is preceded by an amplifier
+			if($locationAdjective > 0 && in_array($bodyArray[$locationAdjective - 1], $this->amplifiers))
 				$severity = 2;
 			else
 				$severity = 1;
@@ -210,18 +230,18 @@ class Linguistics
 			// goodness of a word is inversely proportional to it's distance from a good word
 			if(in_array($adjective, $this->goodWords))
 			{
-				// "not" makes a good word bad
-				if($locationAdjective > 0 && $bodyArray[$locationAdjective - 1] != 'not' && $bodyArray[$locationAdjective - 1] != "don't")
-					$finalScore += $rating;
-				else
+				// an inverter in front of a good word makes it bad.
+				if($locationAdjective > 0 && in_array($bodyArray[$locationAdjective - 1], $this->inverters))
 					$finalScore -= $rating;
+				else
+					$finalScore += $rating;
 			}
 			
 			// badness of a word is inversely proportional to it's distance from a bad word
 			if(in_array($adjective, $this->badWords))
 			{	
-				// "not" makes a bad word good
-				if($locationAdjective > 0 && ($bodyArray[$locationAdjective - 1] == 'not' || $bodyArray[$locationAdjective - 1] == "don't"))				
+				// an inverter in front of a bad word makes it good
+				if($locationAdjective > 0 && in_array($bodyArray[$locationAdjective - 1], $this->inverters))				
 					$finalScore += $rating;
 				else
 					$finalScore -= $rating;

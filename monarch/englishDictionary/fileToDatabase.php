@@ -5,7 +5,8 @@
 // AUTHOR: Ryan Lin
 // DATE:   12/04/2008
 // ABOUT:  Takes a file complete with one English word per line and inserts them
-//         into the database.
+//         into the database. Not being used anymore, because we now load directly
+//         from the englishDictionary text file. 
 // ================================================================================
 
 require_once('../database/Database.php');
