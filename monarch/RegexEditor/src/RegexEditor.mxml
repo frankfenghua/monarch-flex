@@ -47,20 +47,18 @@
     		pageSource.height = pageSourceBox.height;
     		pageSource.width = pageSourceBox.width;
     		pageSource.text = html.window.document.documentElement.outerHTML;
-  /*     		pageSource.selectionBeginIndex = 15;
-    		pageSource.selectionEndIndex = 25;  		
-    		var trange:TextRange = new TextRange(pageSource, true);
-
-    		
-    		trange.fontStyle = "italic"; */
        	}
 		
-		private function highlightMatches(event:Event):void {
+		private function highlightMatches(event:Event):void {    		
+			highlightViewMatches(new RegExp(regexString.text, ""));
+			highlightSourceMatches(new RegExp(regexString.text, "g"));
+			
+		}
+		
+		private function highlightViewMatches(usrRegex:RegExp):void {
 			// Reinitialize match label and match text
     		matchesLabel.text = "No captured text";
     		matchesText.text = "";
-    		
-    		var usrRegex:RegExp = new RegExp(regexString.text, "");
     		
     		// Be sure that we are modifying unhighlighted page	
 			for each(var elem:Object in modifiedElements) {
@@ -73,6 +71,42 @@
     		trace(html);
     		highlightMatchesRec(html.window.document.documentElement, usrRegex);
 		}
+		
+		private function highlightSourceMatches(usrRegex:RegExp):void {
+			
+			var result:Array = usrRegex.exec(pageSource.text);
+			
+			while (result != null) {
+				// Highlight match
+				applyTextHighlight(pageSource, result.index, usrRegex.lastIndex);
+    			// trace("SourceMatches:", result.index, "\t", usrRegex.lastIndex, "\t", result[0].length);
+    			
+    			// Find next match
+    			result = usrRegex.exec(pageSource.text);
+			}
+		}
+		
+		private function applyTextHighlight(textField:UIComponent, startIndex:int,
+                              endIndex:int):void
+		{
+     		var tr:TextRange = new TextRange(textField, false, startIndex, endIndex);
+    		var highlightedPropsObject:Object = {color:"red", fontWeight:"bold", fontSize:12};
+    		// trace("Highlihting text range from ", startIndex, " to ", endIndex);
+     		setTextFormat(tr, highlightedPropsObject);
+		}
+
+		private function setTextFormat(tr:TextRange, obj:Object):void{
+    		//loop through the objects properties and assign each value to your TextRange
+    		//instance (only if the instance already has such a property declared)
+    		for(var i:String in obj){
+    			if(tr.hasOwnProperty(i)){
+        			tr[i] = obj[i];
+    			}else{
+        			trace("some error handling here"); 
+        		}
+    		}
+  }
+		
 		private function highlightMatchesFromList(elemList:Object, regex:RegExp):void {
 			// Save an unmodified background color
 			unmodifiedBackground = elemList[0].style.background;
