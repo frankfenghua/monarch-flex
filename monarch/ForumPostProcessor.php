@@ -145,11 +145,11 @@ class ForumPostProcessor implements Processor {
 			if(mysql_num_rows($q) > 0)
 			{
 				printf('<h4>duplicate post found written by %s on %s</h4>', $author, $time);
+				return;
 			}
 			else
 			{
 				printf('<h4>new post found written by %s on %s</h4>', $author, $time);
-				return;
 			}
 		}
 		
