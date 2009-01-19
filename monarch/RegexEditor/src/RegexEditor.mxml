@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns:ns1="http://www.adobe.com/2006/air"
-	addedToStage="init(event)" viewSourceURL="srcview/index.html">
+	addedToStage="init(event)" viewSourceURL="srcview/index.html" width="1028" height="878">
     <mx:Script>
         <![CDATA[
         import mx.controls.textClasses.TextRange;
@@ -43,10 +43,6 @@
 
     		highlightButton.enabled=true;
     		
-    		// Make pageSource textArea visible
-    		pageSource.height = pageSourceBox.height;
-    		pageSource.width = pageSourceBox.width;
-    		pageSource.text = html.window.document.documentElement.outerHTML;
        	}
 		
 		private function highlightMatches(event:Event):void {    		
@@ -57,8 +53,7 @@
 		
 		private function highlightViewMatches(usrRegex:RegExp):void {
 			// Reinitialize match label and match text
-    		matchesLabel.text = "No captured text";
-    		matchesText.text = "";
+    		matchesText.text = "No captured text";
     		
     		// Be sure that we are modifying unhighlighted page	
 			for each(var elem:Object in modifiedElements) {
@@ -117,9 +112,6 @@
 				var match:Object = regex.exec(elemList[i].outerHTML);
 				if(match != null) {
 					if(match.length >= 2) {
-						if(matchesLabel.text.charAt(0) == "N") {
-							matchesLabel.text = "Captured Text"; 
-						}
 						matchesText.text += ("\n\n* " + match[1]);
 					}					
 
@@ -164,9 +156,15 @@
 			html.load(new URLRequest(searchTerms.text));
 		}
 		
+		private function initSourceText():void {
+			if(html) {
+				// Make pageSource textArea visible
+    			pageSource.text = html.window.document.documentElement.outerHTML;
+			}
+		}
 		]]>
     </mx:Script>
-    <mx:VBox height="51" horizontalAlign="left" width="1044">
+    <mx:VBox height="852" horizontalAlign="left" width="1044">
     	<mx:HBox>
     		<mx:Label text="Website"  width="112"/>
     		<mx:TextInput id="searchTerms" text="http://reddit.com" />
@@ -179,19 +177,17 @@
     		<mx:Button label="Highlight Matches"
     			click="highlightMatches(event)" id="highlightButton" enabled="false"/>
     	</mx:HBox>
+    	<mx:TabNavigator width="730" height="598">
+    	    <mx:Canvas label="View" width="100%" height="100%">
+    	        <mx:VBox height="100%" width="728" id="htmlBox" label="Page View" x="0">
+    	        </mx:VBox>
+    	    </mx:Canvas>
+    	    <mx:VBox label="Source" id="sourceTab" width="100%" height="100%">
+    	        <mx:TextArea width="100%" height="564" id="pageSource" addedToStage="initSourceText()"/>
+    	    </mx:VBox>
+    	    <mx:HBox label="Text Matches" width="100%" height="100%">
+    	        <mx:Text width="730" height="100%" id="matchesText" text="" color="#0C5463"/>
+    	    </mx:HBox>
+    	</mx:TabNavigator>
     </mx:VBox>
-    <mx:HBox id="hBox1" horizontalAlign="left" verticalAlign="top" width="1042" height="100%">
-        <mx:VBox height="100%" width="402" id="htmlBox" label="Page View">
-            <mx:Label text="Page View" fontSize="10" fontWeight="bold" color="#0C5463"/>
-        </mx:VBox>
-        <mx:Spacer/>
-        <mx:VBox height="100%" width="400" id="pageSourceBox" label="Page Source">
-            <mx:Label text="Page Source" fontSize="10" fontWeight="bold" color="#0C5463"/>
-            <mx:TextArea width="100%" height="336" id="pageSource"/>
-        </mx:VBox>
-        <mx:VBox height="100%" width="214" id="matchingTextBox">
-            <mx:Label id="matchesLabel" text="" fontSize="10" fontWeight="bold" color="#0C5463"/>
-            <mx:Text width="213" height="100%" id="matchesText" text="" color="#0C5463"/>
-        </mx:VBox>
-    </mx:HBox>
 </mx:WindowedApplication>
