@@ -1,0 +1,97 @@
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+
+CREATE TABLE `keywords` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `word` varchar(30) collate latin1_german2_ci NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COLLATE=latin1_german2_ci AUTO_INCREMENT=4 ;
+
+CREATE TABLE `keywordstats` (
+  `keyword` smallint(5) unsigned NOT NULL,
+  `stat` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `links` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `baseUrl` varchar(61) collate latin1_german2_ci NOT NULL,
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `baseUrl` (`baseUrl`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COLLATE=latin1_german2_ci AUTO_INCREMENT=33 ;
+
+CREATE TABLE `linkstats` (
+  `link` smallint(5) unsigned NOT NULL,
+  `stat` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `posts` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `user` int(10) unsigned NOT NULL,
+  `time` int(10) unsigned NOT NULL,
+  `length` int(10) unsigned NOT NULL,
+  `thread` int(10) unsigned NOT NULL,
+  `hash` varchar(8) collate latin1_german2_ci NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COLLATE=latin1_german2_ci AUTO_INCREMENT=1987 ;
+
+CREATE TABLE `regexes` (
+  `startPage` varchar(150) default '//',
+  `linkStructure` varchar(150) default '//',
+  `nextPageOfThreads` varchar(150) default '//',
+  `nextPageOfPosts` varchar(150) default '//',
+  `threadUrl` varchar(150) default '//',
+  `threadNumPosts` varchar(150) default '//',
+  `threadNumViews` varchar(150) default '//',
+  `threadTitle` varchar(150) default '//',
+  `firstPostAuthor` varchar(150) default '//',
+  `firstPostAuthorUrl` varchar(150) NOT NULL default '//',
+  `firstPostTime` varchar(150) default '//',
+  `firstPostMessage` varchar(150) default '//',
+  `replyAuthor` varchar(150) default '//',
+  `replyAuthorUrl` varchar(150) NOT NULL default '//',
+  `replyTime` varchar(150) default '//',
+  `replyMessage` varchar(150) default '//',
+  `parentUrl` varchar(150) NOT NULL default '//',
+  `id` smallint(6) NOT NULL default '0',
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `stats` (
+  `id` smallint(5) unsigned NOT NULL auto_increment,
+  `time` int(10) unsigned NOT NULL default '0',
+  `count` smallint(5) unsigned NOT NULL default '0',
+  `goodness` float NOT NULL default '0',
+  `englishProficiency` float unsigned NOT NULL default '0',
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=115 ;
+
+CREATE TABLE `threads` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `url` varchar(200) collate latin1_german2_ci default NULL,
+  `posts` mediumint(8) unsigned NOT NULL default '0',
+  `views` mediumint(8) unsigned NOT NULL default '0',
+  `title` varchar(50) collate latin1_german2_ci default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COLLATE=latin1_german2_ci AUTO_INCREMENT=36 ;
+
+CREATE TABLE `threadstats` (
+  `thread` int(10) unsigned NOT NULL,
+  `keyword` int(10) unsigned NOT NULL,
+  `stat` int(10) unsigned NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+CREATE TABLE `users` (
+  `url` varchar(200) collate latin1_german2_ci default NULL,
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `name` varchar(40) collate latin1_german2_ci NOT NULL,
+  `posts` int(10) unsigned NOT NULL default '1',
+  `created` int(10) unsigned NOT NULL,
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `name` (`name`),
+  UNIQUE KEY `name_2` (`name`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COLLATE=latin1_german2_ci AUTO_INCREMENT=182 ;
+
+CREATE TABLE `userstats` (
+  `user` int(10) unsigned NOT NULL,
+  `keyword` int(10) unsigned NOT NULL,
+  `stat` int(10) unsigned NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;

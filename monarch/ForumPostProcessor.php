@@ -25,7 +25,6 @@ class ForumPostProcessor implements Processor {
 	private $plugin;       // regular expressions for how to scrape this community
 	private $timeStart;    // the time when we started scraping (used for time based statistics)
 	private $allowedWords; // array of keywords which we are scraping for 
-	private $start_time;   // Time this processor was created
 	private $linguistics;  // examines what and how the speaker is speaking
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -112,14 +111,12 @@ class ForumPostProcessor implements Processor {
 	//    ret:   void
 	//    about: Updates info about the post author and analyze's his message.
 	//           Will not do anything if we've already scraped this post before.
-	//    FIX:   Duplicate post checking is not robust - some fast people can
-	//           post twice in the same time granularity of the website.
 	// ------------------------------------------------------------------------	
 	private function insertPost($author, $authorUrl, $time, $bodyHtml, $threadId)
 	{
 		$q = 'SELECT id 
-			  FROM users
-			  WHERE name = "' . $author . '"';
+			FROM users
+			WHERE name = "' . $author . '"';
 		
 		$q = $this->database->query($q);
 
@@ -137,7 +134,8 @@ class ForumPostProcessor implements Processor {
 			$q = 'SELECT id 
 				FROM posts
 				WHERE user = "' . $userId . '"
-				AND time = "' . $this->englishToUnixTime($time) . '"';
+				AND time = "' . $this->englishToUnixTime($time) . '"
+				AND hash = "' . hash('md5', $bodyHtml) . '"';
 
 			$q = $this->database->query($q);
 		
@@ -216,12 +214,16 @@ class ForumPostProcessor implements Processor {
 			$this->database->query($q);
 		}
 		
-		$q = 'INSERT INTO posts (user, time, length, thread)
-			  VALUES("' . $userId . '", 
-					 "' . $this->englishToUnixTime($time) . '", 
-					 "' . strlen($bodyHtml) . '",
-					 "' . $threadId . '")';
-		
+		// hash ensures that two consecutive posts within the same time granularity are counted as unique
+		// given that this double posting idiot didn't post the same message twice. If he did, then its
+		// OK because we don't want to count spam twice. 
+		$q = 'INSERT INTO posts (user, time, length, thread, hash)
+			VALUES("' . $userId . '", 
+			"' . $this->englishToUnixTime($time) . '", 
+			"' . strlen($bodyHtml) . '",
+			"' . $threadId . '",
+			"' . hash('md5', $bodyHtml) . '")';
+			
 		$this->database->query($q);	
 		
 		return $userId;
