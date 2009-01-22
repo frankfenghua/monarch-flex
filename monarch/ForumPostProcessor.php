@@ -135,7 +135,7 @@ class ForumPostProcessor implements Processor {
 				FROM posts
 				WHERE user = "' . $userId . '"
 				AND time = "' . $this->englishToUnixTime($time) . '"
-				AND hash = "' . hash('md5', $bodyHtml) . '"';
+				AND hash = "' . substr(hash('md5', $bodyHtml), 0, POST_HASH_LENGTH) . '"';
 
 			$q = $this->database->query($q);
 		
