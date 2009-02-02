@@ -11,7 +11,7 @@
 define('CRAWL_THREAD_LEVEL', 0);                // FIX: don't know
 define('CRAWL_POST_LEVEL', 1);                  // FIX: don't know
 define('CRAWL_NUM_LEVELS', 2);                  // the depth of levels present in the intended crawl
-define('CRAWL_MAX_TOPLEVEL_PAGES_TO_CRAWL', 1); // the breadth of pages on the top level to crawl.
+define('CRAWL_MAX_TOPLEVEL_PAGES_TO_CRAWL', 5); // the breadth of pages on the top level to crawl.
 define('CRAWL_THROTTLE', 1);                    // number of seconds to delay between downloading each page
 
 define('REGEX_ENGLISH_WORD', 'a-zA-Z0-9');
