@@ -13,7 +13,7 @@ class Database
 
 	// ========================================================================
 	// Database
-	//    args:  string - The name or ID of the website's to connect to. 
+	//    args:  string - The name or ID# of the website to connect to. 
 	//                  - "master" connects to communityanalysis
 	//                  - "root" does not select any database. This is used 
 	//                    for connection to the root, so you can create 
