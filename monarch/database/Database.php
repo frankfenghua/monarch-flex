@@ -30,8 +30,7 @@ class Database
 		
 		$this->connect = @mysql_connect($server, $user, $password) 
 			or die('Could not connect to the master database.');
-		
-		// connection
+
 		if($name == 'root')
 			return;
 	

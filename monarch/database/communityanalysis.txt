@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Feb 07, 2009 at 06:32 PM
+-- Generation Time: Feb 08, 2009 at 12:52 PM
 -- Server version: 5.0.51
 -- PHP Version: 5.2.6
 
@@ -25,7 +25,7 @@ CREATE TABLE `allowedkeywords` (
   `word` varchar(30) NOT NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `word` (`word`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=12 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='tells which keywords each community should scrape for' AUTO_INCREMENT=12 ;
 
 --
 -- Dumping data for table `allowedkeywords`
@@ -46,6 +46,75 @@ INSERT INTO `allowedkeywords` (`id`, `community`, `word`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `amplifiers`
+--
+
+CREATE TABLE `amplifiers` (
+  `word` varchar(30) NOT NULL,
+  UNIQUE KEY `word` (`word`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='adverbs that amplify the meaning of an adjective';
+
+--
+-- Dumping data for table `amplifiers`
+--
+
+INSERT INTO `amplifiers` (`word`) VALUES
+('absolutely'),
+('acutely'),
+('always'),
+('amply'),
+('astonishingly'),
+('awfully'),
+('certainly'),
+('considerably'),
+('dearly'),
+('decidedly'),
+('deeply'),
+('dreadfully'),
+('eminently'),
+('emphatically'),
+('exaggeratedly'),
+('exceedingly'),
+('exceptionally'),
+('excessively'),
+('extensively'),
+('extra'),
+('extraordinarily'),
+('extremely'),
+('greatly'),
+('highly'),
+('incredibly'),
+('indispensably'),
+('largely'),
+('most'),
+('much'),
+('notably'),
+('noticeably'),
+('particularly'),
+('positively'),
+('powerfully'),
+('pressingly'),
+('pretty'),
+('prodigiously'),
+('profoundly'),
+('really'),
+('remarkably'),
+('so'),
+('substantially'),
+('superlatively'),
+('surpassingly'),
+('surprisingly'),
+('terribly'),
+('truly'),
+('uncommonly'),
+('unusually'),
+('vastly'),
+('very'),
+('wonderfully');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `badwords`
 --
 
@@ -53,7 +122,7 @@ CREATE TABLE `badwords` (
   `word` varchar(20) NOT NULL,
   PRIMARY KEY  (`word`),
   UNIQUE KEY `word` (`word`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='negative nouns and adjectives';
 
 --
 -- Dumping data for table `badwords`
@@ -99,6 +168,7 @@ INSERT INTO `badwords` (`word`) VALUES
 ('bitch'),
 ('bitchass'),
 ('bitches'),
+('bitching'),
 ('bitchtits'),
 ('bitchy'),
 ('blow job'),
@@ -232,7 +302,6 @@ INSERT INTO `badwords` (`word`) VALUES
 ('ho'),
 ('hoe'),
 ('homo'),
-('homodumbshit'),
 ('homos'),
 ('honkey'),
 ('humping'),
@@ -317,6 +386,8 @@ INSERT INTO `badwords` (`word`) VALUES
 ('racist'),
 ('racists'),
 ('renob'),
+('retard'),
+('retards'),
 ('rimjob'),
 ('rude'),
 ('sad'),
@@ -402,7 +473,7 @@ CREATE TABLE `communities` (
   `created` int(10) unsigned NOT NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='A community is an umbrella for multiple websites.' AUTO_INCREMENT=2 ;
 
 --
 -- Dumping data for table `communities`
@@ -421,7 +492,7 @@ CREATE TABLE `goodwords` (
   `word` varchar(20) NOT NULL,
   PRIMARY KEY  (`word`),
   UNIQUE KEY `word` (`word`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='positive nouns and adjectives';
 
 --
 -- Dumping data for table `goodwords`
@@ -436,6 +507,7 @@ INSERT INTO `goodwords` (`word`) VALUES
 ('awe'),
 ('awesome'),
 ('beautiful'),
+('beauty'),
 ('blameless'),
 ('bodacious'),
 ('brilliant'),
@@ -469,6 +541,7 @@ INSERT INTO `goodwords` (`word`) VALUES
 ('ethical'),
 ('euphoria'),
 ('euphoric'),
+('exaltation'),
 ('exalted'),
 ('exemplary'),
 ('extraordinary'),
@@ -583,6 +656,52 @@ INSERT INTO `goodwords` (`word`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `inverters`
+--
+
+CREATE TABLE `inverters` (
+  `word` varchar(30) NOT NULL,
+  UNIQUE KEY `word` (`word`),
+  UNIQUE KEY `word_2` (`word`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='adverbs that invert the meaning of an adjective';
+
+--
+-- Dumping data for table `inverters`
+--
+
+INSERT INTO `inverters` (`word`) VALUES
+('barely'),
+('by no means'),
+('don''t'),
+('faintly'),
+('hardly'),
+('hardly ever'),
+('imperceptibly'),
+('in no way'),
+('infrequently'),
+('neither'),
+('never'),
+('no way'),
+('not'),
+('not a bit'),
+('not at all'),
+('not likely'),
+('not markedly'),
+('not measurably'),
+('not much'),
+('not notably'),
+('not noticeably'),
+('not often'),
+('not quite'),
+('nought'),
+('rarely'),
+('scantly'),
+('seldom'),
+('sparsely');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -594,7 +713,7 @@ CREATE TABLE `users` (
   `created` int(10) unsigned NOT NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='accounts for users of this tool' AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `users`
@@ -618,7 +737,7 @@ CREATE TABLE `websites` (
   `scrapeInterval` tinyint(3) unsigned NOT NULL default '40',
   PRIMARY KEY  (`id`),
   KEY `domain` (`name`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COLLATE=latin1_german2_ci AUTO_INCREMENT=22 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COLLATE=latin1_german2_ci COMMENT='shows which community a website belongs under' AUTO_INCREMENT=22 ;
 
 --
 -- Dumping data for table `websites`

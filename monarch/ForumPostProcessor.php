@@ -1,4 +1,5 @@
 <?php
+
   ////////////////////////////////////////////////////////////////////
   // ForumProcessor.php                                            
   // Adapted by Andrew Spencer from code written by Ryan Lin
@@ -207,9 +208,9 @@ class ForumPostProcessor implements Processor {
 				$currentMinJoinTime = $q['created'];
 		
 			$q = 'UPDATE users
-				  SET posts = posts + 1, 
-				  created = "' . $currentMinJoinTime . '"
-				  WHERE id = "' . $userId . '"';
+				SET posts = posts + 1, 
+				created = "' . $currentMinJoinTime . '"
+				WHERE id = "' . $userId . '"';
 			
 			$this->database->query($q);
 		}

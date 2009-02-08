@@ -4,9 +4,8 @@
 // TYPE:   Class
 // AUTHOR: Ryan Lin, Andrew Spencer
 // DATE:   12/03/2008
-// ABOUT:  Various ways to gauge the importance of a speaker. All functions take
-//         normal text as you would find in a book. HTML and other formatting
-//         be removed before using any of these functions.
+// ABOUT:  Various ways to gauge the importance of a speaker and the positivity
+//         or negativity which she speaks of a keyword. 
 // ================================================================================
 
 require_once('database/Database.php');
@@ -50,7 +49,7 @@ class Linguistics
 	{
 		$this->database = new Database('master');
 		
-		// load english dictionary 
+		// load English dictionary 
 		$dictionary = @fopen("englishDictionary/englishDictionary.txt", "r");
 		
 		if(!$dictionary)
@@ -71,26 +70,11 @@ class Linguistics
 		else
 			die('english dictionary file could not be opened.');
 		
-		// load good words	
-		$q = 'SELECT word FROM goodwords';
-		
-		$q = $this->database->query($q);
-		
-		while($row = mysql_fetch_array($q))
-			$this->goodWords[] = $row['word'];
-		
-		// load bad words
-		$q = 'SELECT word FROM badwords';
-		
-		$q = $this->database->query($q);
-		
-		while($row = mysql_fetch_array($q))
-			$this->badWords[] = $row['word'];
-		
-		// modifiers	
-		$this->inverters = explode(', ', 'not, don\'t, hardly, neither, nought, barely, faintly, imperceptibly, infrequently, rarely, scantly, seldom, sparsely, by no means, not a bit, not at all, not likely, not markedly, not measurably, not much, not notably, not noticeably, not often, not quite, no way, never, hardly ever, in no way');
-			
-		$this->amplifiers = explode(', ', 'very, so, much, really, absolutely, acutely, amply, astonishingly, awfully, certainly, considerably, dearly, decidedly, deeply, eminently, emphatically, exaggeratedly, exceedingly, excessively, extensively, extraordinarily, extremely, greatly, highly, incredibly, indispensably, largely, notably, noticeably, particularly, positively, powerfully, pressingly, pretty, prodigiously, profoundly, remarkably, substantially, superlatively, surpassingly, surprisingly, terribly, truly, uncommonly, unusually, vastly, wonderfully, always, dreadfully, exceptionally, extra, most');
+		// load adjectives and adverbs
+		$this->goodWords  = $this->loadWordList('goodwords');
+		$this->badWords   = $this->loadWordList('badwords');
+		$this->inverters  = $this->loadWordList('inverters');
+		$this->amplifiers = $this->loadWordList('amplifiers');
 	}
 	
 	// ============================================================================
@@ -362,6 +346,23 @@ class Linguistics
 		
 		// average
 		return (($percentClosedParens + $percentClosedQuotes) / 2);
+	}
+	
+	// ============================================================================
+	// loadWordList
+	//    args:  string - "inverters" | "amplifiers" | "goodwords" | "badwords"
+	//    ret:   array of strings
+	//    about: Load a set of English words. Each type of set has a different 
+	//           effect on meaning of a sentence.
+	// ----------------------------------------------------------------------------
+	private function loadWordList($type)
+	{
+		$q = $this->database->query('SELECT word FROM ' . $type);
+		
+		while($row = mysql_fetch_array($q))
+			$list[] = $row['word'];
+			
+		return $list;
 	}
 	
 	// ============================================================================

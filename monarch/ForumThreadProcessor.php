@@ -48,11 +48,6 @@ class ForumThreadProcessor implements Processor {
 	//    about: Scrapes the threads page for basic thread stats. Calls
 	//           scrapeThread (singular) to actually go into a thread. Will have
 	//           a delay before entering each thread.
-	//    fix:   * Checking thread title for duplicates is not robust since 
-	//             people can edit their titles. 
-	//           * New replies can be added to a thread which we've alrady 
-	//             scraped for. Currently, we would not be checking those new
-	//             replies.
 	// ------------------------------------------------------------------------	
 	private function scrapeThreads($html)
 	{	
