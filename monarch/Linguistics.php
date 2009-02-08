@@ -88,14 +88,9 @@ class Linguistics
 			$this->badWords[] = $row['word'];
 		
 		// modifiers	
-		$this->inverters = explode(' ', 'not don\'t hardly neither nought barely faintly imperceptibly infrequently 
-			rarely scantly seldom sparsely');
+		$this->inverters = explode(', ', 'not, don\'t, hardly, neither, nought, barely, faintly, imperceptibly, infrequently, rarely, scantly, seldom, sparsely, by no means, not a bit, not at all, not likely, not markedly, not measurably, not much, not notably, not noticeably, not often, not quite, no way, never, hardly ever, in no way');
 			
-		$this->amplifiers = explode(' ', 'very so much really absolutely acutely amply astonishingly awfully certainly 
-			considerably dearly decidedly deeply eminently emphatically exaggeratedly exceedingly excessively extensively 
-			extraordinarily extremely greatly highly incredibly indispensably largely notably noticeably particularly 
-			positively powerfully pressingly pretty prodigiously profoundly remarkably substantially superlatively 
-			surpassingly surprisingly terribly truly uncommonly unusually vastly wonderfully');
+		$this->amplifiers = explode(', ', 'very, so, much, really, absolutely, acutely, amply, astonishingly, awfully, certainly, considerably, dearly, decidedly, deeply, eminently, emphatically, exaggeratedly, exceedingly, excessively, extensively, extraordinarily, extremely, greatly, highly, incredibly, indispensably, largely, notably, noticeably, particularly, positively, powerfully, pressingly, pretty, prodigiously, profoundly, remarkably, substantially, superlatively, surpassingly, surprisingly, terribly, truly, uncommonly, unusually, vastly, wonderfully, always, dreadfully, exceptionally, extra, most');
 	}
 	
 	// ============================================================================
@@ -204,6 +199,9 @@ class Linguistics
 	//             chance of division by zero.
 	//           * not normalized to [0.0 - 1.0] range
 	//           * "very" and "so" does not have to precede adjective. Ex: I like it very much.
+	//           * see if in_array can be made to do binary search through an
+	//             alphabetically arranged goodwords/badwords array to speed
+	//             things up.
 	public function goodnessByIndex($locationKeyword, $bodyArray)
 	{
 		$locationAdjective = 0;
@@ -231,7 +229,7 @@ class Linguistics
 			if(in_array($adjective, $this->goodWords))
 			{
 				// an inverter in front of a good word makes it bad.
-				if($locationAdjective > 0 && in_array($bodyArray[$locationAdjective - 1], $this->inverters))
+				if($this->isInverted($bodyArray, $locationAdjective))
 					$finalScore -= $rating;
 				else
 					$finalScore += $rating;
@@ -241,7 +239,7 @@ class Linguistics
 			if(in_array($adjective, $this->badWords))
 			{	
 				// an inverter in front of a bad word makes it good
-				if($locationAdjective > 0 && in_array($bodyArray[$locationAdjective - 1], $this->inverters))				
+				if($this->isInverted($bodyArray, $locationAdjective))			
 					$finalScore += $rating;
 				else
 					$finalScore -= $rating;
@@ -364,6 +362,40 @@ class Linguistics
 		
 		// average
 		return (($percentClosedParens + $percentClosedQuotes) / 2);
+	}
+	
+	// ============================================================================
+	// isInverted
+	//    args:  * array of strings
+	//           * the index of an adjective in this array of strings
+	//    ret:   boolean
+	//    about: Check to see if the adjective is inverted. For example, the 
+	//           meaning of the adjective "fair" is inverted in "hardly ever fair".
+	// ----------------------------------------------------------------------------
+	private function isInverted($bodyArray, $locationAdjective)
+	{
+		// previous word is an inverter ("not")
+		if($locationAdjective > 0)
+		{
+			if(in_array($bodyArray[$locationAdjective - 1], $this->inverters))
+				return true;
+		}
+		
+		// previous 2 words is an inverter conjunction ("hardly ever")
+		if($locationAdjective > 1)
+		{
+			if(in_array($bodyArray[$locationAdjective - 2] . ' ' . $bodyArray[$locationAdjective - 1], $this->inverters))
+				return true;
+		}
+		
+		// previous 3 words is a inverter conjunction ("by no means")
+		if($locationAdjective > 2)
+		{
+			if(in_array($bodyArray[$locationAdjective - 3] . ' ' . $bodyArray[$locationAdjective - 2] . ' ' . $bodyArray[$locationAdjective - 1], $this->inverters))
+				return true;
+		}
+		
+		return false;
 	}
 
 }

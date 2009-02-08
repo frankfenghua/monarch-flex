@@ -21,6 +21,7 @@ $b = 'Adobe is not bad. It does not suck. I don\'t hate it';
 $g = 'Adobe is good. It is great. I love it.';
 $h = 'Adobe is very good. It is so great. I love it.';
 $o = 'Adobe sucks. I love Adobe.';
+$p = 'Adobe is hardly ever respectable.';
 $c = 'My spelleeng iss horibel. I am nott a trustwoorthy persun';
 $d = 'My spelling is good. My posts can be trusted';
 $e = 'I am bad at " punctuation ) and (cannot) be "trusted"';
@@ -54,9 +55,9 @@ do you like awesome characters? watch Firefly.
 
 ARE YOU GETTING THIS?';
 
+
 echo '<h1>linguistics test</h1>';
 echo '<hr><h2>trash talking</h3>';
-
 printf('<i>%s</i><br /><br /><b>goodness of "adobe":</b> %f', $a, $linguistics->goodness('adobe', $a));
 echo '<hr><h2>negated trash talking</h3>';
 printf('<i>%s</i><br /><br /><b>goodness of "adobe":</b> %f', $b, $linguistics->goodness('adobe', $b));
@@ -66,6 +67,8 @@ echo '<hr><h2>severe ass kissing</h3>';
 printf('<i>%s</i><br /><br /><b>goodness of "adobe":</b> %f', $h, $linguistics->goodness('adobe', $h));
 echo '<hr><h2>split personality</h3>';
 printf('<i>%s</i><br /><br /><b>goodness of "adobe":</b> %f', $o, $linguistics->goodness('adobe', $o));
+echo '<hr><h2>multi-word inverters</h3>';
+printf('<i>%s</i><br /><br /><b>goodness of "adobe":</b> %f', $p, $linguistics->goodness('adobe', $p));
 echo '<hr><h2>misspelling</h3>';
 printf('<i>%s</i><br /><br /><b>spelling:</b> %f', $c, $linguistics->spelling($c));
 echo '<hr><h2>correct spelling</h3>';
