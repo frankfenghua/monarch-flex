@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Feb 08, 2009 at 07:28 PM
+-- Generation Time: Feb 08, 2009 at 10:33 PM
 -- Server version: 5.0.51
 -- PHP Version: 5.2.6
 
@@ -12,105 +12,6 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 --
 -- Database: `communityanalysis`
 --
-
--- --------------------------------------------------------
-
---
--- Table structure for table `allowedkeywords`
---
-
-CREATE TABLE `allowedkeywords` (
-  `id` smallint(6) NOT NULL auto_increment,
-  `community` smallint(5) unsigned NOT NULL,
-  `word` varchar(30) NOT NULL,
-  PRIMARY KEY  (`id`),
-  UNIQUE KEY `word` (`word`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='tells which keywords each community should scrape for' AUTO_INCREMENT=12 ;
-
---
--- Dumping data for table `allowedkeywords`
---
-
-INSERT INTO `allowedkeywords` (`id`, `community`, `word`) VALUES
-(1, 1, 'threadless'),
-(2, 1, 'photoshop'),
-(3, 1, 'illustrator'),
-(4, 1, 'adobe'),
-(5, 1, 'alumni'),
-(6, 1, 'price'),
-(7, 1, 'glennz'),
-(9, 1, 'flash'),
-(10, 1, 'camera'),
-(11, 1, 'collaboration');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `amplifiers`
---
-
-CREATE TABLE `amplifiers` (
-  `word` varchar(30) NOT NULL,
-  UNIQUE KEY `word` (`word`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='adverbs that amplify the meaning of an adjective';
-
---
--- Dumping data for table `amplifiers`
---
-
-INSERT INTO `amplifiers` (`word`) VALUES
-('absolutely'),
-('acutely'),
-('always'),
-('amply'),
-('astonishingly'),
-('awfully'),
-('certainly'),
-('considerably'),
-('dearly'),
-('decidedly'),
-('deeply'),
-('dreadfully'),
-('eminently'),
-('emphatically'),
-('exaggeratedly'),
-('exceedingly'),
-('exceptionally'),
-('excessively'),
-('extensively'),
-('extra'),
-('extraordinarily'),
-('extremely'),
-('greatly'),
-('highly'),
-('incredibly'),
-('indispensably'),
-('largely'),
-('most'),
-('much'),
-('notably'),
-('noticeably'),
-('particularly'),
-('positively'),
-('powerfully'),
-('pressingly'),
-('pretty'),
-('prodigiously'),
-('profoundly'),
-('really'),
-('remarkably'),
-('so'),
-('substantially'),
-('superlatively'),
-('surpassingly'),
-('surprisingly'),
-('terribly'),
-('truly'),
-('uncommonly'),
-('unusually'),
-('vastly'),
-('very'),
-('wonderfully');
 
 -- --------------------------------------------------------
 
@@ -133,6 +34,7 @@ INSERT INTO `badwords` (`word`) VALUES
 ('abrupt'),
 ('abuse'),
 ('abusive'),
+('against'),
 ('alcoholic'),
 ('alcoholics'),
 ('anus'),
@@ -165,6 +67,8 @@ INSERT INTO `badwords` (`word`) VALUES
 ('bitches'),
 ('bitching'),
 ('bitchy'),
+('bloated'),
+('bloatware'),
 ('blowjob'),
 ('blows'),
 ('blunt'),
@@ -173,6 +77,8 @@ INSERT INTO `badwords` (`word`) VALUES
 ('brainless'),
 ('brusque'),
 ('brutish'),
+('bug'),
+('bugs'),
 ('bullshit'),
 ('bummer'),
 ('burglars'),
@@ -191,12 +97,17 @@ INSERT INTO `badwords` (`word`) VALUES
 ('cock'),
 ('cocksmoker'),
 ('cocky'),
+('communism'),
+('communist'),
+('confuse'),
+('confusing'),
 ('conspiracies'),
 ('conspiracy'),
 ('coochie'),
 ('coochy'),
 ('coon'),
 ('cooter'),
+('cop-out'),
 ('cracker'),
 ('crime'),
 ('crimes'),
@@ -209,18 +120,32 @@ INSERT INTO `badwords` (`word`) VALUES
 ('cunnilingus'),
 ('cunt'),
 ('curt'),
+('damage'),
+('damages'),
+('damaging'),
 ('damn'),
+('dark'),
+('darkest'),
+('decrepid'),
 ('defective'),
 ('deficiency'),
 ('deficient'),
+('denounce'),
+('denounced'),
+('denouncing'),
+('denunciation'),
 ('dick'),
 ('dickhead'),
 ('dicks'),
 ('dickweed'),
 ('dickwod'),
+('dictator'),
+('dictatorship'),
 ('dildo'),
 ('dipshit'),
+('disagree'),
 ('discourteous'),
+('disgusting'),
 ('disorderly'),
 ('dissatisfactory'),
 ('dookie'),
@@ -249,6 +174,10 @@ INSERT INTO `badwords` (`word`) VALUES
 ('fagfucker'),
 ('faggit'),
 ('faggot'),
+('fail'),
+('failed'),
+('fails'),
+('failure'),
 ('fallacious'),
 ('fat'),
 ('fatass'),
@@ -333,6 +262,7 @@ INSERT INTO `badwords` (`word`) VALUES
 ('jap'),
 ('jigaboo'),
 ('jizz'),
+('joke'),
 ('junky'),
 ('kidnapper'),
 ('kidnappers'),
@@ -354,6 +284,7 @@ INSERT INTO `badwords` (`word`) VALUES
 ('lesbo'),
 ('lezzie'),
 ('lousy'),
+('manic'),
 ('manslaughter'),
 ('marajuana'),
 ('mcfagget'),
@@ -362,6 +293,8 @@ INSERT INTO `badwords` (`word`) VALUES
 ('mick'),
 ('mindless'),
 ('minge'),
+('miserable'),
+('misery'),
 ('moron'),
 ('moronic'),
 ('mothafucka'),
@@ -379,6 +312,8 @@ INSERT INTO `badwords` (`word`) VALUES
 ('nigga'),
 ('nigger'),
 ('niggers'),
+('nightmare'),
+('nightmares'),
 ('niglet'),
 ('nutsack'),
 ('obese'),
@@ -403,6 +338,10 @@ INSERT INTO `badwords` (`word`) VALUES
 ('porno'),
 ('pornography'),
 ('prick'),
+('problem'),
+('problematic'),
+('problems'),
+('prone'),
 ('prostitute'),
 ('prostitutes'),
 ('prostitution'),
@@ -416,6 +355,9 @@ INSERT INTO `badwords` (`word`) VALUES
 ('queers'),
 ('racist'),
 ('racists'),
+('rant'),
+('ranted'),
+('ranting'),
 ('rape'),
 ('raped'),
 ('raper'),
@@ -427,6 +369,7 @@ INSERT INTO `badwords` (`word`) VALUES
 ('robbery'),
 ('rude'),
 ('sad'),
+('sadly'),
 ('sand nigger'),
 ('sandnigger'),
 ('savage'),
@@ -446,6 +389,7 @@ INSERT INTO `badwords` (`word`) VALUES
 ('shittiest'),
 ('shitting'),
 ('shitty'),
+('silly'),
 ('simpleminded'),
 ('skank'),
 ('skanks'),
@@ -474,6 +418,8 @@ INSERT INTO `badwords` (`word`) VALUES
 ('stealing'),
 ('stinking'),
 ('stole'),
+('stupid'),
+('stupidity'),
 ('substandard'),
 ('suck'),
 ('suckers'),
@@ -482,8 +428,15 @@ INSERT INTO `badwords` (`word`) VALUES
 ('theft'),
 ('thief'),
 ('thundercunt'),
+('tirade'),
+('totalitarian'),
+('trouble'),
+('troubles'),
 ('twat'),
 ('twats'),
+('tyrant'),
+('tyrany'),
+('ugly'),
 ('unacceptable'),
 ('uncivil'),
 ('uncivilized'),
@@ -501,6 +454,9 @@ INSERT INTO `badwords` (`word`) VALUES
 ('unsuitable'),
 ('va-j-j'),
 ('vag'),
+('violate'),
+('violated'),
+('violation'),
 ('violence'),
 ('violent'),
 ('vjayjay'),
@@ -516,365 +472,3 @@ INSERT INTO `badwords` (`word`) VALUES
 ('womanizer'),
 ('womanizers'),
 ('wop');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `communities`
---
-
-CREATE TABLE `communities` (
-  `id` int(10) unsigned NOT NULL auto_increment,
-  `user` mediumint(8) unsigned NOT NULL,
-  `name` varchar(30) NOT NULL,
-  `created` int(10) unsigned NOT NULL,
-  PRIMARY KEY  (`id`),
-  UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='A community is an umbrella for multiple websites' AUTO_INCREMENT=2 ;
-
---
--- Dumping data for table `communities`
---
-
-INSERT INTO `communities` (`id`, `user`, `name`, `created`) VALUES
-(1, 1, 't-shirts', 1228522900);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `goodwords`
---
-
-CREATE TABLE `goodwords` (
-  `word` varchar(20) NOT NULL,
-  PRIMARY KEY  (`word`),
-  UNIQUE KEY `word` (`word`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='positive nouns and adjectives';
-
---
--- Dumping data for table `goodwords`
---
-
-INSERT INTO `goodwords` (`word`) VALUES
-('able'),
-('accept'),
-('acceptable'),
-('acclaim'),
-('acclaimed'),
-('adept'),
-('adequate'),
-('admire'),
-('adorable'),
-('advocate'),
-('agreeable'),
-('applaud'),
-('appreciate'),
-('appreciation'),
-('approbate'),
-('approval'),
-('approve'),
-('approved'),
-('apt'),
-('awe'),
-('awesome'),
-('beautiful'),
-('beauty'),
-('best'),
-('blameless'),
-('bodacious'),
-('brainy'),
-('brilliance'),
-('brilliant'),
-('canny'),
-('celebrated'),
-('celebration'),
-('charisma'),
-('charismatic'),
-('cheer'),
-('cheered'),
-('cheering'),
-('clean'),
-('clever'),
-('cogent'),
-('comforting'),
-('commend'),
-('commendable'),
-('commended'),
-('competence'),
-('competent'),
-('compliment'),
-('complimented'),
-('congenial'),
-('consoling'),
-('convincing'),
-('cool'),
-('correct'),
-('credible'),
-('creditable'),
-('cute'),
-('decent'),
-('decorous'),
-('delectable'),
-('delicious'),
-('delightful'),
-('desirable'),
-('devoted'),
-('devotion'),
-('distinction'),
-('distinguished'),
-('efficient'),
-('elegant'),
-('eminence'),
-('encourage'),
-('endorse'),
-('erotic'),
-('esteem'),
-('esteemed'),
-('ethical'),
-('euphoria'),
-('euphoric'),
-('exaltation'),
-('exalted'),
-('exemplary'),
-('experienced'),
-('extraordinary'),
-('famous'),
-('favor'),
-('favorable'),
-('foremost'),
-('genius'),
-('geniuses'),
-('gifted'),
-('glory'),
-('godlike'),
-('godly'),
-('good'),
-('goody-goody'),
-('gracious'),
-('grand'),
-('grateful'),
-('gratified'),
-('gratifying'),
-('gratitude'),
-('great'),
-('greater'),
-('greatest'),
-('guiltless'),
-('heavenly'),
-('high-minded'),
-('homage'),
-('honest'),
-('honor'),
-('honorable'),
-('honored'),
-('hot'),
-('hurrah'),
-('immaculate'),
-('important'),
-('incorruptible'),
-('ingenious'),
-('innocent'),
-('inoffensive'),
-('intelligent'),
-('irreproachable'),
-('justified,'),
-('keen'),
-('kudos'),
-('laudation'),
-('lauded'),
-('law-abiding'),
-('leader'),
-('legitimate'),
-('like'),
-('likeable'),
-('logical'),
-('love'),
-('lovely'),
-('lover'),
-('luscious'),
-('marvelous'),
-('memorable'),
-('mighty'),
-('moral'),
-('moralistic'),
-('nimble'),
-('noble'),
-('noteworthy'),
-('okay'),
-('optimistic'),
-('outstanding'),
-('ovation'),
-('pert'),
-('photogenic'),
-('pleasant'),
-('pleased'),
-('pleasureful'),
-('positive'),
-('powerful'),
-('praise'),
-('prestige'),
-('prestigious'),
-('pretty'),
-('principled'),
-('prominence'),
-('prominent'),
-('proper'),
-('pure'),
-('rad'),
-('radical'),
-('rational'),
-('raved'),
-('recommend'),
-('refreshing'),
-('rejuvenating'),
-('remarkable'),
-('renewing'),
-('renown'),
-('reputable'),
-('resourceful'),
-('respect'),
-('respectable'),
-('respected'),
-('restful'),
-('restorative'),
-('restoring'),
-('right'),
-('right-minded'),
-('righteous'),
-('sanctimonious'),
-('sanction'),
-('sassy'),
-('satisfactory'),
-('satisfying'),
-('scrupulous'),
-('self-righteous'),
-('sexual'),
-('sexy'),
-('shrewd'),
-('slick'),
-('smart'),
-('solacing'),
-('spirit'),
-('spirited'),
-('splendid'),
-('spotless'),
-('stardom'),
-('stupendous'),
-('substantiated'),
-('suitable'),
-('suited'),
-('super'),
-('superb'),
-('superior'),
-('superiority'),
-('support'),
-('talented'),
-('thank'),
-('thanked'),
-('thankful'),
-('thanks'),
-('titillating'),
-('tribute'),
-('tributed'),
-('uncorrupted'),
-('unerring'),
-('unobjectionable'),
-('virtuous'),
-('welcome'),
-('welcomed'),
-('whiz'),
-('wonderful'),
-('worthy');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `inverters`
---
-
-CREATE TABLE `inverters` (
-  `word` varchar(30) NOT NULL,
-  UNIQUE KEY `word` (`word`),
-  UNIQUE KEY `word_2` (`word`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='adverbs that invert the meaning of an adjective';
-
---
--- Dumping data for table `inverters`
---
-
-INSERT INTO `inverters` (`word`) VALUES
-('barely'),
-('by no means'),
-('don''t'),
-('faintly'),
-('hardly'),
-('hardly ever'),
-('imperceptibly'),
-('in no way'),
-('infrequently'),
-('neither'),
-('never'),
-('no way is'),
-('not'),
-('not a bit'),
-('not at all'),
-('not likely'),
-('not markedly'),
-('not measurably'),
-('not much'),
-('not notably'),
-('not noticeably'),
-('not often'),
-('not quite'),
-('nought'),
-('rarely'),
-('scantly'),
-('seldom'),
-('sparsely');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `users`
---
-
-CREATE TABLE `users` (
-  `id` mediumint(8) unsigned NOT NULL auto_increment,
-  `username` varchar(20) NOT NULL,
-  `password` varchar(41) NOT NULL,
-  `realName` varchar(30) NOT NULL,
-  `created` int(10) unsigned NOT NULL,
-  PRIMARY KEY  (`id`),
-  UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='accounts for users of this tool' AUTO_INCREMENT=1 ;
-
---
--- Dumping data for table `users`
---
-
-
--- --------------------------------------------------------
-
---
--- Table structure for table `websites`
---
-
-CREATE TABLE `websites` (
-  `id` smallint(5) unsigned NOT NULL auto_increment,
-  `user` mediumint(8) unsigned NOT NULL,
-  `community` int(10) unsigned NOT NULL,
-  `name` varchar(30) collate latin1_german2_ci NOT NULL,
-  `created` int(11) NOT NULL,
-  `type` enum('forum','blog','news') collate latin1_german2_ci NOT NULL default 'forum',
-  `scrapeNumTopLevel` tinyint(3) unsigned NOT NULL default '2',
-  `scrapeInterval` tinyint(3) unsigned NOT NULL default '40',
-  PRIMARY KEY  (`id`),
-  KEY `domain` (`name`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COLLATE=latin1_german2_ci COMMENT='shows which community this website belongs under and the set' AUTO_INCREMENT=22 ;
-
---
--- Dumping data for table `websites`
---
-
-INSERT INTO `websites` (`id`, `user`, `community`, `name`, `created`, `type`, `scrapeNumTopLevel`, `scrapeInterval`) VALUES
-(1, 1, 1, 'threadless', 1223060915, 'forum', 2, 40);
