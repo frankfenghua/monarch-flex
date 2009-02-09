@@ -35,15 +35,6 @@ class Linguistics
 	//    ret:   none
 	//    about: Constructor. Loads up the good/bad words. Will not load the entire
 	//           English dictionary because it's 7MB and that would take forever.
-	//    FIX:   shitload of good amplifiers and inverters that we should use, but
-	//           currently we don't support multi-word modifers. Use thesaurus.com
-	//           to find more.
-	//
-	//           no more than, not a bit, not at all, not by much, not likely, 
-	//           not markedly, not measurably, not much, not notably, not 
-	//           noticeably, not often, not quite, no way, once in a blue moon.
-	// 
-	//           Horrible balance between inverters and amplifiers at the moment. 
 	// ----------------------------------------------------------------------------
 	public function Linguistics()
 	{
@@ -139,11 +130,11 @@ class Linguistics
 	//                 or how bad (-) this word is spoken about. Returns 0.0 if
 	//                 keyword is not even found in the body.
 	//    about: A rating that tells you if the keyword or full URL is spoken 
-	//           of positively or negatively. Count ALL occurrences of the 
+	//           of positively or negatively. Counts ALL occurrences of the 
 	//           keyword in the body.  If you just want to calculate the 
 	//           goodness for just one occurrence, use goodnessByIndex instead.
-	//           This function is just for testing - it's not meant for the post 
-	//           processor. 
+	//           This function is just for testing - it's not meant for the 
+	//           post processor. 
 	// ------------------------------------------------------------------------
 	public function goodness($keyword, $bodyHtml)
 	{
@@ -174,15 +165,12 @@ class Linguistics
 	//                 or how bad (-) this word is spoken about. Returns 0.0 if
 	//                 keyword is not even found in the body.
 	//    about: Gives the goodness rating for a particular occurrence of a 
-	//           keyword or link within the body. 
+	//           keyword or link within the body.
 	//    FIX:   * "like" is not necessarily a positive word because it could 
 	//             be used as a synonym of "similar" instead of "love".
-	//           * do stemming and augmenting of goodWords.
 	//           * bad running time
-	//           * if $word belonged to goodWords or badWords, there is a 
-	//             chance of division by zero.
 	//           * not normalized to [0.0 - 1.0] range
-	//           * "very" and "so" does not have to precede adjective. Ex: I like it very much.
+	//           * "very" and "so" does not have to precede adjective. Ex: I like Adobe very much.
 	//           * see if in_array can be made to do binary search through an
 	//             alphabetically arranged goodwords/badwords array to speed
 	//             things up.
@@ -246,7 +234,6 @@ class Linguistics
 	//    about: How well does this author capitalize the next letter after ending
 	//           a sentence? Gives a percentage of the sentences that were 
 	//           capitalized correctly.
-	//    fix:   make sure passed in text has no html
 	// ----------------------------------------------------------------------------
 	public function capitalization($text)
 	{
@@ -277,7 +264,7 @@ class Linguistics
 	//    ret:   double - [0.0 - 1.0]
 	//    about: Checks how well this person's spelling is. Tells you the 
 	//           percentage of correctly spelled words.
-	//    FIX:   * Does not check for multi-word words such as "a cappella"
+	//    FIX:   Does not check for phrases such as "a cappella"
 	// ----------------------------------------------------------------------------
 	public function spelling($text)
 	{
@@ -372,6 +359,7 @@ class Linguistics
 	//    ret:   boolean
 	//    about: Check to see if the adjective is inverted. For example, the 
 	//           meaning of the adjective "fair" is inverted in "hardly ever fair".
+	//           Currently hardcoded to only support 3-word phrase inverters. 
 	// ----------------------------------------------------------------------------
 	private function isInverted($bodyArray, $locationAdjective)
 	{
