@@ -22,8 +22,9 @@ class Linguistics
 	private $goodWords;         // array of positive words (linguistic analysis)
 	private $englishDictionary; // array of all the words in the english dictionary
 	private $database;          // used for accessing the linguistic tables
-	private $inverters;         // array of words that invert the effect of an adjective
-	private $amplifiers;        // array of words that amplify the effect of an adjective
+	private $amplifiers;        // array of words that amplify the effect of an adjective (very, really, ...)
+	private $inverters;         // array of words that invert the effect of an adjective (not, hardly, ...) 
+	                            //    and a wish that something would be [positive word] (should be, could have been, ...)
 	
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // PUBLIC FUNCTIONS ...............................................................
@@ -95,6 +96,9 @@ class Linguistics
 	//                              plain textual URL's (not anchors / images).
 	//    about: Chunks all words into an array. Does cleaning necessary for 
 	//           correct evaluation by the goodnessByIndex function.
+	//    FIX:   only the first part of a hyphenated word will be added to the
+	//           returned array. For example: "based" will not be included in
+	//           "water-based".
 	// ------------------------------------------------------------------------
 	public function cleanBody($bodyHtml)
 	{
@@ -202,19 +206,31 @@ class Linguistics
 			{
 				// an inverter in front of a good word makes it bad.
 				if($this->isInverted($bodyArray, $locationAdjective))
+				{
 					$finalScore -= $rating;
+					printf('<font color="red"><h5><i>%s</i> (after inversion/amplification) decreased the rating by %f</h5></font>', $bodyArray[$locationAdjective], $rating);
+				}
 				else
+				{
 					$finalScore += $rating;
+					printf('<font color="green"><h5><i>%s</i> (after inversion/amplification) increased the rating by %f</h5></font>', $bodyArray[$locationAdjective], $rating);
+				}
 			}
 			
 			// badness of a word is inversely proportional to it's distance from a bad word
 			if(in_array($adjective, $this->badWords))
 			{	
 				// an inverter in front of a bad word makes it good
-				if($this->isInverted($bodyArray, $locationAdjective))			
+				if($this->isInverted($bodyArray, $locationAdjective))	
+				{		
 					$finalScore += $rating;
+					printf('<font color="green"><h5><i>%s</i> (after inversion/amplification) increased the rating by %f</h5></font>', $bodyArray[$locationAdjective], $rating);
+				}
 				else
+				{
 					$finalScore -= $rating;
+					printf('<font color="red"><h5><i>%s</i> (after inversion/amplification) decreased the rating by %f</h5></font>', $bodyArray[$locationAdjective], $rating);
+				}
 			}
 			
 			$locationAdjective++;

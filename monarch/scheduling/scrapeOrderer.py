@@ -40,7 +40,7 @@ def main():
 
 	while True:
 	    if stepcount %  REFRESH_TIME == 0:
-		db.query("SELECT * FROM websites")
+		db.query("SELECT scrapeInterval, scrapeNumTopLevel FROM websites")
 		# Get result as a tuple of dictionaries
 		jobs = db.store_result().fetch_row(maxrows=0, # get all rows
 	                                           how=1)
