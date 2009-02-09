@@ -162,7 +162,7 @@ class StructuredCrawl {
 				}
 				else 
 				{
-					echo 'No url matches for ';
+					echo 'No url matches in '.$url->getName().' for ';
 					$u_type->output();
 				}
 			}
