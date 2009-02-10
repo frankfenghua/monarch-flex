@@ -18,8 +18,6 @@ TIMESTEP = 1 # minutes
 REFRESH_TIME = 1 # minutes
 SCRAPE_SCRIPT="http://csil-srprj-2.cs.uiuc.edu/monarch/tests/testcrawl.php"
 
-
-
 # Define thread
 class JobThread(threading.Thread):
     def __init__(self, link):
@@ -28,7 +26,8 @@ class JobThread(threading.Thread):
 	print datetime.datetime.now(),": Thread started for ",link
        
     def run(self):
-        urllib2.urlopen(self.link)
+        url = urllib2.urlopen(self.link)
+	# url.read()
         
 def main():
 	stepcount = 0
@@ -40,10 +39,10 @@ def main():
 
 	while True:
 	    if stepcount %  REFRESH_TIME == 0:
-		db.query("SELECT scrapeInterval, scrapeNumTopLevel FROM websites")
+		db.query("SELECT name, scrapeInterval, scrapeNumTopLevel FROM websites")
 		# Get result as a tuple of dictionaries
 		jobs = db.store_result().fetch_row(maxrows=0, # get all rows
-	                                           how=1)
+	                                           how=1)     # get each row as dictionary
 	    for job in jobs:
          	 if stepcount % int(job["scrapeInterval"]) == 0:
                      # Execute job
