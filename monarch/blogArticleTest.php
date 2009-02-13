@@ -164,12 +164,16 @@ I have a new dream. To continue building cool stuff, exploring the co-creating p
 
 echo '<h1>Blog Test 1: <a href="http://www.cmswatch.com/Trends/1492-The-case-against-Flex-based-application">The case against Flex-based application UIs</a></h1>';
 printf('<h3>goodness of "Flex": %f</h3>', $linguistics->goodness('flex', $a));
+echo '<hr />';
 echo '<h1>Blog Test 2: <a href="http://blog.simb.net/2009/01/12/source-does-not-open-source-make/">Flex SDK Source does not an “open source” project make</a></h1>';
 printf('<h3>goodness of "Flex": %f</h3>', $linguistics->goodness('flex', $b));
+echo '<hr />';
 echo '<h1>Blog Test 3: <a href="http://www.rachaelandtom.info/content/flex-sdk-team-talk">The Flex SDK team talk</a></h1>';
 printf('<h3>goodness of "Flex": %f</h3>', $linguistics->goodness('flex', $c));
+echo '<hr />';
 echo '<h1>Blog Test 4: <a href="http://blog.simb.net/2009/01/19/take-flex-back-for-the-community/">Take Flex Back For the Community (and other subheadings)</a></h1>';
 printf('<h3>goodness of "Flex": %f</h3>', $linguistics->goodness('flex', $d));
+echo '<hr />';
 echo '<h1>Blog Test 5: <a href="http://www.joeflash.ca/blog/2009/01/entering-into-the-conversation.html">Entering Into The Conversation in the Post-Cluetrain World</a></h1>';
 printf('<h3>goodness of "Adobe": %f</h3>', $linguistics->goodness('adobe', $e));
 // echo '<hr><h2>Spelling</h3>';
