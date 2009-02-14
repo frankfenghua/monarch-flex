@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Feb 11, 2009 at 09:15 PM
+-- Generation Time: Feb 13, 2009 at 06:31 PM
 -- Server version: 5.0.51
 -- PHP Version: 5.2.6
 
@@ -787,6 +787,8 @@ INSERT INTO `goodwords` (`word`) VALUES
 ('blameless'),
 ('bodacious'),
 ('brainy'),
+('breeze'),
+('breezy'),
 ('brilliance'),
 ('brilliant'),
 ('canny'),

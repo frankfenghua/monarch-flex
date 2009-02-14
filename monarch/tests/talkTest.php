@@ -1,6 +1,6 @@
 <?php
 
-require('database/Database.php');
+require('../database/Database.php');
 
 function signColor($rating)
 {

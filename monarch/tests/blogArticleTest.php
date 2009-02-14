@@ -12,7 +12,7 @@ error_reporting(E_ALL);
 ini_set('display_errors','1');
 */
 
-require_once('Linguistics.php');
+require_once('../Linguistics.php');
 
 $linguistics = new Linguistics();
 $a = 'The case against Flex-based application UIs
