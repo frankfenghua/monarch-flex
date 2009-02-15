@@ -1,0 +1,13 @@
+* the graph controls should be in always visible.
+* label the graph lines clearly.
+* the sliders are not understandable.
+* "websites in community" is not understandable in the accordian.
+* change "goodness" to "sentiment".
+* ask for the password twice when registering.
+* have a defalt added innocuous community under "my communities" for new users.
+* Matt doesn't like the word "spoken" in the accordian.
+* Need context sensitive help on the accordian.
+* the accordian needs to be split up into two groups: keywords/links & graph controls/websites in community.
+* change eye icon to a magnifying glass.
+* when you log-in, stay on the homepage.
+* combine the two registration steps.
