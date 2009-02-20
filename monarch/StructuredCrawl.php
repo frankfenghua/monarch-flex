@@ -172,7 +172,7 @@ class StructuredCrawl {
 			if(array_key_exists($url->getLevel(), $this->callbacks)) 
 			{
 				echo 'Calling back<br/>';
-				$this->callbacks[$url->getLevel()]->process($src);
+				$this->callbacks[$url->getLevel()]->process($src, $url->getName());
 			}
 		
 			// Update members

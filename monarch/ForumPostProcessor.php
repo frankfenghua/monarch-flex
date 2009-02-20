@@ -45,15 +45,20 @@ class ForumPostProcessor implements Processor {
 	}
 
 	// FIX: where is the function header?
-	public function process($html) 
+	public function process($html, $threadUrl) 
 	{
 		// Find the thread ID for this page using the link
-		$threadUrl = $this->plugin['parentUrl'];
-		preg_match_all($threadUrl, $html, $matches);
+		// $threadUrl = $this->plugin['parentUrl'];
+		// preg_match_all($threadUrl, $html, $matches);
 		
-		$q = 'SELECT id
+		/* $q = 'SELECT id
 			FROM threads
 			WHERE url = "' . $matches[1][0] . '"';
+		*/
+		$q = 'SELECT id
+			FROM threads
+			WHERE url = "' . $threadUrl . '"';
+
 		$q = $this->database->fetch($q);
 		
 		$threadID = $q[0] ? $q[0] : -1;
@@ -115,6 +120,7 @@ class ForumPostProcessor implements Processor {
 	// ------------------------------------------------------------------------	
 	private function insertPost($author, $authorUrl, $time, $bodyHtml, $threadId)
 	{
+		echo "Calling insertPost with author=".$author."</br>";
 		$q = 'SELECT id 
 			FROM users
 			WHERE name = "' . $author . '"';
@@ -334,6 +340,8 @@ class ForumPostProcessor implements Processor {
 		
 		foreach($dirty as $dirt)
 			$englishTime = str_replace($dirt, '', $englishTime);
+
+		$englishTime = strip_tags($englishTime);
 		
 		return strtotime($englishTime);
 	}

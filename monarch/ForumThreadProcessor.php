@@ -36,7 +36,7 @@ class ForumThreadProcessor implements Processor {
 	}
 
 	// FIX: no comment header
-	public function process($html) 
+	public function process($html, $url) 
 	{
 		$this->scrapeThreads($html);
 	}
