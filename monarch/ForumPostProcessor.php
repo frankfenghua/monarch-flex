@@ -120,7 +120,6 @@ class ForumPostProcessor implements Processor {
 	// ------------------------------------------------------------------------	
 	private function insertPost($author, $authorUrl, $time, $bodyHtml, $threadId)
 	{
-		echo "Calling insertPost with author=".$author."</br>";
 		$q = 'SELECT id 
 			FROM users
 			WHERE name = "' . $author . '"';
@@ -149,12 +148,21 @@ class ForumPostProcessor implements Processor {
 			// do not re-scrape this post if we've already encountered it.
 			if(mysql_num_rows($q) > 0)
 			{
-				printf('<h4>duplicate post found written by %s on %s</h4>', $author, $time);
+				if(DEBUG_POST)
+					printf('<h4><font color="chocolate">found duplicate post written by %s on %s</font></h4>', $author, $time);
+					
 				return;
 			}
 			else
 			{
-				printf('<h4>new post found written by %s on %s</h4>', $author, $time);
+				if(DEBUG_POST)
+					printf('<h4><font color="chocolate">found new post written by %s on %s</font></h4>', $author, $time);
+				
+				$q = 'UPDATE threads
+					SET posts = posts + 1
+					WHERE id = ' . $threadId;
+			
+				$this->database->query($q);
 			}
 		}
 		
@@ -279,8 +287,9 @@ class ForumPostProcessor implements Processor {
 				$goodness = $this->linguistics->goodnessByIndex($linkLocation, $wordsArray);
 				$this->insertTimeStat('link', $baseUrl, $goodness, $englishProficiency);
 				
-				printf('<h4>base url seen: %s with goodness: %f and english proficiency: %f</h4>', 
-					$baseUrl, $goodness, $englishProficiency);
+				if(DEBUG_SAY_LINK)
+					printf('<h4>base url seen: %s with goodness: %f and english proficiency: %f</h4>', 
+						$baseUrl, $goodness, $englishProficiency);
 			}
 		}
 	}
@@ -315,8 +324,9 @@ class ForumPostProcessor implements Processor {
 				$this->insertUniStat('user', $userId, $keywordId, $goodness, $englishProficiency);
 				$this->insertUniStat('thread', $threadId, $keywordId, $goodness, $englishProficiency);
 				
-				printf('<h4>keyword "%s" said by userId #%d with goodness: %f and english proficiency: %f</h4>', 
-					$wordsArray[$wordLocation], $userId, $goodness, $englishProficiency);
+				if(DEBUG_SAY_KEYWORD)
+					printf('<h4>keyword "%s" said by userId #%d with goodness: %f and english proficiency: %f</h4>', 
+						$wordsArray[$wordLocation], $userId, $goodness, $englishProficiency);
 			}
 		}
 	}
@@ -559,8 +569,7 @@ class ForumPostProcessor implements Processor {
 	private function loadPlugin()
 	{
 		$q = 'SELECT *
-		      FROM regexes
-		      WHERE id = 0';
+		      FROM regexes';
 			
 		return $this->database->fetch($q);
 	}

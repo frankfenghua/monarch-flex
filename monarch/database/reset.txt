@@ -35,10 +35,15 @@
 		DELETE FROM communities;
 		DELETE FROM websites;
 		DELETE FROM users;
+		ALTER TABLE allowedkeywords AUTO_INCREMENT = 1;
+		ALTER TABLE communities AUTO_INCREMENT = 1;
+		ALTER TABLE users AUTO_INCREMENT = 1;
+		ALTER TABLE websites AUTO_INCREMENT = 1;
 		
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// reset back to only having a clean threadless
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// reset scraped data but keep regexes and community/websites entact
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	website database:
 	
@@ -62,4 +67,5 @@
 	master database:
 	
 		DELETE FROM users;
+		ALTER TABLE users AUTO_INCREMENT = 1;
 		

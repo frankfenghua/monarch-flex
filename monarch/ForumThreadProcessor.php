@@ -57,9 +57,6 @@ class ForumThreadProcessor implements Processor {
 		if($this->plugin['threadTitle'] != NULL)
 			preg_match_all($this->plugin['threadTitle'], $html, $threadTitle);
 		
-		if($this->plugin['threadNumPosts'] != NULL)
-			preg_match_all($this->plugin['threadNumPosts'], $html, $numPosts);
-		
 		if($this->plugin['threadNumViews'] != NULL)	
 			preg_match_all($this->plugin['threadNumViews'], $html, $numViews);
 	
@@ -89,16 +86,12 @@ class ForumThreadProcessor implements Processor {
 				$threadId = $q['id'];
 			}
 			  
-			// some sites don't keep track of these counts
-			if($numPosts[1][$i] == '')
-				$numPosts[1][$i] = 0;
-			
+			// some sites don't keep track of this
 			if($numViews[1][$i] == '')
 				$numViews[1][$i] = 0;
 			  
 			$q = 'UPDATE threads
-				SET posts = "' . mysql_real_escape_string($numPosts[1][$i]) . '",
-				views = "' . mysql_real_escape_string($numViews[1][$i]) . '"
+				SET views = "' . mysql_real_escape_string($numViews[1][$i]) . '"
 				WHERE id = "' . $threadId . '"';
 				
 			$this->database->query($q);
@@ -118,11 +111,8 @@ class ForumThreadProcessor implements Processor {
 	// ------------------------------------------------------------------------	
 	private function loadPlugin()
 	{
-		$q = 'SELECT startPage, linkStructure, nextPageOfThreads, nextPageOfPosts, threadUrl, 
-			threadNumPosts, threadNumViews, threadTitle, firstPostAuthor, firstPostTime,
-			firstPostMessage, replyAuthor, replyTime, replyMessage 
-			FROM regexes
-			WHERE id = 0';
+		$q = 'SELECT *
+			FROM regexes';
 		
 		return $this->database->fetch($q);
 	}

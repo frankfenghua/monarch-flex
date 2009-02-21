@@ -160,7 +160,7 @@ class StructuredCrawl {
 						$this->addUrl($u,$u_type->getLevel());
 					}
 				}
-				else 
+				else if(DEBUG_CRAWL) 
 				{
 					echo 'No url matches in '.$url->getName().' for ';
 					$u_type->output();
@@ -171,7 +171,9 @@ class StructuredCrawl {
 			// echo 'Processing '.$url->getName().'<br/>';
 			if(array_key_exists($url->getLevel(), $this->callbacks)) 
 			{
-				echo 'Calling back<br/>';
+				if(DEBUG_CRAWL)
+					echo 'Calling back<br/>';
+					
 				$this->callbacks[$url->getLevel()]->process($src, $url->getName());
 			}
 		
@@ -179,11 +181,13 @@ class StructuredCrawl {
 			$url->setCrawled();
 			if($url->getLevel() == $toplevel) 
 			{
-				printf('<h3>Finished crawling toplevel page: <a href="%s">%s</a></h3>: <br/>',
-					$url->getName(), $url->getName());
+				if(DEBUG_CRAWL)
+					printf('<h3>Finished crawling toplevel page: <a href="%s">%s</a></h3>: <br/>',
+						$url->getName(), $url->getName());
+						
 				$this->toplevel_pages_crawled++;
 			}
-			else 
+			else if(DEBUG_CRAWL)
 			{
 				printf('<h3>Finished crawling non-toplevel page: <a href="%s">%s</a></h3>: <br/>',
 					$url->getName(), $url->getName());
@@ -196,9 +200,12 @@ class StructuredCrawl {
 			sleep($this->throttle);
 		}
 		
-		echo 'Max pages crawled <br/>';
-		echo 'Stopped on URL ';
-		$url->output();
+		if(DEBUG_CRAWL)
+		{
+			echo 'Max pages crawled <br/> Stopped on URL ';
+			$url->output();
+		}
+		
 		return;
 	}
 
@@ -352,7 +359,7 @@ class URLType {
   }
 
   public function output() {
-    echo $this->regex . '<br/>' . $this->level . '<br/>';
+    echo htmlspecialchars($this->regex) . '<br/>' . $this->level . '<br/>';
   }
 }
 ?>

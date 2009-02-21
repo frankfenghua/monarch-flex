@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 2.11.6
+-- version 3.1.1
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Feb 13, 2009 at 06:31 PM
--- Server version: 5.0.51
--- PHP Version: 5.2.6
+-- Generation Time: Feb 20, 2009 at 11:31 PM
+-- Server version: 5.1.30
+-- PHP Version: 5.2.8
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
@@ -19,13 +19,13 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- Table structure for table `allowedkeywords`
 --
 
-CREATE TABLE `allowedkeywords` (
-  `id` smallint(6) NOT NULL auto_increment,
+CREATE TABLE IF NOT EXISTS `allowedkeywords` (
+  `id` smallint(6) NOT NULL AUTO_INCREMENT,
   `community` smallint(5) unsigned NOT NULL,
   `word` varchar(30) NOT NULL,
-  PRIMARY KEY  (`id`),
+  PRIMARY KEY (`id`),
   UNIQUE KEY `word` (`word`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='tells which keywords each community should scrape for' AUTO_INCREMENT=12 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='tells which keywords each community should scrape for' AUTO_INCREMENT=25 ;
 
 --
 -- Dumping data for table `allowedkeywords`
@@ -41,7 +41,20 @@ INSERT INTO `allowedkeywords` (`id`, `community`, `word`) VALUES
 (7, 1, 'glennz'),
 (9, 1, 'flash'),
 (10, 1, 'camera'),
-(11, 1, 'collaboration');
+(11, 1, 'collaboration'),
+(12, 2, 'obama'),
+(13, 2, 'hillary'),
+(14, 2, 'palin'),
+(15, 2, 'bailout'),
+(16, 2, 'mccain'),
+(17, 2, 'michelle'),
+(18, 2, 'jobs'),
+(19, 2, 'welfare'),
+(20, 2, 'marijuana'),
+(21, 2, 'evasion'),
+(22, 2, 'biden'),
+(23, 2, 'stimulus'),
+(24, 2, 'economy');
 
 -- --------------------------------------------------------
 
@@ -49,7 +62,7 @@ INSERT INTO `allowedkeywords` (`id`, `community`, `word`) VALUES
 -- Table structure for table `amplifiers`
 --
 
-CREATE TABLE `amplifiers` (
+CREATE TABLE IF NOT EXISTS `amplifiers` (
   `word` varchar(30) NOT NULL,
   UNIQUE KEY `word` (`word`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='adverbs that amplify the meaning of an adjective';
@@ -121,9 +134,9 @@ INSERT INTO `amplifiers` (`word`) VALUES
 -- Table structure for table `badwords`
 --
 
-CREATE TABLE `badwords` (
+CREATE TABLE IF NOT EXISTS `badwords` (
   `word` varchar(20) NOT NULL,
-  PRIMARY KEY  (`word`),
+  PRIMARY KEY (`word`),
   UNIQUE KEY `word` (`word`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='negative nouns and adjectives';
 
@@ -136,6 +149,8 @@ INSERT INTO `badwords` (`word`) VALUES
 ('abrupt'),
 ('abuse'),
 ('abusive'),
+('accuse'),
+('accused'),
 ('against'),
 ('alcoholic'),
 ('alcoholics'),
@@ -160,6 +175,11 @@ INSERT INTO `badwords` (`word`) VALUES
 ('assualted'),
 ('asswipe'),
 ('atrocious'),
+('attack'),
+('attacker'),
+('attackers'),
+('attacking'),
+('attacks'),
 ('awful'),
 ('bad'),
 ('bad-mannered'),
@@ -181,7 +201,6 @@ INSERT INTO `badwords` (`word`) VALUES
 ('bloatware'),
 ('blowjob'),
 ('blows'),
-('blunt'),
 ('boner'),
 ('boorish'),
 ('bother'),
@@ -288,6 +307,7 @@ INSERT INTO `badwords` (`word`) VALUES
 ('distrubed'),
 ('disturb'),
 ('disturbing'),
+('dodgy'),
 ('dookie'),
 ('doubt'),
 ('doubts'),
@@ -327,6 +347,9 @@ INSERT INTO `badwords` (`word`) VALUES
 ('fails'),
 ('failure'),
 ('fallacious'),
+('fart'),
+('farted'),
+('farting'),
 ('fat'),
 ('fatass'),
 ('faulty'),
@@ -363,6 +386,7 @@ INSERT INTO `badwords` (`word`) VALUES
 ('garbage'),
 ('gay'),
 ('gaydo'),
+('gayness'),
 ('gays'),
 ('gaytard'),
 ('gaywad'),
@@ -406,6 +430,9 @@ INSERT INTO `badwords` (`word`) VALUES
 ('homos'),
 ('honkey'),
 ('humping'),
+('hypocrisy'),
+('hypocrite'),
+('hypocrites'),
 ('icky'),
 ('idiot'),
 ('idiotic'),
@@ -461,6 +488,7 @@ INSERT INTO `badwords` (`word`) VALUES
 ('lesbian'),
 ('lesbo'),
 ('lezzie'),
+('limited'),
 ('limp'),
 ('loathsome'),
 ('lousy'),
@@ -488,6 +516,7 @@ INSERT INTO `badwords` (`word`) VALUES
 ('murder'),
 ('murdered'),
 ('murderer'),
+('murderers'),
 ('murders'),
 ('nada'),
 ('nazi'),
@@ -563,6 +592,7 @@ INSERT INTO `badwords` (`word`) VALUES
 ('repulsed'),
 ('repulsive'),
 ('retard'),
+('retarded'),
 ('retards'),
 ('rickety'),
 ('rimjob'),
@@ -681,6 +711,8 @@ INSERT INTO `badwords` (`word`) VALUES
 ('va-j-j'),
 ('vag'),
 ('vapid'),
+('victim'),
+('victims'),
 ('vile'),
 ('violate'),
 ('violated'),
@@ -715,21 +747,22 @@ INSERT INTO `badwords` (`word`) VALUES
 -- Table structure for table `communities`
 --
 
-CREATE TABLE `communities` (
-  `id` int(10) unsigned NOT NULL auto_increment,
+CREATE TABLE IF NOT EXISTS `communities` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user` mediumint(8) unsigned NOT NULL,
   `name` varchar(30) NOT NULL,
   `created` int(10) unsigned NOT NULL,
-  PRIMARY KEY  (`id`),
+  PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='A community is an umbrella for multiple websites' AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='A community is an umbrella for multiple websites' AUTO_INCREMENT=3 ;
 
 --
 -- Dumping data for table `communities`
 --
 
 INSERT INTO `communities` (`id`, `user`, `name`, `created`) VALUES
-(1, 1, 't-shirts', 1228522900);
+(1, 1, 't-shirts', 1228522900),
+(2, 1, 'politics', 1235169885);
 
 -- --------------------------------------------------------
 
@@ -737,9 +770,9 @@ INSERT INTO `communities` (`id`, `user`, `name`, `created`) VALUES
 -- Table structure for table `goodwords`
 --
 
-CREATE TABLE `goodwords` (
+CREATE TABLE IF NOT EXISTS `goodwords` (
   `word` varchar(20) NOT NULL,
-  PRIMARY KEY  (`word`),
+  PRIMARY KEY (`word`),
   UNIQUE KEY `word` (`word`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='positive nouns and adjectives';
 
@@ -773,7 +806,6 @@ INSERT INTO `goodwords` (`word`) VALUES
 ('appreciation'),
 ('approbate'),
 ('approval'),
-
 ('approve'),
 ('approved'),
 ('apt'),
@@ -839,6 +871,9 @@ INSERT INTO `goodwords` (`word`) VALUES
 ('divinity'),
 ('efficient'),
 ('elegant'),
+('embrace'),
+('embraced'),
+('embracing'),
 ('eminence'),
 ('encourage'),
 ('endorse'),
@@ -865,6 +900,8 @@ INSERT INTO `goodwords` (`word`) VALUES
 ('flavorful'),
 ('flavorsome'),
 ('foremost'),
+('generosity'),
+('generous'),
 ('genius'),
 ('geniuses'),
 ('gifted'),
@@ -910,8 +947,10 @@ INSERT INTO `goodwords` (`word`) VALUES
 ('justified,'),
 ('keen'),
 ('kudos'),
+('laud'),
 ('laudation'),
 ('lauded'),
+('lauds'),
 ('law-abiding'),
 ('leader'),
 ('legitimate'),
@@ -938,6 +977,8 @@ INSERT INTO `goodwords` (`word`) VALUES
 ('outstanding'),
 ('ovation'),
 ('palatable'),
+('perfect'),
+('perfection'),
 ('pert'),
 ('photogenic'),
 ('piquant'),
@@ -983,7 +1024,12 @@ INSERT INTO `goodwords` (`word`) VALUES
 ('sanctimonious'),
 ('sanction'),
 ('sassy'),
+('satiate'),
+('satiated'),
+('satisfaction'),
 ('satisfactory'),
+('satisfied'),
+('satisfy'),
 ('satisfying'),
 ('savory'),
 ('scrumptious'),
@@ -1014,6 +1060,7 @@ INSERT INTO `goodwords` (`word`) VALUES
 ('superiority'),
 ('support'),
 ('supported'),
+('supportive'),
 ('talented'),
 ('tasteful'),
 ('tasty'),
@@ -1024,6 +1071,10 @@ INSERT INTO `goodwords` (`word`) VALUES
 ('titillating'),
 ('tribute'),
 ('tributed'),
+('trust'),
+('trusted'),
+('trusting'),
+('trustworthy'),
 ('uncorrupted'),
 ('understanding'),
 ('understood'),
@@ -1036,6 +1087,7 @@ INSERT INTO `goodwords` (`word`) VALUES
 ('whiz'),
 ('wonderful'),
 ('worthy'),
+('wow'),
 ('yum'),
 ('yummy'),
 ('zestful');
@@ -1046,7 +1098,7 @@ INSERT INTO `goodwords` (`word`) VALUES
 -- Table structure for table `inverters`
 --
 
-CREATE TABLE `inverters` (
+CREATE TABLE IF NOT EXISTS `inverters` (
   `word` varchar(30) NOT NULL,
   UNIQUE KEY `word` (`word`),
   UNIQUE KEY `word_2` (`word`)
@@ -1084,9 +1136,15 @@ INSERT INTO `inverters` (`word`) VALUES
 ('hardly ever'),
 ('has never been'),
 ('has not been'),
+('hasn'),
+('hasn''t'),
+('hasnt'),
 ('have been more'),
 ('have never been'),
 ('have not been'),
+('havn'),
+('havn''t'),
+('havnt'),
 ('imperceptibly'),
 ('in no way'),
 ('infrequently'),
@@ -1144,6 +1202,8 @@ INSERT INTO `inverters` (`word`) VALUES
 ('want them to'),
 ('want us to'),
 ('want you to'),
+('will never be'),
+('will never have'),
 ('wish he had'),
 ('wish she had'),
 ('wish they had'),
@@ -1151,6 +1211,7 @@ INSERT INTO `inverters` (`word`) VALUES
 ('wish you had'),
 ('won'),
 ('won''t'),
+('wont'),
 ('would be'),
 ('would not'),
 ('would work'),
@@ -1163,13 +1224,13 @@ INSERT INTO `inverters` (`word`) VALUES
 -- Table structure for table `users`
 --
 
-CREATE TABLE `users` (
-  `id` mediumint(8) unsigned NOT NULL auto_increment,
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `username` varchar(20) NOT NULL,
   `password` varchar(41) NOT NULL,
   `realName` varchar(30) NOT NULL,
   `created` int(10) unsigned NOT NULL,
-  PRIMARY KEY  (`id`),
+  PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='accounts for users of this tool' AUTO_INCREMENT=1 ;
 
@@ -1184,16 +1245,16 @@ CREATE TABLE `users` (
 -- Table structure for table `websites`
 --
 
-CREATE TABLE `websites` (
-  `id` smallint(5) unsigned NOT NULL auto_increment,
+CREATE TABLE IF NOT EXISTS `websites` (
+  `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
   `user` mediumint(8) unsigned NOT NULL,
   `community` int(10) unsigned NOT NULL,
-  `name` varchar(30) collate latin1_german2_ci NOT NULL,
+  `name` varchar(30) COLLATE latin1_german2_ci NOT NULL,
   `created` int(11) NOT NULL,
-  `type` enum('forum','blog','news') collate latin1_german2_ci NOT NULL default 'forum',
-  `scrapeNumTopLevel` tinyint(3) unsigned NOT NULL default '2',
-  `scrapeInterval` tinyint(3) unsigned NOT NULL default '40',
-  PRIMARY KEY  (`id`),
+  `type` enum('forum','blog','news') COLLATE latin1_german2_ci NOT NULL DEFAULT 'forum',
+  `scrapeNumTopLevel` tinyint(3) unsigned NOT NULL DEFAULT '2',
+  `scrapeInterval` tinyint(3) unsigned NOT NULL DEFAULT '40',
+  PRIMARY KEY (`id`),
   KEY `domain` (`name`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COLLATE=latin1_german2_ci COMMENT='shows which community this website belongs under and the set' AUTO_INCREMENT=22 ;
 
@@ -1202,4 +1263,5 @@ CREATE TABLE `websites` (
 --
 
 INSERT INTO `websites` (`id`, `user`, `community`, `name`, `created`, `type`, `scrapeNumTopLevel`, `scrapeInterval`) VALUES
-(1, 1, 1, 'threadless', 1223060915, 'forum', 2, 40);
+(1, 1, 1, 'threadless', 1223060915, 'forum', 2, 40),
+(2, 1, 2, 'nytimespolitics', 1235169885, 'news', 1, 120);

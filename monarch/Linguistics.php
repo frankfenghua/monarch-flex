@@ -179,13 +179,25 @@ class Linguistics
 	//             alphabetically arranged goodwords/badwords array to speed
 	//             things up.
 	public function goodnessByIndex($locationKeyword, $bodyArray)
-	{
-		$locationAdjective = 0;
+	{	
+		// Do not search the entire body for adjectives; rather only search around a vicinity of the keyword
+		// This is used to cut down on processing time and also increase accuracy of goodness
+		$lastIndexAdjective  = $locationKeyword + LING_KEYWORD_VICINITY;
+		$firstIndexAdjective = $locationKeyword - LING_KEYWORD_VICINITY;
+		
+		if($firstIndexAdjective < 0)
+			$firstIndexAdjective = 0;
+		
+		$locationAdjective = $firstIndexAdjective;
 		$finalScore = 0;
 
 		// scan through the whole body
 		foreach($bodyArray as $adjective)
 		{
+			// done checking vicinity keyword
+			if($locationAdjective > $lastIndexAdjective)
+				return $finalScore;
+		
 			// can't use keyword itself as an adjective
 			if($locationAdjective == $locationKeyword)
 			{
@@ -208,12 +220,16 @@ class Linguistics
 				if($this->isInverted($bodyArray, $locationAdjective))
 				{
 					$finalScore -= $rating;
-					printf('<font color="red"><h5><i>%s</i> (after inversion/amplification) decreased the rating by %f</h5></font>', $bodyArray[$locationAdjective], $rating);
+					
+					if(DEBUG_GOODNESS)
+						$this->debugGoodness($bodyArray[$locationKeyword], $adjective, -$rating);
 				}
 				else
 				{
 					$finalScore += $rating;
-					printf('<font color="green"><h5><i>%s</i> (after inversion/amplification) increased the rating by %f</h5></font>', $bodyArray[$locationAdjective], $rating);
+					
+					if(DEBUG_GOODNESS)
+						$this->debugGoodness($bodyArray[$locationKeyword], $adjective, $rating);
 				}
 			}
 			
@@ -224,12 +240,16 @@ class Linguistics
 				if($this->isInverted($bodyArray, $locationAdjective))	
 				{		
 					$finalScore += $rating;
-					printf('<font color="green"><h5><i>%s</i> (after inversion/amplification) increased the rating by %f</h5></font>', $bodyArray[$locationAdjective], $rating);
+					
+					if(DEBUG_GOODNESS)
+						$this->debugGoodness($bodyArray[$locationKeyword], $adjective, $rating);
 				}
 				else
 				{
 					$finalScore -= $rating;
-					printf('<font color="red"><h5><i>%s</i> (after inversion/amplification) decreased the rating by %f</h5></font>', $bodyArray[$locationAdjective], $rating);
+					
+					if(DEBUG_GOODNESS)
+						$this->debugGoodness($bodyArray[$locationKeyword], $adjective, -$rating);
 				}
 			}
 			
@@ -401,6 +421,32 @@ class Linguistics
 		}
 		
 		return false;
+	}
+	
+	// ============================================================================
+	// debugGoodness
+	//    args:  * string - word being affected by an adjective
+	//           * string - adjective that's affecting the keyword
+	//           * float (anything but 0.0)
+	//    ret:   void
+	//    about: Prints out how much an adjective increased or decreased the score
+	//           of a keyword.
+	// ----------------------------------------------------------------------------
+	private function debugGoodness($keyword, $adjective, $rating)
+	{
+		if($rating < 0)
+		{
+			$color = 'red';
+			$affect = 'decreased';
+		}
+		else 
+		{
+			$color = 'green';
+			$affect = 'increased';
+		}
+	
+		printf('<font color="%s"><h5><i>%s</i> (after inversion/amplification) %s the rating of %s by %f</h5></font>', 
+			$color, $adjective, $affect, $keyword, $rating);
 	}
 
 }
