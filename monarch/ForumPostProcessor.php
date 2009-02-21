@@ -48,16 +48,17 @@ class ForumPostProcessor implements Processor {
 	public function process($html, $threadUrl) 
 	{
 		// Find the thread ID for this page using the link
-		// $threadUrl = $this->plugin['parentUrl'];
-		// preg_match_all($threadUrl, $html, $matches);
+		$threadUrl = $this->plugin['parentUrl'];
+		preg_match_all($threadUrl, $html, $matches);
+		
+		$q = 'SELECT id
+			FROM threads
+			WHERE url = "' . $matches[1][0] . '"';
 		
 		/* $q = 'SELECT id
 			FROM threads
-			WHERE url = "' . $matches[1][0] . '"';
-		*/
-		$q = 'SELECT id
-			FROM threads
 			WHERE url = "' . $threadUrl . '"';
+		*/
 
 		$q = $this->database->fetch($q);
 		

@@ -10,7 +10,7 @@
 
 	$html = file_get_contents('http://thecaucus.blogs.nytimes.com/2009/02/20/the-first-lady-lauds-transportation-workers/');
 
-	preg_match_all('/<li class="print"><a href="([^"]+)"/', $html, $result);
+	preg_match_all('/<li class="print"><a href="(.+?)\?/', $html, $result);
 
 	print_r($html);
 

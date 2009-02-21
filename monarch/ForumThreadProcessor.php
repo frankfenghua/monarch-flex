@@ -113,7 +113,7 @@ class ForumThreadProcessor implements Processor {
 	{
 		$q = 'SELECT *
 			FROM regexes';
-		
+
 		return $this->database->fetch($q);
 	}
 	
