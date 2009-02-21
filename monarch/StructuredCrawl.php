@@ -202,8 +202,11 @@ class StructuredCrawl {
 		
 		if(DEBUG_CRAWL)
 		{
-			echo 'Max pages crawled <br/> Stopped on URL ';
-			$url->output();
+			echo 'Max pages crawled <br/>'; 
+			if($url) {
+				echo 'Stopped on URL ';
+				$url->output();
+			}
 		}
 		
 		return;
