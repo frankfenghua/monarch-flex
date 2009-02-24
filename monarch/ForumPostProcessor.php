@@ -199,8 +199,8 @@ class ForumPostProcessor implements Processor {
 		if($userId == -1)
 		{
 			$q = 'INSERT INTO users (name, url, created)
-				VALUES("' . $author . '", 
-				"' . $authorUrl . '",
+				VALUES("' . mysql_real_escape_string($author) . '", 
+				"' . mysql_real_escape_string($authorUrl) . '",
 				"' . time() . '")';
 			
 			$this->database->query($q);
@@ -212,7 +212,7 @@ class ForumPostProcessor implements Processor {
 		{
 			$q = 'SELECT created 
 			  FROM users
-			  WHERE name = "' . $author . '"';
+			  WHERE name = "' . mysql_real_escape_string($author) . '"';
 			  
 			$q = $this->database->fetch($q);
 			
@@ -445,7 +445,7 @@ class ForumPostProcessor implements Processor {
 		}
 			
 		$q = 'SELECT id FROM ' . $type . 's
-			WHERE ' . $typeColumn . ' = "' . $thing . '"';
+			WHERE ' . $typeColumn . ' = "' . mysql_real_escape_string($thing) . '"';
 		
 		$q = $this->database->query($q);
 		
@@ -453,7 +453,7 @@ class ForumPostProcessor implements Processor {
 		if(mysql_num_rows($q) == 0)
 		{
 			$q = 'INSERT INTO ' . $type . 's (' . $typeColumn . ')
-				VALUES("' . $thing . '")';
+				VALUES("' . mysql_real_escape_string($thing) . '")';
 			
 			$q = $this->database->query($q);
 			

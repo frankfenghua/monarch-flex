@@ -65,7 +65,7 @@ class ForumThreadProcessor implements Processor {
 			// check for duplicate
 			$q = 'SELECT id
 				FROM threads
-				WHERE url = "' . $threadUrl[1][$i] . '"';
+				WHERE url = "' . mysql_real_escape_string($threadUrl[1][$i]) . '"';
 			
 			$q = $this->database->query($q);
 			
