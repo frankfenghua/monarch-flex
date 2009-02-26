@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute">
+	<mx:Script>
+		<![CDATA[
+		
+		import controls.Highlighter;
+		
+		private var highlighter:Highlighter;
+		
+			/******************************************/
+		private function appInit(event:Event):void {
+			highlighter = new Highlighter(getTextField(outputText));		
+		}
+		
+		private function onTextInputChange(event:Event):void {
+			// Build regular expression from user string
+			var regex:RegExp = new RegExp(input.text, "g");
+			highlighter.reset();
+			if(input.text.length > 0) {
+				highlighter.highlightMatches(regex);
+			}		
+		}
+		
+		private function getTextField(component:TextArea):TextField{
+            var len:int = component.numChildren;
+            var r:TextField;
+            for(var i:int=0; i<len; i++){
+                var thisChild:DisplayObject = component.getChildAt(i);
+                if(thisChild is TextField){
+                    r = thisChild as TextField;
+                }
+            }
+        	return r;
+        }
+		]]>
+	</mx:Script>
+	<mx:TextInput x="10" y="10" id="input" change="onTextInputChange(event)" height="56" width="170"/>
+	<mx:TextArea x="10" y="74" width="753" height="367" id="outputText"  addedToStage="appInit(event)" text="Like 64 million other American households, mine has cable television, and I'm aghast at how much money I fork over for the privilege of watching The Real Housewives of New York City. With the DVR HD cable box, the sports package, broadband Internet, and the rental fee for that obscenely bloated remote control, I'm out $120 a month—and that includes a discount I received after threatening to cancel and switch to satellite. Even though I can't get satellite in my building. I bluffed because the cable industry is effectively a monopoly and treats its customers accordingly.
+
+A decent chunk of us 64 million would probably choose an alternative, if one existed. And for the past four months or so, one has. It's called Boxee, and FOX, NBC, and possibly Comcast and Time Warner tried to kill it last week. It's a good example of the Internet's creatively destructive force; whenever traditional media companies try to either capture or stifle it, the Web snaps up to bite them somewhere else.
+
+Boxee is a free program that stitches together the best music, video, and movie Web sites with your local media files (photos, music) into an interface you can navigate with fewer remote-control buttons than there are fingers on your hands. The interface is powerful and couch-friendly. But the site in Boxee's lineup that transformed it into an embryonic cable killer was Hulu.
+
+
+Hulu's Web site has a slew of licensed and advertising-supported movies and TV shows. Launched last March, Hulu was conceived by News Corp. and NBC Universal, the respective parents of FOX and NBC, because they were sick of seeing their expensive content on YouTube.
+
+Hulu was designed to let viewers instantly watch and manipulate content made for TV on their computers. Boxee effectively reverses the process, making Hulu play nicely on TV, where couch potatoes like me can enjoy it.
+
+The problem is that News Corp. and NBC Universal never intended for users to experience Hulu this way. Hulu wasn't created to solve the problem of nerds wanting to watch Heroes on computers hooked up to their TVs. Cable shells out billions of dollars a year to put TV content on TVs.
+
+That's why on Wednesday Hulu CEO Jason Kilar and Boxee founder Avner Ronen posted on their blogs the news that Kilar had asked Ronen to remove Hulu's offerings from Boxee, and after two weeks of negotiating, Ronen finally agreed.
+
+Kilar wrote that Hulu's content providers, who are also its owners, forced the move, even though, as Ronen noted, Boxee users watched more than 100,000 Hulu streams last week alone. Theoretically, Hulu can only benefit from increased traffic on the site; it means more people will have seen the site's ads, making money for the networks. But the networks don't want to make money from Hulu on a TV set—that undermines their relationship with cable providers and robs them both of advertising revenue on a much more lucrative scale.
+
+Even though users can already watch Hulu on TV through their Web browsers, Boxee's remote-controlled version of the site is what scared the bejesus out of Hulu, the networks, and the cable companies. Indeed, dozens of commenters wrote on the blog posts that they have already canceled their cable service in favor of Boxee (and Hulu).
+
+Cable companies got their first glimpse of Boxee at this year's CES in Las Vegas, where Ronen says he told them, "/>
+	
+</mx:WindowedApplication>
