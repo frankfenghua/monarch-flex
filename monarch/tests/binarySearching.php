@@ -2,6 +2,8 @@
 
 	require('../BinarySearch.php');
 	
+	$startTime = microtime(true);
+
 	// load up english dictionary
 	$dictionary = @fopen("../englishDictionary/englishDictionary.txt", "r");
 	
@@ -46,4 +48,5 @@
 	else
 		die('usage: binarySearching.php?binary=true || binarySearching.php?binary=false');
 
+	echo "Execution time = ". (microtime(true) - $startTime)." sec";
 ?>
