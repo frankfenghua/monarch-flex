@@ -23,8 +23,7 @@ class Linguistics
 	private $englishDictionary; // array of all the words in the english dictionary
 	private $database;          // used for accessing the linguistic tables
 	private $amplifiers;        // array of words that amplify the effect of an adjective (very, really, ...)
-	private $inverters;         // array of words that invert the effect of an adjective (not, hardly, ...) 
-	                            //    and a wish that something would be [positive word] (should be, could have been, ...)
+	private $inverters;         // array of words that invert the effect of an adjective (not, hardly, should be, could have been, ...) 
 	
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // PUBLIC FUNCTIONS ...............................................................
