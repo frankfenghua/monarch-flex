@@ -10,6 +10,7 @@
 
 require_once('database/Database.php');
 require_once('constants.php');
+require_once('BinarySearch.php');
 
 class Linguistics
 {
@@ -18,12 +19,12 @@ class Linguistics
 // CLASS FIELD MEMBERS ............................................................
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-	private $badWords;          // array of negative words (linguistic analysis)
-	private $goodWords;         // array of positive words (linguistic analysis)
-	private $englishDictionary; // array of all the words in the english dictionary
 	private $database;          // used for accessing the linguistic tables
-	private $amplifiers;        // array of words that amplify the effect of an adjective (very, really, ...)
-	private $inverters;         // array of words that invert the effect of an adjective (not, hardly, should be, could have been, ...) 
+	private $badWords;          // BinarySearch object of negative words (linguistic analysis)
+	private $goodWords;         // BinarySearch object of positive words (linguistic analysis)
+	private $englishDictionary; // BinarySearch object of all the words in the english dictionary
+	private $amplifiers;        // BinarySearch object of words that amplify the effect of an adjective (very, really, ...)
+	private $inverters;         // BinarySearch object of words that invert the effect of an adjective (not, hardly, should be, could have been, ...) 
 	
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // PUBLIC FUNCTIONS ...............................................................
@@ -40,26 +41,7 @@ class Linguistics
 	{
 		$this->database = new Database('master');
 		
-		// load English dictionary 
-		$dictionary = @fopen("englishDictionary/englishDictionary.txt", "r");
-		
-		if(!$dictionary)
-			$dictionary = @fopen("../englishDictionary/englishDictionary.txt", "r");
-		
-		if($dictionary) 
-		{
-			while(!feof($dictionary)) 
-			{
-				$word = trim(strtolower(fgets($dictionary)));
-			
-				if($word != '')
-					$this->englishDictionary[] = $word;
-			}
-			
-			fclose($dictionary);
-		}
-		else
-			die('english dictionary file could not be opened.');
+		$this->englishDictionary = $this->loadEnglishDictionary();
 		
 		// load adjectives and adverbs
 		$this->goodWords  = $this->loadWordList('goodwords');
@@ -174,9 +156,6 @@ class Linguistics
 	//           * bad running time
 	//           * not normalized to [0.0 - 1.0] range
 	//           * "very" and "so" does not have to precede adjective. Ex: I like Adobe very much.
-	//           * see if in_array can be made to do binary search through an
-	//             alphabetically arranged goodwords/badwords array to speed
-	//             things up.
 	public function goodnessByIndex($locationKeyword, $bodyArray)
 	{	
 		// Do not search the entire body for adjectives; rather only search around a vicinity of the keyword
@@ -205,7 +184,7 @@ class Linguistics
 			}
 
 			// the adjective is preceded by an amplifier
-			if($locationAdjective > 0 && in_array($bodyArray[$locationAdjective - 1], $this->amplifiers))
+			if($locationAdjective > 0 && $this->amplifiers->inArray($bodyArray[$locationAdjective - 1]))
 				$severity = 2;
 			else
 				$severity = 1;
@@ -213,7 +192,7 @@ class Linguistics
 			$rating = 1 / abs($locationAdjective - $locationKeyword) * $severity;
 
 			// goodness of a word is inversely proportional to it's distance from a good word
-			if(in_array($adjective, $this->goodWords))
+			if($this->goodWords->inArray($adjective))
 			{
 				// an inverter in front of a good word makes it bad.
 				if($this->isInverted($bodyArray, $locationAdjective))
@@ -233,7 +212,7 @@ class Linguistics
 			}
 			
 			// badness of a word is inversely proportional to it's distance from a bad word
-			if(in_array($adjective, $this->badWords))
+			if($this->badWords->inArray($adjective))
 			{	
 				// an inverter in front of a bad word makes it good
 				if($this->isInverted($bodyArray, $locationAdjective))	
@@ -312,7 +291,7 @@ class Linguistics
 		
 		foreach($text as $word)
 		{
-			if(in_array(strtolower($word), $this->englishDictionary))
+			if($this->englishDictionary->inArray(strtolower($word)))
 				$numSpelledCorrect++;
 		}
 		
@@ -373,7 +352,7 @@ class Linguistics
 	// ============================================================================
 	// loadWordList
 	//    args:  string - "inverters" | "amplifiers" | "goodwords" | "badwords"
-	//    ret:   array of strings
+	//    ret:   BinarySearch object
 	//    about: Load a set of English words. Each type of set has a different 
 	//           effect on meaning of a sentence.
 	// ----------------------------------------------------------------------------
@@ -384,7 +363,39 @@ class Linguistics
 		while($row = mysql_fetch_array($q))
 			$list[] = $row['word'];
 			
-		return $list;
+		return new BinarySearch($list);
+	}
+	
+	// ============================================================================
+	// loadEnglishDictionary
+	//    args:  none
+	//    ret:   BinarySearch object
+	//    about: Loads all English dictionary words in lowercased form.  Does not 
+	//           include proper nouns.
+	// ----------------------------------------------------------------------------
+	private function loadEnglishDictionary()
+	{
+		$dictionary = @fopen("englishDictionary/englishDictionary.txt", "r");
+		
+		if(!$dictionary)
+			$dictionary = @fopen("../englishDictionary/englishDictionary.txt", "r");
+		
+		if($dictionary) 
+		{
+			while(!feof($dictionary)) 
+			{
+				$word = trim(strtolower(fgets($dictionary)));
+			
+				if($word != '')
+					$englishDictionary[] = $word;
+			}
+			
+			fclose($dictionary);
+		}
+		else
+			die('Linguistics->loadWordList: english dictionary file could not be opened.');
+		
+		return new BinarySearch($englishDictionary);
 	}
 	
 	// ============================================================================
@@ -401,21 +412,21 @@ class Linguistics
 		// previous word is an inverter ("not")
 		if($locationAdjective > 0)
 		{
-			if(in_array($bodyArray[$locationAdjective - 1], $this->inverters))
+			if($this->inverters->inArray($bodyArray[$locationAdjective - 1]))
 				return true;
 		}
 		
 		// previous 2 words is an inverter conjunction ("hardly ever")
 		if($locationAdjective > 1)
 		{
-			if(in_array($bodyArray[$locationAdjective - 2] . ' ' . $bodyArray[$locationAdjective - 1], $this->inverters))
+			if($this->inverters->inArray($bodyArray[$locationAdjective - 2] . ' ' . $bodyArray[$locationAdjective - 1]))
 				return true;
 		}
 		
 		// previous 3 words is a inverter conjunction ("by no means")
 		if($locationAdjective > 2)
 		{
-			if(in_array($bodyArray[$locationAdjective - 3] . ' ' . $bodyArray[$locationAdjective - 2] . ' ' . $bodyArray[$locationAdjective - 1], $this->inverters))
+			if($this->inverters->inArray($bodyArray[$locationAdjective - 3] . ' ' . $bodyArray[$locationAdjective - 2] . ' ' . $bodyArray[$locationAdjective - 1]))
 				return true;
 		}
 		

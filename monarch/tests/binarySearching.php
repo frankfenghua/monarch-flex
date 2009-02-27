@@ -1,8 +1,6 @@
 <?php
 
 	require('../BinarySearch.php');
-	
-	$startTime = microtime(true);
 
 	// load up english dictionary
 	$dictionary = @fopen("../englishDictionary/englishDictionary.txt", "r");
@@ -21,6 +19,8 @@
 	}
 	else
 		die('english dictionary file could not be opened.');
+	
+	sort($englishDictionary);
 		
 	// do binary searches on random words
 	$binary = new BinarySearch($englishDictionary);
@@ -34,6 +34,8 @@
 		'hits', 'punches', 'punching', 'kick', 'kicker', 'kickers', 'kicks', 'kicked',
 		'medicinal', 'marijuana', 'alcohol', 'abuse', 'triple', 'a', 'jail', 'slap',
 		'womanizer', 'femenist', 'zeal', 'zoo', 'june', 'april');
+		
+	$startTime = microtime(true);	
 	
 	if($_GET['binary'] == 'true')
 	{	
