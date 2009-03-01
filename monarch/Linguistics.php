@@ -34,8 +34,7 @@ class Linguistics
 	// Linguistics
 	//    args:  none
 	//    ret:   none
-	//    about: Constructor. Loads up the good/bad words. Will not load the entire
-	//           English dictionary because it's 7MB and that would take forever.
+	//    about: Constructor. Loads up all our word lists. 
 	// ----------------------------------------------------------------------------
 	public function Linguistics()
 	{
@@ -353,7 +352,7 @@ class Linguistics
 	// loadWordList
 	//    args:  string - "inverters" | "amplifiers" | "goodwords" | "badwords"
 	//    ret:   BinarySearch object
-	//    about: Load a set of English words. Each type of set has a different 
+	//    about: Load a subset of English words. Each type of set has a different 
 	//           effect on meaning of a sentence.
 	// ----------------------------------------------------------------------------
 	private function loadWordList($type)
