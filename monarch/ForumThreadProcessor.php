@@ -11,6 +11,7 @@
 
 require_once 'database/Database.php';
 require_once 'Processor.php';
+require_once 'Url.php';
 
 class ForumThreadProcessor implements Processor {
 
@@ -21,6 +22,7 @@ class ForumThreadProcessor implements Processor {
 	private $database; // connection to the master DB or specific community's DB
 	private $domain;   // name of the community
 	private $plugin;   // regular expressions for how to scrape this community
+	private $myUrl;    // the URL of the page that we are currently processing (String)
 	
   
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -38,6 +40,7 @@ class ForumThreadProcessor implements Processor {
 	// FIX: no comment header
 	public function process($html, $url) 
 	{
+	  $this->myUrl = $url;
 		$this->scrapeThreads($html);
 	}
 
@@ -62,10 +65,11 @@ class ForumThreadProcessor implements Processor {
 	
 		for($i = 0; $i < sizeof($threadUrl[1]); $i++)
 		{
+		  $thisThreadUrl = URL::translateURLBasedOnCurrent($threadUrl[1][$i], $myUrl);
 			// check for duplicate
 			$q = 'SELECT id
 				FROM threads
-				WHERE url = "' . mysql_real_escape_string($threadUrl[1][$i]) . '"';
+				WHERE url = "' . mysql_real_escape_string($thisThreadUrl) . '"';
 			
 			$q = $this->database->query($q);
 			
@@ -73,8 +77,8 @@ class ForumThreadProcessor implements Processor {
 			if(mysql_num_rows($q) == 0)	
 			{	
 				$q = 'INSERT INTO threads (title, url)
-					VALUES("' . mysql_real_escape_string($threadTitle[1][$i]) . '", 
-					"' . mysql_real_escape_string($threadUrl[1][$i]) . '")';
+					VALUES("' . mysql_real_escape_string($thisThreadUrl) . '", 
+					"' . mysql_real_escape_string($thisThreadUrl) . '")';
 						   
 				$this->database->query($q);
 				
