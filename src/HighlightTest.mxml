@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute">
+        
+<mx:Script>
+	<![CDATA[
+	import mx.core.UIComponent;
+	import controls.HTMLHighlighter;
+	
+	private var pathUrl:String = "http://www.metacritic.com/music/";
+	private var highlighter:HTMLHighlighter;
+	private var highlightReady:Boolean;
+
+	private function appInit(event:Event):void {
+		highlightReady = false;
+	
+		var htmlLoader:HTMLLoader = html.htmlLoader;
+		highlighter = new HTMLHighlighter(htmlLoader);
+		var url:URLRequest = new URLRequest(pathUrl); //URL to the file
+		htmlLoader.addEventListener(Event.COMPLETE, onUrlLoadComplete);
+			
+		htmlLoader.load(url);
+	}
+	
+	private function onUrlLoadComplete(event:Event):void {
+		highlightReady = true;
+		highlightMatches();
+	}
+
+	private function onTextChanged(event:Event):void {
+		highlightMatches();	
+	}
+	
+	private function onScroll(event:Event):void {
+		highlightMatches();
+	}
+	
+	private function highlightMatches():void {
+		// Build regular expression from user string
+		var regex:RegExp = new RegExp(input.text, "g");
+		if(input.text.length > 0 && highlightReady) {
+			highlighter.reset();
+			highlighter.highlightMatches(regex);
+		}	
+	}		
+	]]>
+</mx:Script>
+	<mx:TextInput id="input" x="10" y="10" change="onTextChanged(event)"/>
+	<mx:HTML id="html" x="10" y="40" width="735" height="471" scroll="onScroll(event)" addedToStage="appInit(event)"/>
+
+</mx:WindowedApplication>
