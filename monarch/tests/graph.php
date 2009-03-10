@@ -27,8 +27,6 @@ while($plotPoint = mysql_fetch_array($q))
 	$english[]   = $plotPoint['YenglishProficiency'];
 }
 
-
-
  // Standard inclusions   
  include("pChart/pChart/pData.class");
  include("pChart/pChart/pChart.class");
@@ -45,15 +43,18 @@ while($plotPoint = mysql_fetch_array($q))
  $DataSet->SetSerieName("sentiment", "Serie2");
  $DataSet->SetSerieName("english"  , "Serie3");
 
+	$width = 2400;
+	$height = 1000;
+
  // Initialise the graph
- $Test = new pChart(700,230);
+ $Test = new pChart($width, $height); // 230
  $Test->setFontProperties("pChart/Fonts/tahoma.ttf",8);
- $Test->setGraphArea(50,30,585,200);
- $Test->drawFilledRoundedRectangle(7,7,693,223,5,240,240,240);
- $Test->drawRoundedRectangle(5,5,695,225,5,230,230,230);
- $Test->drawGraphArea(255,255,255,TRUE);
+ $Test->setGraphArea(50,30,$width - 100,$height - 30);
+ $Test->drawFilledRoundedRectangle(7,7,$width - 50,$height - 7,5,$height + 10,$height + 10,$height + 10);
+ $Test->drawRoundedRectangle(5,5,$width - 48,$height - 5,5,$height,$height,$height);
+ $Test->drawGraphArea($height - 5,$height - 5,$height - 5,TRUE);
  $Test->drawScale($DataSet->GetData(),$DataSet->GetDataDescription(),SCALE_NORMAL,150,150,150,TRUE,0,2);
- $Test->drawGrid(4,TRUE,230,230,230,50);
+ $Test->drawGrid(4,TRUE,$height,$height,$height,50);
 
  // Draw the 0 line
  $Test->setFontProperties("pChart/Fonts/tahoma.ttf",6);
@@ -61,11 +62,11 @@ while($plotPoint = mysql_fetch_array($q))
 
  // Draw the line graph
  $Test->drawLineGraph($DataSet->GetData(),$DataSet->GetDataDescription());
- $Test->drawPlotGraph($DataSet->GetData(),$DataSet->GetDataDescription(),3,2,255,255,255);
+ $Test->drawPlotGraph($DataSet->GetData(),$DataSet->GetDataDescription(),3,2,$height + 15,$height + 15,$height + 15);
 
  // Finish the graph
  $Test->setFontProperties("pChart/Fonts/tahoma.ttf",8);
- $Test->drawLegend(600,30,$DataSet->GetDataDescription(),255,255,255);
+ $Test->drawLegend(100,30,$DataSet->GetDataDescription(),$height + 15,$height + 15,$height + 15);
  $Test->setFontProperties("pChart/Fonts/tahoma.ttf",10);
  $Test->drawTitle(50,22, 'Stat VS Time' ,50,50,50,585);
  $Test->Render("graph.png");
