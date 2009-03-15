@@ -24,15 +24,17 @@ Modified to support regular expression matching by Andrew Spencer, February 2009
 */
 package controls
 {
-    import flash.html.HTMLLoader;
-    import flash.events.Event;
-    import flash.display.BitmapData;
-    import flash.display.Bitmap;
-    import flash.geom.Rectangle;
-        
     import controls.textClasses.ElementBoundaries;
     import controls.textClasses.Finder;
-	import controls.util.ElementUtils;
+    import controls.util.ElementUtils;
+    
+    import flash.display.Bitmap;
+    import flash.display.BitmapData;
+    import flash.events.Event;
+    import flash.geom.Rectangle;
+    import flash.html.HTMLLoader;
+    
+    import mx.controls.HTML;
     
     public class HTMLHighlighter
     {   
@@ -40,6 +42,12 @@ package controls
     	* The HTMLLoader being highlighted.
     	*/
         public var htmlLoader:HTMLLoader;
+        
+        
+        /**
+        * The HTML object we are highlighting on
+        */
+        public var html:HTML;
         
         /**
         * The color used to highlight strings (RGBA).
@@ -76,19 +84,20 @@ package controls
         * @param xOffset If necessary, the horizontal offset of the highlight.  Useful when the TextField has some padding applied to it.  Default is 0.
         * @param yOffset If necessary, the vertical offset of the highlight.  Useful when the TextField has some padding applied to it.  Default is 0.
         */
-        public function HTMLHighlighter(htmlLdr:HTMLLoader,color:uint=0xffff0000)
+        public function HTMLHighlighter(_html:HTML,color:uint=0xffff0000)
         {
-            this.htmlLoader = htmlLdr;
+        	this.html = _html;
+            this.htmlLoader = _html.htmlLoader;
             this.highlightColor = color;
             
             this.boundariesToHighlight = new Array();
             
-            this.canvas = new BitmapData(2000,2000,false,0xffff0000);
+            this.canvas = new BitmapData(2000,2000,true,0x00000000);
             
             this.bitmap = new Bitmap(canvas);
             
             // var ind:int = this.htmlLoader.parent.getChildIndex(this.htmlLoader);
-            this.htmlLoader.parent.parent.addChild(this.bitmap);
+            this.html.addChild(this.bitmap);
             
             finder = new Finder(this.htmlLoader);
             
@@ -136,6 +145,7 @@ package controls
 			            this.canvas.fillRect(rect,this.highlightColor);
             		}
             	}
+            	trace("Rect "+rects[0]);
             } 
         }
 

@@ -14,7 +14,7 @@
 		highlightReady = false;
 	
 		var htmlLoader:HTMLLoader = html.htmlLoader;
-		highlighter = new HTMLHighlighter(htmlLoader);
+		highlighter = new HTMLHighlighter(html);
 		var url:URLRequest = new URLRequest(pathUrl); //URL to the file
 		htmlLoader.addEventListener(Event.COMPLETE, onUrlLoadComplete);
 			
