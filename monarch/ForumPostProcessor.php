@@ -189,9 +189,6 @@ class ForumPostProcessor implements Processor {
 	//           post count.  
 	//   FIX:    * There will be duplicate SQL error if a guy's username is over
 	//             40 characters (the limit of our varchar for the name).
-	//           * instead of only storing the author's profile page on the 
-	//             first insertion, should we update it each time we see it
-	//             in case it changes somehow?
 	// ------------------------------------------------------------------------	
 	private function insertUser($author, $authorUrl, $userId, $time, $threadId, $bodyHtml)
 	{	
