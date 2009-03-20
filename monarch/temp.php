@@ -1,31 +1,32 @@
 <?php
 
-$html = file_get_contents('http://www.cnn.com/2009/POLITICS/03/18/aig.bonuses.congress/index.html');
-
 /*
 
-<b>(CNN)</b> -- Senate Banking committee Chairman Christopher Dodd told CNN Wednesday that he was responsible for language added to the federal stimulus bill to make sure that already-existing contracts for bonuses at companies receiving federal bailout money were honored.</p> <!--startclickprintexclude-->
-
-
+/<div class="comment_time">[\n][\s]+said[\n][\s]+([0-9]+ [a-zA-Z]+[\n][\s]+ago)/
 
 
 
 
 */
 
-// preg_match_all('/<h3>\n<a href="(.*?)"/', $html, $res);
-
-// preg_match_all('/<h3>\n<a href=".*?">(.*?)</', $html, $res);
-
-//preg_match_all('/<p class="cnnAttribution">.*? (.*?) contributed/', $html, $res);
-
-// preg_match_all('/([0-9]{4}\/[0-9]{2}\/[0-9]{2})\//', $html, $res);
-
-preg_match_all('/<div id="cnnHighLightTrigger">(.*?)<\/div>/s', $html, $res);
-
-print_r($res);
+$html = file_get_contents('http://www.designbyhumans.com/forums/show/405884');
 
 
+// preg_match_all('/<div class="forum-post-title">[\n][\s]+<a href="(.*?)"/', $html, $ret);
+
+// preg_match_all('/<div class="forum-post-title">[\n][\s]+<a href="(?:.*?)">(.*?)</', $html, $ret);
+
+// preg_match_all('/posted[\s]+[\n][\s]+(?:about)? (.*?)[\n]/', $html, $ret);
+
+preg_match_all('/posted[\s]+[\n][\s]+(?:about)? (.*?)[\n]/', $html, $ret);
+
+
+echo '<pre>';
+print_r($ret);
+echo '</pre>';
+
+
+// echo date('m j y', strtotime($ret[1][1]));
 
 ?>
 

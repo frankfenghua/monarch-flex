@@ -25,6 +25,11 @@ CREATE TABLE IF NOT EXISTS `keywords` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_german2_ci AUTO_INCREMENT=1 ;
 
+--
+-- Dumping data for table `keywords`
+--
+
+
 -- --------------------------------------------------------
 
 --
@@ -35,6 +40,11 @@ CREATE TABLE IF NOT EXISTS `keywordstats` (
   `keyword` smallint(5) unsigned NOT NULL,
   `stat` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `keywordstats`
+--
+
 
 -- --------------------------------------------------------
 
@@ -49,6 +59,11 @@ CREATE TABLE IF NOT EXISTS `links` (
   UNIQUE KEY `baseUrl` (`baseUrl`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_german2_ci AUTO_INCREMENT=1 ;
 
+--
+-- Dumping data for table `links`
+--
+
+
 -- --------------------------------------------------------
 
 --
@@ -59,6 +74,11 @@ CREATE TABLE IF NOT EXISTS `linkstats` (
   `link` smallint(5) unsigned NOT NULL,
   `stat` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `linkstats`
+--
+
 
 -- --------------------------------------------------------
 
@@ -75,6 +95,11 @@ CREATE TABLE IF NOT EXISTS `posts` (
   `hash` varchar(8) COLLATE latin1_german2_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_german2_ci AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `posts`
+--
+
 
 -- --------------------------------------------------------
 
@@ -100,6 +125,13 @@ CREATE TABLE IF NOT EXISTS `regexes` (
   `parentUrl` varchar(250) NOT NULL DEFAULT '//'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `regexes`
+--
+
+INSERT INTO `regexes` (`startPage`, `nextPageOfThreads`, `nextPageOfPosts`, `threadUrl`, `threadNumViews`, `threadTitle`, `firstPostAuthor`, `firstPostAuthorUrl`, `firstPostTime`, `firstPostMessage`, `replyAuthor`, `replyAuthorUrl`, `replyTime`, `replyMessage`, `parentUrl`) VALUES
+('http://www.designbyhumans.com/forums', '//', '//', '/<div class="forum-post-title">[\\n][\\s]+<a href="(.*?)"/', '//', '/<div class="forum-post-title">[\\n][\\s]+<a href="(?:.*?)">(.*?)</', '/<span style="font-size:18px; color:#aaa; font-style:italic;display:block;">[\\n][\\s]+<a href="(?:.*?)\\/><\\/a>[\\s]+[\\n][\\s]+[\\n][\\s]+<a href="(?:.*?)">(.*?)</', '/<span style="font-size:18px; color:#aaa; font-style:italic;display:block;">[\\n][\\s]+<a href="(.*?)"/', '/posted[\\s]+[\\n][\\s]+(?:about)? (.*?)[\\n]/', '/<\\/h1>(.+)[\\n][\\s]{2}[\\n][\\s]{2,3}[\\n][\\s]{2}</s', '/<div class="comment_name">[\\n][\\s]+<a href="(?:.*?)">(.*?)</', '/<div class="comment_name">[\\n][\\s]+<a href="(.*?)"/', '/<div class="comment_time">[\\n][\\s]+said[\\n][\\s]+([0-9]+ [a-zA-Z]+[\\n][\\s]+ago)/', '/<div class="comment_body">(.*?)<\\/div>/s', '/(\\/forums\\/show\\/[0-9]+)\\?post_quote/');
+
 -- --------------------------------------------------------
 
 --
@@ -114,6 +146,11 @@ CREATE TABLE IF NOT EXISTS `stats` (
   `englishProficiency` float unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `stats`
+--
+
 
 -- --------------------------------------------------------
 
@@ -130,6 +167,11 @@ CREATE TABLE IF NOT EXISTS `threads` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_german2_ci AUTO_INCREMENT=1 ;
 
+--
+-- Dumping data for table `threads`
+--
+
+
 -- --------------------------------------------------------
 
 --
@@ -141,6 +183,11 @@ CREATE TABLE IF NOT EXISTS `threadstats` (
   `keyword` int(10) unsigned NOT NULL,
   `stat` int(10) unsigned NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `threadstats`
+--
+
 
 -- --------------------------------------------------------
 
@@ -159,6 +206,11 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `name_2` (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_german2_ci AUTO_INCREMENT=1 ;
 
+--
+-- Dumping data for table `users`
+--
+
+
 -- --------------------------------------------------------
 
 --
@@ -170,3 +222,8 @@ CREATE TABLE IF NOT EXISTS `userstats` (
   `keyword` int(10) unsigned NOT NULL,
   `stat` int(10) unsigned NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `userstats`
+--
+
