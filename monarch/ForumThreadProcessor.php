@@ -77,7 +77,7 @@ class ForumThreadProcessor implements Processor {
 			if(mysql_num_rows($q) == 0)	
 			{	
 				$q = 'INSERT INTO threads (title, url)
-					VALUES("' . mysql_real_escape_string($thisThreadUrl) . '", 
+					VALUES("' . mysql_real_escape_string($threadTitle) . '", 
 					"' . mysql_real_escape_string($thisThreadUrl) . '")';
 						   
 				$this->database->query($q);
