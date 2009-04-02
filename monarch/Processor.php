@@ -8,7 +8,7 @@
 
 
 interface Processor {
-  public function process($html, $url);
+  public function process($html, $url, $parentUrl);
 }
 
 ?>

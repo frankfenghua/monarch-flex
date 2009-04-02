@@ -7,10 +7,12 @@ class URL {
   private $name;    // The string representation of this URL
   private $level;   // The level that this URL appears in
   private $crawled; // Boolean telling whether or not this page has been crawled
+  private $parentURL; // TODO: refine definition
 
-  public function URL($n, $l) {
+  public function URL($n, $l, $p) {
     $this->name = $n;
     $this->level = $l;
+    $this->parentURL = $p;
     $this->crawled = false;
   }
 
@@ -20,6 +22,10 @@ class URL {
 
   public function getName() {
     return $this->name;
+  }
+
+  public function getParentURLName() {
+    return $this->parentURL;
   }
 
   public function setCrawled() {

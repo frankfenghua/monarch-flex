@@ -38,9 +38,9 @@ class ForumThreadProcessor implements Processor {
 	}
 
 	// FIX: no comment header
-	public function process($html, $url) 
+	public function process($html, $url, $parentUrl) 
 	{
-	  $this->myUrl = $url;
+		$this->myUrl = $url;
 		$this->scrapeThreads($html);
 	}
 
@@ -55,17 +55,20 @@ class ForumThreadProcessor implements Processor {
 	private function scrapeThreads($html)
 	{	
 		if($this->plugin['threadUrl'] != NULL)
-			preg_match_all($this->plugin['threadUrl'], $html, $threadUrl);
+			preg_match_all($this->plugin['threadUrl'], $html, $threadUrls);
 		
 		if($this->plugin['threadTitle'] != NULL)
-			preg_match_all($this->plugin['threadTitle'], $html, $threadTitle);
+			preg_match_all($this->plugin['threadTitle'], $html, $threadTitles);
 		
 		if($this->plugin['threadNumViews'] != NULL)	
 			preg_match_all($this->plugin['threadNumViews'], $html, $numViews);
 	
-		for($i = 0; $i < sizeof($threadUrl[1]); $i++)
+		for($i = 0; $i < sizeof($threadUrls[1]); $i++)
 		{
-		  $thisThreadUrl = URL::translateURLBasedOnCurrent($threadUrl[1][$i], $myUrl);
+		  	$thisThreadUrl = URL::translateURLBasedOnCurrent($threadUrls[1][$i], $this->myUrl);
+			$thisThreadTitle = $threadTitles[1][$i];
+			echo 'Translated URL = '.$thisThreadUrl.'</br>';
+			
 			// check for duplicate
 			$q = 'SELECT id
 				FROM threads
@@ -77,7 +80,7 @@ class ForumThreadProcessor implements Processor {
 			if(mysql_num_rows($q) == 0)	
 			{	
 				$q = 'INSERT INTO threads (title, url)
-					VALUES("' . mysql_real_escape_string($threadTitle) . '", 
+					VALUES("' . mysql_real_escape_string($thisThreadTitle) . '", 
 					"' . mysql_real_escape_string($thisThreadUrl) . '")';
 						   
 				$this->database->query($q);

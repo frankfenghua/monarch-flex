@@ -1,7 +1,7 @@
 <?php
 
-// error_reporting(E_ALL ^ E_NOTICE);
-// ini_set('display_errors','1');
+ error_reporting(E_ALL ^ E_NOTICE);
+ ini_set('display_errors','1');
 
 if(!$_GET['name'] || !$_GET['topLevel'])
 	die('Please specify the name of the website and number of top level pages to scrape. Example: testcrawl.php?name=threadless&topLevel=40');

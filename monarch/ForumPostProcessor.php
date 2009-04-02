@@ -45,20 +45,15 @@ class ForumPostProcessor implements Processor {
 	}
 
 	// FIX: where is the function header?
-	public function process($html, $threadUrl) 
+	public function process($html, $thisUrl, $parentUrl) 
 	{
+		echo 'Parent url for '.$thisUrl.' is '.$parentUrl.'</br>';
 		// Find the thread ID for this page using the link
-		$threadUrl = $this->plugin['parentUrl'];
-		preg_match_all($threadUrl, $html, $matches);
+		$threadUrl = $parentUrl;
 		
 		$q = 'SELECT id
 			FROM threads
-			WHERE url = "' . $matches[1][0] . '"';
-		
-		/* $q = 'SELECT id
-			FROM threads
 			WHERE url = "' . $threadUrl . '"';
-		*/
 
 		$q = $this->database->fetch($q);
 		

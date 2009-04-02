@@ -75,7 +75,7 @@ class StructuredCrawl {
   //    about: Begins crawl. Assumes the parameter url is at level 0
   // ------------------------------------------------------------------------	
   public function beginCrawlFromPage($url_name) {
-    $newUrl = $this->addUrl($url_name, 0); // add level to toplevel
+    $newUrl = $this->addUrl($url_name, 0, NULL); // add level to toplevel
     $next = $this->nextUrl();
     // $next->output();
     $this->crawlFromPage($next);
@@ -136,13 +136,13 @@ class StructuredCrawl {
 	//          or the crawl count has reached the MAX_TOPLEVEL_PAGES constant then
 	//          we terminate.
 	//    Something else that could be done:
-	//     Make this iterative instead of recursive
+	//     -- Make this iterative instead of recursive -- DONE
 	//           
 	// ------------------------------------------------------------------------	
 	private function crawlFromPage($url) 
 	{
 		while($url && ($this->toplevel_pages_crawled < $this->max_toplevel_pages ||
-      		$url->getLevel() != $this->toplevel))
+      			$url->getLevel() != $this->toplevel))
 		{ 
 			$src = $this->downloadUrl($url->getName());
 			// $src = file_get_contents($url->getName());
@@ -151,6 +151,7 @@ class StructuredCrawl {
 			//  add these links to the $url_map and $url_stacks if they are new
 			foreach($this->url_types[$url->getLevel()] as $u_type) 
 			{
+				// Match url strings in the page source
 				$urls = $u_type->getMatches($src);
 				if($urls) 
 				{
@@ -158,7 +159,7 @@ class StructuredCrawl {
 					{
 						$u = URL::translateURLBasedOnCurrent($u, $url->getName());
 						// echo 'Added url ' . $u . ' with '.$u_type->getLevel().' <br/>';
-						$this->addUrl($u,$u_type->getLevel());
+						$this->addUrl($u,$u_type->getLevel(),$url);
 					}
 				}
 				else if(DEBUG_CRAWL) 
@@ -175,7 +176,10 @@ class StructuredCrawl {
 				if(DEBUG_CRAWL)
 					echo 'Calling back<br/>';
 					
-				$this->callbacks[$url->getLevel()]->process($src, $url->getName());
+				// If this URL has a parent, set parentURLString; otherwise, set it to null
+				$parentURLString = $url->getParentURLName();
+				
+				$this->callbacks[$url->getLevel()]->process($src, $url->getName(), $parentURLString);
 			}
 		
 			// Update members
@@ -221,10 +225,19 @@ class StructuredCrawl {
   //    about: Adds the url specified to internal data structures if it is
   //           not yet present
   // ------------------------------------------------------------------------	
-  private function addUrl($url_name, $url_level) {
+  private function addUrl($url_name, $url_level, $prev_url) {
     // Add this url if it is not yet in the url_map
     if(!array_key_exists($url_name,$this->url_map[$url_level])) {
-      $newUrl = new URL($url_name, $url_level);
+	// See Url.php for definition of "Parent URL"
+	$parentUrl = NULL;
+	if($prev_url && ($url_level == $prev_url->getLevel())) {
+		$parentUrlName = $prev_url->getParentURLName();	
+	} 
+	else {
+		$parentUrlName = $url_name;
+	}
+      $newUrl = new URL($url_name, $url_level, $parentUrlName);
+	echo 'Added url '.$url_name.' with parent URL name '.$parentUrlName.'</br>';
       array_push($this->url_stacks[$url_level],$newUrl);
       $this->url_map[$url_level][$url_name] = $newUrl;
       return $newUrl;
