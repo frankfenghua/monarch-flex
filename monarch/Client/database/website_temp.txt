@@ -1,0 +1,10 @@
+CREATE TABLE IF NOT EXISTS `keywords` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `word` varchar(30) COLLATE latin1_german2_ci NOT NULL,
+  PRIMARY KEY (`id`)
+)
+
+CREATE TABLE IF NOT EXISTS `keywordstats` (
+  `keyword` smallint(5) unsigned NOT NULL,
+  `stat` int(11) NOT NULL
+)
