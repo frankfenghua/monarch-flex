@@ -19,7 +19,7 @@ if(!function_exists('exif_imagetype'))
 }
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
-// TITLE:   imageUpload
+// TITLE:   PhotoManip
 // TYPE:    class
 // CREATED: Apr. 7, 2009
 // AUTHOR:  Andrew Spencer, Ryan Lin
