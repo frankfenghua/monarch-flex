@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="creationCompleteCanvasHandler(event)" show="showCanvasHandler(event)" width="477" height="136" useHandCursor="true">
+	
+	<mx:Script>
+		<![CDATA[
+		
+			import mx.effects.Fade;
+			import mx.controls.Alert;
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//							EVENT HANDLERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			/**
+			 * 
+			 */
+			/*
+			private function rollOverHandler(event:Event):void
+			{
+				var fade:Fade = new Fade();
+				fade.alphaFrom = 0.3;
+				fade.alphaTo = 0.8;
+				fade.duration = 500;
+				fade.target = this;
+				fade.play();
+			}
+			*/
+			
+			/**
+			 * 
+			 */
+			/*
+			private function rollOutHandler(event:Event):void
+			{
+				var fade:Fade = new Fade();
+				fade.alphaFrom = 0.8;
+				fade.alphaTo = 0.3;
+				fade.duration = 500;
+				fade.target = this;
+				fade.play();
+			}
+			*/
+			
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//							MEMBER FUNCTIONS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			/**
+			 * 	Sets the title label for this component.
+			 */
+			public function setTitle(title:String):void
+			{
+				mTitle = title;
+			}
+			
+			/**
+			 * 	Sets the text box text for this component.
+			 */
+			public function setBody(text:String):void
+			{
+				mBodyText = text;
+			}
+			
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//							CANVAS EVENT HANDLERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			/**
+			 * 	Called when the canvas is created.
+			 */
+			private function creationCompleteCanvasHandler(event:Event):void
+			{
+				mTitleLabel.text = mTitle;
+				mTextBox.text = mBodyText;
+			}
+			
+			/**
+			 * 	Called when the canvas is displayed.
+			 */
+			private function showCanvasHandler(event:Event):void
+			{
+				mTitleLabel.text = mTitle;
+				mTextBox.text = mBodyText;
+			}
+			
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//							DATA MEMBERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			// the title
+			private var mTitle:String = "";
+			// the body text
+			private var mBodyText:String = "";
+			
+		]]>
+	</mx:Script>
+	
+	<mx:Label text="Welcome to the Adobe Community Analytics Tool !" width="449" horizontalCenter="4" verticalCenter="-48" id="mTitleLabel" styleName="homeInfoTitle"/>
+	<mx:TextArea width="449" editable="false" wordWrap="true" horizontalCenter="4" verticalCenter="16" borderThickness="0" textAlign="left" selectable="false" id="mTextBox" height="84">
+		<mx:text>This tool allows you to formulate community groups to monitor keywords across the websites of your choice.</mx:text>
+	</mx:TextArea>
+	
+</mx:Canvas>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" showCloseButton="true" title="Sign In" x="168" y="86" creationComplete="creationCompleteHandler(event)" close="closingHandler(event)" width="374" height="152" layout="absolute"  showInAutomationHierarchy="false" minHeight="152" minWidth="374" maxHeight="152" maxWidth="374">
+	
+	<mx:Metadata>
+		[Event(name="signInEvent", type="cSignInEvent")]
+	</mx:Metadata>
+	
+	<mx:Script>
+		<![CDATA[
+			
+			import mx.managers.PopUpManager;
+			import mx.controls.Alert;
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//								EVENT HANDLERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			/**
+			 * 	Event handler which is triggered by the user clicking the Sign In button.
+			 */
+			private function signInClickHandler(event:Event):void
+			{
+				signInProcess();
+			}
+			
+			/**
+			 * 	Event handler which is triggered by the user clicking Cancel button.
+			 */
+			private function cancelClickHandler(event:Event):void
+			{
+				cancelProcess();
+			}
+			
+			/**
+			 * 	Event handler triggered when the user clicks the ENTER keyboard
+			 *  button while the cursor lies within the user name text box.
+			 */
+			private function userNameKeyDownHandler(event:KeyboardEvent):void
+			{
+				if(event.keyCode == Keyboard.ENTER) {
+					signInProcess();
+				}
+			}
+			
+			/**
+			 *  Event handler triggered when the user clicks the ENTER keyboard
+			 *  button while the cursor lies within the password text box.
+			 */
+			private function passwordKeyDownHandler(event:KeyboardEvent):void
+			{
+				if(event.keyCode == Keyboard.ENTER) {
+					signInProcess();
+				}
+			}
+			
+			/**
+			 * 	Event handler called when the window is first created.
+			 */
+			private function creationCompleteHandler(event:Event):void
+			{
+				mEmailTextBox.setFocus();
+			}
+			
+			/**
+			 * 	Event handler triggered when the window is about to close.
+			 */
+			private function closingHandler(event:Event):void
+			{
+				cancelProcess();
+			}
+			
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//								MEMBER FUNCTIONS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			/**
+			 * 	Function which handles the processing of a sign in event.
+			 */
+			private function signInProcess():void
+			{
+				if(mEmailTextBox.text.length == 0 || 
+				   mPasswordTextBox.text.length == 0)
+				{
+					Alert.show("Please enter both a Email and a Password.", "Error", 1, this);
+					return;
+				}
+				var e:cSignInEvent = new cSignInEvent("cSignInEvent");
+				e.mEmail = mEmailTextBox.text;
+				e.mPassword = mPasswordTextBox.text;
+				e.mType = e.SIGN_IN;
+				this.dispatchEvent(e);
+				PopUpManager.removePopUp(this);
+
+			}
+			
+			/**
+			 * 	Function which handles the processing of a cancel event.
+			 */
+			private function cancelProcess():void
+			{
+				var e:cSignInEvent = new cSignInEvent("cSignInEvent");
+				e.mType = e.CANCEL;
+				this.dispatchEvent(e);
+				PopUpManager.removePopUp(this);
+
+			}
+			
+			
+		]]>
+	</mx:Script>
+	
+	<mx:Label x="32" y="27" text="Email :"  textAlign="right"/>
+	<mx:Label x="11" y="53" text="Password :"  textAlign="right"/>
+	<mx:TextInput width="263" keyDown="userNameKeyDownHandler(event)" id="mEmailTextBox" x="82" y="25" toolTip="Enter the account user name"/>
+	<mx:TextInput x="82" y="51" keyDown="passwordKeyDownHandler(event)" width="263" displayAsPassword="true" id="mPasswordTextBox" toolTip="Enter the account password"/>
+	<mx:Button label="Sign In" id="mSignInButton" click="signInClickHandler(event)" x="279" y="81" />
+	<mx:Button label="Cancel" id="mCancelButton" click="cancelClickHandler(event)" x="208" y="81" />
+</mx:TitleWindow>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="canvasShowHandler(event)" show="canvasShowHandler(event)" width="285" height="28" >
+
+	<mx:Metadata>
+		[Event(name="RemoveClickedEvent", type="cAllPurposeEvent")]
+	</mx:Metadata>
+
+	<mx:Script>
+		<![CDATA[
+			import mx.events.EffectEvent;
+			import mx.controls.Alert;
+			import mx.effects.Fade;
+			import mx.effects.Move;
+			import mx.effects.Tween;
+			
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//							  EVENT HANDLERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			/**
+			 * 	Called when the canvas is first created or displayed thereafter.
+			 */
+			private function canvasShowHandler(event:Event):void
+			{
+				mNameLabel.text = mName;
+			}
+			
+			/**
+			 * 	Called when the user clicks on the remove label.
+			 */
+			private function removeLabelClickedHandler(event:Event):void
+			{
+				var e:cAllPurposeEvent = new cAllPurposeEvent("cLabelEntryClickedEvent");
+				e.mName = mName;
+				this.dispatchEvent(e);
+			}
+			
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//							  MEMBER FUNCTION
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			/**
+			 * 	Updates the internal information for this canvas.
+			 */
+			public function updateInformation(name:String):void {
+				mName = name;	
+			}
+			
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//							  DATA MEMBERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			// mNameLabel string
+			private var mName:String = "";
+			
+		]]>
+	</mx:Script>
+	<mx:Label text="Label" fontSize="12" width="220" horizontalCenter="-28" verticalCenter="0" id="mNameLabel"/>
+	<mx:Label text="remove" click="removeLabelClickedHandler(event)" horizontalCenter="114" verticalCenter="0" id="mRemoveLabel" color="#FF0000"/>
+	
+</mx:Canvas>

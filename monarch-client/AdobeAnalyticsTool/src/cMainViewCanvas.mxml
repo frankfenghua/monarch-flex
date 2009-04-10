@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="1013" height="625" >
+	<mx:Label x="26" y="37" text="Top Community Groups"  fontSize="24" textDecoration="underline"   id="mHomeLoggedOutAccountLabel"/>
+	<mx:Label x="494" y="37" text="News"  fontSize="24" textDecoration="underline"   id="mHomeLoggedOutAccountLabel0"/>
+	<mx:VRule x="464" y="37" width="3" height="552"/>
+	<mx:List x="26" y="77" width="421" height="486"   id="mTopCommListBox"></mx:List>
+	<mx:List x="494" y="77" width="488" height="486"   id="mNewsListBox"></mx:List>
+	<mx:Label x="278" y="571" text="See All Community Groups" width="169" textAlign="right" id="mSeeAllCommLabel"/>
+	
+</mx:Canvas>

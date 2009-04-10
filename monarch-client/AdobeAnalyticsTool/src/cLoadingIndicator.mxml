@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="296" height="50" label="mBackPanelCanvas">
+
+	<mx:Metadata>
+		
+	</mx:Metadata>
+
+	<mx:Script>
+		<![CDATA[
+			import mx.events.TweenEvent;
+			import mx.effects.Fade;
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//							 EVENT HANDLERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+		
+			/**
+			 * 	Event handler which signals the end of a fade in effect.
+			 */
+			private function fadeInEnd(event:Event):void
+			{
+				if(!mStop) {
+				
+					var fade:Fade = Fade(mFadeOutCollection[mCounter]);
+					var canvas:Canvas = Canvas(mSymbols[mCounter]);
+					fade.target = canvas;
+					fade.play();
+				}
+			}
+			
+			/**
+			 * 	Event handler which signals the end if a fade out effect. 
+			 */
+			private function fadeOutEnd(event:Event):void
+			{
+				if(!mStop) {
+					mCounter++;
+					if(mCounter == 16) {
+						mCounter = 0;
+					}
+					
+					var fade:Fade = Fade(mFadeInCollection[mCounter]);
+					var canvas:Canvas = Canvas(mSymbols[mCounter]);
+					fade.target = canvas;
+					fade.play();
+				}
+			}
+
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//							 MEMBER FUNCTIONS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			/**
+			 * 	Animates this loading indicator.
+			 */
+			public function play():void
+			{
+				mStop = false;
+				mCounter = 0;
+				
+				mSymbols.push(mSymbol1);
+				mSymbols.push(mSymbol2);
+				mSymbols.push(mSymbol3);
+				mSymbols.push(mSymbol4);
+				mSymbols.push(mSymbol5);
+				mSymbols.push(mSymbol6);
+				mSymbols.push(mSymbol7);
+				mSymbols.push(mSymbol8);
+				mSymbols.push(mSymbol9);
+				mSymbols.push(mSymbol10);
+				mSymbols.push(mSymbol11);
+				mSymbols.push(mSymbol12);
+				mSymbols.push(mSymbol13);
+				mSymbols.push(mSymbol14);
+				mSymbols.push(mSymbol15);
+				mSymbols.push(mSymbol16);
+				
+				var duration:int = 50;
+				
+				for(var i:int = 0; i < 16; i++) {
+					var fadeIn:Fade = new Fade();
+					var fadeOut:Fade = new Fade();
+					
+					fadeIn.alphaFrom = 0.3;
+					fadeIn.alphaTo = 1.0;
+					fadeIn.duration = duration;
+					fadeIn.addEventListener(TweenEvent.TWEEN_END, fadeInEnd);
+					
+					fadeOut.alphaFrom = 1.0;
+					fadeOut.alphaTo = 0.3;
+					fadeOut.duration = duration;
+					fadeOut.addEventListener(TweenEvent.TWEEN_END, fadeOutEnd);
+					
+					mFadeInCollection.push(fadeIn);
+					mFadeOutCollection.push(fadeOut);
+				}
+				
+				var fade:Fade = Fade(mFadeInCollection[0]);
+				var canvas:Canvas = Canvas(mSymbols[0]);
+				fade.target = canvas;
+				fade.play();
+			}
+			
+			/**
+			 * 	Stops animating this loading indicator.
+			 */
+			public function stop():void
+			{
+				mStop = true;
+			}
+			
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//							   DATA MEMBERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			private var mFadeInCollection:Array = new Array();
+			private var mFadeOutCollection:Array = new Array();
+			private var mSymbols:Array = new Array();
+			private var mCounter:int = 0;
+			private var mStop:Boolean = false;
+			
+		]]>
+	</mx:Script>
+
+	<mx:Label x="104.5" y="27" text="Loading ..." fontSize="14" fontWeight="bold" textDecoration="normal" fontStyle="italic"/>
+	<mx:Canvas x="10" y="5.75" width="276" height="20.839998" id="mLoaderBarCanvas">
+		<mx:Canvas x="5" y="2" width="11.75" height="16.5" cornerRadius="2" borderStyle="solid" id="mSymbol1"  >
+		</mx:Canvas>
+		<mx:Canvas x="22" y="2" width="11.75" height="16.5" cornerRadius="2" borderStyle="solid" id="mSymbol2"  >
+		</mx:Canvas>
+		<mx:Canvas x="39" y="2" width="11.75" height="16.5" cornerRadius="2" borderStyle="solid" id="mSymbol3"  >
+		</mx:Canvas>
+		<mx:Canvas x="56" y="2" width="11.75" height="16.5" cornerRadius="2" borderStyle="solid" id="mSymbol4"  >
+		</mx:Canvas>
+		<mx:Canvas x="73" y="2" width="11.75" height="16.5" cornerRadius="2" borderStyle="solid" id="mSymbol5"  >
+		</mx:Canvas>
+		<mx:Canvas x="90" y="2" width="11.75" height="16.5" cornerRadius="2" borderStyle="solid" id="mSymbol6"  >
+		</mx:Canvas>
+		<mx:Canvas x="107" y="2" width="11.75" height="16.5" cornerRadius="2" borderStyle="solid" id="mSymbol7"  >
+		</mx:Canvas>
+		<mx:Canvas x="124" y="2" width="11.75" height="16.5" cornerRadius="2" borderStyle="solid" id="mSymbol8"  >
+		</mx:Canvas>
+		<mx:Canvas x="141" y="2" width="11.75" height="16.5" cornerRadius="2" borderStyle="solid" id="mSymbol9"  >
+		</mx:Canvas>
+		<mx:Canvas x="158" y="2" width="11.75" height="16.5" cornerRadius="2" borderStyle="solid" id="mSymbol10"  >
+		</mx:Canvas>
+		<mx:Canvas x="175" y="2" width="11.75" height="16.5" cornerRadius="2" borderStyle="solid" id="mSymbol11"  >
+		</mx:Canvas>
+		<mx:Canvas x="192" y="2" width="11.75" height="16.5" cornerRadius="2" borderStyle="solid" id="mSymbol12"  >
+		</mx:Canvas>
+		<mx:Canvas x="209" y="2" width="11.75" height="16.5" cornerRadius="2" borderStyle="solid" id="mSymbol13"  >
+		</mx:Canvas>
+		<mx:Canvas x="226" y="2" width="11.75" height="16.5" cornerRadius="2" borderStyle="solid" id="mSymbol14"  >
+		</mx:Canvas>
+		<mx:Canvas x="243" y="2" width="11.75" height="16.5" cornerRadius="2" borderStyle="solid" id="mSymbol15"  >
+		</mx:Canvas>
+		<mx:Canvas x="260" y="2" width="11.75" height="16.5" cornerRadius="2" borderStyle="solid" id="mSymbol16"  >
+		</mx:Canvas>
+	</mx:Canvas>
+</mx:Canvas>

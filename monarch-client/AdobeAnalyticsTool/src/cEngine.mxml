@@ -1,0 +1,497 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Module xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="0" height="0">
+	<mx:Metadata>		
+		[Event(name="LoggedInCreatedEvent", type="cLoggedinEvent")]
+		[Event(name="AccountCreatedEvent", type="cLoggedinEvent")]
+		[Event(name="CommunityCreatedEvent", type="flash.events.Event")]
+		[Event(name="NewCommunityCreatedEvent", type="cNewCommunityEvent")]
+		[Event(name="NewWebsiteCreatedEvent", type="cNewWebsitesEvent")]
+		[Event(name="AnalyticsReadyEvent", type="cAnalysisDataReadyEvent")]
+		[Event(name="AllWebsitesReadyEvent", type="cNewWebsitesEvent")]
+		[Event(name="FailedEvent", type="flash.events.Event")]
+	</mx:Metadata>
+
+    <mx:Script>
+    	<![CDATA[
+    		import mx.collections.ArrayCollection;
+    		import mx.collections.XMLListCollection;
+    		import mx.rpc.events.ResultEvent;
+    		import mx.controls.Alert;
+    		
+    		[Bindable]
+    		private var mFullName:String = "";
+    		[Bindable]
+    		private var mEmail:String = "";
+    		[Bindable]
+    		private var mPassword:String = "";
+    		
+    		[Bindable]
+    		private var mCommunityName:String = "";
+    		[Bindable]
+    		private var mUserId:String = "";
+    		[Bindable]
+    		private var mKeyWord1:String = "";
+    		[Bindable]
+    		private var mKeyWord2:String = "";
+    		[Bindable]
+    		private var mKeyWord3:String = "";
+    		[Bindable]
+    		private var mKeyWord4:String = "";
+    		[Bindable]
+    		private var mKeyWord5:String = "";
+    		[Bindable]
+    		private var mKeyWord6:String = "";
+    		[Bindable]
+    		private var mKeyWord7:String = "";
+    		[Bindable]
+    		private var mKeyWord8:String = ""; 
+    		
+    		[Bindable]
+    		private var mCommunityId:String = "";
+    		[Bindable]
+    		private var mWebsiteName:String = "";
+    		[Bindable]
+    		private var mWebsiteURL:String = "";
+    		[Bindable] 
+    		private var mWebsiteType:String = "";
+    		
+    		[Bindable]
+    		private var mWebsiteIds:String = "";
+    		
+    		//////////////////////////////////////////////////////////////////////////////////////
+			//
+			//							MEMBER FUNCTIONS
+			//
+			//////////////////////////////////////////////////////////////////////////////////////
+    		
+    		/*
+    		 *	Function which sends a request via the mAccountRequestHTTPService HTTPService component
+    		 *  to a php file which resides on the server. The function will set the proper request
+    		 *  variabled before sending the request.
+    		 */
+    		public function createAccount(fullName:String, userName:String, password:String):void
+    		{
+				mFullName = fullName;
+				mEmail = userName;
+				mPassword = password;
+    			
+    			mAccountRequestHTTPService.send();
+    		}
+    		
+    		/**
+    		 * 	Function which will send out a login request to the server.
+    		 */
+    		public function loginToAccount(userName:String, password:String):void
+    		{
+    			mEmail = userName;
+    			mPassword = password;
+    			
+    			mLogInRequestHTTPService.send();
+    		}
+    		
+    		/*
+    		 *
+    		 */
+    		public function createCommunity(communityName:String, keyWords:Array, userId:int):void
+    		{
+    			mCommunityName = communityName;
+    			mUserId = userId.toString();
+    			mKeyWord1 = keyWords[0];
+    			mKeyWord2 = keyWords[1];
+    			mKeyWord3 = keyWords[2];
+    			mKeyWord4 = keyWords[3];
+    			mKeyWord5 = keyWords[4];
+    			mKeyWord6 = keyWords[5];
+    			mKeyWord7 = keyWords[6];
+    			mKeyWord8 = keyWords[7];
+    				
+    			mAddCommunityRequestHTTPService.send();
+    		}
+    		
+    		/*
+    		 *
+    		 */
+    		public function addKeywordsToCommunity(communityId:int, keyWords:Array, userId:int):void
+    		{
+    			mCommunityId = communityId.toString();
+    			mUserId = userId.toString();
+    			mKeyWord1 = keyWords[0];
+    			mKeyWord2 = keyWords[1];
+    			mKeyWord3 = keyWords[2];
+    			mKeyWord4 = keyWords[3];
+    			mKeyWord5 = keyWords[4];
+    			mKeyWord6 = keyWords[5];
+    			mKeyWord7 = keyWords[6];
+    			mKeyWord8 = keyWords[7];
+    				
+    			mAddKeywordsToCommunityRequestHTTPService.send();
+    		}
+    		
+    		/**
+    		 *	Function which calls the server side PHP script which inserts a website
+    		 *  into the database.
+    		 */
+    		public function insertWebsite(communityId:int, 
+    		                              userId:int, 
+    		                              websiteName:String,
+    		                              websiteURL:String,
+    		                              websiteType:String):void
+    		{
+    			mUserId = userId.toString();
+    			mCommunityId = communityId.toString();
+    			mWebsiteName = websiteName;
+    			mWebsiteURL = websiteURL;
+    			mWebsiteType = websiteType;
+    			
+    			mAddWebsiteRequestHTTPService.send();
+    		}
+    		
+    		/**
+    		 * 	Function which calls the server side PHP script which inserts a existing
+    		 * 	websites into the specified community group.
+    		 */
+    		public function addWebsites(communityId:int,
+    									websiteIds:String):void
+    		{
+    			mCommunityId = communityId.toString();
+    			mWebsiteIds = websiteIds;
+    			
+    			mAddExistingWebsitesRequestHTTPService.send();
+    		}
+    		
+    		/**
+    		 * 	Request statistics to be fetched from the database for a particular website and community.
+    		 */
+    		public function getAnalytics(communityId:int, 
+    		 							  websiteName:String):void
+    		{
+    			mCommunityId = communityId.toString();
+    			mWebsiteName = websiteName;
+    			
+    			mAnalyticsRequestHTTPService.send();
+    		}
+    		
+    		/**
+    		 * 	Reuqests a to fetch all websites from the server.
+    		 */
+    		public function getAllWebsites():void
+    		{
+    			mAllWebsitesRequestHTTPService.send();
+    		} 
+    		
+    		//////////////////////////////////////////////////////////////////////////////////////
+			//
+			//							GUI EVENT HANDLERS
+			//
+			//////////////////////////////////////////////////////////////////////////////////////
+    		
+    		/*
+    		 *
+    		 */
+    		private function logInHTTPServiceResultHandler(event:ResultEvent):void
+    		{    			    			    			
+    			var xmlTree:XML = XML(event.result);
+    			var  userAccountInformationList:XMLListCollection = new XMLListCollection(xmlTree.elements("UserAccountInformation"));
+				if(userAccountInformationList.children().length() > 0) {    				
+    				//Alert.show("You have successfully logged in.", "Login Successful");
+    				var e:cLoggedinEvent = new cLoggedinEvent("LoggedInCreatedEvent");
+    				e.mFullName = userAccountInformationList.elements("fullName").toString();
+    				e.mEmail = userAccountInformationList.elements("email").toString();
+    				e.mPassword = userAccountInformationList.elements("password").toString();
+    				e.mUserId = int(userAccountInformationList.elements("userId"));
+    							
+    				var communities:ArrayCollection = new ArrayCollection();			
+    							
+    				var  userAccountCommunityGroupList:XMLListCollection = new XMLListCollection(xmlTree.elements("CommunityGroups"));			
+    				var numberOfCommunityGroups:int = int(userAccountCommunityGroupList.elements("NumberOfCommunityGroups"));
+    				
+    				for(var i:int = 0; i < numberOfCommunityGroups; i++)
+    				{
+    					var communityGroupList:XMLListCollection = new XMLListCollection(userAccountCommunityGroupList.elements("CommunityGroup" + i));
+    					var communtyGroupId:int = int(communityGroupList.elements("communityGroupId"));
+    					var communtyGroupName:String = communityGroupList.elements("communityGroupName");
+    					var communityGroupCreatedTime:int = int(communityGroupList.elements("communityGroupCreatedTime"));
+    					
+    					var communityGroupWebsitesList:XMLListCollection = new 
+    					                 XMLListCollection(communityGroupList.elements("CommunityGroup" + i + "Websites"));	
+    					var numberOfCommunityGroupWebsites:int = int(communityGroupWebsitesList.elements("NumberOfWebsites"));
+    					
+    					var websites:ArrayCollection = new ArrayCollection();
+    					
+    					for(var j:int = 0; j < numberOfCommunityGroupWebsites; j++)
+    					{		
+    						var websiteList:XMLListCollection = new XMLListCollection(communityGroupWebsitesList.elements("Website" + j));
+    						var websiteId:int = int(websiteList.elements("websiteId"));
+    						var websiteName:String = websiteList.elements("websiteName");
+    						var websiteType:String = websiteList.elements("websiteType");
+    						var websiteCreatedTime:int = int(websiteList.elements("websiteCreatedTime"));
+    						
+    						var website:cWebsiteEntry = new cWebsiteEntry(websiteId, 
+    																	  websiteName,
+    																	  "",
+    																	  websiteType,
+    																	  websiteCreatedTime);
+    						websites.addItem(website);
+    					}
+    					
+    					var communityGroupKeywordList:XMLListCollection = new 
+    					                 XMLListCollection(communityGroupList.elements("CommunityGroup" + i + "Keywords"));	
+    					var numberOfCommunityGroupKeywords:int = int(communityGroupKeywordList.elements("NumberOfKeywords"));
+    					
+    					var keywords:ArrayCollection = new ArrayCollection();
+    			    					
+    					for(var k:int = 0; k < numberOfCommunityGroupKeywords; k++)
+    					{		
+    						var keywordList:XMLListCollection = new XMLListCollection(communityGroupKeywordList.elements("Keyword" + k));
+    						var keywordId:int = int(keywordList.elements("keywordId"));
+    						var keywordName:String = keywordList.elements("keywordName");
+    						
+    						var keyword:cKeywordEntry = new cKeywordEntry(keywordId, keywordName, 0);
+    						keywords.addItem(keyword);	
+    					}
+    					
+    					var community:cCommunityGroupEntry = new cCommunityGroupEntry(communtyGroupId,
+    																				  communtyGroupName,
+    																				  communityGroupCreatedTime,
+    																				  websites,
+    																				  keywords);
+					  	communities.addItem(community);														  
+    				}
+    				
+    				e.mCommunities = communities;	
+			 		dispatchEvent(e);
+    			}
+    			else {
+    				var failed:Event = new Event("FailedEvent");
+    				this.dispatchEvent(failed);
+    				Alert.show("The username or password is incorrect.\nLoggin Failed.", 
+    				           "Loggin Failed");
+    			}
+    		}
+    		
+    		/*
+    		 *
+    		 */
+    		private function createAccountHTTPServiceResultHandler(event:ResultEvent):void
+    		{
+    			var xmlTree:XML = XML(event.result);
+    			var  userAccountInformationList:XMLListCollection = new XMLListCollection(xmlTree.elements("UserAccountInformation"));
+				if(userAccountInformationList.children().length() > 0) {    				
+    				var e:cLoggedinEvent = new cLoggedinEvent("AccountCreatedEvent");
+    				e.mFullName = userAccountInformationList.elements("fullName").toString();
+    				e.mEmail = userAccountInformationList.elements("email").toString();
+    				e.mPassword = userAccountInformationList.elements("password").toString();
+    				e.mUserId = int(userAccountInformationList.elements("userId"));
+    				
+    				var communities:ArrayCollection = new ArrayCollection();		
+    				e.mCommunities = communities;	
+			 		dispatchEvent(e);
+			 		
+			 		Alert.show("Your account was successfully created.\nYou are now logged in.", "Account Created");
+    			}
+    			else {
+    				var failed:Event = new Event("FailedEvent");
+    				this.dispatchEvent(failed);
+    				Alert.show("There was an error in trying to create an account.\nPlease try again.", 
+    				           "Account Creation Failed Message");
+    			}
+    			return;
+    		}
+    		
+    		/*
+    		 *
+    		 */
+    		private function addCommintyHTTPServiceResultHandler(event:ResultEvent):void
+    		{	    			
+    			var xmlTree:XML = XML(event.result);
+    			var  newCommunityInformationList:XMLListCollection = new XMLListCollection(xmlTree.elements("CommunityInformation"));
+				if(newCommunityInformationList.children().length() > 0) {    		
+									
+    				var communityName:String = newCommunityInformationList.elements("communityGroupName");
+    				var communityId:int = int(newCommunityInformationList.elements("communityGroupId"));
+    				var communityCreatedTime:int = int(newCommunityInformationList.elements("communityGroupCreatedTime"));
+    				
+    				var  keywordsList:XMLListCollection = new XMLListCollection(xmlTree.elements("CommunityGroupKeywords"));
+
+					var keywords:ArrayCollection = new ArrayCollection();
+					var websites:ArrayCollection = new ArrayCollection();
+    				for(var i:int = 0; i < keywordsList.children().length(); i++)
+					{		
+						var keywordList:XMLListCollection = new XMLListCollection(keywordsList.elements("Keyword" + i));
+						var keywordId:int = int(keywordList.elements("keywordId"));
+						var keywordName:String = keywordList.elements("keywordName");
+						
+						var keyword:cKeywordEntry = new cKeywordEntry(keywordId, keywordName, 0);
+						keywords.addItem(keyword);	
+					}
+					
+					var community:cCommunityGroupEntry = new cCommunityGroupEntry(communityId, 
+																				  communityName, 
+																				  communityCreatedTime, 
+																				  websites, 
+																				  keywords);
+					community.mJustCreated = true;
+    				var e:cNewCommunityEvent = new cNewCommunityEvent("NewCommunityCreatedEvent");
+    				e.mCommunityGroupEntry = community;
+			 		dispatchEvent(e);
+			 		
+    				Alert.show("The community was successfully created.", "Community Created Message");
+    			}
+    			else {
+    				var failed:Event = new Event("FailedEvent");
+    				this.dispatchEvent(failed);
+    				Alert.show("The community name you chose is already in use.\Please choose a different community name.", 
+    				           "Community Creation Failed Message");
+    			}
+    			return;
+    		}
+    		
+    		/*
+    		 *
+    		 */
+    		private function addKeywordsToCommunityHTTPServiceResultHandler(event:ResultEvent):void
+    		{
+    			
+    		}
+    		
+    		/*
+    		 *
+    		 */
+    		private function addWebsiteHTTPServiceResultHandler(event:ResultEvent):void
+    		{        		    					    	    							    			    			    			
+    			/*var xmlTree:XML = XML(event.result);
+    			var  newWebsiteInformationList:XMLListCollection = new XMLListCollection(xmlTree.elements("WebsiteInformation"));
+				if(newWebsiteInformationList.children().length() > 0) { 
+					var e:cNewWebsitesEvent = new cNewWebsitesEvent("NewWebsiteCreatedEvent");
+					var id:int = int(newWebsiteInformationList.elements("websiteId"));
+    				var name:String = newWebsiteInformationList.elements("websiteName");
+					var URL:String = newWebsiteInformationList.elements("websiteURL");
+					var type:String = newWebsiteInformationList.elements("websiteType");
+					var time:int = int(newWebsiteInformationList.elements("websiteCreatedTime"));
+			 		e.mWebsiteEntry = new cWebsiteEntry(id, name, URL, type, time);
+			 		dispatchEvent(e);
+			 		
+			 		Alert.show("The website was successfully created.", "Website Created Message");
+    			}
+    			else {
+    				var failed:Event = new Event("FailedEvent");
+    				this.dispatchEvent(failed);
+    				Alert.show("The website name you chose is already in use. Please choose a different website name.", 
+    				           "Website Creation Failed Message");
+    			}
+    			return;*/
+    		}
+    		
+    		/**
+    		 * 	Detects that the HTTP service component has returned analytics data from the server. 
+    		 */
+    		private function analyticsHTTPServiceResultHandler(event:ResultEvent):void
+    		{    			
+    			var xmlTree:XML = XML(event.result);
+				var analysisParser:cAnalyticsParser = new cAnalyticsParser(xmlTree);
+				var e:cAnalysisDataReadyEvent = new cAnalysisDataReadyEvent("AnalyticsReadyEvent");
+				e.mAnalysisParser = analysisParser;				
+				dispatchEvent(e);
+    		}
+    		
+    		/**
+    		 * 	Detetcs that the HTTP service component has returned a collection of all of the websites.
+    		 */
+    		private function allWebsitesHTTPServiceResultHandler(event:ResultEvent):void
+    		{   			
+    			var e:cNewWebsitesEvent = new cNewWebsitesEvent("AllWebsitesReadyEvent");
+    			
+    			var xmlTree:XML = XML(event.result);
+    			var  websites:XMLListCollection = new XMLListCollection(xmlTree.elements("AllWebsites"));
+				var numberOfWebsites:int = int(websites.elements("numberOfWebsites"));				
+				for(var i:int = 0; i < numberOfWebsites; i++) {
+					var  website:XMLListCollection = new XMLListCollection(websites.elements("Website" + i));
+
+					var id:int = int(website.elements("id"));
+					var name:String = website.elements("name");
+					var type:String = website.elements("type");
+					
+					var websiteEntry:cWebsiteEntry = new cWebsiteEntry(id, name, "", type, 0);
+					e.mWebsites.addItem(websiteEntry);
+				}
+				
+				this.dispatchEvent(e);
+    		}
+    		
+    		/**
+    		 *	Detects that the HTTP service component has returned the status of whether or not the 
+    		 *  existing websites where added to a community group. 
+    		 */
+    		private function addExistingWebsitesHTTPServiceResultHandler(event:ResultEvent):void
+    		{
+    			Alert.show(event.result.toString());
+    		}
+    		
+    	]]>
+    </mx:Script>	
+		
+	<mx:HTTPService id="mAccountRequestHTTPService" result="createAccountHTTPServiceResultHandler(event)" url="http://csil-srprj-2.cs.uiuc.edu/Client/register.php" resultFormat="e4x" method="GET" useProxy="false">
+		<mx:request xmlns="">
+			<fullName>{mFullName}</fullName>
+			<email>{mEmail}</email>
+			<password>{mPassword}</password>
+		</mx:request>
+	</mx:HTTPService>	
+	<mx:HTTPService id="mLogInRequestHTTPService" result="logInHTTPServiceResultHandler(event)" url="http://csil-srprj-2.cs.uiuc.edu/Client/login.php" resultFormat="e4x" method="GET" useProxy="false">
+		<mx:request xmlns="">
+			<email>{mEmail}</email>
+			<password>{mPassword}</password>
+		</mx:request>
+	</mx:HTTPService>
+	<mx:HTTPService id="mAddCommunityRequestHTTPService" result="addCommintyHTTPServiceResultHandler(event)" url="http://csil-srprj-2.cs.uiuc.edu/Client/insertCommunity.php" resultFormat="e4x" method="GET" useProxy="false">
+		<mx:request xmlns="">
+			<communityName>{mCommunityName}</communityName>
+			<userId>{mUserId}</userId>
+			<keyWord1>{mKeyWord1}</keyWord1>
+			<keyWord2>{mKeyWord2}</keyWord2>
+			<keyWord3>{mKeyWord3}</keyWord3>
+			<keyWord4>{mKeyWord4}</keyWord4>
+			<keyWord5>{mKeyWord5}</keyWord5>
+			<keyWord6>{mKeyWord6}</keyWord6>
+			<keyWord7>{mKeyWord7}</keyWord7>
+			<keyWord8>{mKeyWord8}</keyWord8>
+		</mx:request>
+	</mx:HTTPService>	
+	<mx:HTTPService id="mAddKeywordsToCommunityRequestHTTPService" result="addKeywordsToCommunityHTTPServiceResultHandler(event)" url="http://csil-srprj-2.cs.uiuc.edu/Client/insertKeywordsIntoComm.php" resultFormat="e4x" method="GET" useProxy="false">
+		<mx:request xmlns="">
+			<communityId>{mCommunityId}</communityId>
+			<userId>{mUserId}</userId>
+			<keyWord1>{mKeyWord1}</keyWord1>
+			<keyWord2>{mKeyWord2}</keyWord2>
+			<keyWord3>{mKeyWord3}</keyWord3>
+			<keyWord4>{mKeyWord4}</keyWord4>
+			<keyWord5>{mKeyWord5}</keyWord5>
+			<keyWord6>{mKeyWord6}</keyWord6>
+			<keyWord7>{mKeyWord7}</keyWord7>
+			<keyWord8>{mKeyWord8}</keyWord8>
+		</mx:request>
+	</mx:HTTPService>	
+	<mx:HTTPService id="mAddWebsiteRequestHTTPService" result="addWebsiteHTTPServiceResultHandler(event)" url="http://csil-srprj-2.cs.uiuc.edu/Client/insertWebsite.php" resultFormat="e4x" method="GET" useProxy="false">
+		<mx:request xmlns="">
+			<community>{mCommunityId}</community>
+			<userId>{mUserId}</userId>
+			<websiteName>{mWebsiteName}</websiteName>
+			<websiteURL>{mWebsiteURL}</websiteURL>
+			<type>{mWebsiteType}</type>
+		</mx:request>
+	</mx:HTTPService>
+	<mx:HTTPService id="mAnalyticsRequestHTTPService" result="analyticsHTTPServiceResultHandler(event)" url="http://csil-srprj-2.cs.uiuc.edu/Client/getAnalytics.php" resultFormat="e4x" method="GET" useProxy="false">
+		<mx:request xmlns="">
+			<community>{mCommunityId}</community>
+			<websiteName>{mWebsiteName}</websiteName>
+		</mx:request>
+	</mx:HTTPService>
+	<mx:HTTPService id="mAddExistingWebsitesRequestHTTPService" result="addExistingWebsitesHTTPServiceResultHandler(event)" url="http://csil-srprj-2.cs.uiuc.edu/Client/insertExistingWebsites.php" resultFormat="e4x" method="GET" useProxy="false">
+		<mx:request xmlns="">
+			<communityId>{mCommunityId}</communityId>
+			<websiteIds>{mWebsiteIds}</websiteIds>
+		</mx:request>
+	</mx:HTTPService>
+	<mx:HTTPService id="mAllWebsitesRequestHTTPService" result="allWebsitesHTTPServiceResultHandler(event)" url="http://csil-srprj-2.cs.uiuc.edu/Client/getAllWebsites.php" resultFormat="e4x" method="GET" useProxy="false">
+	</mx:HTTPService>		
+</mx:Module>

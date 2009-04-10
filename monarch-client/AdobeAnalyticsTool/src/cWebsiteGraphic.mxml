@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="showCanvasHandler(event)" show="showCanvasHandler(event)" width="418" height="20" >
+	<mx:Label text="Label" color="#FFFFFF" x="4" y="1" width="363.8" id="mNameLabel"/>
+	<mx:CheckBox x="381.8" y="1" id="mRadioButton"/>
+
+	
+	<mx:Script>
+		<![CDATA[
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//							CANVAS EVENT HANDLERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			/**
+			 * 	Called when the canvas is created or displayed.
+			 */
+			private function showCanvasHandler(event:Event):void
+			{
+				mNameLabel.text = mName;
+			}
+		
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//							MEMBER FUNCTIONS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			/**
+			 * 	Updates the internal data members of this canvas.
+			 */
+			public function updateInformation(name:String, id:int):void
+			{
+				mName = name;
+				mId = id;
+			}
+			
+			/**
+			 * 	Returns true if the radio button is selected and false otherwise.
+			 */
+			public function isSelected():Boolean
+			{
+				return mRadioButton.selected;
+			}
+			
+			/**
+			 * 	Returns the website id.
+			 */
+			public function getWebsiteId():int
+			{
+				return mId;
+			}
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//							DATA MEMBERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			// website name
+			private var mName:String = "";
+			// website id
+			private var mId:int = -1;
+			
+		]]>
+	</mx:Script>
+	
+	
+	
+</mx:Canvas>

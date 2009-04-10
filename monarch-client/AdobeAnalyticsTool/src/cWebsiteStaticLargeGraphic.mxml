@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" rollOver="canvasRollOverHandler(event)" rollOut="canvasRollOutHandler(event)" creationComplete="creationCompleteHandler(event)" width="410" height="100" >
+
+	<mx:Metadata>
+		[Event(name="WebsiteStaticLargeGraphicClickedEvent", type="cWebsiteStaticLargeGraphicClickedEvent")]
+	</mx:Metadata>
+
+	<mx:Script>
+		<![CDATA[
+			import mx.effects.Resize;
+			import mx.events.EffectEvent;
+			import mx.controls.Alert;
+			import mx.effects.Fade;
+			import mx.effects.Move;
+			import mx.effects.Tween;
+			
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//							  EVENT HANDLERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			/**
+			 * 	Called when the user hovers the mouse over the overlay canvas.
+			 */
+			/*
+			private function overlayCanvasRollOverHandler(event:Event):void
+			{
+				mMainPanelCanvas.setStyle("backgroundColor", "0xdadc19");
+			}
+			*/
+			
+			/**
+			 * 	Called when the user hovers the mouse away from the overlay canvas.
+			 */
+			/*
+			private function overlayCanvasRollOutHandler(event:Event):void
+			{
+				mMainPanelCanvas.setStyle("backgroundColor", "0x124599");	
+			}
+			*/
+			
+			/**
+			 * 	Called when the user clicks on the add icon canvas.
+			 */
+			private function addIconClickHandler(event:Event):void
+			{
+				var e:cWebsiteStaticLargeGraphicClickedEvent = new cWebsiteStaticLargeGraphicClickedEvent("cWebsiteStaticLargeGraphicClickedEvent");
+				
+				this.dispatchEvent(e);
+			}
+			
+			/**
+			 * 	Called when the user hovers the mouse over the add icon canvas.
+			 */
+			/*
+			private function addIconRollOverHandler(event:Event):void
+			{
+				mAddIconCanvas.setStyle("backgroundColor", "0xFF0000");	
+				
+			}
+			*/
+			
+			/**
+			 * 	Called when the user hovers the mouse away from the add icon canvas.
+			 */
+			/*
+			private function addIconRollOutHandler(event:Event):void
+			{
+				mAddIconCanvas.setStyle("backgroundColor", "0x00FF00");	
+			}
+			*/
+			
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//							  MEMBER FUNCTIONS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			/**
+			 * 	Used to set the data members of this component for later use.
+			 */
+			public function updateInformation(websiteName:String,
+											  websiteURL:String,
+											  websiteType:String,
+											  websiteCreatedTime:String):void
+			{
+				mWebsiteName = websiteName;
+				mURL = websiteURL;
+				mType = websiteType;
+				mCreatedTime = websiteCreatedTime;
+			}
+			
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//							  CANVAS EVENT HANDLERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			/**
+			 *  Functions called when the component is created. It initializes the child
+			 *  components.
+			 */
+			private function creationCompleteHandler(event:Event):void
+			{
+				if(mWebsiteName.length == 0) {
+					mWebsiteNameLabel.text = "[Not Available]";
+				}
+				else {
+					mWebsiteNameLabel.text = mWebsiteName;
+				}
+				if(mURL.length == 0) {
+					mWebsiteURLLabel.text = "URL : [Not Available]";
+				}
+				else {
+					mWebsiteURLLabel.text = "URL : " + mURL;
+				}
+				if(mType.length == 0) {
+					mWebsiteType.text = "Type : [Not Available]"; 	
+				}
+				else {
+					mWebsiteType.text = "Type : " + mType;
+				}
+				if(mCreatedTime.length == 0) {
+					mWebsiteCreatedTime.text = "Created On : [Not Available]"; 	
+				}
+				else {
+					var currDate:Date = new Date(int(mCreatedTime)*1000); 
+					var theDate:String = ((currDate.getMonth()+ 1) + "/" + currDate.getDate() + "/" + currDate.getFullYear());
+					mWebsiteCreatedTime.text = "Created On : " + theDate;
+				}
+			}
+			
+			/**
+			 * 	Called when the user hovers the mouse over the this canvas.
+			 */
+			/*
+			private function canvasRollOverHandler(event:Event):void
+			{
+				var fade:Fade = new Fade();
+				fade.alphaFrom = 0.8;
+				fade.alphaTo = 1.0;
+				fade.duration = 500;
+				fade.target = this;
+				fade.play();
+			}
+			*/
+			
+			/**
+			 * 	Called when the user hovers the mouse away from the this canvas.
+			 */
+			/*
+			private function canvasRollOutHandler(event:Event):void
+			{
+				var fade:Fade = new Fade();
+				fade.alphaFrom = 1.0;
+				fade.alphaTo = 0.8;
+				fade.duration = 500;
+				fade.target = this;
+				fade.play();
+			}
+			*/
+			
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//							  DATA MEMBERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			// website name
+			private var mWebsiteName:String = "";
+			// website URL
+			private var mURL:String = "";
+			// website type
+			private var mType:String = "";
+			// website created time
+			private var mCreatedTime:String = "";
+			
+		]]>
+	</mx:Script>
+	
+	<mx:Canvas x="10" y="10" width="390" height="80" id="mMainPanelCanvas">
+		<mx:Canvas x="12" y="8" width="64" height="64" backgroundImage="@Embed(source='../images/websiteSample.jpg')">
+		</mx:Canvas>
+		<mx:Label x="84" y="13" text="Some Website Name" fontSize="16" id="mWebsiteNameLabel" width="296"/>
+		<mx:Label x="84" y="35" text="Created On : Not Available" id="mWebsiteCreatedTime" width="262.5"   height="17"/>
+		<mx:Label x="84" y="45" text="Type : Not Available" id="mWebsiteType" width="258"   height="17"/>
+		<mx:Label x="84" y="57" text="URL : www.xyz.com" id="mWebsiteURLLabel" width="253.5" height="18"  />
+		<mx:Canvas x="0" y="0" width="390" height="80" id="mOverlayCanvas">
+			<mx:Canvas x="350" y="40" width="30" height="30" click="addIconClickHandler(event)" backgroundImage="@Embed(source='../images/addIcon.png')" visible="true" id="mAddIconCanvas" toolTip="Add this website to this community">
+			</mx:Canvas>
+		</mx:Canvas>
+	</mx:Canvas>
+	
+</mx:Canvas>

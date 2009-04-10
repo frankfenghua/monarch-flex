@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="342" height="66" borderStyle="solid" cornerRadius="20" backgroundColor="#F1E63C" backgroundAlpha="0.7">
+	<mx:Label text="To view statistics click a website to the right." color="#0F79CB" fontSize="12" width="315" horizontalCenter="0" fontWeight="bold" textAlign="center" verticalCenter="1"/>
+	<mx:Label text="X" color="#FA0000" fontWeight="bold" width="16" horizontalCenter="147" top="0"/>
+	
+</mx:Canvas>

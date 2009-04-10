@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Accordion xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="showAccordionHandler(event)" show="showAccordionHandler(event)" width="169" height="493">
+	
+	<mx:Metadata>
+		[Event(name="StatOptionSelectedEvent", type="cStatOptionSelectedEvent")]
+		[Event(name="AccordionWebsiteGraphicEvent", type="cAccordionWebsiteGraphicEvent")]
+		[Event(name="WebsiteSelectedEvent", type="cAccordionWebsiteGraphicEvent")]
+		[Event(name="AccordionKeywordGraphicEvent", type="cAccordionKeywordGraphicEvent")]
+	</mx:Metadata>
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+						
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//							   MEMBER FUNCTIONS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			/**
+			 * 	Disables all canvases except mWebsitesCanvas.
+			 */
+			public function disableAll():void
+			{
+				mKeywordsSpokenCanvas.enabled = false;
+				mLinksSpokenCanvas.enabled = false;
+			}
+			
+			/**
+			 * 	Updates the internal information of this object.
+			 */
+			public function updateInformation(websites:ArrayCollection,
+											  keywords:ArrayCollection):void
+			{
+				mWebsites = websites;
+				mKeywords = keywords;
+				
+				if(mWebsites != null) {
+					if(mWebsites.length == 0) {
+						mNoWebsitesAvailableLabel.visible = true;
+					}
+					else {
+						mNoWebsitesAvailableLabel.visible = false;
+					}
+				}
+				
+				var websiteEntry:cWebsiteEntry = null;
+				this.selectedIndex = 0;
+				mWebsitesCanvas.removeAllChildren();
+				mKeywordsSpokenCanvas.removeAllChildren();
+				mLinksSpokenCanvas.removeAllChildren();
+				var inc:int = 0;
+				for(var i:int = 0; i < mWebsites.length; i++) {
+					websiteEntry = cWebsiteEntry(mWebsites.getItemAt(i));
+					var websiteGraphic:cAccordionWebsiteGraphicCanvas = new cAccordionWebsiteGraphicCanvas();
+					websiteGraphic.addEventListener("cAccordionWebsiteGraphicEvent", accordionWebsiteGraphicEventHandler);
+					websiteGraphic.updateInformation(websiteEntry.mName);
+					websiteGraphic.y = inc;
+					inc += 28;
+					mWebsitesCanvas.addChild(websiteGraphic);	
+				}
+				
+				var keywordEntry:cKeywordEntry = null;
+				inc = 0;
+				for(i = 0; i < mKeywords.length; i++) {
+					keywordEntry = cKeywordEntry(mKeywords.getItemAt(i));
+					var keywordGraphic:cAccordionKeywordGraphicCanvas = new cAccordionKeywordGraphicCanvas();
+					keywordGraphic.addEventListener("cAccordionKeywordGraphicEvent", accordionKeywordGraphicEventHandler);
+					keywordGraphic.updateInformation(keywordEntry.mName);
+					keywordGraphic.y = inc;
+					inc += 28;
+					mKeywordsSpokenCanvas.addChild(keywordGraphic);	
+				}
+			}
+			
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//						  EVENT HANDLERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			/**
+			 * 
+			 */
+			private function keywordSpokenCanvasShowHandler(event:Event):void
+			{
+				if(mKeywords != null) {
+					if(mKeywords.length == 0) {
+						mNoKeywordsAvailableLabel.visible = true;
+					}
+					else {
+						mNoKeywordsAvailableLabel.visible = false;
+					}
+				}
+			}
+			
+			/**
+			 * 
+			 */
+			private function linksSpokenCanvasShowHandler(event:Event):void
+			{
+				if(mLinks != null) {
+					if(mLinks.length == 0) {
+						mNoLinksAvailableLabel.visible = true;
+					}
+					else {
+						mNoLinksAvailableLabel.visible = false;
+					}
+				}
+			}
+			
+			/**
+			 * 
+			 */
+			private function websiteCanvasShowHandler(event:Event):void
+			{
+				if(mWebsites != null) {
+					if(mWebsites.length == 0) {
+						mNoWebsitesAvailableLabel.visible = true;
+					}
+					else {
+						mNoWebsitesAvailableLabel.visible = false;
+					}
+				}
+			}
+			
+			/**
+			 * 	Fires an event signaling that the user has clicked an attribute of the accordion website graphic. 
+			 */
+			private function accordionWebsiteGraphicEventHandler(event:cAccordionWebsiteGraphicEvent):void
+			{
+				var e:cAccordionWebsiteGraphicEvent = new cAccordionWebsiteGraphicEvent("AccordionWebsiteGraphicEvent");
+				e.mWebsiteName = event.mWebsiteName;
+				e.mType = event.mType;
+				this.dispatchEvent(e);
+				
+				mKeywordsSpokenCanvas.enabled = true;
+				mLinksSpokenCanvas.enabled = true;
+			}
+			
+			/**
+			 * 	Fires an event signaling that the user has clicked an attribute of the accordion keyword graphic.
+			 */
+			private function accordionKeywordGraphicEventHandler(event:cAccordionKeywordGraphicEvent):void
+			{
+				var e:cAccordionKeywordGraphicEvent = new cAccordionKeywordGraphicEvent("AccordionKeywordGraphicEvent");
+				e.mKeywordName = event.mKeywordName;
+				e.mType = event.mType;
+				this.dispatchEvent(e);
+			}
+			
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//						   ACCORDION EVENT HANDLERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			/**
+			 * 
+			 */
+			private function showAccordionHandler(event:Event):void
+			{
+				mKeywordsSpokenCanvas.enabled = false;
+				mLinksSpokenCanvas.enabled = false;
+			}
+			
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//							   DATA MEMBERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			// community website
+			private var mWebsites:ArrayCollection = null;
+			// community keywords
+			private var mKeywords:ArrayCollection = null;
+			// community links
+			private var mLinks:ArrayCollection = null;
+			
+		]]>
+	</mx:Script>
+	
+	<mx:Canvas label="Websites in Community" creationComplete="websiteCanvasShowHandler(event)" show="websiteCanvasShowHandler(event)" width="100%" height="100%" id="mWebsitesCanvas" toolTip="Websites that the creator has grouped under this community" horizontalScrollPolicy="off">
+		<mx:Label text="No Websites Available" horizontalCenter="0" verticalCenter="-218" id="mNoWebsitesAvailableLabel" toolTip="Perhaps no websites are registered"/>
+		</mx:Canvas>
+	<mx:Canvas label="Keywords Spoken" width="100%" height="100%" creationComplete="keywordSpokenCanvasShowHandler(event)" show="keywordSpokenCanvasShowHandler(event)" id="mKeywordsSpokenCanvas" toolTip="Keywords spoken by people in the websites under this community" horizontalScrollPolicy="off">
+		<mx:Label text="No Keywords Available" horizontalCenter="0" verticalCenter="-218" id="mNoKeywordsAvailableLabel" toolTip="Perhaps no keywords where registered"/>
+		</mx:Canvas>
+	<mx:Canvas label="Links Spoken" width="100%" height="100%" creationComplete="linksSpokenCanvasShowHandler(event)" show="linksSpokenCanvasShowHandler(event)" id="mLinksSpokenCanvas" toolTip="URL's spoken by people in the websites under this community.  These could have been links to images or external websites." horizontalScrollPolicy="off">
+		<mx:Label text="No Links Available" horizontalCenter="0" verticalCenter="-218" id="mNoLinksAvailableLabel" toolTip="Perhaps no links where found"/>
+	</mx:Canvas>
+	
+</mx:Accordion>

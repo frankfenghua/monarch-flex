@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="creationCompleteHandler(event)" width="1012" height="577" xmlns:ns1="*" >
+
+	<mx:Metadata>
+		[Event(name="BackLabelClickedEvent", type="flash.events.Event")]
+	</mx:Metadata>
+
+	<mx:Script>
+		<![CDATA[
+			import mx.messaging.channels.StreamingAMFChannel;
+			import mx.controls.Alert;
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//						   EVENT HANDLERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+
+			/**
+			 * 	Called when the user clicks on the edit label.
+			 */
+			private function backLabelClickHandler(event:Event):void
+			{
+				var e:Event = new Event("BackLabelClickedEvent");
+				this.dispatchEvent(e);
+			}
+			
+			/**
+			 * 	Called when the user hovers the mouse over the back label.
+			 */
+			private function backLabelRollOverHandler(event:Event):void
+			{
+				mBackLabel.setStyle("color", "0xFF6666");
+			}
+			
+			/**
+			 * 	Called when the user hovers the mouse away from the back label.
+			 */
+			private function backLabelRollOutHandler(event:Event):void
+			{
+				mBackLabel.setStyle("color", "0x11d30c");
+			}
+			
+			/**
+			 *  
+			 */
+			 private function lineChartCanvasCreateHandler(event:Event):void
+			 {
+			 	mLineChartCanvas.updateInformation(mAnalyticsParser, null);
+			 }
+			 
+			 /**
+			 * 
+			 */
+			private function _1YearTimeSpanRadioButtonChangeHandler(event:Event):void
+			{
+				
+			}
+			
+			/**
+			 * 
+			 */
+			private function _9MonthsTimeSpanRadioButtonChangeHandler(event:Event):void
+			{
+				
+			}
+			
+			/**
+			 * 
+			 */
+			private function _6MonthsTimeSpanRadioButtonChangeHandler(event:Event):void
+			{
+				
+			}
+			
+			/**
+			 * 
+			 */
+			private function _1MonthTimeSpanRadioButtonChangeHandler(event:Event):void
+			{
+				
+			}
+			
+			/**
+			 * 
+			 */
+			private function _2WeeksTimeSpanRadioButtonChangeHandler(event:Event):void
+			{
+				mStatOptionSelected.mTimeSpan = mStatOptionSelected.TIME_SPAN_2_WEEKS;
+				mLineChartCanvas.updateInformation(mAnalyticsParser, mStatOptionSelected);
+			}
+			
+			/**
+			 * 
+			 */
+			private function _1WeekTimeSpanRadioButtonChangeHandler(event:Event):void
+			{
+				mStatOptionSelected.mTimeSpan = mStatOptionSelected.TIME_SPAN_1_WEEK;
+				mLineChartCanvas.updateInformation(mAnalyticsParser, mStatOptionSelected);
+			}
+			 
+			 /**
+			 * 	Event handler which listens to the cStatOptionsAccordion object events.
+			 */
+			private function statOptionSelectedHandler(event:cStatOptionSelectedEvent):void
+			{
+				// check which time frame to use
+				var timeSpan:int = event.TIME_SPAN_1_YEAR;
+				if(m1WeekSpanRadioButton.selected) {
+					timeSpan = event.TIME_SPAN_1_WEEK;
+				}
+				else if(m2WeeksTimeSpanRadioButton.selected) {
+					timeSpan = event.TIME_SPAN_2_WEEKS;
+				}
+				else if(m1MonthTimeSpanRadioButton.selected) {
+					timeSpan = event.TIME_SPAN_1_MONTH;
+				}
+				else if(m6MonthsTimeSpanRadioButton.selected) {
+					timeSpan = event.TIME_SPAN_6_MONTHS;
+				}
+				else if(m9MonthsTimeSpanRadioButton.selected) {
+					timeSpan = event.TIME_SPAN_9_MONTHS;
+				}
+				event.mTimeSpan = timeSpan;
+				// update the line Chart Canvas
+				mLineChartCanvas.updateInformation(mAnalyticsParser, event);
+				mGraphicDisplayName.text = event.mDisplayName;
+				mStatOptionSelected = event;
+			}
+			 
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//						   MEMBER FUNCTIONS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			/**
+			 * 
+			 */
+			public function updateInformation(analyticsParser:cAnalyticsParser,
+											  websiteName:String,
+									          websiteURL:String,
+											  websiteType:String,
+											  websiteCreatedTime:String):void
+			{
+				var currDate:Date = new Date(int(websiteCreatedTime)*1000); 
+				var theDate:String = ((currDate.getMonth()+ 1) + "/" + currDate.getDate() + "/" + currDate.getFullYear());
+				
+				mWebsiteName = websiteName;
+				mWebsiteURL = websiteURL;
+				mWebsiteType = websiteType;
+				mWebsiteCreatedTime = theDate;
+				mAnalyticsParser = analyticsParser;
+			} 
+			
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//						   CANVAS EVENT HANDLERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			/**
+			 * 
+			 */
+			private function creationCompleteHandler(event:Event):void
+			{
+				if(mWebsiteName.length == 0) {
+					mWebsiteNameLabel.text = "[Website Name Not Available]";
+				}
+				else {
+					mWebsiteNameLabel.text = mWebsiteName;
+				}
+				if(mWebsiteURL.length == 0) {
+					mWebsiteURLLabel.text = "URL : [Not Available]";
+				}
+				else {
+					mWebsiteURLLabel.text = "URL : " + mWebsiteURL;
+				}
+				if(mWebsiteType.length == 0) {
+					mWebsiteTypeLabel.text = "Type : [Not Available]";	
+				}
+				else {
+					mWebsiteTypeLabel.text = "Type : " + mWebsiteType; 	
+				}
+				if(mWebsiteCreatedTime.length == 0) {
+					mWebsiteCreatedTimeLabel.text = "Created On : [Not Available]"; 	
+				}
+				else {
+					mWebsiteCreatedTimeLabel.text = "Created On : " + mWebsiteCreatedTime;
+				}
+			}
+			
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//						   DATA MEMBERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			// website name
+			private var mWebsiteName:String = "";
+			// website URL
+			private var mWebsiteURL:String = "";
+			// website type
+			private var mWebsiteType:String = "";
+			// website created time
+			private var mWebsiteCreatedTime:String = "";
+			// analytics parser object
+			private var mAnalyticsParser:cAnalyticsParser = null;
+			// stat option selected object
+			private var mStatOptionSelected:cStatOptionSelectedEvent = null;
+			
+		]]>
+	</mx:Script>
+
+	<mx:Label x="10" y="17" click="backLabelClickHandler(event)" rollOver="backLabelRollOverHandler(event)" rollOut="backLabelRollOutHandler(event)" text="Back" fontSize="14" textDecoration="underline" id="mBackLabel" />
+	<mx:ViewStack x="187" y="104" id="mStatGraphicsViewStack" width="815" height="438">
+		<ns1:cLineChartCanvas x="1" y="2" id="mLineChartCanvas" creationComplete="lineChartCanvasCreateHandler(event)">
+		</ns1:cLineChartCanvas>
+	</mx:ViewStack>
+	<mx:Canvas x="938" y="18" width="64" height="64" backgroundImage="@Embed(source='../images/websiteSample.jpg')">
+	</mx:Canvas>
+	<mx:Label x="10" y="71" text="Statistics Options" fontSize="16" />
+	<mx:Label x="551" y="10" text="Some Website Name" fontSize="24" width="379" textAlign="right" id="mWebsiteNameLabel"/>
+	<mx:Label x="662" y="53" text="Type : [Not Available]" width="268" textAlign="right" id="mWebsiteTypeLabel"/>
+	<mx:Label x="662" y="39" text="Created On : [Not Available]" width="268" textAlign="right" id="mWebsiteCreatedTimeLabel"/>
+	<mx:Label x="662" y="67" text="URL : [Not Available]" width="268" textAlign="right" id="mWebsiteURLLabel"/>
+	<mx:RadioButton x="365" y="550" label="1 Year" change="_1YearTimeSpanRadioButtonChangeHandler(event)" id="m1YearTimeSpanRadioButton"/>
+	<mx:RadioButton x="434" y="550" label="9 Months" change="_9MonthsTimeSpanRadioButtonChangeHandler(event)" id="m9MonthsTimeSpanRadioButton"/>
+	<mx:RadioButton x="518" y="550" label="6 Months" change="_6MonthsTimeSpanRadioButtonChangeHandler(event)" id="m6MonthsTimeSpanRadioButton"/>
+	<mx:RadioButton x="602" y="550" label="1 Month" change="_1MonthTimeSpanRadioButtonChangeHandler(event)" id="m1MonthTimeSpanRadioButton"/>
+	<mx:RadioButton x="680" y="550" label="2 Weeks" change="_2WeeksTimeSpanRadioButtonChangeHandler(event)" id="m2WeeksTimeSpanRadioButton"/>
+	<mx:RadioButton x="762" y="550" label="1 Week" selected="true" change="_1WeekTimeSpanRadioButtonChangeHandler(event)" id="m1WeekSpanRadioButton"/>
+	<ns1:cStatOptionsAccordion x="10" y="104" id="mStatOptionAccordion"
+							   StatOptionSelectedEvent="statOptionSelectedHandler(event)">
+	</ns1:cStatOptionsAccordion>
+	<mx:Label x="189" y="77" width="405" textAlign="right" id="mGraphicDisplayName" text="Some Graphic Displayed"/>
+	
+</mx:Canvas>

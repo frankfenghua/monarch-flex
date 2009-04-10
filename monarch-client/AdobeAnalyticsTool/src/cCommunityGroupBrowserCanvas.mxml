@@ -1,0 +1,568 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="creationCompleteHandler(event)" show="showCanvasHandler(event)" width="1013" height="615" xmlns:ns1="*" horizontalScrollPolicy="off" verticalScrollPolicy="off">
+
+	<mx:Metadata>
+		[Event(name="OpenCommunityGroupSelectionClickedEvent", type="flash.events.Event")]
+		[Event(name="OpenCommunityGroupHomeCanvasEvent", type="flash.events.Event")]
+		[Event(name="OpenAdditionalWebsiteInformationEvent", type="cAccordionWebsiteGraphicEvent")]
+		[Event(name="OpenCommunityGroupEditorCanvasEvent", type="cCommunityGroupEditorEvent")]
+		[Event(name="FetchWebsiteAnalytics", type="cAllPurposeEvent")]
+		[Event(name="OpenAddWebsiteWindowEvent", type="cCreateWebsiteEvent")]
+	</mx:Metadata>
+
+	<mx:Script>
+		<![CDATA[
+			import mx.messaging.channels.StreamingAMFChannel;
+			import mx.events.TweenEvent;
+			import mx.events.ItemClickEvent; 
+			import mx.effects.Fade;
+			import mx.effects.Move;
+			import mx.effects.Tween;
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+					
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//						   EVENT HANDLERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+
+			/**
+			 * 	Called when the user clicks the edit community group button.
+			 */
+			private function editCommunityGroupButtonClickHandler(event:Event):void
+			{
+				var e:cCommunityGroupEditorEvent = new cCommunityGroupEditorEvent("OpenCommunityGroupEditorCanvasEvent");
+				e.mCommuniutyGroupName = mCommunityGroupNameLabel.text;
+				e.mCommunityGroupId = mCommGroupId;
+				e.mWebsites = mWebsites;
+				e.mKeywords = mKeywords;
+				this.dispatchEvent(e);
+			}
+
+			/**
+			 * 	Called when the user clicks on the home label.
+			 */
+			private function homeLabelClickHandler(event:Event):void
+			{
+				var e:Event = new Event("OpenCommunityGroupHomeCanvasEvent");
+				this.dispatchEvent(e);
+			}
+			
+			/**
+			 * 	Called when the user hovers the mouse over the home label.
+			 */
+			private function homeLabelRollOverHandler(event:Event):void
+			{
+				mHomeLabel.setStyle("color", "0xFF6666");
+			}
+			
+			/**
+			 * 	Called when the user hovers the mouse away from the home label.
+			 */
+			private function homeLabelRollOutHandler(event:Event):void
+			{
+				mHomeLabel.setStyle("color", "0x11d30c");
+			}
+			
+			/**
+			 * 	Called when the user clicks on the community label.
+			 */
+			private function communityLabelClickHandler(event:Event):void
+			{
+				var e:Event = new Event("OpenCommunityGroupSelectionClickedEvent");
+				this.dispatchEvent(e);
+			}
+			
+			/**
+			 * 	Called when the user hovers the mouse over the community label.
+			 */
+			private function communityLabelRollOverHandler(event:Event):void
+			{
+				mCommunityGroupLabel.setStyle("color", "0xFF6666");
+			}
+			
+			/**
+			 * 	Called when the user hovers the mouse away from the community label.
+			 */
+			private function communityLabelRollOutHandler(event:Event):void
+			{
+				mCommunityGroupLabel.setStyle("color", "0x11d30c");
+			}
+			
+			/**
+			 *  
+			 */
+			 private function lineChartCanvasCreateHandler(event:Event):void
+			 {
+			 	//mLineChartCanvas.updateInformation(mAnalyticsParser, null);
+			 }
+			 
+			private function changeTimeSpan(event:ItemClickEvent):void 
+			{
+                switch(event.index)
+                {
+                	case 0: mStatEvent.mTimeSpan = mStatEvent.TIME_SPAN_1_YEAR;   break;
+                	case 1: mStatEvent.mTimeSpan = mStatEvent.TIME_SPAN_9_MONTHS; break;
+                	case 2: mStatEvent.mTimeSpan = mStatEvent.TIME_SPAN_6_MONTHS; break;
+                	case 3: mStatEvent.mTimeSpan = mStatEvent.TIME_SPAN_1_MONTH;  break;
+                	case 4: mStatEvent.mTimeSpan = mStatEvent.TIME_SPAN_2_WEEKS;  break;
+                	case 5: mStatEvent.mTimeSpan = mStatEvent.TIME_SPAN_1_WEEK;   break;
+                }
+                mLineChartCanvas.updateInformation(mAnalyticsParser, mStatEvent, mSelectedKeywords);
+            }
+			 
+			 
+			 /**
+			 * 	Called when the user clicks the 1 year radio button.
+			 */
+			/*
+			private function _1YearTimeSpanRadioButtonChangeHandler(event:Event):void
+			{
+				mStatEvent.mTimeSpan = mStatEvent.TIME_SPAN_1_YEAR;
+				mLineChartCanvas.updateInformation(mAnalyticsParser, mStatEvent, mSelectedKeywords);
+			}
+
+			private function _9MonthsTimeSpanRadioButtonChangeHandler(event:Event):void
+			{
+				mStatEvent.mTimeSpan = mStatEvent.TIME_SPAN_9_MONTHS;
+				mLineChartCanvas.updateInformation(mAnalyticsParser, mStatEvent, mSelectedKeywords);
+			}
+			
+
+			private function _6MonthsTimeSpanRadioButtonChangeHandler(event:Event):void
+			{
+				mStatEvent.mTimeSpan = mStatEvent.TIME_SPAN_6_MONTHS;
+				mLineChartCanvas.updateInformation(mAnalyticsParser, mStatEvent, mSelectedKeywords);
+			}
+			
+			private function _1MonthTimeSpanRadioButtonChangeHandler(event:Event):void
+			{
+				mStatEvent.mTimeSpan = mStatEvent.TIME_SPAN_1_MONTH;
+				mLineChartCanvas.updateInformation(mAnalyticsParser, mStatEvent, mSelectedKeywords);
+			}
+
+			private function _2WeeksTimeSpanRadioButtonChangeHandler(event:Event):void
+			{
+				mStatEvent.mTimeSpan = mStatEvent.TIME_SPAN_2_WEEKS;
+				mLineChartCanvas.updateInformation(mAnalyticsParser, mStatEvent, mSelectedKeywords);
+			}
+			
+			private function _1WeekTimeSpanRadioButtonChangeHandler(event:Event):void
+			{
+				
+				mStatEvent.mTimeSpan = mStatEvent.TIME_SPAN_1_WEEK;
+				mLineChartCanvas.updateInformation(mAnalyticsParser, mStatEvent, mSelectedKeywords);
+			}
+			*/
+			 
+			
+			/**
+			 *  Called when the user has requested an event from the website graphic within the accoridion 
+			 * 	component.
+			 */
+			private function accordionWebsiteGraphicEventHandler(event:cAccordionWebsiteGraphicEvent):void
+			{
+				if(event.mType == event.OPEN_ADDITIONAL_INFORMATION) {
+					var e:cAccordionWebsiteGraphicEvent = new cAccordionWebsiteGraphicEvent("OpenAdditionalWebsiteInformationEvent");
+					e.mWebsiteName = event.mWebsiteName;
+					e.mCommuniutyGroupName = mCommunityGroupNameLabel.text;
+					this.dispatchEvent(e);
+				}
+				else if(event.mType == event.WEBSITE_CHECKED) {
+					var e1:cAllPurposeEvent = new cAllPurposeEvent("FetchWebsiteAnalytics");
+					e1.mWebsiteName = event.mWebsiteName;
+					e1.mCommGroupId = mCommGroupId;
+					this.dispatchEvent(e1);
+					
+					this.cursorManager.setBusyCursor()
+					mStatOptionAccordion.enabled = false;
+					mGraphControlPanel.enabled = false;
+					mChartTimeSelectPanel.enabled = false;
+				}
+				else if(event.mType == event.WEBSITE_UNCHECKED) {
+					Alert.show("UnChecked");
+				}
+			}
+			
+			/**
+			 * 	Called when the user clicks on the add website button.
+			 */
+			private function addWebsiteClickHandler(event:Event):void
+			{
+				var e:cCreateWebsiteEvent = new cCreateWebsiteEvent("OpenAddWebsiteWindowEvent");
+				e.mCommunityGroupId = mCommGroupId;
+				e.mCommunityGroupName = mCommGroupName;
+				this.dispatchEvent(e);
+			}
+			
+			/**
+			 * 	Called when the user requests an event from the keyword graphic within the accordion component.
+			 */
+			private function accordionKeywordGraphicHandler(event:cAccordionKeywordGraphicEvent):void
+			{
+				if(event.mType == event.KEYWORD_CHECKED && mGraphControlPanel.enabled) {
+					mSelectedKeywords.addItem(event.mKeywordName);
+					mLineChartCanvas.updateInformation(mAnalyticsParser, mStatEvent, mSelectedKeywords);
+				}
+				else if(event.mType == event.KEYWORD_UNCHECKED && mGraphControlPanel.enabled) {
+					for(var i:int = 0; i < mSelectedKeywords.length; i++) {
+						if(mSelectedKeywords.getItemAt(i).toString() == event.mKeywordName) {
+							mSelectedKeywords.removeItemAt(i);
+							mLineChartCanvas.updateInformation(mAnalyticsParser, mStatEvent, mSelectedKeywords);
+							return;
+						}
+					}
+				}
+			}
+			
+			/**
+			 * 
+			 */
+			private function countWeightSliderChangeHandler(event:Event):void
+			{
+				mCountInfoLabel.text = mCountWeightSlider.value.toString().slice(0, 5);
+				mStatEvent.mCountWeight = mCountWeightSlider.value;
+				mLineChartCanvas.updateInformation(mAnalyticsParser, mStatEvent, mSelectedKeywords);
+			}
+			
+			/**
+			 * 
+			 */
+			private function goodnessWeightSliderChangeHandler(event:Event):void
+			{
+				mGoodnessInfoLabel.text = mEnglishProficiencyWeightSlider.value.toString().slice(0, 5);
+				mStatEvent.mGoodnessWeight = mEnglishProficiencyWeightSlider.value;
+				mLineChartCanvas.updateInformation(mAnalyticsParser, mStatEvent, mSelectedKeywords);
+			}
+			
+			/**
+			 * 
+			 */
+			private function proficiencyWeightSliderChangeHandler(event:Event):void
+			{
+				mEnglishProficiencyInfoLabel.text = mGoodnessWeightSlider.value.toString().slice(0, 5);
+				mStatEvent.mEnglishProficiency = mGoodnessWeightSlider.value;
+				mLineChartCanvas.updateInformation(mAnalyticsParser, mStatEvent, mSelectedKeywords);
+			}
+			
+			/**
+			 * 
+			 */
+			private function presetsComboBoxChangeHandler(event:Event):void
+			{
+				if(mPresetsComboBox.selectedItem.toString() == "Count") {
+					mCountWeightSlider.value = 1;
+					mEnglishProficiencyWeightSlider.value = 0;
+					mGoodnessWeightSlider.value = 0;
+				}
+				if(mPresetsComboBox.selectedItem.toString() == "Sentiment") {
+					mCountWeightSlider.value = 0;
+					mEnglishProficiencyWeightSlider.value = 0;
+					mGoodnessWeightSlider.value = 1;
+				}
+				if(mPresetsComboBox.selectedItem.toString() == "English Prof.") {
+					mCountWeightSlider.value = 0;
+					mEnglishProficiencyWeightSlider.value = 1;
+					mGoodnessWeightSlider.value = 0;
+				}
+				if(mPresetsComboBox.selectedItem.toString() == "Count + Sentiment") {
+					mCountWeightSlider.value = 1;
+					mEnglishProficiencyWeightSlider.value = 0;
+					mGoodnessWeightSlider.value = 1;
+				}
+				if(mPresetsComboBox.selectedItem.toString() == "Count + English Prof.") {
+					mCountWeightSlider.value = 1;
+					mEnglishProficiencyWeightSlider.value = 1;
+					mGoodnessWeightSlider.value = 0;
+				}
+				if(mPresetsComboBox.selectedItem.toString() == "Sentiment + English Prof.") {
+					mCountWeightSlider.value = 0;
+					mEnglishProficiencyWeightSlider.value = 1;
+					mGoodnessWeightSlider.value = 1;
+				}
+				if(mPresetsComboBox.selectedItem.toString() == "Show All") {
+					mCountWeightSlider.value = 1;
+					mEnglishProficiencyWeightSlider.value = 1;
+					mGoodnessWeightSlider.value = 1;
+				}
+				
+				mCountInfoLabel.text = mCountWeightSlider.value.toString().slice(0, 5);
+				mGoodnessInfoLabel.text = mEnglishProficiencyWeightSlider.value.toString().slice(0, 5);
+				mEnglishProficiencyInfoLabel.text = mGoodnessWeightSlider.value.toString().slice(0, 5);
+				
+				mStatEvent.mCountWeight = mCountWeightSlider.value;
+				mStatEvent.mGoodnessWeight = mEnglishProficiencyWeightSlider.value;
+				mStatEvent.mEnglishProficiency = mGoodnessWeightSlider.value;
+				
+				mLineChartCanvas.updateInformation(mAnalyticsParser, mStatEvent, mSelectedKeywords);
+			}
+			
+			/**
+			 * 	Called when the user clicks on the zoom in button.
+			 */
+			private function zoomInButtonClickHandler(event:Event):void
+			{
+				mLineChartCanvas.zoomIn();
+			}
+			
+			/**
+			 * 	Called when the user clicks on the zoom out button.
+			 */
+			private function zoomOutButtonClickHandler(event:Event):void
+			{
+				mLineChartCanvas.zoomOut();
+			}
+			 
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//						   MEMBER FUNCTIONS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			/**
+			 * 	Updates the internal information of this object.
+			 */
+			public function updateInformation(commGroupName:String,
+										      commGroupId:int,
+										      creator:String,
+										      dateCreated:String,
+									     	  websites:ArrayCollection,
+									     	  keywords:ArrayCollection):void
+			{
+				if(mCommGroupId != commGroupId) {
+					mCommunityParserCollection.removeAll();
+				}
+				
+				if(mStatOptionAccordion != null && mLineChartCanvas != null && mCommGroupName != commGroupName) {
+					mStatOptionAccordion.disableAll();
+					mLineChartCanvas.clearData();
+				}
+				
+				mCommGroupName = commGroupName;
+				mCommGroupId = commGroupId;
+				mCreator = creator;
+				mDateCreated = dateCreated;
+				mWebsites = websites;
+				mKeywords = keywords;
+				
+				for(var i:int = 0; i < mKeywords.length; i++) {
+					var keywordEntry:cKeywordEntry = cKeywordEntry(mKeywords.getItemAt(i));
+					mSelectedKeywords.addItem(keywordEntry.mName);
+				}
+			}
+			
+			/**
+			 *	update the analytics information - called when new website statistics have been
+			 * 	fetched. 
+			 */
+			public function updateAnalyticsInformation(analyticsParser:cAnalyticsParser):void
+			{
+				mCommunityParserCollection.addItem(analyticsParser);
+				// 1. compute agregate
+				
+				
+				// 2. update graphs
+				
+				var timeSpan:int = mStatEvent.TIME_SPAN_1_YEAR;
+				
+				if(mChartTimeSelectPanel.selectedIndex == 5)
+					timeSpan = mStatEvent.TIME_SPAN_1_WEEK;
+				else if(mChartTimeSelectPanel.selectedIndex == 4)
+					timeSpan = mStatEvent.TIME_SPAN_2_WEEKS;
+				else if(mChartTimeSelectPanel.selectedIndex == 3)
+					timeSpan = mStatEvent.TIME_SPAN_1_MONTH;
+				else if(mChartTimeSelectPanel.selectedIndex == 2)
+					timeSpan = mStatEvent.TIME_SPAN_6_MONTHS;
+				else if(mChartTimeSelectPanel.selectedIndex == 1)
+					timeSpan = mStatEvent.TIME_SPAN_9_MONTHS;
+				else
+					timeSpan = mStatEvent.TIME_SPAN_1_YEAR;
+					
+				/*
+				if(m1WeekSpanRadioButton.selected) {
+					timeSpan = mStatEvent.TIME_SPAN_1_WEEK;
+				}
+				else if(m2WeeksTimeSpanRadioButton.selected) {
+					timeSpan = mStatEvent.TIME_SPAN_2_WEEKS;
+				}
+				else if(m1MonthTimeSpanRadioButton.selected) {
+					timeSpan = mStatEvent.TIME_SPAN_1_MONTH;
+				}
+				else if(m6MonthsTimeSpanRadioButton.selected) {
+					timeSpan = mStatEvent.TIME_SPAN_6_MONTHS;
+				}
+				else if(m9MonthsTimeSpanRadioButton.selected) {
+					timeSpan = mStatEvent.TIME_SPAN_9_MONTHS;
+				}
+				*/
+				mStatEvent.mTimeSpan = timeSpan;
+				mStatEvent.mCountWeight = mCountWeightSlider.value;
+				mStatEvent.mGoodnessWeight = mEnglishProficiencyWeightSlider.value;
+				mStatEvent.mEnglishProficiency = mGoodnessWeightSlider.value;
+				
+				mLineChartCanvas.updateInformation(analyticsParser, mStatEvent, mSelectedKeywords);
+				
+				this.cursorManager.removeBusyCursor();
+				mStatOptionAccordion.enabled = true;
+				mGraphControlPanel.enabled = true;
+				mChartTimeSelectPanel.enabled = true;
+				
+				// REMOVE THIS LATER
+				mAnalyticsParser = analyticsParser;
+			}
+			
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//						   CANVAS EVENT HANDLERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			/**
+			 * Called when the canvas is created.
+			 */
+			private function creationCompleteHandler(event:Event):void
+			{
+				if(mCommGroupName.length == 0) {
+					mCommunityGroupNameLabel.text = "[Community Group Name Not Available]";
+				}
+				else {
+					mCommunityGroupNameLabel.text = mCommGroupName;
+				}
+				
+				mCountWeightSlider.value = 1;
+				mEnglishProficiencyWeightSlider.value = 0;
+				mGoodnessWeightSlider.value = 0;
+				mCountInfoLabel.text = mCountWeightSlider.value.toString().slice(0, 5);
+				mGoodnessInfoLabel.text = mEnglishProficiencyWeightSlider.value.toString().slice(0, 5);
+				mEnglishProficiencyInfoLabel.text = mGoodnessWeightSlider.value.toString().slice(0, 5);
+				
+				mGraphControlPanel.enabled = false;
+				mChartTimeSelectPanel.enabled = false;
+				
+				
+				///  REMOVE - HELPER CLOUD TO GUIDE FIRST TIME USER 
+				//var c:cHelperCloud = new cHelperCloud();
+				//c.x = 400;
+				//c.y = 250;
+				//this.addChild(c);
+			}
+			
+			/**
+			 * 	Called when the canvas is shown.
+			 */
+			private function showCanvasHandler(event:Event):void
+			{
+				if(mCommGroupName.length == 0) {
+					mCommunityGroupNameLabel.text = "[Community Group Name Not Available]";
+				}
+				else {
+					mCommunityGroupNameLabel.text = mCommGroupName;
+				}
+				mStatOptionAccordion.updateInformation(mWebsites, mKeywords);
+			}
+			
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//						   DATA MEMBERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			// community group name
+			private var mCommGroupName:String = "";
+			// community group id
+			private var mCommGroupId:int = 0;
+			// creator of the community
+			private var mCreator:String = "";
+			// date community group was created
+			private var mDateCreated:String = "";
+			// websites for the community
+			private var mWebsites:ArrayCollection = null;
+			// keywords for the community
+			private var mKeywords:ArrayCollection = null;
+			// keywords selected by user
+			private var mSelectedKeywords:ArrayCollection = new ArrayCollection();
+			// collection of website parsers for a community
+			private var mCommunityParserCollection:ArrayCollection = new ArrayCollection();
+			
+			private var mAnalyticsParser:cAnalyticsParser = null;
+			private var mStatEvent:cStatOptionSelectedEvent = new cStatOptionSelectedEvent("dummy");
+			
+		]]>
+	</mx:Script>
+
+	<mx:LinkButton click="homeLabelClickHandler(event)" label="Home" id="mHomeLabel" x="12" y="5"/>
+	<mx:Label x="72" y="3" text="&gt;" styleName="breadCrumbSeparator" />
+	<mx:LinkButton click="communityLabelClickHandler(event)" label="My Community Groups" id="mCommunityGroupLabel"  horizontalCenter="-339" verticalCenter="-291" />
+	<mx:Label x="251" y="4" text="&gt;" styleName="breadCrumbSeparator" />
+	<mx:Label text="Some Community Group Name" id="mCommunityGroupNameLabel" styleName="pageTitle"  x="279" y="4"/>
+	<mx:ViewStack x="187" y="45.55" id="mStatGraphicsViewStack" width="815" height="529.45">
+		<ns1:cLineChartCanvas x="1" y="2" id="mLineChartCanvas" creationComplete="lineChartCanvasCreateHandler(event)">
+		</ns1:cLineChartCanvas>
+		<mx:Canvas label="1 year" width="100%" height="100%">
+		</mx:Canvas>
+	</mx:ViewStack>
+	
+	<!--
+	Puneet said that radio buttons were user unfriendly
+	<mx:RadioButton label="1 Year" change="_1YearTimeSpanRadioButtonChangeHandler(event)" id="m1YearTimeSpanRadioButton" horizontalCenter="62" verticalCenter="286"/>
+	<mx:RadioButton label="9 Months" change="_9MonthsTimeSpanRadioButtonChangeHandler(event)" id="m9MonthsTimeSpanRadioButton" verticalCenter="286" horizontalCenter="138"/>
+	<mx:RadioButton label="6 Months" change="_6MonthsTimeSpanRadioButtonChangeHandler(event)" id="m6MonthsTimeSpanRadioButton" verticalCenter="286" horizontalCenter="222"/>
+	<mx:RadioButton label="1 Month" change="_1MonthTimeSpanRadioButtonChangeHandler(event)" id="m1MonthTimeSpanRadioButton" verticalCenter="286" horizontalCenter="303"/>
+	<mx:RadioButton label="2 Weeks" change="_2WeeksTimeSpanRadioButtonChangeHandler(event)" id="m2WeeksTimeSpanRadioButton" verticalCenter="286" horizontalCenter="383"/>
+	<mx:RadioButton label="1 Week" selected="true" change="_1WeekTimeSpanRadioButtonChangeHandler(event)" id="m1WeekSpanRadioButton" verticalCenter="286" horizontalCenter="462"/>
+	-->
+	<ns1:cStatOptionsAccordion id="mStatOptionAccordion"
+							   AccordionWebsiteGraphicEvent="accordionWebsiteGraphicEventHandler(event)"
+							   AccordionKeywordGraphicEvent="accordionKeywordGraphicHandler(event)"
+							   height="355" horizontalCenter="-412" verticalCenter="-88">
+	</ns1:cStatOptionsAccordion>
+	<mx:Button label="Add Website" click="addWebsiteClickHandler(event)" id="mAddWebsiteButton" styleName="buttonBlack"  x="897" y="4" icon="@Embed(source='../images/application_add.png')"/>
+	<mx:Button label="Edit Community Group" click="editCommunityGroupButtonClickHandler(event)" id="mEditCommunityGroupButton" styleName="buttonBlack"  x="723" y="4" icon="@Embed(source='../images/pencil.png')"/>
+
+	
+
+	<mx:Panel layout="absolute" height="199" y="411" x="9" width="172" title="graph controls" verticalScrollPolicy="off" horizontalScrollPolicy="off" id="mGraphControlPanel" toolTip="This panel allows you to control weights of how to gauge a keyword or link's hotness.">
+
+		<mx:HSlider x="8" y="55" change="countWeightSliderChangeHandler(event)" width="149" minimum="0" maximum="1" allowTrackClick="true" liveDragging="true" value="1" enabled="true" id="mCountWeightSlider"/>
+		<mx:HSlider x="8" y="135" change="goodnessWeightSliderChangeHandler(event)" width="149" minimum="0" maximum="1" allowTrackClick="true" liveDragging="true" value="1" enabled="true" id="mEnglishProficiencyWeightSlider"/>
+		<mx:HSlider x="8" y="95" change="proficiencyWeightSliderChangeHandler(event)" width="149" allowTrackClick="true" minimum="0" maximum="1" liveDragging="true" value="1" enabled="true" id="mGoodnessWeightSlider"/>
+		<mx:Label x="8" y="41" text="Count:" enabled="true" id="mCountWeightLabel" toolTip="How many times this keyword or link has been mentioned."/>
+		<mx:Label x="8" y="81" text="Sentiment:" enabled="true" id="mGoodnessWeightLabel" toolTip="The level of approval of the keyword or link. Do people hate or love it?" />
+		<mx:Label x="8" y="121" text="English Proficiency:" enabled="true" id="mProficiencyWeightLabel0" toolTip="When this keyword or link was said, how good was the speaker's English? Slide this higher if you want more weight for more carefule prose."/>
+		<mx:ComboBox id="mPresetsComboBox" change="presetsComboBoxChangeHandler(event)" x="8" y="5" width="152" maxWidth="160" toolTip="presets that automatically set the sliders below">
+			<mx:ArrayCollection>
+				 <mx:String>Count</mx:String>
+				 <mx:String>Sentiment</mx:String>
+				 <mx:String>English Prof.</mx:String>
+				 <mx:String>Count + Sentiment</mx:String>
+				 <mx:String>Count + English Prof.</mx:String>
+				 <mx:String>Sentiment + English Prof.</mx:String>
+				 <mx:String>Show All</mx:String>
+	    	</mx:ArrayCollection>
+		</mx:ComboBox>
+		<mx:Label x="112" y="41" text="Label" textAlign="right" id="mCountInfoLabel" width="40" selectable="false"/>
+		<mx:Label x="132" y="121" text="Label" textAlign="right" id="mGoodnessInfoLabel"/>
+		<mx:Label x="132" y="81" text="Label" textAlign="right" id="mEnglishProficiencyInfoLabel"/>
+	</mx:Panel>
+	<mx:Button x="199" y="585" label="Zoom In" click="zoomInButtonClickHandler(event)" id="mZoomInButton" width="24" height="24" icon="@Embed(source='../images/magnifier_zoom_in.png')" toolTip="zoom in"/>
+	<mx:Button x="227" y="585" label="Zoom Out" click="zoomOutButtonClickHandler(event)" id="mZoomOutButton" width="24" height="24" icon="@Embed(source='../images/magnifier_zoom_out.png')" toolTip="zoom out" />
+
+	<mx:ToggleButtonBar x="567" y="581" itemClick="changeTimeSpan(event);" selectedIndex="5" id="mChartTimeSelectPanel" toolTip="Adjust how far back the stats you want to see">
+		<mx:dataProvider>
+		       <mx:Array>
+		           <mx:String>1 year</mx:String>
+		           <mx:String>9 months</mx:String>
+		           <mx:String>6 months</mx:String>
+		           <mx:String>1 month</mx:String>
+		           <mx:String>2 weeks</mx:String>
+		           <mx:String>1 week</mx:String>
+		       </mx:Array>
+		   </mx:dataProvider>
+	</mx:ToggleButtonBar>
+
+	
+</mx:Canvas>

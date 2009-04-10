@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="showCanvasHandler(event)" width="390" height="86">
+	
+	<mx:Metadata>
+		[Event(name="CommGroupGraphicClickedEvent", type="cCommGroupGraphicClickedEvent")]
+	</mx:Metadata>
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			import mx.effects.Fade;
+			import mx.effects.Move;
+			import mx.effects.Tween;
+			import mx.events.EffectEvent;
+			
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//							   EVENT HANDLERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			/**
+			 * 	Called when the user hovers the mouse over the main canvas.
+			 */
+			/*
+			private function mainPanelRollOverHandler(event:Event):void
+			{
+				if(!mRemoveLabelOn) {
+					mMainPanelCanvas.setStyle("borderColor", "0xffe400");
+				}
+			}
+			*/
+			
+			/**
+			 * 	Called when the user hovers the mouse away from the main canvas.
+			 */
+			/*
+			private function mainPanelRollOutHandler(event:Event):void
+			{
+				if(!mRemoveLabelOn) {
+					mMainPanelCanvas.setStyle("borderColor", "0xb7babc");
+				}
+			}
+			*/
+			
+			/**
+			 *  Fires an event signaling that the user has clicked the community
+			 *  group graphic.
+			 */
+			private function graphicClickedHandler(event:Event):void
+			{
+				if(!mRemoveLabelOn) {
+					if(this.mJustCreated) {
+						// mMainPanelCanvas.setStyle("backgroundColor", "0x65ACC9");
+						this.mJustCreated = false;
+					}
+					
+					var e:cCommGroupGraphicClickedEvent = new cCommGroupGraphicClickedEvent("cCommGroupGraphicClickedEvent");
+					e.mCommGroupName = mCommGroupName;
+					e.mCommGroupId = mId;
+					e.mTime = mDateCreated;
+					this.dispatchEvent(e);
+				}
+			}
+			
+			/**
+			 * 	Handler called when the canvas opens. It initializes the child components.
+			 */
+			private function showCanvasHandler(event:Event):void
+			{
+				/*	
+				if(mJustCreated) {
+					mMainPanelCanvas.setStyle("backgroundColor", "0xff4444");
+				}
+				else {
+					mMainPanelCanvas.setStyle("backgroundColor", "0x65ACC9");
+				}
+				*/	
+				
+				if(mCommGroupName.length == 0) {
+					mCommNameLabel.text = "[Name Not Available]";
+				}
+				else {
+					if(mJustCreated) {
+						mCommNameLabel.text = "(new) " + mCommGroupName;
+					}
+					else {
+						mCommNameLabel.text = mCommGroupName;	
+					}
+				}
+				if(mCreator.length == 0) {
+					mCreatorLabel.text = "Created by : [Not Available]";
+				}
+				else {
+					mCreatorLabel.text = "Created by : " + mCreator;
+				}
+				if(mDateCreated.length == 0) {
+					mDateLabel.text = "Created on : [Not Available]";
+				}
+				else {
+					var currDate:Date = new Date(int(mDateCreated)*1000); 
+					var theDate:String = ((currDate.getMonth()+ 1) + "/" + currDate.getDate() + "/" + currDate.getFullYear());
+					mDateLabel.text = "Created on : " + theDate;
+				}
+				mNumWebsiteLabel.text = "Number Of Websites : " + mNumWebsites
+			}
+			
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//							   CANVAS EVENT HANDLERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			/**
+			 * 	Called when the user hovers the mouse away from this canvas.
+			 */
+			/*
+			private function canvasRollOverHandler(event:Event):void
+			{
+				var fade:Fade = new Fade();
+				fade.alphaFrom = 0.8;
+				fade.alphaTo = 1;
+				fade.duration = 500;
+				fade.target = this;
+				fade.play();
+			}
+			*/
+			
+			/**
+			 * 	Called when the user hovers the mouse away from this canvas.
+			 */
+			/*
+			private function canvasRollOutHandler(event:Event):void
+			{
+				var fade:Fade = new Fade();
+				fade.alphaFrom = 1;
+				fade.alphaTo = 0.8;
+				fade.duration = 500;
+				fade.target = this;
+				fade.play();
+			}
+			*/
+			
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//							   MEMBER FUNCTIONS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			/**
+			 * 	Used to set the data members of this component for later use.
+			 */
+			public function updateInformation(commGroupName:String,
+											  creator:String,
+											  dateCreated:String,
+											  numWebsites:String,
+											  id:int,
+											  justCreated:Boolean):void
+			{
+				mCommGroupName = commGroupName;
+				mCreator = creator;
+				mDateCreated = dateCreated;
+				mNumWebsites = numWebsites;
+				mId = id;
+				mJustCreated = justCreated;
+				
+				mCommImageURL = IMAGE_URL + id + ".jpg";
+				trace(mCommImageURL);
+			}
+			
+			/**
+			 *	Sets the visible property on the remove website label to true; 
+			 */
+			public function showRemoveCommGroupsLabel():void
+			{
+				mRemoveCommGroupLabel.visible = true;
+				// animate
+				var move:Move = new Move();
+				move.xFrom = mRemoveCommGroupLabel.x;
+				move.xTo = mRemoveCommGroupLabel.x + 20;
+				move.target = mRemoveCommGroupLabel;
+				move.duration = 500;
+				move.play();
+				
+				/*
+				var fade:Fade = new Fade();
+				fade.alphaFrom = 0;
+				fade.alphaTo = 1;
+				fade.duration = 500;
+				fade.target = mRemoveCommGroupLabel;
+				fade.play();
+				*/
+				
+				mRemoveLabelOn = true;
+			}
+			
+			/**
+			 * 	Function called after the move effect declared in hideRemoveCommGroupLabel
+			 *  has completed. 
+			 */
+			private function moveEffectEnd(event:Event):void
+			{
+				mRemoveCommGroupLabel.visible = false;
+			}
+			
+			/**
+			 * 	Sets the visible property on the remove website label to false;
+			 */
+			public function hideRemoveWebsiteLabel():void
+			{	
+				// animate
+				var move:Move = new Move();
+				move.xFrom = mRemoveCommGroupLabel.x;
+				move.xTo = mRemoveCommGroupLabel.x - 20;
+				move.target = mRemoveCommGroupLabel;
+				move.duration = 500;
+				move.play();
+				move.addEventListener(EffectEvent.EFFECT_END, moveEffectEnd);
+				
+				/*
+				var fade:Fade = new Fade();
+				fade.alphaFrom = 1;
+				fade.alphaTo = 0;
+				fade.duration = 500;
+				fade.target = mRemoveCommGroupLabel;
+				fade.play();
+				*/
+				
+				mRemoveLabelOn = false;
+			}
+			
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//							   DATA MEMBERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			// name of the community group
+			private var mCommGroupName:String = "";
+			// the creator of the community
+			private var mCreator:String = "";
+			// the date the community group was created
+			private var mDateCreated:String = "";
+			// the community group id
+			private var mId:int = 0;
+			// the number of websites under the community
+			private var mNumWebsites:String = "";
+			// Used to track if the graphic BKG color should depict a newly created community
+			private var mJustCreated:Boolean = false;
+			
+			// boolean which tells the component's children if the remove label is visible
+			private var mRemoveLabelOn:Boolean = false;
+			[Bindable]
+			private var mCommImageURL:String = "../images/ps.png";
+			// Constant specifying the path to server images 
+			// TODO: don't hardcode because eventually we have to move it to Puneet's lair (They are constants, an improvement on hard-coding; easy to modify--What do you suggest)
+			public var IMAGE_URL:String = "http://csil-srprj-2.cs.uiuc.edu/images/";
+		
+		]]>
+	</mx:Script>
+	<mx:Canvas width="377" id="mMainPanelCanvas" horizontalCenter="-1" verticalCenter="0">
+		<mx:Label x="89" y="34" text="Created on December 12, 2030" width="276" id="mDateLabel" styleName="communitySelectStat" />
+		<mx:Label x="89" y="45" text="Creator : Mariusz Choroszy" width="276" id="mCreatorLabel" styleName="communitySelectStat" />
+		<mx:Label x="89" y="57" text="Number of Websites : 0" width="276" id="mNumWebsiteLabel" styleName="communitySelectStat" />
+		<mx:Label x="89" y="12" text="Some Communty Group" width="276" id="mCommNameLabel" styleName="communitySelectName" />
+		<mx:Image x="17" y="8" width="64" height="64" source="{mCommImageURL}" id="mImageCanvas">
+		</mx:Image>
+		<mx:Canvas x="0" y="0" click="graphicClickedHandler(event)" width="375" height="78" id="mOverlayCanvas">
+			<mx:Canvas x="286" y="54" width="50" height="20" backgroundImage="@Embed(source='../images/removeIcon.jpg')" id="mRemoveCommGroupLabel" visible="false" toolTip="Remove the community group">
+			</mx:Canvas>
+		</mx:Canvas>
+	</mx:Canvas>
+</mx:Canvas>

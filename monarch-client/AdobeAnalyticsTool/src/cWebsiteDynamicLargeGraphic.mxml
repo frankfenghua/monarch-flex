@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" rollOver="canvasRollOverHandler(event)" rollOut="canvasRollOutHandler(event)" creationComplete="creationCompleteHandler(event)" width="410" height="100" >
+
+	<mx:Metadata>
+		[Event(name="WebsiteGraphicClickedEvent", type="_cWebsiteGraphicClickedEvent")]
+		[Event(name="EditWebsiteLabelClickedEvent", type="cEditWebsiteEvent")]
+	</mx:Metadata>
+
+	<mx:Script>
+		<![CDATA[
+			import mx.events.EffectEvent;
+			import mx.controls.Alert;
+			import mx.effects.Fade;
+			import mx.effects.Move;
+			import mx.effects.Tween;
+			
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//							  EVENT HANDLERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			/**
+			 * 	Called when the user hovers the mouse over the overlay canvas.
+			 */
+			private function overlayCanvasRollOverHandler(event:Event):void
+			{
+				if(!mRemoveLabelOn || !mEditLabelOn) {
+					mMainPanelCanvas.setStyle("backgroundColor", "0xdadc19");
+				}
+			}
+			
+			/**
+			 * 	Called when the user hovers the mouse away from the overlay canvas.
+			 */
+			private function overlayCanvasRollOutHandler(event:Event):void
+			{
+				if(!mRemoveLabelOn || !mEditLabelOn) {
+					mMainPanelCanvas.setStyle("backgroundColor", "0x4ad413");
+				}
+			}
+			
+			/**
+			 * Fires an event signaling that the website graphic was clicked
+			 */
+			private function overlayCanvasClickHandler(event:Event):void
+			{
+				var e:_cWebsiteGraphicClickedEvent = new _cWebsiteGraphicClickedEvent("cWebsiteGraphicClickedEvent");
+				e.mWebsiteName = mWebsiteName;
+				e.mWebsiteURL = mURL;
+				e.mWebsiteType = mType;
+				e.mWebsiteCreatedTime = mCreatedTime;
+				this.dispatchEvent(e);
+			}
+			
+			/**
+			 * 	Event handler called when the user clicks on the remove website label when
+			 * 	it's visible.
+			 */
+			private function removeWebsiteLabelClickHandler(event:Event):void
+			{
+				Alert.show("Remove Clicked");
+			}
+			
+			/**
+			 * 	Event handler called when the user clicks on the edit website label when
+			 * 	it's visible.
+			 */
+			private function editWebsiteLabelClickHandler(event:Event):void
+			{
+				var e:cEditWebsiteEvent = new cEditWebsiteEvent("cEditWebsiteEvent");
+				
+				this.dispatchEvent(e);
+			}
+			
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//							  MEMBER FUNCTIONS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			/**
+			 * 	Used to set the data members of this component for later use.
+			 */
+			public function updateInformation(websiteName:String,
+											  websiteURL:String,
+											  websiteType:String,
+											  websiteCreatedTime:String):void
+			{
+				mWebsiteName = websiteName;
+				mURL = websiteURL;
+				mType = websiteType;
+				mCreatedTime = websiteCreatedTime;
+			}
+			
+			/**
+			 *	Sets the visible property on the remove website label to true; 
+			 */
+			public function showRemoveWebsiteLabel():void
+			{
+				mRemoveWebsiteLabel.visible = true;
+				// animate
+				var move:Move = new Move();
+				move.xFrom = mRemoveWebsiteLabel.x;
+				move.xTo = mRemoveWebsiteLabel.x + 20;
+				move.target = mRemoveWebsiteLabel;
+				move.duration = 500;
+				move.play();
+				
+				var fade:Fade = new Fade();
+				fade.alphaFrom = 0;
+				fade.alphaTo = 1;
+				fade.duration = 500;
+				fade.target = mRemoveWebsiteLabel;
+				fade.play();
+				
+				mEditLabelOn = true;
+			}
+			
+			/**
+			 *	Sets the visible property on the remove website label to true; 
+			 */
+			public function showEditWebsiteLabel():void
+			{
+				mEditWebsiteLabel.visible = true;
+				// animate
+				var move:Move = new Move();
+				move.xFrom = mEditWebsiteLabel.x;
+				move.xTo = mEditWebsiteLabel.x + 20;
+				move.target = mEditWebsiteLabel;
+				move.duration = 500;
+				move.play();
+				
+				var fade:Fade = new Fade();
+				fade.alphaFrom = 0;
+				fade.alphaTo = 1;
+				fade.duration = 500;
+				fade.target = mEditWebsiteLabel;
+				fade.play();
+				
+				mRemoveLabelOn = true;
+			}
+			
+			/**
+			 * 	Function called after the move effect declared in hideRemoveWebsiteLabel
+			 *  has completed. 
+			 */
+			private function moveRemoveWebsiteLabelEffectEnd(event:Event):void
+			{
+				mRemoveWebsiteLabel.visible = false;
+			}
+			
+			/**
+			 * 	Sets the visible property on the remove website label to false;
+			 */
+			public function hideRemoveWebsiteLabel():void
+			{	
+				// animate
+				var move:Move = new Move();
+				move.xFrom = mRemoveWebsiteLabel.x;
+				move.xTo = mRemoveWebsiteLabel.x - 20;
+				move.target = mRemoveWebsiteLabel;
+				move.duration = 500;
+				move.play();
+				move.addEventListener(EffectEvent.EFFECT_END, moveRemoveWebsiteLabelEffectEnd);
+				
+				var fade:Fade = new Fade();
+				fade.alphaFrom = 1;
+				fade.alphaTo = 0;
+				fade.duration = 500;
+				fade.target = mRemoveWebsiteLabel;
+				fade.play();
+				
+				mRemoveLabelOn = false;
+			}
+			
+			/**
+			 * 	Function called after the move effect declared in hideEditWebsiteLabel
+			 *  has completed. 
+			 */
+			private function moveEditWebsiteLabelEffectEnd(event:Event):void
+			{
+				mEditWebsiteLabel.visible = false;
+			}
+			
+			/**
+			 * 	Sets the visible property on the edit website label to false;
+			 */
+			public function hideEditWebsiteLabel():void
+			{	
+				// animate
+				var move:Move = new Move();
+				move.xFrom = mEditWebsiteLabel.x;
+				move.xTo = mEditWebsiteLabel.x - 20;
+				move.target = mEditWebsiteLabel;
+				move.duration = 500;
+				move.play();
+				move.addEventListener(EffectEvent.EFFECT_END, moveEditWebsiteLabelEffectEnd);
+				
+				var fade:Fade = new Fade();
+				fade.alphaFrom = 1;
+				fade.alphaTo = 0;
+				fade.duration = 500;
+				fade.target = mEditWebsiteLabel;
+				fade.play();
+				
+				mEditLabelOn = false;
+			}
+			
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//							  CANVAS EVENT HANDLERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			/**
+			 *  Functions called when the component is created. It initializes the child
+			 *  components.
+			 */
+			private function creationCompleteHandler(event:Event):void
+			{
+				if(mWebsiteName.length == 0) {
+					mWebsiteNameLabel.text = "[Not Available]";
+				}
+				else {
+					mWebsiteNameLabel.text = mWebsiteName;
+				}
+				if(mURL.length == 0) {
+					mWebsiteURLLabel.text = "URL : [Not Available]";
+				}
+				else {
+					mWebsiteURLLabel.text = "URL : " + mURL;
+				}
+				if(mType.length == 0) {
+					mWebsiteType.text = "Type : [Not Available]"; 	
+				}
+				else {
+					mWebsiteType.text = "Type : " + mType;
+				}
+				if(mCreatedTime.length == 0) {
+					mWebsiteCreatedTimeLabel.text = "Created On : [Not Available]"; 	
+				}
+				else {
+					var currDate:Date = new Date(int(mCreatedTime)*1000); 
+					var theDate:String = ((currDate.getMonth()+ 1) + "/" + currDate.getDate() + "/" + currDate.getFullYear());
+					mWebsiteCreatedTimeLabel.text = "Created On : " + theDate;
+				}
+			}
+			
+			/**
+			 * 
+			 */
+			private function canvasRollOverHandler(event:Event):void
+			{
+				var fade:Fade = new Fade();
+				fade.alphaFrom = 0.8;
+				fade.alphaTo = 1;
+				fade.duration = 500;
+				fade.target = this;
+				fade.play();
+			}
+			
+			/**
+			 * 
+			 */
+			private function canvasRollOutHandler(event:Event):void
+			{
+				var fade:Fade = new Fade();
+				fade.alphaFrom = 1;
+				fade.alphaTo = 0.8;
+				fade.duration = 500;
+				fade.target = this;
+				fade.play();
+			}
+			
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//							  DATA MEMBERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			// website name
+			private var mWebsiteName:String = "";
+			// website URL
+			private var mURL:String = "";
+			// website type
+			private var mType:String = "";
+			// website create time
+			private var mCreatedTime:String = "";
+			
+			// boolean which tells the component's children if the remove label is visible
+			private var mRemoveLabelOn:Boolean = false;
+			private var mEditLabelOn:Boolean = false;
+			
+		]]>
+	</mx:Script>
+	
+	<mx:Canvas x="10" y="10" width="390" height="80" id="mMainPanelCanvas" borderStyle="solid" cornerRadius="15" borderThickness="0">
+		<mx:Canvas x="12" y="8" width="64" height="64" backgroundImage="@Embed(source='../images/websiteSample.jpg')">
+		</mx:Canvas>
+		<mx:Label x="84" y="13" text="Some Website Name" fontSize="16" id="mWebsiteNameLabel" width="296"/>
+		<mx:Label x="84" y="45" text="Type : Not Available" id="mWebsiteType" width="296"  />
+		<mx:Label x="84" y="57" text="URL : www.xyz.com" id="mWebsiteURLLabel" width="296"  />
+		<mx:Label x="84" y="35" text="Some Time" id="mWebsiteCreatedTimeLabel" width="296"  />
+		<mx:Canvas x="0" y="0" width="390" height="80" click="overlayCanvasClickHandler(event)" rollOver="overlayCanvasRollOverHandler(event)" rollOut="overlayCanvasRollOutHandler(event)" id="mOverlayCanvas" backgroundAlpha="0.01" backgroundColor="#FDFDFD">
+			<mx:Canvas x="306" y="51" width="50" height="20" toolTip="Remove this website from the community group" click="removeWebsiteLabelClickHandler(event)" backgroundImage="@Embed(source='../images/removeIcon.jpg')" id="mRemoveWebsiteLabel" visible="false" verticalScrollPolicy="off" horizontalScrollPolicy="off" useHandCursor="true">
+			</mx:Canvas>
+			<mx:Canvas x="306" y="51" width="50" height="20" toolTip="Edit this website from the community group" click="editWebsiteLabelClickHandler(event)" backgroundImage="@Embed(source='../images/editIcon.jpg')" id="mEditWebsiteLabel" visible="false" verticalScrollPolicy="off" horizontalScrollPolicy="off" useHandCursor="true">
+			</mx:Canvas>
+		</mx:Canvas>
+	</mx:Canvas>
+	
+</mx:Canvas>

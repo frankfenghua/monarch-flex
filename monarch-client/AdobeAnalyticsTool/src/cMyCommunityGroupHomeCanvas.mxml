@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="1012" height="616">
+	
+	<mx:Metadata>
+		[Event(name="MyCommunityGroupClickedEvent", type="flash.events.Event")]
+	</mx:Metadata>
+	
+	<mx:Script>
+		<![CDATA[
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//						   EVENT HANDLERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			/**
+			 * 	Event handler which displatches a event when the user clicks the my community
+			 * 	group button.
+			 */
+			private function myCommunityGroupButtonClickHandler(event:Event):void
+			{
+				var e:Event = new Event("MyCommunityGroupClickedEvent");
+				this.dispatchEvent(e);
+			}
+			
+		]]>
+	</mx:Script>
+	<mx:Label text="Home" id="mMyCommunityGroupHomeLabel" styleName="pageTitle" x="10" y="5"/>
+	<mx:Button label="My Community Groups" click="myCommunityGroupButtonClickHandler(event)" width="240" height="54" fontSize="14" toolTip="Browse my community groups" horizontalCenter="-154" verticalCenter="-26" icon="@Embed(source='../images/arrow_left.png')" styleName="buttonBlack"/>
+	<mx:Button label="Other Community Groups" width="240" height="54" fontSize="14" toolTip="Browse other community groups" horizontalCenter="154" verticalCenter="-26" icon="@Embed(source='../images/arrow_right.png')" styleName="buttonBlack"/>
+	
+</mx:Canvas>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" show="showCanvasHandler(event)" creationComplete="showCanvasHandler(event)" width="167" height="28" >
+
+	<mx:Metadata>
+		[Event(name="AccordionKeywordGraphicEvent", type="cAccordionKeywordGraphicEvent")]
+	</mx:Metadata>
+	<mx:Script>
+		<![CDATA[
+		
+			import mx.controls.Alert;
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//						   CANVAS EVENT HANDLERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			/**
+			 * 	Called when the canvas is displayed.
+			 */
+			private function showCanvasHandler(event:Event):void
+			{
+				mNameLabel.text = mName;
+				mNameLabel.toolTip = "Keyword " + mName;
+				mCheckBox.toolTip = "Toggle Statistics for " + mName;
+				mCheckBox.selected = true;
+			}
+			
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//						   EVENT HANDLERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			/**
+			 * 	Called when the user clicks on the check box.
+			 */
+			private function checkBoxChangeHandler(event:Event):void
+			{
+				var e:cAccordionKeywordGraphicEvent = new cAccordionKeywordGraphicEvent("cAccordionKeywordGraphicEvent");
+				e.mKeywordName = mName;
+				if(mCheckBox.selected) {
+					e.mType = e.KEYWORD_CHECKED;
+				}
+				else {
+					e.mType = e.KEYWORD_UNCHECKED;
+				}
+				this.dispatchEvent(e);
+			}
+			
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//						   MEMBER FUNCTIONS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			/**
+			 * 	Updates the internal information of this object.
+			 */
+			public function updateInformation(name:String):void
+			{
+				mName = name;
+			}
+			
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//						   DATA MEMBERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			// website name
+			private var mName:String = "";
+			
+		]]>
+	</mx:Script>
+
+	<mx:CheckBox x="4" y="5" change="checkBoxChangeHandler(event)" id="mCheckBox"/>
+	<mx:Label x="22" y="6" text="Keyword One" fontSize="11" width="135" fontWeight="normal" id="mNameLabel"/>
+	
+</mx:Canvas>

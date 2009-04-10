@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" show="showCanvasHandler(event)" creationComplete="showCanvasHandler(event)" width="167" height="28" horizontalScrollPolicy="off">
+
+	<mx:Metadata>
+		[Event(name="AccordionWebsiteGraphicEvent", type="cAccordionWebsiteGraphicEvent")]
+	</mx:Metadata>
+	<mx:Script>
+		<![CDATA[
+		
+			import mx.controls.Alert;
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//						   CANVAS EVENT HANDLERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			/**
+			 * 	
+			 */
+			private function showCanvasHandler(event:Event):void
+			{
+				mNameLabel.text = mName;
+				mNameLabel.toolTip = "Website " + mName;
+				mInfoLabel.toolTip = "Browes additional information for " + mName;
+				mCheckBox.toolTip = "Toggle Statistics for " + mName;
+			}
+			
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//						   EVENT HANDLERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			/**
+			 * 	Called when the user clicks on the additional info label.
+			 */
+			private function infoLabelClickHandler(event:Event):void
+			{
+				var e:cAccordionWebsiteGraphicEvent = new cAccordionWebsiteGraphicEvent("cAccordionWebsiteGraphicEvent");
+				e.mWebsiteName = mName;
+				e.mType = e.OPEN_ADDITIONAL_INFORMATION;
+				this.dispatchEvent(e);
+			}
+			
+			/**
+			 * 	Called when the user changes the state of the check box within this component.
+			 */
+			private function checkBoxChangeHandler(event:Event):void
+			{
+				var e:cAccordionWebsiteGraphicEvent = new cAccordionWebsiteGraphicEvent("cAccordionWebsiteGraphicEvent");
+				e.mWebsiteName = mName;
+				if(mCheckBox.selected) {
+					e.mType = e.WEBSITE_CHECKED
+				}
+				else {
+					e.mType = e.WEBSITE_UNCHECKED;
+				}
+				this.dispatchEvent(e);
+			}
+			
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//						   MEMBER FUNCTIONS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			/**
+			 * 	Updates the internal information of this object.
+			 */
+			public function updateInformation(name:String):void
+			{
+				mName = name;
+			}
+			
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//						   DATA MEMBERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			// website name
+			private var mName:String = "";
+			
+		]]>
+	</mx:Script>
+
+	<mx:CheckBox x="4" y="5" change="checkBoxChangeHandler(event)" id="mCheckBox"/>
+	<mx:Label x="22" y="6" text="Website Alpha" fontSize="11" width="103" fontWeight="normal" id="mNameLabel"/>
+	<mx:Button x="141" y="4" click="infoLabelClickHandler(event)" id="mInfoLabel" icon="@Embed(source='../images/information.png')" width="22"/>
+
+	
+</mx:Canvas>

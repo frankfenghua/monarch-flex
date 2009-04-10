@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="creationCompleteHandler(event)" show="creationCompleteHandler(event)" close="closingHandler(event)" layout="absolute" width="444" height="440" showInAutomationHierarchy="false" maxHeight="440" maxWidth="444" minHeight="440" minWidth="444" disabledOverlayAlpha=".7" backgroundDisabledColor="#000000" horizontalScrollPolicy="off" showCloseButton="true" title="Add Website" xmlns:local="*">
+	
+	<mx:Metadata>
+		[Event(name="CreateWebsiteEvent", type="cCreateWebsiteEvent")]
+		[Event(name="AddWebsitesEvent", type="cCreateWebsiteEvent")]
+	</mx:Metadata>
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.Label;
+			import mx.collections.ArrayCollection;
+			import mx.managers.PopUpManager;
+			import mx.controls.Alert;
+		
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//								EVENT HANDLERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			/**
+			 * 	Event handler which is triggered by the user clicking the Create
+			 * 	Website button.
+			 */
+			private function createWebsiteClickHandler(event:Event):void
+			{
+				if(mAddNewWebsiteRadioButton.selected) {
+					createWebsiteProcess();
+				}
+				else if(mAddPrevWebsiteRadioButton.selected) {
+					addWebsiteProcess();
+				}
+				
+			}
+			
+			/**
+			 *  Event handler triggered when the user clicks the ENTER keyboard
+			 *  button while the cursor lies within the website name text box.
+			 */
+			private function websiteNameKeyDownHandler(event:KeyboardEvent):void
+			{
+				if(event.keyCode == Keyboard.ENTER) {
+					createWebsiteProcess();
+				}
+			}
+			
+			/**
+			 *  Event handler triggered when the user clicks the ENTER keyboard
+			 *  button while the cursor lies within the website URL text box.
+			 */
+			private function websiteURLKeyDownHandler(event:KeyboardEvent):void
+			{
+				if(event.keyCode == Keyboard.ENTER) {
+					createWebsiteProcess();
+				}
+			}
+			
+			/**
+			 * 	Event handler which is triggered by the user clicking the Cancel button.
+			 */
+			private function cancelClickHandler(event:Event):void
+			{
+				cancelProcess();
+			}
+			
+			/**
+			 * 	Called when the user clicks on the add new website radio button.
+			 */
+			private function addNewWebsiteChangeHandler(event:Event):void
+			{
+				mAddNewWebsiteContainer.enabled = true;
+				mAddPrevWebsiteContainer.enabled = false;	
+				cCreateWebsiteButton.toolTip = "Create the website specified";
+			}
+			
+			/**
+			 * 	Called when the user clicks on the add previous website radio button.
+			 */
+			private function addPreviousWebsiteChangeHandler(event:Event):void
+			{
+				// request to fetch all of the websites from the server.
+				mEngine.getAllWebsites();
+				
+				mAddNewWebsiteContainer.enabled = false;
+				mAddPrevWebsiteContainer.enabled = true;	
+				cCreateWebsiteButton.toolTip = "Add the previously setup website(s) selected";
+			}
+			
+			/**
+			 * 	Event handler called when mEngine receives the AllWebsitesReadyEvent.
+			 */
+			private function allWebsitesReadyServiceHandler(event:cNewWebsitesEvent):void
+			{
+				mAddPrevWebsiteContainer.removeAllChildren();
+				for(var i:int = 0; i < event.mWebsites.length; i++) {
+					var websiteEntry:cWebsiteEntry = cWebsiteEntry(event.mWebsites.getItemAt(i));
+					
+					var entry:cWebsiteGraphic = new cWebsiteGraphic();
+					entry.updateInformation(websiteEntry.mName, websiteEntry.mId);
+					mAddPrevWebsiteContainer.addChild(entry);
+				}
+			}
+			
+
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//								MEMBER FUNCTIONS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			/**
+			 * 	Function which handles the processing of a create website event.
+			 */
+			private function createWebsiteProcess():void
+			{
+				if(mWebsiteNameTextBox.text.length == 0) {
+					Alert.show("Please enter a website name before proceeding.", "Error", 1, this);
+					return;
+				}
+					
+				if(mWebsiteURLTextBox.text.length == 0) {
+					Alert.show("Please enter a website URL before proceeding.", "Error", 1, this);
+					return;
+				}
+				
+				var e:cCreateWebsiteEvent = new cCreateWebsiteEvent("cCreateWebsiteEvent");
+				
+				var websiteType:String = "";
+				if(mForumTypeRadioButton.selected) {
+					websiteType = e.WEBSITE_TYPE_FORUM;
+				}
+				else if(mBlogTypeRadioButton.selected) {
+					websiteType = e.WEBSITE_TYPE_BLOG;
+				}
+				else if(mNewsTypeRadioButton.selected) {
+					websiteType = e.WEBSITE_TYPE_NEWS;
+				}
+				
+				if(websiteType.length == 0) {
+					Alert.show("Please select a type for the website before proceeding.", "Error", 1, this);
+					return;
+				}
+				
+				e.mType = e.CREATE_WEBSITE;
+				e.mWebsiteType = websiteType;
+				e.mWebsiteName = mWebsiteNameTextBox.text;
+				e.mWebsiteURL = mWebsiteURLTextBox.text;
+				this.dispatchEvent(e);
+				//this.close()
+				PopUpManager.removePopUp(this);
+			}
+			
+			/**
+			 *  Function which handles the processing of a add website(s) event.
+			 */
+			private function addWebsiteProcess():void
+			{
+				var ids:ArrayCollection = new ArrayCollection();
+				// grab all of the websites (ids) which have been selected
+				for(var i:int = 0; i < mAddPrevWebsiteContainer.getChildren().length; i++) {
+					if(mAddPrevWebsiteContainer.getChildAt(i) is cWebsiteGraphic) {
+						var websiteEntry:cWebsiteGraphic = cWebsiteGraphic(mAddPrevWebsiteContainer.getChildAt(i));
+						if(websiteEntry.isSelected()) {
+							ids.addItem(websiteEntry.getWebsiteId());
+						}
+					}
+				}
+				
+				// check to make sure the user has selected at least one website before proceeding
+				if(ids.length == 0) {
+					Alert.show("Please select at least one website before proceeding.", "Error", 1, this);
+					return;
+				}
+				
+				// concat a string of id's separated by commas
+				var string:String = "";
+				for(i = 0; i < ids.length; i++) {
+					if(i) {
+						string = string + "," + ids.getItemAt(i);
+					}
+					else {
+						string = ids.getItemAt(i).toString();
+					}
+				}
+				// fire the event signaling that existing websites should be added 
+				var e:cCreateWebsiteEvent = new cCreateWebsiteEvent("cCreateWebsiteEvent");
+				e.mType = e.ADD_WEBSITES;
+				e.mWebsiteIds = string;				
+				this.dispatchEvent(e);
+				//this.close();
+				PopUpManager.removePopUp(this);
+			}
+			
+			/**
+			 * 	Function which handles the processing of a cancel event.
+			 */
+			private function cancelProcess():void
+			{
+				var e:cCreateWebsiteEvent = new cCreateWebsiteEvent("cCreateWebsiteEvent");
+				e.mType = e.CANCEL;
+				this.dispatchEvent(e);
+				//this.close()
+				PopUpManager.removePopUp(this);
+			}
+			
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//								WINDOW EVENT HANDLERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			/**
+			 * 	Event handler called when the window is first created.
+			 */
+			private function creationCompleteHandler(event:Event):void
+			{
+				mWebsiteNameTextBox.setFocus();
+				mAddPrevWebsiteContainer.enabled = false;
+				mAddNewWebsiteContainer.enabled = true;
+				cCreateWebsiteButton.toolTip = "Create the website specified";
+			}
+			
+			/**
+			 * 	Event handler triggered when the window is about to close.
+			 */
+			private function closingHandler(event:Event):void
+			{
+				cancelProcess();
+			}
+			
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//								DATA MEMBERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+		]]>
+	</mx:Script>
+	
+	<mx:Button click="createWebsiteClickHandler(event)" id="cCreateWebsiteButton" label="Add Website(s)" horizontalCenter="153" verticalCenter="188"/>
+	<mx:Button click="cancelClickHandler(event)" id="mCancelButton" label="Cancel" toolTip="Cancel the create account aperation" horizontalCenter="56" verticalCenter="188"/>
+	<mx:Canvas width="418" height="113" id="mAddNewWebsiteContainer" horizontalCenter="2" verticalCenter="-111" enabled="true" disabledOverlayAlpha=".9" alpha="1" backgroundDisabledColor="#333333">
+		<mx:Label x="-2.5" y="13" text="Website Name :" keyDown="websiteNameKeyDownHandler(event)" textAlign="right"/>
+		<mx:Label x="7.5" y="49" text="Website URL :" keyDown="websiteURLKeyDownHandler(event)" textAlign="right"/>
+		<mx:Label x="-2.5" y="87" text="Website Type :" textAlign="right"/>
+		<mx:TextInput x="110.5" y="11" width="296" id="mWebsiteNameTextBox"/>
+		<mx:TextInput x="110.5" y="47" width="296" id="mWebsiteURLTextBox"/>
+		<mx:RadioButton x="110.5" y="85" label="Forum"  id="mForumTypeRadioButton" groupName="typeGroup"/>
+		<mx:RadioButton x="178.5" y="85" label="Blog" id="mBlogTypeRadioButton" groupName="typeGroup"/>
+		<mx:RadioButton x="236" y="85" label="News" id="mNewsTypeRadioButton" groupName="typeGroup"/>
+	</mx:Canvas>
+	<mx:RadioButton label="Add New Website" change="addNewWebsiteChangeHandler(event)" selected="true" id="mAddNewWebsiteRadioButton" x="10" verticalCenter="-185" groupName="selectionGroup">
+		<mx:toolTip>Create and add a website which has not been previously created</mx:toolTip>
+	</mx:RadioButton>
+	<mx:RadioButton x="14" label="Add Previously Setup Websites" change="addPreviousWebsiteChangeHandler(event)" id="mAddPrevWebsiteRadioButton" verticalCenter="-16" groupName="selectionGroup">
+		<mx:toolTip>Add a website which has been previously created and added</mx:toolTip>
+	</mx:RadioButton>
+	<mx:VBox height="166" width="418" enabled="false" disabledOverlayAlpha=".9" alpha="1" backgroundDisabledColor="#333333" id="mAddPrevWebsiteContainer" horizontalCenter="2" verticalCenter="86" verticalScrollPolicy="on" horizontalScrollPolicy="off">
+	</mx:VBox>
+	<local:cEngine id="mEngine" AllWebsitesReadyEvent="allWebsitesReadyServiceHandler(event)">
+		
+	</local:cEngine>
+</mx:TitleWindow>	
+

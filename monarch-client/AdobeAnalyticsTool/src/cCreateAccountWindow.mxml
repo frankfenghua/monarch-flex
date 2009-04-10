@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="creationCompleteHandler(event)" layout="absolute" close="closingHandler(event)" width="376" height="206" minHeight="206" minWidth="376" maxHeight="206" maxWidth="376" showCloseButton="true" title="Register an Account">
+	<mx:Metadata>
+		[Event(name="createAccountEvent", type="cCreateAccountEvent")]
+	</mx:Metadata>
+	
+	<mx:Script>
+		<![CDATA[
+			
+			import mx.controls.Alert;
+			import mx.managers.PopUpManager;
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//								EVENT HANDLERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			/**
+			 * 	Event handler which is triggered by the user clicking the Create
+			 * 	Account button.
+			 */
+			private function createAccountClickHandler(event:Event):void
+			{
+				createAccountProcess();
+			}
+			
+			/**
+			 * 	Event handler which is triggered by the user clicking the Cancel button.
+			 */
+			private function cancelClickHandler(event:Event):void
+			{
+				cancelProcess();
+			}
+			
+			/**
+			 *  Event handler triggered when the user clicks the ENTER keyboard
+			 *  button while the cursor lies within the full name text box.
+			 */
+			private function fullNameKeyDownHandler(event:KeyboardEvent):void
+			{
+				if(event.keyCode == Keyboard.ENTER) {
+					createAccountProcess();
+				}
+			}
+			
+			/**
+			 *  Event handler triggered when the user clicks the ENTER keyboard
+			 *  button while the cursor lies within the user name text box.
+			 */
+			private function userNameKeyDownHandler(event:KeyboardEvent):void
+			{
+				if(event.keyCode == Keyboard.ENTER) {
+					createAccountProcess();
+				}
+			}
+			
+			/**
+			 *  Event handler triggered when the user clicks the ENTER keyboard
+			 *  button while the cursor lies within the password text box.
+			 */
+			private function passwordKeyDownHandler(event:KeyboardEvent):void
+			{
+				if(event.keyCode == Keyboard.ENTER) {
+					createAccountProcess();
+				}
+			}
+			
+			/**
+			 * Event handler triggered when the user clicks the ENTER keyboard
+			 *  button while the cursor lies within the re-enter password text box.
+			 */
+			private function reEnterPasswordKeyDownHandler(event:KeyboardEvent):void
+			{
+				if(event.keyCode == Keyboard.ENTER) {
+					createAccountProcess();
+				}
+			}
+			
+			/**
+			 * 	Event handler triggered when the window is about to close.
+			 */
+			private function closingHandler(event:Event):void
+			{
+				cancelProcess();
+			}
+			
+			/**
+			 * 	Event handler called when the window is first created.
+			 */
+			private function creationCompleteHandler(event:Event):void
+			{
+				mFullNameTextBox.setFocus();
+			}
+			
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//								MEMBER FUNCTIONS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			/**
+			 * 	Function which handles the processing of a create account event.
+			 */
+			private function createAccountProcess():void
+			{
+				if(mFullNameTextBox.text.length == 0 ||
+				   mEmailTextBox.text.length == 0 ||
+				   mPasswordTextBox.text.length == 0 ||
+				   mReEnterPasswordTextBox.text.length == 0)
+				{
+					Alert.show("Please fill in all fields before proceeding.", "Error", 1, this);
+					return;
+				}	
+				
+				if(mPasswordTextBox.text != mReEnterPasswordTextBox.text)
+				{
+					Alert.show("The passwords entered don't match.", "Error", 1, this);
+					return;
+				}
+				
+				var e:cCreateAccountEvent = new cCreateAccountEvent("cCreateAccountEvent");
+				e.mType = e.CREATE_ACCOUNT;
+				e.mFullName = mFullNameTextBox.text;
+				e.mEmail = mEmailTextBox.text;
+				e.mPassword = mPasswordTextBox.text;
+				this.dispatchEvent(e);
+				PopUpManager.removePopUp(this);
+			}
+			
+			/**
+			 * 	Function which handles the processing of a cancel event.
+			 */
+			private function cancelProcess():void
+			{
+				var e:cCreateAccountEvent = new cCreateAccountEvent("cCreateAccountEvent");
+				e.mType = e.CANCEL;
+				this.dispatchEvent(e);
+				PopUpManager.removePopUp(this);
+			}
+			
+		]]>
+	</mx:Script>
+	<mx:Label x="51" y="28" text="Full Name :" />
+	<mx:Label x="76" y="54" text="Email :" />
+	<mx:Label x="57" y="80" text="Password :" />
+	<mx:Label x="7" y="106" text="Re-enter Password :" />
+	<mx:TextInput width="224.5" keyDown="fullNameKeyDownHandler(event)" id="mFullNameTextBox" x="128" y="26" toolTip="Your full name"/>
+	<mx:TextInput width="224.5" keyDown="userNameKeyDownHandler(event)" id="mEmailTextBox" x="128" y="52" toolTip="The user name used for logging in"/>
+	<mx:TextInput width="224.5" keyDown="passwordKeyDownHandler(event)" id="mPasswordTextBox" x="128" y="78" displayAsPassword="true" toolTip="The password used for logging in"/>
+	<mx:TextInput width="224.5" keyDown="reEnterPasswordKeyDownHandler(event)" id="mReEnterPasswordTextBox" x="128" y="104" displayAsPassword="true" toolTip="To make sure that you typed it in correctly"/>
+	<mx:Button x="243.5" y="138" click="createAccountClickHandler(event)" id="cCreateAccountButton" label="Create Account" />
+	<mx:Button x="172.5" y="138" click="cancelClickHandler(event)" id="mCancelButton" label="Cancel" />
+</mx:TitleWindow>

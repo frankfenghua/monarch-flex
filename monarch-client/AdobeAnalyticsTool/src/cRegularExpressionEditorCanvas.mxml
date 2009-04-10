@@ -1,0 +1,555 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="1012" height="616" creationComplete="initWizard(event)" show="showCanvasHandler(event)">
+	<mx:Metadata>
+		[Event(name="OpenCommunityGroupSelectionClickedEvent", type="flash.events.Event")]
+		[Event(name="OpenCommunityGroupHomeCanvasEvent", type="flash.events.Event")]
+		[Event(name="OpenCommunityGroupBrowserCanvasEvent", type="flash.events.Event")]
+		[Event(name="OpenWebsiteAdditionalStatBrowserCanvasEvent", type="flash.events.Event")]
+		[Event(name="RegExProcessingCompleteEvent", type="cCreateWebsiteEvent")]
+	</mx:Metadata>
+	
+	<mx:Script>
+		<![CDATA[
+		
+			import mx.core.UIComponent;
+			import mx.controls.textClasses.TextRange;
+			import mx.controls.Alert;
+			import controls.Highlighter;
+			import mx.managers.PopUpManager;
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//							CANVAS EVENT HANDLERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			// Called when the wizard is added to the stage
+			private function initWizard(event:Event):void {
+				
+				mCommunityGroupNameLabel.label = mCommunityGroupName;
+				mWebsiteNameLabel.label = mWebsiteName;
+				mCommunityGroupNameLabel.x =+ mSep2.x + mSep2.measureText(mSep2.text).width + 10;
+				mSep3.x =+ mCommunityGroupNameLabel.x + mCommunityGroupNameLabel.width + 10;
+				//mWebsiteNameLabel.x =+ mSep3.x + mSep3.measureText(mSep3.text).width + 10;
+				//mSep4.x =+ mWebsiteNameLabel.x + mWebsiteNameLabel.width + 10;
+				mRexExEditorLabel.x =+ mSep3.x + mSep3.measureText(mSep3.text).width + 10;
+			}
+			
+			/**
+			 * 	Called when the canvas is displayed.
+			 */
+			private function showCanvasHandler(event:Event):void
+			{
+				// select OpeningScreen canvas by default.
+				mMainViewStack.selectedIndex = 0;
+				
+				mCommunityGroupNameLabel.label = mCommunityGroupName;
+				mWebsiteNameLabel.label = mWebsiteName;
+				mCommunityGroupNameLabel.x =+ mSep2.x + mSep2.measureText(mSep2.text).width + 10;
+				mSep3.x =+ mCommunityGroupNameLabel.x + mCommunityGroupNameLabel.width + 10;
+				//mWebsiteNameLabel.x =+ mSep3.x + mSep3.measureText(mSep3.text).width + 10;
+				//mSep4.x =+ mWebsiteNameLabel.x + mWebsiteNameLabel.width + 10;
+				mRexExEditorLabel.x =+ mSep3.x + mSep3.measureText(mSep3.text).width + 10;
+				
+				
+			}
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//							MEMBER FUNCTIONS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			/**
+			 * 	Updates the internal information of this object.
+			 */
+			public function updateInformation(event:cCreateWebsiteEvent):void
+			{
+				mCommunityGroupName = event.mCommunityGroupName;
+				mCommunityGroupId = event.mCommunityGroupId;
+				mWebsiteName = event.mWebsiteName;
+				mWebsiteURL = event.mWebsiteURL;
+				mWebsiteType = event.mWebsiteType;	
+				
+				urlToLoad = event.mWebsiteURL;
+				RegExProcessingCompleteEvent  = event;
+				
+				if(urlToLoad.substr(0, 7) != "http://") {
+					urlToLoad = "http://" + urlToLoad;
+				}
+				
+				// Initialize variables
+				urlContents = "<html>No website loaded</html>";
+				pageOfPostsContents = "<html>No website loaded</html>";
+				trace("wizard inited");
+				pageLoader = new URLLoader(new URLRequest(urlToLoad));
+				pageLoader.addEventListener(Event.COMPLETE, handlePageLoaded);
+				pageIsLoading = true;
+				
+			}
+		
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//							ANDREW'S FUNCTIONS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+		
+			/**
+			 * 	Called when the the mPageSourceText objects is created and shown.
+			 */
+			private function initializePageSourceText(event:Event):void
+			{
+				mPageSourceText.text = urlContents;
+				trace("Page Source set to string of length "+urlContents.length);
+				
+				// Initialize highlighter
+				highlighter = new Highlighter(getTextField(mPageSourceText));		
+			}
+		
+			private function handlePageLoaded(event:Event):void {
+				// Enable source tab and text matches tab
+				if(sourceTab) {
+					sourceTab.enabled = true;
+				}
+				if(textMatchesTab) {
+					textMatchesTab.enabled = true;
+				}
+				pageIsLoading = false;
+				trace("Page loaded");
+				urlContents = pageLoader.data;		
+			}
+			
+			private function handlePageOfPostsLoaded(event:Event):void {
+				trace("Page of posts loaded: length of data");
+				
+				// Must use if because sometimes the event received is not the right one
+				if(pageOfPostsLoader.data != null) {
+					pageIsLoading = false;
+					pageOfPostsContents = pageOfPostsLoader.data;
+				}		
+			}
+			
+
+			private function handlePageOfPostsError(event:Event):void {
+				// When there is an error in loading a page of posts, alert
+				// the user and return to previous page
+				Alert.show("Your regular expression for Thread URL did not return a valid URL");
+				mMainViewStack.selectedChild = RegexEntry;
+				currState = topLevelRegexes[topLevelRegexes.length - 1];
+				
+			}
+			
+			// ================================================================
+			// regexHelp
+			//    args:  nigger, don't ask me. I don't know what an event is. 
+			//           Aint even used in this mofo.
+			//    ret:   void
+			//    about: Pops up a help window showing an screenshot of 
+			//           Threadless and some more descriptive text.
+			// ----------------------------------------------------------------
+			private function regexHelp(event:Event):void 
+			{
+				var helpWindow:cRegexHelpWindow = cRegexHelpWindow(PopUpManager.createPopUp(this, cRegexHelpWindow, true));
+				helpWindow.x = 100;
+				helpWindow.y = 50;
+				helpWindow.init(currState);
+				trace("REGEX HELP: "+currState);
+				// TODO: why is nativeWindow undefined whenever I use it but is defined when Mariusz uses it?
+				// helpWindow.x = (nativeWindow.width - helpWindow.width) / 2;
+				// helpWindow.y = (nativeWindow.height - helpWindow.height) / 2;
+			}
+			
+			// Called when the user clicks the forward button:
+			//  advances to the next screen
+			private function advanceWizard(event:Event):void {
+				trace("Advance: currState = "+currState);
+				
+				// Modify state variables and store user input in Site Event 
+				if(mMainViewStack.selectedChild == OpeningScreen) {
+					mMainViewStack.selectedChild = RegexEntry;
+					currState = topLevelRegexes[0];
+				}
+				else if(mMainViewStack.selectedChild == RegexEntry) {
+					// Given current state, either go to next regular expression or 
+					//  change to the next canvas in the viewstack
+					var index:int = topLevelRegexes.indexOf(currState);
+					
+					// Store the user input in the site event
+					RegExProcessingCompleteEvent.regularExpressionMap[currState] = regexString.text;
+					
+					if(index == topLevelRegexes.length - 1) { // this is last toplevel regex
+						trace("last toplevel regex");
+
+						mMainViewStack.selectedChild = pageOfPostsVerify;
+						if(pageOfPostsHTML) {
+							initializePageOfPostsVerify(new Event("dummy"));
+						}
+					}
+					else if(index == -1) { // must be a sub-level regular expression
+						trace("must be a sub-level regular expression");
+						index = subLevelRegexes.indexOf(currState);
+
+						if(index == subLevelRegexes.length -1) { // this is last sub-level regex
+							mMainViewStack.selectedChild = finalView;
+						}
+						else {								
+							// Set the regex to be collected to the next in the list
+							currState = subLevelRegexes[index + 1];
+						}
+					}
+					else {
+						// Set the regex to be collected to the next in the list
+						currState = topLevelRegexes[index + 1];
+					}	
+				}
+				else if(mMainViewStack.selectedChild == pageOfPostsVerify) {
+					mMainViewStack.selectedChild = RegexEntry;
+					currState = subLevelRegexes[0];
+				}	
+				else { // viewstack1.selectedChild == finalView
+					// Store user input in Site Event
+					// TODO: determine if casting to int is still necesssary:
+					RegExProcessingCompleteEvent.topLevelBreadth = int(mNumToplevelTextInput.value);
+					RegExProcessingCompleteEvent.crawlingPeriod = int(mMinutesBetweenCrawlsTextInput.value);
+					
+					// Dispatch event: will be handled by the server
+					trace("RegEx:");
+					trace(RegExProcessingCompleteEvent);
+					var e:cCreateWebsiteEvent = new cCreateWebsiteEvent("RegExProcessingCompleteEvent");
+					this.dispatchEvent(RegExProcessingCompleteEvent);
+				}	
+						
+				// Initialize the regexString text input for the next screen
+				if(regexString && mMainViewStack.selectedChild == RegexEntry) {
+					// If the user has already entered a regular expression for this
+					// state, set regexString.text to it
+					if(RegExProcessingCompleteEvent .regularExpressionMap.hasOwnProperty(currState)) {
+						regexString.text = RegExProcessingCompleteEvent.regularExpressionMap[currState];
+					}
+					else {
+						regexString.text = "";
+					}
+					// We have changed text so call text-changed handler
+					onTextInputChange(new Event(Event.CHANGE));
+				}
+			}
+			
+			private function backWizard(event:Event):void {
+				// When the user presses back, whatever they had already typed in the
+				//  next screen is lost.
+				if(mMainViewStack.selectedChild == OpeningScreen) {
+					// Should we disable back on the opening screen? I think so.
+				}
+				else if(mMainViewStack.selectedChild == RegexEntry) {
+					// Given current state, either go to next regular expression or 
+					//  change to the next canvas in the viewstack
+					var index:int = topLevelRegexes.indexOf(currState);
+					if(index == 0) { // this is first toplevel regex
+						mMainViewStack.selectedChild = OpeningScreen;
+					}
+					else if(index == -1) { // must be a sub-level regular expression
+						index = subLevelRegexes.indexOf(currState);
+						if(index == 0) { // this is first sub-level regex
+							mMainViewStack.selectedChild = pageOfPostsVerify;
+						}
+						else {
+							// Set the regex to be collected to the next in the list
+							currState = subLevelRegexes[index - 1];
+						}
+					}
+					else {
+						// Set the regex to be collected to the next in the list
+						currState = topLevelRegexes[index - 1];
+					}	
+				}
+				else if(mMainViewStack.selectedChild == pageOfPostsVerify) {
+					mMainViewStack.selectedChild = RegexEntry;
+					currState = topLevelRegexes[topLevelRegexes.length-1];
+				}	
+				else { // viewstack1.selectedChild == finalView
+					mMainViewStack.selectedChild = RegexEntry;
+					currState = subLevelRegexes[subLevelRegexes.length-1];
+				}
+				
+				// Initialize the regexString text input for the next screen
+				if(regexString && mMainViewStack.selectedChild == RegexEntry) {
+					// If the user has already entered a regular expression for this
+					// state, set regexString.text to it
+					if(RegExProcessingCompleteEvent .regularExpressionMap.hasOwnProperty(currState)) {
+						regexString.text = RegExProcessingCompleteEvent .regularExpressionMap[currState];
+					}
+					else {
+						regexString.text = "";
+					}
+					// We have changed text so call text-changed handler
+					onTextInputChange(new Event(Event.CHANGE));
+				}	
+			}
+			
+			private function initializeFinalView(event:Event):void {
+				// Initialize this view's text inputs to the values carried by the event
+				mNumToplevelTextInput.value = RegExProcessingCompleteEvent.topLevelBreadth;
+				mMinutesBetweenCrawlsTextInput.value = RegExProcessingCompleteEvent.crawlingPeriod;
+			}
+			
+			private function initializePageOfPostsVerify(event:Event):void {
+				// Match text of "thread url" regular expression and load page from that
+				// url.
+				var threadUrlMatch:Object;
+				var threadUrlRegex:RegExp = new RegExp(RegExProcessingCompleteEvent.regularExpressionMap["thread url"], "g");
+				trace(threadUrlRegex);
+				trace(mPageSourceText);
+				threadUrlMatch = threadUrlRegex.exec(urlContents);
+				if(threadUrlMatch && threadUrlMatch.length > 1) {
+					searchTerms.text = threadUrlMatch[1];
+					pageOfPostsLoader = new URLLoader(new URLRequest(searchTerms.text));
+					pageOfPostsLoader.addEventListener(Event.COMPLETE, handlePageOfPostsLoaded);
+					pageOfPostsLoader.addEventListener(ErrorEvent.ERROR, handlePageOfPostsError);
+					pageIsLoading = true;
+				}
+				else {
+					// TODO: load a dummy page
+					handlePageOfPostsError(new Event(ErrorEvent.ERROR));
+				}
+			}
+			private function viewAppearanceHandler(event:Event):void {
+//				var myComponent:UIComponent  = new UIComponent();  
+//				myComponent.addChild(html);
+//				htmlBox.addChild(myComponent);
+//				html.width = htmlBox.width;
+//    			html.height = 2880;
+			}
+			
+			/**
+			 * Clears highlighting and re-highlights matches
+			 */
+			private function onTextInputChange(event:Event):void {
+				// Build regular expression from user string
+				var regex:RegExp = new RegExp(regexString.text, "g");
+
+				if(regexString.text.length > 0) {
+					if(feedbackTabs.selectedChild == htmlViewTab) {
+						// TODO: highlight HTML
+					}
+					else if(feedbackTabs.selectedChild == sourceTab) {
+						if(highlighter) {
+							highlighter.reset();
+							highlighter.highlightMatches(regex);
+						}
+					} 
+					else { // selectedChild == textMatchesTab
+						// Find all matches for text in the source view and
+						// output them in the textMatchesTab TextArea
+						var matchObject:Object;
+						var matchesString:String = "";
+						
+						// Construct string of text matches
+						matchObject = regex.exec(urlContents);
+						while(matchObject != null) {
+							if(matchObject.length > 1) {
+								matchesString = matchesString + "\n\n"+matchObject[1];
+							}
+							matchObject = regex.exec(urlContents);
+						}
+						
+						// Set matches test to string of text matches
+						matchesText.text = matchesString;
+					}
+				}
+				else {
+					// Clear highlighting
+					if(feedbackTabs.selectedChild == sourceTab && highlighter) {
+						highlighter.reset();
+					}
+				}		
+			}
+			
+			/**
+			 * Given a TextArea, returns the underlying TextField
+			 */
+			private function getTextField(component:TextArea):TextField{
+	            var len:int = component.numChildren;
+	            var r:TextField;
+	            for(var i:int=0; i<len; i++){
+	                var thisChild:DisplayObject = component.getChildAt(i);
+	                if(thisChild is TextField){
+	                    r = thisChild as TextField;
+	                }
+	            }
+	        	return r;
+        	}
+					
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//							EVENT HANDLERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+
+			
+			/**
+			 * Called when the HTML view is added to the stage
+			 */
+			private function htmlViewAddedHandler(event:Event):void 
+			{
+				// htmlComponent.htmlText = urlContents;
+			}
+			
+			/**
+			 * 	Called when the user clicks on the home label.
+			 */
+			private function homeLabelClickHandler(event:Event):void
+			{
+				var e:Event = new Event("OpenCommunityGroupHomeCanvasEvent");
+				this.dispatchEvent(e);
+			}
+			
+			/**
+			 * 	Called when the user clicks on the community label.
+			 */
+			private function communityLabelClickHandler(event:Event):void
+			{
+				var e:Event = new Event("OpenCommunityGroupSelectionClickedEvent");
+				this.dispatchEvent(e);
+			}
+			
+			/**
+			 * 	Called when the user clicks on the community group name label.
+			 */
+			private function communityNameLabelClickHandler(event:Event):void
+			{
+				var e:Event = new Event("OpenCommunityGroupBrowserCanvasEvent");
+				this.dispatchEvent(e);
+			}
+			
+			/**
+			 * 	Called when the user clicks on the website name label.
+			 */
+			private function websiteNameLabelClickHandler(event:Event):void
+			{
+				var e:Event = new Event("OpenWebsiteAdditionalStatBrowserCanvasEvent");
+				this.dispatchEvent(e);
+			}
+			
+			/**
+			 * 
+			 */
+			private function exitButtonClickHandler(event:Event):void
+			{
+				var e:Event = new Event("OpenWebsiteAdditionalStatBrowserCanvasEvent");
+				this.dispatchEvent(e);
+			}
+			
+			
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//							DATA MEMBERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			
+			// TODO: populate these from the database
+			// nextPageOfThreads, threadUrl, threadNumPosts, threadNumViews. Once these are collected, the threadUrl 
+			private var topLevelRegexes:Array = new Array("next page of threads", "number of views for thread", "thread url");
+			private var usrRegexes:Object = new Object();
+			private var subLevelRegexes:Array = new Array("next page of posts", "thread title", "first post author", "first post author URL",
+												  "first post time", "first post message", "reply author", "reply time",
+												  "reply message");
+
+			[Bindable]
+			private var currState:String;
+			
+			private var pageLoader:URLLoader;
+			private var pageOfPostsLoader:URLLoader;
+			private var urlToLoad:String; // in application this will be given
+			
+			[Bindable]
+			private var urlContents:String = "<html>No website loaded</html>";
+			[Bindable]
+			private var pageOfPostsContents:String = "<html>No website loaded</html>";
+			private var html:HTMLLoader;
+			
+			// name of the community group
+			private var mCommunityGroupName:String = "";
+			// id of the community group
+			private var mCommunityGroupId:int = -1;
+			// name of the website 
+			private var mWebsiteName:String = "";
+			// URL of the website
+			private var mWebsiteURL:String = "";
+			// type of website
+			private var mWebsiteType:String = "";
+			// highlighter for page source
+			private var highlighter:Highlighter;
+			// We will populate this event using user input
+			private var RegExProcessingCompleteEvent :cCreateWebsiteEvent;	
+			// Boolean used to signal that a page is still being loaded
+			private var pageIsLoading:Boolean = false;
+			
+			private var IMAGE_URL:String = "http://csil-srprj-2.cs.uiuc.edu/monarch/images";
+			
+		]]>
+	</mx:Script>
+	<mx:LinkButton label="Home" id="mHomeLabel" click="homeLabelClickHandler(event)"  top="15" left="9" textAlign="left"/>
+	<mx:LinkButton label="My Community Groups"  id="mCommunityGroupLabel" click="communityLabelClickHandler(event)" styleName="breadCrumb"  top="15" left="81" textAlign="left"/>
+	<mx:LinkButton id="mCommunityGroupNameLabel" click="communityNameLabelClickHandler(event)" styleName="breadCrumb"  top="15" left="256" textAlign="center"/>
+	<mx:LinkButton click="websiteNameLabelClickHandler(event)" id="mWebsiteNameLabel" top="15" left="346" textAlign="center" textDecoration="normal" visible="false"/>
+	<mx:Label text="RegEx Editor" id="mRexExEditorLabel" styleName="pageTitle"  top="13" left="344" textAlign="left"/>
+	<mx:Button id="rightButton" click="advanceWizard(event)" horizontalCenter="478" verticalCenter="-284" icon="@Embed(source='../images/arrow_right.png')" toolTip="next regex" width="30" height="30" />
+	<mx:Button horizontalCenter="370" verticalCenter="-284" id="mExitButton" click="exitButtonClickHandler(event)" toolTip="exit" icon="@Embed(source='../images/door_out.png')" width="30" height="30"/>
+	<mx:Button click="backWizard(event)" horizontalCenter="427" verticalCenter="-284" icon="@Embed(source='../images/arrow_left.png')" toolTip="previous regex" width="30" height="30"/>
+	<mx:Button click="regexHelp(event)" horizontalCenter="315" verticalCenter="-284" icon="@Embed(source='../images/help.png')" toolTip="help on this particular regex" width="30" height="30"/>
+	
+	<mx:ViewStack x="10" y="55" id="mMainViewStack" width="992" height="551">
+		<mx:Canvas id="OpeningScreen" width="100%" height="100%">
+			<mx:Text text="Welcome to the Adapter Creation Wizard. The following screens will walk you through the creation of a custom plugin. &#xd;Click on the right arrow to continue." width="971.95" textAlign="center" horizontalCenter="-1" verticalCenter="-232" fontSize="12"/>
+		</mx:Canvas>
+		<mx:Canvas id="RegexEntry" width="100%" height="100%" creationComplete="viewAppearanceHandler(event)" show="viewAppearanceHandler(event)">
+			<mx:Text id="infoText" text="Enter a regular expression that matches {currState}:" width="972" height="22" fontSize="12" horizontalCenter="0" verticalCenter="-256"/>
+			<mx:TextInput id="regexString" change="onTextInputChange(event)"  width="292" horizontalCenter="-340" verticalCenter="-231" borderStyle="solid" borderThickness="0" color="#EFEFEF"/>
+			<mx:TabNavigator id="feedbackTabs" width="974.95" height="481" horizontalCenter="2" verticalCenter="35" change="onTextInputChange(event)">
+	    		<mx:Canvas label="View" id="htmlViewTab" width="100%" height="100%" color="#EFEFEF">
+	    		    <mx:HTML id="htmlComponent" htmlText="{urlContents}" x="10" y="10" width="952.95" height="440" addedToStage="htmlViewAddedHandler(event)"/>
+	    		</mx:Canvas>
+	    		<mx:VBox label="Source" id="sourceTab" width="100%" height="100%" color="#EFEFEF">
+	    		    <mx:TextArea creationComplete="initializePageSourceText(event)" show="initializePageSourceText(event)" width="972" height="447" id="mPageSourceText" selectable="true" verticalScrollPolicy="on" editable="false" wordWrap="true"/>
+	    		</mx:VBox>
+	   		    <mx:HBox label="Text Matches" id="textMatchesTab" width="100%" height="100%" color="#EFEFEF">
+	    		    <mx:TextArea id="matchesText" width="970" height="446">
+	    		    </mx:TextArea>
+	    		</mx:HBox>
+			</mx:TabNavigator>
+		</mx:Canvas>
+		<mx:Canvas id="pageOfPostsVerify" label="" width="100%" height="100%">
+			<mx:Canvas width="100%" height="100%" x="-0.05" y="10">
+				<mx:TabNavigator width="973" height="483" horizontalCenter="0" verticalCenter="20" change="onTextInputChange(event)">
+				  		<mx:Canvas label="View" width="100%" height="100%" backgroundColor="#FFFFFF">
+				  		  		<mx:HBox color="#F4F4F4">
+				  		  			<mx:Label text="Website ;"  width="68" fontSize="12"/>
+				  		  			<mx:TextInput id="searchTerms"  borderStyle="solid" borderThickness="0" width="189"/>
+				  		  		</mx:HBox>
+				  		  		<mx:HTML x="0" y="30" width="961" height="407" id="pageOfPostsHTML" htmlText="{pageOfPostsContents}" addedToStage="initializePageOfPostsVerify(event)"/>
+				  		</mx:Canvas>
+				</mx:TabNavigator>
+				<mx:Text x="10" y="10" text="If a &quot;page of posts is shown below click the right arrow. Otherwise revise the &quot;thread url&quot; regular expression in the previous screen." width="972" fontSize="12"/>
+			</mx:Canvas>
+		</mx:Canvas>
+		<mx:Canvas label="" width="100%" height="100%" id="finalView">
+			<mx:Text x="10" y="10" text="Select your crawling preferences:" width="441" fontSize="12"/>
+			<mx:HBox x="91" y="71" width="100%" height="22">
+				<mx:Text text="Minutes to wait between crawls:" width="393" fontSize="12"/>
+				<mx:NumericStepper id="mMinutesBetweenCrawlsTextInput"  value="30" minimum="5" maximum="255" stepSize="1"/>
+			</mx:HBox>
+			<mx:HBox x="91" y="114" width="100%" height="22">
+				<mx:Text text="Number of top-level pages to explore per crawl:" width="393" height="22" fontSize="12"/>
+				<mx:NumericStepper id="mNumToplevelTextInput"  value="2" minimum="1" maximum="20" stepSize="1"/>
+			</mx:HBox>
+			<mx:Text x="91" y="178" text="Note: we will do our best to accomodate your crawling preferences. However, please note that we are in possession of only finite resources. As a general guideline, the default values should be suitable for most sites." width="441" fontSize="12"/>
+		</mx:Canvas>
+	</mx:ViewStack>
+	<mx:HRule width="993" height="14.56" verticalCenter="-261" horizontalCenter="0"  />
+	<mx:Label text="&gt;" styleName="breadCrumbSeparator"  fontWeight="bold" top="13" left="61" id="mSep1"/>
+	<mx:Label text="&gt;" styleName="breadCrumbSeparator"  top="13" left="232" id="mSep2"/>
+	<mx:Label text="&gt;" styleName="breadCrumbSeparator"  top="13" left="322" id="mSep3"/>
+	<mx:Label text="&gt;" styleName="breadCrumbSeparator"  top="12" left="415" id="mSep4" visible="false"/>
+</mx:Canvas>

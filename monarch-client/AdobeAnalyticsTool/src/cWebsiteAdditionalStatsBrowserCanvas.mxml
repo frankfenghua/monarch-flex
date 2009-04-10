@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="showCanvasHandler(event)" show="showCanvasHandler(event)" width="1012" height="616">
+
+	<mx:Metadata>
+		[Event(name="OpenCommunityGroupSelectionClickedEvent", type="flash.events.Event")]
+		[Event(name="OpenCommunityGroupHomeCanvasEvent", type="flash.events.Event")]
+		[Event(name="OpenCommunityGroupBrowserCanvasEvent", type="flash.events.Event")]
+		[Event(name="OpenRegExCanvasEvent", type="cEditWebsiteEvent")]
+	</mx:Metadata>
+	<mx:Script>
+		<![CDATA[
+		
+			import mx.controls.Alert;
+		
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//						   EVENT HANDLERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+		
+			/**
+			 * 	Called when the user clicks on the home label.
+			 */
+			private function homeLabelClickHandler(event:Event):void
+			{
+				var e:Event = new Event("OpenCommunityGroupHomeCanvasEvent");
+				this.dispatchEvent(e);
+			}
+			
+			/**
+			 * 	Called when the user hovers the mouse over the home label.
+			 */
+			private function homeLabelRollOverHandler(event:Event):void
+			{
+				mHomeLabel.setStyle("color", "0xFF6666");
+			}
+			
+			/**
+			 * 	Called when the user hovers the mouse away from the home label.
+			 */
+			private function homeLabelRollOutHandler(event:Event):void
+			{
+				mHomeLabel.setStyle("color", "0x11d30c");
+			}
+			
+			/**
+			 * 	Called when the user clicks on the community label.
+			 */
+			private function communityLabelClickHandler(event:Event):void
+			{
+				var e:Event = new Event("OpenCommunityGroupSelectionClickedEvent");
+				this.dispatchEvent(e);
+			}
+			
+			/**
+			 * 	Called when the user hovers the mouse over the community label.
+			 */
+			private function communityLabelRollOverHandler(event:Event):void
+			{
+				mCommunityGroupLabel.setStyle("color", "0xFF6666");
+			}
+			
+			/**
+			 * 	Called when the user hovers the mouse away from the community label.
+			 */
+			private function communityLabelRollOutHandler(event:Event):void
+			{
+				mCommunityGroupLabel.setStyle("color", "0x11d30c");
+			}
+			
+			/**
+			 * 	Called when the user clicks on the community group name label.
+			 */
+			private function communityNameLabelClickHandler(event:Event):void
+			{
+				var e:Event = new Event("OpenCommunityGroupBrowserCanvasEvent");
+				this.dispatchEvent(e);
+			}
+			
+			/**
+			 * 	Called when the user hovers the mouse over the community group name label.
+			 */
+			private function communityNameLabelRollOverHandler(event:Event):void
+			{
+				mCommunityGroupNameLabel.setStyle("color", "0xFF6666");
+			}
+			
+			/**
+			 * 	Called when the user hovers the mouse away from the community group name label.
+			 */
+			private function communityNameLabelRollOutHandler(event:Event):void
+			{
+				mCommunityGroupNameLabel.setStyle("color", "0x11d30c");
+			}
+			
+			/**
+			 * 	Called when the user clicks on the edit website button.
+			 */
+			private function editWebsiteButtonClickHandler(event:Event):void
+			{
+				var e:cEditWebsiteEvent = new cEditWebsiteEvent("OpenRegExCanvasEvent");
+				e.mWebsiteName = mWebsiteName;
+				e.mCommunityGroupName = mCommunityGroupName;
+				this.dispatchEvent(e);
+			}
+			
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//						   CANVAS EVENT HANDLERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			/**
+			 * 	Called when the canvas is displayed.
+			 */
+			private function showCanvasHandler(event:Event):void
+			{
+				mCommunityGroupNameLabel.label = mCommunityGroupName;
+				mWebsiteNameLabel.text = mWebsiteName;
+				mCommunityGroupNameLabel.x =+ mSep2.x + mSep2.measureText(mSep2.text).width + 10;
+				mSep3.x =+ mCommunityGroupNameLabel.x + mCommunityGroupNameLabel.width + 10;
+				mWebsiteNameLabel.x =+ mSep3.x + mSep3.measureText(mSep3.text).width + 10;
+			}
+			
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//						   MEMBER FUNCTIONS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			/**
+			 * 	Updates the internal information of this object.
+			 */
+			public function updateInformation(websiteName:String,
+											  communityName:String):void
+			{
+				mCommunityGroupName = communityName;
+				mWebsiteName = websiteName;	
+			}
+			
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//						   DATA MEMBERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			// name of the community group
+			private var mCommunityGroupName:String = "";
+			// name of the website 
+			private var mWebsiteName:String = "";	
+			
+		]]>
+	</mx:Script>
+	<mx:LinkButton click="homeLabelClickHandler(event)" label="Home" id="mHomeLabel" top="2" left="0" />
+	<mx:LinkButton click="communityLabelClickHandler(event)" label="My Community Groups" id="mCommunityGroupLabel" top="1" left="79" />
+	<mx:LinkButton click="communityNameLabelClickHandler(event)" id="mCommunityGroupNameLabel" top="2" left="267" />
+	<mx:Label text="Website Name" id="mWebsiteNameLabel" styleName="pageTitle"  top="1" left="358.5"/>
+	<mx:Label text="&gt;" styleName="breadCrumbSeparator"  top="-1" left="58" id="mSep1"/>
+	<mx:Label text="&gt;" styleName="breadCrumbSeparator"  top="-1" left="240" id="mSep2"/>
+	<mx:Label text="&gt;" styleName="breadCrumbSeparator"  id="mSep3" top="0" left="335"/>
+	<mx:Button label="Edit Website" styleName="buttonBlack" click="editWebsiteButtonClickHandler(event)" id="mEditWebsiteButton" horizontalCenter="447" verticalCenter="-293" fontWeight="bold" fontStyle="normal" cornerRadius="5" icon="@Embed(source='../images/pencil.png')"/>
+	<mx:Panel x="6" y="50" width="494.5" height="270" layout="absolute" title="General">
+		<mx:Text x="0" y="0" text="Posts per day: 99.5&#xa;Most active poster: Michael Jordan&#xa;..." width="464.5" height="215"/>
+	</mx:Panel>
+	<mx:Panel x="6" y="328" width="494.5" height="279" layout="absolute" title="Links Spoken">
+		<mx:Text x="5" y="10" text="Most mentioned: fuck.com (99123)&#xa;Least mentioned: hoe.com (4)&#xa;Most favorable: shit.com (+56.2)&#xa;Least favorable: damn.com (-12.5)&#xa;Spoken with bad English: bitch.com (-0.82)&#xa;Spoken with best English: nigger.com (0.99)" width="464.5" height="215"/>
+	</mx:Panel>
+	<mx:Panel x="508" y="50" width="494" height="556" layout="absolute" title="Keywords">
+		<mx:Text x="10" y="10" text="keyword1:&#xa;&#xa;favorable threads: ................&#xa;hate threads:  .......................&#xa;mentioned a lot threads: ............&#xa;biggest lovers: ......................&#xa;biggest haters: ....................&#xa;user that said the most: .............&#xa;..................&#xa;&#xa;keyword2:&#xa;&#xa;favorable threads: ................&#xa;hate threads:  .......................&#xa;mentioned a lot threads: ............&#xa;biggest lovers: ......................&#xa;biggest haters: ....................&#xa;user that said the most: .............&#xa;..................&#xa;&#xa;keyword3:&#xa;&#xa;favorable threads: ................&#xa;hate threads:  .......................&#xa;mentioned a lot threads: ............&#xa;biggest lovers: ......................&#xa;biggest haters: ....................&#xa;user that said the most: .............&#xa;..................&#xa;&#xa;keyword4:&#xa;&#xa;favorable threads: ................&#xa;hate threads:  .......................&#xa;mentioned a lot threads: ............&#xa;biggest lovers: ......................&#xa;biggest haters: ....................&#xa;user that said the most: .............&#xa;.................." width="454" height="491"/>
+	</mx:Panel>
+	
+</mx:Canvas>

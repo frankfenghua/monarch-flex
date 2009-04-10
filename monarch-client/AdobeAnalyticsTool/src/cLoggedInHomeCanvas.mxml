@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="1013" height="625" xmlns:local="*">
+	<mx:HRule x="0" y="33" width="1013" height="7" strokeColor="#606060" id="mHRule1"/>
+	<mx:ViewStack x="10" y="48" id="mNavigatorViewStack" width="993" height="567">
+		<local:cHomeCanvas label="Home">
+		</local:cHomeCanvas>
+		<mx:Canvas label="All Community Groups" width="100%" height="100%" backgroundColor="#00D8FF">
+		</mx:Canvas>
+	</mx:ViewStack>
+	<mx:ToggleButtonBar x="388.5" y="6" dataProvider="mNavigatorViewStack" themeColor="#B7B7B7"   fontSize="12">
+	</mx:ToggleButtonBar>
+	
+</mx:Canvas>

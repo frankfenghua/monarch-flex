@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" show="showCanvasHandler(event)" creationComplete="showCanvasHandler(event)" width="167" height="28" >
+
+	<mx:Script>
+		<![CDATA[
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//						   CANVAS EVENT HANDLERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			/**
+			 * 
+			 */
+			private function showCanvasHandler(event:Event):void
+			{
+				mNameLabel.text = mName;
+				mNameLabel.toolTip = "Link " + mName;
+				mCheckBox.toolTip = "Toggle Statistics for " + mName;
+			}
+			
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//						   MEMBER FUNCTIONS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			/**
+			 * 	Updates the internal information of this object.
+			 */
+			public function updateInformation(name:String):void
+			{
+				mName = name;
+			}
+			
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//						   DATA MEMBERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			// website name
+			private var mName:String = "";
+			
+		]]>
+	</mx:Script>
+
+	<mx:CheckBox x="4" y="5" id="mCheckBox"/>
+	<mx:Label x="22" y="6" text="Link One" fontSize="11" width="135" fontWeight="normal" id="mNameLabel"/>
+	
+</mx:Canvas>

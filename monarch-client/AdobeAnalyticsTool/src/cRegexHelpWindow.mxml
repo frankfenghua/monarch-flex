@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	showCloseButton="true" 
+	title="Regex Help" 
+	width="620" 
+	height="400" 
+	layout="absolute" 
+	close="closingHandler(event)"
+>
+	
+	<mx:Script>
+		<![CDATA[
+			
+			import mx.managers.PopUpManager;
+			
+			// ================================================================
+			// closingHandler
+			//    args:  don't know
+			//    ret:   void
+			//    about: closes this title window when the user clicks X.
+			// ----------------------------------------------------------------
+			private function closingHandler(event:Event):void
+			{
+				PopUpManager.removePopUp(this);
+			}
+			
+			// ================================================================
+			// init
+			//    args:  which regex do you need help with?
+			//    ret:   void
+			//    abot:  Shows the correct screenshot and lenghty help text for
+			//           this regex.
+			// ----------------------------------------------------------------
+			public function init(whichRegex:String):void
+			{
+				var screenshot:String;
+				var descriptionText:String;
+				
+				switch(whichRegex)
+				{
+					case "next page of threads":
+						screenshot = "NextPageOfThreads";
+						descriptionText = "The URL that takes you to the next page of threads. " +
+							"Usually the current page has a class like 'selected'. You'll need " +
+							"to find the page after the 'selected' page.  In the example above " +
+							"we are currently on page one and need to enter the regex for page 2.";
+						break;	
+						
+					// TODO: didn't we remove this? It's done automatically for the user now
+					case "number of threads in post":
+						break;
+						
+					case "number of views for thread":
+						screenshot = "ThreadNumViews";
+						descriptionText = "The number of times this thread has been viewed by " +
+							"the users of this website.  Many websites don't show this number. " +
+							"In this case, just leave the regex as //.";
+						break;
+					
+					case "thread url":
+						screenshot = "ThreadUrl";
+						descriptionText = "The URL that takes you into a thread.";
+						break;
+					
+					case "next page of posts":
+						screenshot = "NextPageOfPosts";
+						descriptionText = "A thread may be divided into several pages. " +
+							"How does one traverse to the next page? A good idea is to look " + 
+							"for the current page - it usually has a class like 'selected'. " +
+							"Then find the page after this one.";
+						break;
+					
+					case "thread title":
+						screenshot = "ThreadUrl";
+						descriptionText = "The text title of a thread.";
+						break;
+						
+					case "first post author":
+						screenshot = "FirstPostAuthor";
+						descriptionText = "The very first post of the thread often has a different appearance " +
+							"than the replies. What is the name of the first poster?";
+						break;
+					
+					case "first post time": 
+						screenshot = "FirstPostTime";
+						descriptionText = "The very first post of the thread often has a different appearance " +
+							"than the replies. What time was the first post written? Don't worry if " +
+							"the time is in plain English.  We'll know how to handle it.";
+						break;
+						
+					case "first post message": 
+						screenshot = "FirstPostMessage";
+						descriptionText = "The very first post of the thread often has a different appearance " +
+							"than the replies. What did the first poster say?";
+						break;
+						
+					case "reply author":
+						screenshot = "ReplyAuthor";
+						descriptionText = "What are the names of the people that responded to this thread? " +
+							"This excludes the very first poster.";
+						break;
+					
+					case "reply time":
+						screenshot = "ReplyTime";
+						descriptionText = "What time did each person respond to the thread? This excludes " +
+							"the very first poster. Don't worry if the time is in plain English.  We know " +
+							"how to handle it.";
+						break;
+					
+					case "reply message":
+						screenshot = "ReplyMessage";
+						descriptionText = "What did each replyer say?";
+						break;
+					
+					// TODO: this was taken out of the backend, but your regex thing still asks for it. (not anymores) [O RLY?]
+					case "parent URL for thread":
+						break;
+					
+					default:
+						screenshot = "NotFound";
+						descriptionText = "Sorry. This page does not have help.";
+						break;
+				}
+				
+				image.source = IMAGE_URL + "regex" + screenshot + ".jpg";	
+				description.text = descriptionText;
+			}
+	
+		// TODO: make the base URL global so we don't have 100 pages with hardcoded URL's
+		private var IMAGE_URL:String = "http://csil-srprj-2.cs.uiuc.edu/images/";
+		
+		]]>
+	</mx:Script>
+	
+	<mx:Image x="6" y="8" source="" id="image" width="600" height="300"/>
+	<mx:Text x="10" y="316" text="" width="596" height="53" id="description"/>
+
+</mx:TitleWindow>

@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="showCanvasHandler(event)" show="showCanvasHandler(event)" width="1012" height="616" >
+
+	<mx:Metadata>
+		[Event(name="OpenCommunityGroupSelectionClickedEvent", type="flash.events.Event")]
+		[Event(name="OpenCommunityGroupHomeCanvasEvent", type="flash.events.Event")]
+		[Event(name="OpenCommunityGroupBrowserCanvasEvent", type="flash.events.Event")]
+		[Event(name="OpenAddWebsiteWindowEvent", type="cCreateWebsiteEvent")]
+	</mx:Metadata>
+	<mx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+		
+		import mx.controls.Alert;
+		
+		///////////////////////////////////////////////////////////////////////////////////
+		//
+		//						   EVENT HANDLERS
+		//
+		///////////////////////////////////////////////////////////////////////////////////
+		
+		/**
+		 * 	Called when the user clicks on the home label.
+		 */
+		private function homeLabelClickHandler(event:Event):void
+		{
+			var e:Event = new Event("OpenCommunityGroupHomeCanvasEvent");
+			this.dispatchEvent(e);
+		}
+		
+		/**
+		 * 	Called when the user clicks on the add website button.
+		 */
+		private function addWebsiteButtonClickHandler(evet:Event):void
+		{
+			var e:cCreateWebsiteEvent = new cCreateWebsiteEvent("OpenAddWebsiteWindowEvent");
+			e.mCommunityGroupId = mCommunityGroupId;
+			e.mCommunityGroupName = mCommunityGroupName;
+			this.dispatchEvent(e);
+		}
+		
+		/**
+		 * 	Called when the user hovers the mouse over the home label.
+		 */
+		/*
+		private function homeLabelRollOverHandler(event:Event):void
+		{
+			mHomeLabel.setStyle("color", "0xFF6666");
+		}
+		*/
+		
+		/**
+		 * 	Called when the user hovers the mouse away from the home label.
+		 */
+		/*
+		private function homeLabelRollOutHandler(event:Event):void
+		{
+			mHomeLabel.setStyle("color", "0x11d30c");
+		}
+		*/
+		
+		/**
+		 * 	Called when the user clicks on the community label.
+		 */
+		private function communityLabelClickHandler(event:Event):void
+		{
+			var e:Event = new Event("OpenCommunityGroupSelectionClickedEvent");
+			this.dispatchEvent(e);
+		}
+		
+		/**
+		 * 	Called when the user hovers the mouse over the community label.
+		 */
+		/*
+		private function communityLabelRollOverHandler(event:Event):void
+		{
+			mCommunityGroupLabel.setStyle("color", "0xFF6666");
+		}
+		*/
+		
+		/**
+		 * 	Called when the user hovers the mouse away from the community label.
+		 */
+		/*
+		private function communityLabelRollOutHandler(event:Event):void
+		{
+			mCommunityGroupLabel.setStyle("color", "0x11d30c");
+		}
+		*/
+		
+		/**
+		 * 	Called when the user clicks on the community group name label.
+		 */
+		private function communityNameLabelClickHandler(event:Event):void
+		{
+			var e:Event = new Event("OpenCommunityGroupBrowserCanvasEvent");
+			this.dispatchEvent(e);
+		}
+		
+		/**
+		 * 	Called when the user hovers the mouse over the community group name label.
+		 */
+		/*
+		private function communityNameLabelRollOverHandler(event:Event):void
+		{
+			mCommunityGroupNameLabel.setStyle("color", "0xFF6666");
+		}
+		*/
+		
+		/**
+		 * 	Called when the user hovers the mouse away from the community group name label.
+		 */
+		/*
+		private function communityNameLabelRollOutHandler(event:Event):void
+		{
+			mCommunityGroupNameLabel.setStyle("color", "0x11d30c");
+		}
+		*/
+		
+		/**
+		 *	 
+		 */
+		private function removeKeywordClickedEvent(event:cAllPurposeEvent):void
+		{
+			
+		}
+		
+		/**
+		 * 
+		 */
+		private function removeWebsiteClickedEvent(event:cAllPurposeEvent):void
+		{
+			
+		}
+		
+		/**
+		 * 
+		 */
+		private function submitButtonClickHandler(event:Event):void
+		{
+			if(mKeywordTextBox.text == "") {
+				Alert.show("Please enter a keyword before proceeding.", "Error");
+				return;
+			}
+		}
+		
+		
+		///////////////////////////////////////////////////////////////////////////////////
+		//
+		//						   CANVAS EVENT HANDLERS
+		//
+		///////////////////////////////////////////////////////////////////////////////////
+		
+		
+		/**
+		 * 	Called when the canvas is displayed.
+		 */
+		private function showCanvasHandler(event:Event):void
+		{
+			mCommunityGroupNameLabel.label = mCommunityGroupName;
+			mCommunityGroupNameLabel.x =+ mSep2.x + mSep2.measureText(mSep2.text).width + 10;
+			mSep3.x =+ mCommunityGroupNameLabel.x + mCommunityGroupNameLabel.width + 10;
+			mEditLabel.x =+ mSep3.x + mSep3.measureText(mSep3.text).width + 10;
+			mNameTextBox.text = mCommunityGroupName;
+			
+			// place the community keywords in the mKeywordsVBox
+			/*mKeywordsVBox.removeAllChildren();
+			for(var i:int = 0; i < mKeywords.length; i++) {
+				var keyword:cKeywordEntry = cKeywordEntry(mKeywords.getItemAt(i));
+				var graphic:cLabelEntryGraphic = new cLabelEntryGraphic();
+				graphic.updateInformation(keyword.mName);
+				graphic.addEventListener("cLabelEntryClickedEvent", removeKeywordClickedEvent);
+				mKeywordsVBox.addChild(graphic);
+			}
+			
+			// place the community website in the mWebsitesVBox
+			mWebsitesVBox.removeAllChildren();
+			for(var j:int = 0; j < mWebsites.length; j++) {
+				var website:cWebsiteEntry = cWebsiteEntry(mWebsites.getItemAt(j));
+				var graphic:cLabelEntryGraphic = new cLabelEntryGraphic();
+				graphic.updateInformation(website.mName);
+				graphic.addEventListener("cLabelEntryClickedEvent", removeWebsiteClickedEvent);
+				mWebsitesVBox.addChild(graphic);
+			}*/
+			
+			// TODO: move link to global variable
+			communityIcon.source = "http://csil-srprj-2.cs.uiuc.edu/images/" + mCommunityGroupId + ".jpg"; 
+		}
+		
+		// Called when user clicks to browse for file to upload
+		private function fileBrowseHandler(event:Event):void {
+			mUploadFileReference = new FileReference();
+			mUploadFileReference.addEventListener(Event.SELECT, fileSelectedHandler);
+			mUploadFileReference.browse([new FileFilter("JPEG images", "*.jpg;*.jpeg;*.JPG;*.JPEG")]);
+		}
+		
+		private function fileSelectedHandler(event:Event):void {
+			mUploadFileReference.addEventListener(DataEvent.UPLOAD_COMPLETE_DATA, uploadCompletedHandler);
+			mIconTextBox.text = mUploadFileReference.name;
+		}
+		
+		private function saveClickedHandler(event:Event):void {
+			var uploadRequest:URLRequest = new URLRequest(IMAGE_UPLOAD_URL);
+			
+			// Pass community ID as a parameter during upload
+			var params:URLVariables = new URLVariables();
+    		params.id = mCommunityGroupId;
+    		
+    		uploadRequest.method = URLRequestMethod.POST;
+    		uploadRequest.data = params;
+   			try {
+				mUploadFileReference.upload(uploadRequest, "Filedata");
+				trace("Uploading... ");
+			} catch (error:Error) {
+				trace("unable to upload file");
+			}
+		}
+		
+		private function uploadCompletedHandler(event:DataEvent):void {
+			mIconTextBox.text = "";
+			Alert.show(event.data);
+			// Do something
+			
+			// TODO: move link to global variable
+			communityIcon.source = "ifIDontDoThisTheImageWontRefresh";
+			communityIcon.source = "http://csil-srprj-2.cs.uiuc.edu/images/" + mCommunityGroupId + ".jpg"; 
+		}
+		
+		
+		///////////////////////////////////////////////////////////////////////////////////
+		//
+		//						   MEMBER FUNCTIONS
+		//
+		///////////////////////////////////////////////////////////////////////////////////
+		
+		/**
+		 * 	Updates the internal information of this object.
+		 */
+		public function updateInformation(communityName:String,
+										  communityId:int,
+										  keywords:ArrayCollection,
+										  websites:ArrayCollection):void
+		{
+			mCommunityGroupName = communityName;
+			mCommunityGroupId = communityId;
+			mKeywords = keywords;
+			mWebsites = websites;
+		}
+		
+		
+		///////////////////////////////////////////////////////////////////////////////////
+		//
+		//						   DATA MEMBERS
+		//
+		///////////////////////////////////////////////////////////////////////////////////
+		
+		// name of the community group
+		private var mCommunityGroupName:String = "";
+		// id of the community group
+		private var mCommunityGroupId:int = -1;
+		// FileReference for user image upload
+		private var mUploadFileReference:FileReference;
+		// community group keywords
+		public var mKeywords:ArrayCollection = null;
+		// community group websites
+		public var mWebsites:ArrayCollection = null;
+		// Constant specifying URL of the script to use to upload images; 
+		// TODO: make this a shared constant; also used in cCommGroupLargeGraphic.mxml
+		// TODO: unhardcode this URL. Not going to work when they move it to Puneet's lair. 
+		public var IMAGE_UPLOAD_URL:String = "http://csil-srprj-2.cs.uiuc.edu/imageUpload.php";
+			
+		]]>
+	</mx:Script>
+	<mx:LinkButton click="homeLabelClickHandler(event)" label="Home" id="mHomeLabel" top="7" left="10" />
+	<mx:LinkButton click="communityLabelClickHandler(event)" label="My Community Groups" id="mCommunityGroupLabel" top="7" left="85" />
+	<mx:LinkButton click="communityNameLabelClickHandler(event)" id="mCommunityGroupNameLabel" top="7" left="260" />
+	<mx:Label text="&gt;" styleName="breadCrumbSeparator" top="5" left="65" id="mSep1"/>
+	<mx:Label text="&gt;" styleName="breadCrumbSeparator" top="5" left="237" id="mSep2"/>
+	<mx:Label text="&gt;" styleName="breadCrumbSeparator" top="5" left="324" id="mSep3"/>
+	<mx:Label text="Edit" id="mEditLabel" styleName="pageTitle" top="5" left="351"/>
+	<mx:Panel x="0" y="55" width="352" height="551" layout="absolute" title="Basic Info">
+		<mx:Label x="20" y="25" text="Name :"/>
+		<mx:TextInput x="20" y="51" width="236" id="mNameTextBox"/>
+		<mx:Label x="19" y="120" text="Icon :" />
+		<mx:Image x="18" y="150" width="64" height="64" source="../images/ps.png" id="communityIcon" />
+		<mx:TextInput x="18" y="222" width="236" id="mIconTextBox"/>
+		<mx:Button x="262" y="222" label="Browse" id="mBrowseButton" click="fileBrowseHandler(event)"/>
+		<mx:Button x="18" y="252" label="Save"   id="mSaveButton" click="saveClickedHandler(event)"/>
+	</mx:Panel>
+
+	<mx:Panel x="370" y="55" width="313" height="551" layout="absolute" title="Keywords" horizontalScrollPolicy="off" verticalScrollPolicy="off">
+		<mx:Text text="Words being analyzed:" />
+		<mx:VBox y="25" height="401" width="285" x="3" id="mKeywordVBox">
+		</mx:VBox>
+		<mx:TextInput y="477" width="217" x="0" id="mKeywordTextBox"/>
+		<mx:Label text="Add new keyword:"  y="451"/>
+		<mx:Button y="477" label="Submit" id="mSubmitButton" click="submitButtonClickHandler(event)" x="225"/>
+	</mx:Panel>
+
+	<mx:Panel x="370" y="55" width="313" height="551" layout="absolute" title="Keywords being analyzed" horizontalScrollPolicy="off" verticalScrollPolicy="off">
+		<mx:List height="469" width="289" id="mKeywordsVBox" x="10" y="10">
+			<mx:dataProvider>
+				<mx:Array>
+					<mx:Object label="Obama"/>
+					<mx:Object label="Palin"/>
+					<mx:Object label="McCain"/>
+					<mx:Object label="Economy"/>
+					<mx:Object label="Michelle"/>
+					<mx:Object label="Bailout"/>
+				</mx:Array>
+			</mx:dataProvider>
+		</mx:List>
+		<mx:TextInput y="488" width="217" x="10" id="mKeywordsTextBox" toolTip="Add a new keyword to be analyzed" />
+		<mx:Button y="488" label="add" id="_mSubmitButton" x="234" icon="@Embed(source='../images/add.png')" toolTip="Add a new keyword to be analyzed" />
+
+	</mx:Panel>
+
+	<mx:Panel x="701" y="55" width="311" height="551" layout="absolute" title="Websites">
+		<mx:Text text="Sites under this community:" />	
+		<mx:Button click="addWebsiteButtonClickHandler(event)" label="Add Website" id="mAddWebsiteButton" x="202" y="481"/>
+		<mx:VBox height="441" width="285" id="mWebsitesVBox" x="3" y="26">
+		</mx:VBox>
+	</mx:Panel>
+	<mx:Panel x="701" y="55" width="311" height="551" layout="absolute" title="Websites under this community">
+		<mx:Button click="addWebsiteButtonClickHandler(event)" label="Add Website" id="_mAddWebsiteButton" x="183" y="488" icon="@Embed(source='../images/application_add.png')" toolTip="Add a new website under this community group"/>
+		<mx:List height="469" width="287" id="_mWebsitesVBox" x="10" y="10">
+			<mx:dataProvider>
+				<mx:Array>
+					<mx:Object label="CNN Politics"/>
+					<mx:Object label="New York Times Politics"/>
+				</mx:Array>
+			</mx:dataProvider>
+		</mx:List>
+
+	</mx:Panel>
+	
+</mx:Canvas>

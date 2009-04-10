@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="creationCompleteHandler(event)" close="closeHandler(event)" layout="absolute" width="1040" height="710" title="Adobe Community Analytics" showGripper="false" xmlns:local="*" viewSourceURL="srcview/index.html">
+<mx:Style source="../skin/src/style/style.css"/>	
+	<mx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;		
+			import mx.controls.Alert;
+			import air.net.URLMonitor;
+			import mx.managers.PopUpManager;
+	
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//							GUI EVENT HANDLERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			/**
+			 * 	Event handler which listens to the sign in window events.
+			 */
+			private function signInWindowCloseHandler(event:cSignInEvent):void
+			{
+				if(event.mType == event.SIGN_IN) {
+					mEngine.loginToAccount(event.mEmail, event.mPassword);
+				}
+				this.enabled = true;
+			}
+			
+			/**
+			 * 	Event handler which listens to the create account window events.
+			 */
+			private function createAccountWindowCloseHandler(event:cCreateAccountEvent):void
+			{
+				if(event.mType == event.CREATE_ACCOUNT) {
+					mEngine.createAccount(event.mFullName, event.mEmail, event.mPassword);
+				}
+				this.enabled = true;
+			}
+			
+			/**
+			 * 	Function which lanuches a sign in window.
+			 */
+			private function signInClickHandler(event:Event):void
+			{
+				if(mConnectedToInternet) {
+					
+					var signInWindow:cSignInWindow = cSignInWindow(PopUpManager.createPopUp(this, cSignInWindow, true));
+					signInWindow.x = (nativeWindow.width - signInWindow.width) / 2;
+					signInWindow.y = (nativeWindow.height - signInWindow.height) / 2;
+
+					signInWindow.addEventListener("cSignInEvent", signInWindowCloseHandler);
+				}
+			}
+			
+			/**
+			 * 	Event handler which listens to the create or add website window events.
+			 */
+			private function createWebsiteWindowCloseHandler(event:cCreateWebsiteEvent):void
+			{
+				if(event.mType == event.CREATE_WEBSITE) {	
+					var createWebsiteEvent:cCreateWebsiteEvent = new cCreateWebsiteEvent("CreateWebsiteEvent");
+					createWebsiteEvent.mCommunityGroupName = mAccountInformation.mSelectedCommunityName;
+					createWebsiteEvent.mCommunityGroupId = mAccountInformation.mSelectedCommunityId;
+					createWebsiteEvent.mWebsiteName = event.mWebsiteName;
+					createWebsiteEvent.mWebsiteType = event.mWebsiteType;
+					createWebsiteEvent.mWebsiteURL = event.mWebsiteURL;
+					mLoggedInCanvas.openRegularExpressionEditorCanvas(createWebsiteEvent);		
+					/*mEngine.insertWebsite(mAccountInformation.mSelectedCommunityId, 
+										  mAccountInformation.mUserId,
+										  event.mWebsiteName,
+										  event.mWebsiteURL,
+										  event.mWebsiteType);*/
+					//mLoader.visible = true;
+	            	//mLoader.play();
+				}
+				else if(event.mType == event.ADD_WEBSITES) {
+					mEngine.addWebsites(mAccountInformation.mSelectedCommunityId, event.mWebsiteIds);
+				}
+				this.enabled = true;
+			}
+			
+			/**
+			 * 	Detects a request to launch the website creator window.
+			 */
+			private function openWebsiteCreatorWindowHandler(event:cCreateWebsiteEvent):void
+			{
+				mAccountInformation.mSelectedCommunityId = event.mCommunityGroupId;	
+				mAccountInformation.mSelectedCommunityName = event.mCommunityGroupName;
+				
+				var websiteCreatorWindow:cCreateWebsiteWindow = cCreateWebsiteWindow(PopUpManager.createPopUp(this, cCreateWebsiteWindow, true));
+				
+				websiteCreatorWindow.x = (nativeWindow.width - websiteCreatorWindow.width) / 2;
+				websiteCreatorWindow.y = (nativeWindow.height - websiteCreatorWindow.height) / 2;
+				
+				websiteCreatorWindow.addEventListener("cCreateWebsiteEvent", createWebsiteWindowCloseHandler);
+				this.enabled = false;			
+			}
+			
+			/**
+			 * 	Function which lanuches a sign out window.
+			 */
+			private function signOutClickHandler(event:Event):void
+			{
+				// if(mConnectedToInternet) {
+					mSignInLabel.visible = true;
+					mSignOutButton.visible = false;
+					// mSeparator2.visible = true;
+					mCreateAccountButton.visible = true;
+					// mUserNameLabel.text = "";
+					mMainViewStack.selectedIndex = 0;
+					Alert.show("You successfully logged out of your account.", "Logged Out");
+				// }	
+			}
+			
+			/**
+			 * 	Function which launches a create account window.
+			 */
+			private function createAccountClickHandler(event:Event):void
+			{
+				if(mConnectedToInternet) {
+					var createAccountWindow:cCreateAccountWindow = cCreateAccountWindow(PopUpManager.createPopUp(this, cCreateAccountWindow, true));
+					
+					createAccountWindow.x = (nativeWindow.width - createAccountWindow.width) / 2;
+					createAccountWindow.y = (nativeWindow.height - createAccountWindow.height) / 2;
+					
+					createAccountWindow.addEventListener("cCreateAccountEvent", createAccountWindowCloseHandler);
+					// createAccountWindow.alwaysInFront = true;
+					this.enabled = false;
+				}
+			}
+			
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//							CHILD CANVAS EVENT HANDLERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			/**
+			 * 	Detects that a community group should be created. It will call the engine object 
+			 *  to service the request.
+			 */
+			private function createCommunityGroupEventHandler(event:cCreateCommunityGroupEvent):void
+			{
+				mEngine.createCommunity(event.mCommName, event.mKeywords, mAccountInformation.mUserId);
+			}
+			
+			/**
+			 * 	Detects that website statistics data should be fetched from the server. It requests
+			 *  this through the engine.
+			 */
+			private function requestWebsiteStatHandler(event:cAllPurposeEvent):void
+			{
+				mEngine.getAnalytics(event.mCommGroupId, event.mWebsiteName);
+			}
+			
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//							ENGINE EVENT HANDLERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			/**
+			 * 	Event handler which signals to the main window that the engine has recieved
+			 *  a logged in response from the server.
+			 */
+			private function loggedInServiceHandler(event:cLoggedinEvent):void
+			{
+				loggedInMainCanvasInformationUpdate(event.mFullName,
+													event.mEmail,
+													event.mPassword,
+													event.mUserId,
+													event.mCommunities);
+				mLoggedInCanvas.updateInformation(mAccountInformation);
+				mMainViewStack.selectedIndex = 1;
+			}
+			
+			/**
+			 *  Event handler which signals to the main window that the engine has recieved
+			 *  an account created response from the server.
+			 */
+			private function accountCreatedServiceHandler(event:cLoggedinEvent):void
+			{
+				loggedInMainCanvasInformationUpdate(event.mFullName,
+													event.mEmail,
+													event.mPassword,
+													event.mUserId,
+													event.mCommunities);
+				mLoggedInCanvas.updateInformation(mAccountInformation);
+				mMainViewStack.selectedIndex = 1; 
+				mLoggedInCanvas.openMyCommHomeCanvas();
+			}
+			
+			/**
+			 *	Event handler which signals to the main window that the engine has recieved
+			 *  a newly created community group response from the server.
+			 */
+			private function newCommunityCreatedServiceHandler(event:cNewCommunityEvent):void
+			{
+				mAccountInformation.mCommunities.addItemAt(event.mCommunityGroupEntry, 0);
+				mLoggedInCanvas.updateInformation(mAccountInformation);
+				mLoggedInCanvas.openMyCommHomeCanvas();
+			}
+			
+			/**
+			 * 	Event handler which signals to the main window that the engine has recieved
+			 *  website statitics data.
+			 */
+			private function analyticsReadyServiceHandler(event:cAnalysisDataReadyEvent):void
+			{
+				mLoggedInCanvas.updateWebsiteAnalytics(event.mAnalysisParser);
+			}
+			
+			/**
+			 * 	Event handler which signals to the main window that the engine has recieved
+			 *  website created event.
+			 */
+			private function newWebsiteCreatedServiceHandler(event:cNewWebsitesEvent):void
+			{				
+				/* adds the newly website entry to the appropriate community group entry */
+				/*for(var i:int = 0; i < mAccountInformation.mCommunities.length; i++) {
+					var entry:cCommunityGroupEntry = cCommunityGroupEntry(mAccountInformation.mCommunities.getItemAt(i));
+					if(entry.mId == mAccountInformation.mSelectedCommunityId) {
+						
+						entry.mWebsites.addItem(event.mWebsiteEntry);
+					}
+				}
+				mLoggedInCanvas.updateInformation(mAccountInformation);
+				mLoggedInCanvas.addWebsiteToCommGroupBrowerCanvas(event.mWebsiteEntry);*/
+				
+				//mLoader.stop();
+	            //mLoader.visible = false;
+			}
+			
+			/**
+			 * 	Event handler called to signal that a request to the engine has failed.
+			 */
+			private function failedServiceHandler(event:Event):void
+			{
+				//mLoader.stop();
+				//mLoader.visible = false;
+			}
+			
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//						SYSTEM MONITOR EVENT HANDLERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			/**
+			 * 	System monitor event handler which is notified if the connection to the internet
+			 *  becomes brocken. It will notify the user of the event.
+			 */
+			private function serverConnectionStatusChangeHandler(event:StatusEvent):void
+			{
+				if(!mURLMonitor.available) {
+					this.status = "Connection Status : Not Connected";
+					mMainViewStack.enabled = false;
+					mConnectedToInternet = false;
+					Alert.show("The connection to the server has been broken. Please check your internet " + 
+							   "connection and restart the application.", "Connection Error");
+				}
+				else
+				{
+					this.status = "Connection Status : Connected";
+					mMainViewStack.enabled = true;
+					mConnectedToInternet = true;
+				}
+			}
+			
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//							WINDOW EVENT HANDLERS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			/**
+			 * 	Event handler triggered when the main window first opens.
+			 */
+			private function creationCompleteHandler(event:Event):void
+			{
+				var screenBounds:Rectangle = Screen.mainScreen.bounds;
+                nativeWindow.x = (screenBounds.width - nativeWindow.width) / 2;
+                nativeWindow.y = (screenBounds.height - nativeWindow.height) / 2;
+                
+               //mLoader.visible = false;
+               //mLoader.x = (nativeWindow.width - mLoader.width) / 2;
+				//mLoader.y = (nativeWindow.height - mLoader.height) / 2;
+                //this.addChild(mLoader); 
+                
+                var urlRequest:URLRequest = new URLRequest("http://www.google.com");
+                mURLMonitor = new URLMonitor(urlRequest);  
+                mURLMonitor.pollInterval = 3000;
+                mURLMonitor.addEventListener(StatusEvent.STATUS, serverConnectionStatusChangeHandler);
+                mURLMonitor.start();
+			}
+			
+			/**
+			 * 	Event handler triggered when the main window is about to close.
+			 */
+			private function closeHandler(event:Event):void
+			{
+				
+			}
+			
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//							MEMBER FUNCTIONS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			/**
+			 * 
+			 */
+			private function loggedInMainCanvasInformationUpdate(fullName:String,
+													   			 userName:String,
+													   			 password:String,
+													   			 userId:int,
+													   			 communities:ArrayCollection):void
+			{
+				mSignInLabel.visible = false;
+				mSignOutButton.visible = true;
+				// mSeparator2.visible = false;
+				mCreateAccountButton.visible = false;
+				// mUserNameLabel.text = "WELCOME " + fullName
+				mAccountInformation = new cAccountInformation(fullName,
+															  userName,
+															  password,
+															  userId,
+															  communities);
+			}
+			
+			
+			///////////////////////////////////////////////////////////////////////////////////
+			//
+			//							MEMBER FUNCTIONS
+			//
+			///////////////////////////////////////////////////////////////////////////////////
+			
+			// hold user account information
+			private var mAccountInformation:cAccountInformation = null;
+			// loader used to display a loading status to the user
+			private var mLoader:cLoadingIndicator = new cLoadingIndicator();
+			// object which monitors internet connection for the application
+			private var mURLMonitor:URLMonitor = null;
+			// connection status variable
+			private var mConnectedToInternet:Boolean = false;
+			
+		]]>
+	</mx:Script>
+	
+	<mx:HRule width="1013" id="mHRule1" horizontalCenter="2" verticalCenter="-286"/>
+	<mx:ViewStack id="mMainViewStack" width="1013" height="625" disabledColor="#373737" horizontalCenter="2" verticalCenter="26">
+		<local:cLoggedOutCanvas id="mLoggedOutCanvas">
+		</local:cLoggedOutCanvas>
+		<local:cLoggedInCanvas id="mLoggedInCanvas" OpenWebsiteCreatorWindowEvent="openWebsiteCreatorWindowHandler(event)" 
+													RequestWebsiteStatsEvent="requestWebsiteStatHandler(event)" 
+													CreateCommunityGroupEvent="createCommunityGroupEventHandler(event)"
+													OpenAddWebsiteWindowEvent="openWebsiteCreatorWindowHandler(event)">
+		</local:cLoggedInCanvas>
+	</mx:ViewStack>
+	<local:cEngine id="mEngine" LoggedInCreatedEvent="loggedInServiceHandler(event)"
+							 	AccountCreatedEvent="accountCreatedServiceHandler(event)"
+							 	NewCommunityCreatedEvent="newCommunityCreatedServiceHandler(event)"
+							  	AnalyticsReadyEvent="analyticsReadyServiceHandler(event)"
+							  	FailedEvent="failedServiceHandler(event)"
+							  	NewWebsiteCreatedEvent="newWebsiteCreatedServiceHandler(event)" verticalCenter="-354" horizontalCenter="-519">
+							  	
+	</local:cEngine>
+	<!--
+	I forgot where Puneet said to put this:
+	<mx:Label fontSize="12" textAlign="right" width="442" id="mUserNameLabel" />
+	
+	Puneet said to put this in the bottom right status bar:
+	<mx:Label text="Connection Status : Not Connected" id="mConnectionStatusLabel" toolTip="Displays internet connection status" textAlign="left" verticalCenter="-302" horizontalCenter="-404" selectable="false"/>
+	-->
+	<mx:Button label="Register" click="createAccountClickHandler(event)" id="mCreateAccountButton" verticalCenter="-326" horizontalCenter="371" icon="@Embed(source='../images/user_add.png')" styleName="buttonBlack"/>
+	<mx:Button label="Sign In" click="signInClickHandler(event)" id="mSignInLabel" verticalCenter="-326" horizontalCenter="463" icon="@Embed(source='../images/door_in.png')" styleName="buttonBlack"/>
+	<mx:Button click="signOutClickHandler(event)" label="Sign Out" id="mSignOutButton" visible="false" horizontalCenter="467" verticalCenter="-330" icon="@Embed(source='../images/door_out.png')" styleName="buttonBlack"/>
+	<mx:Image x="20" y="12" source="@Embed('../images/monarchLogo.png')" />
+</mx:WindowedApplication>
