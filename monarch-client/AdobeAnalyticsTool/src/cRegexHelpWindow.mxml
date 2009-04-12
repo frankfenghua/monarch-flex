@@ -81,6 +81,12 @@
 						descriptionText = "The very first post of the thread often has a different appearance " +
 							"than the replies. What is the name of the first poster?";
 						break;
+						
+					case "first post author URL":
+						screenshot = "FirstPostAuthor";
+						descriptionText = "The link to the first poster's profile. This helps us link back to " +
+							"ass kissers or trash talkers of certain keywords.";
+						break;
 					
 					case "first post time": 
 						screenshot = "FirstPostTime";
