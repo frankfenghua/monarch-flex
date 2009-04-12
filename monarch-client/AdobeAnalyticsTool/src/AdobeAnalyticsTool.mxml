@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="creationCompleteHandler(event)" close="closeHandler(event)" layout="absolute" width="1040" height="710" title="Adobe Community Analytics" showGripper="false" xmlns:local="*" viewSourceURL="srcview/index.html">
+<mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="creationCompleteHandler(event)" close="closeHandler(event)" layout="absolute" width="1040" height="710" title="Monarch" showGripper="false" xmlns:local="*" viewSourceURL="srcview/index.html">
 <mx:Style source="../skin/src/style/style.css"/>	
 	<mx:Script>
 		<![CDATA[
@@ -14,6 +14,15 @@
 			//							GUI EVENT HANDLERS
 			//
 			///////////////////////////////////////////////////////////////////////////////////
+			
+			/**
+			 * 	Takes you back to the homepage if you click the logo
+			 */
+			private function logoClickHandler(event:Event):void
+			{
+				var e:Event = new Event("OpenCommunityGroupHomeCanvasEvent");
+				this.dispatchEvent(e);
+			}
 			
 			/**
 			 * 	Event handler which listens to the sign in window events.
@@ -381,5 +390,5 @@
 	<mx:Button label="Register" click="createAccountClickHandler(event)" id="mCreateAccountButton" verticalCenter="-326" horizontalCenter="371" icon="@Embed(source='../images/user_add.png')" styleName="buttonBlack"/>
 	<mx:Button label="Sign In" click="signInClickHandler(event)" id="mSignInLabel" verticalCenter="-326" horizontalCenter="463" icon="@Embed(source='../images/door_in.png')" styleName="buttonBlack"/>
 	<mx:Button click="signOutClickHandler(event)" label="Sign Out" id="mSignOutButton" visible="false" horizontalCenter="467" verticalCenter="-330" icon="@Embed(source='../images/door_out.png')" styleName="buttonBlack"/>
-	<mx:Image x="20" y="12" source="@Embed('../images/monarchLogo.png')" />
+	<mx:Image x="20" y="12" source="@Embed('../images/monarchLogo.png')" click="logoClickHandler(event)" />
 </mx:WindowedApplication>

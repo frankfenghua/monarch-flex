@@ -19,12 +19,16 @@
 				intro.setBody("This tool allows you to specify keywords and track their popularity in any forum, blog, or news site." +
 					"Ways to gauge popularity include counting mentions, how thoughtful an author's prose is when mentioning " +
 					"the keyword, and general sentiment (hate/love).");
+				intro.setIcon("homeGraph.png");
+				
 				var info1:cInformationGraphic = new cInformationGraphic();
 				info1.setTitle("Create an account:");	
 				info1.setBody("An account allows you to group websites under a community. " +
 					"All websites under a community will be scraped for the same keywords. " + 
 					"This allows you to see on average how popular your keywords are doing. " +
 					"Click the 'register' button on the top right to create an account.");  
+				info1.setIcon("homeWebsiteSceenshots.png");
+					
 				mNewsVBox.addChild(intro);
 				mNewsVBox.addChild(info1);
 			}

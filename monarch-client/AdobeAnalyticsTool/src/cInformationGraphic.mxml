@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="creationCompleteCanvasHandler(event)" show="showCanvasHandler(event)" width="477" height="136" useHandCursor="true">
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="creationCompleteCanvasHandler(event)" show="showCanvasHandler(event)" width="490" height="156" useHandCursor="true">
 	
 	<mx:Script>
 		<![CDATA[
 		
-			import mx.effects.Fade;
-			import mx.controls.Alert;
+			//import mx.effects.Fade;
+			//import mx.controls.Alert;
 			
 			///////////////////////////////////////////////////////////////////////////////////
 			//
@@ -66,6 +66,14 @@
 				mBodyText = text;
 			}
 			
+			/**
+			 * 	Sets relative icon path for this component.
+			 */
+			public function setIcon(path:String):void
+			{
+				mIconPath = "http://csil-srprj-2.cs.uiuc.edu/images/" + path;
+			}
+			
 			
 			///////////////////////////////////////////////////////////////////////////////////
 			//
@@ -80,6 +88,7 @@
 			{
 				mTitleLabel.text = mTitle;
 				mTextBox.text = mBodyText;
+				mIcon.source = mIconPath;
 			}
 			
 			/**
@@ -89,6 +98,7 @@
 			{
 				mTitleLabel.text = mTitle;
 				mTextBox.text = mBodyText;
+				mIcon.source = mIconPath;
 			}
 			
 			
@@ -102,13 +112,16 @@
 			private var mTitle:String = "";
 			// the body text
 			private var mBodyText:String = "";
+			// small graphic 
+			private var mIconPath:String = "";
 			
 		]]>
 	</mx:Script>
 	
-	<mx:Label text="Welcome to the Adobe Community Analytics Tool !" width="449" horizontalCenter="4" verticalCenter="-48" id="mTitleLabel" styleName="homeInfoTitle"/>
-	<mx:TextArea width="449" editable="false" wordWrap="true" horizontalCenter="4" verticalCenter="16" borderThickness="0" textAlign="left" selectable="false" id="mTextBox" height="84">
+	<mx:Label text="Welcome to the Adobe Community Analytics Tool !" width="341" horizontalCenter="73" verticalCenter="-32" id="mTitleLabel" styleName="homeInfoTitle"/>
+	<mx:TextArea width="341" editable="false" wordWrap="true" horizontalCenter="73" verticalCenter="35" borderThickness="0" textAlign="left" selectable="false" id="mTextBox" height="84">
 		<mx:text>This tool allows you to formulate community groups to monitor keywords across the websites of your choice.</mx:text>
 	</mx:TextArea>
+	<mx:Image id="mIcon" x="20" y="35" width="101" height="116"/>
 	
 </mx:Canvas>

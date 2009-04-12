@@ -883,7 +883,7 @@ TabNavigator
 */
 TextArea
 {
-	color: #FFFFFF;
+	color: #DDDDDD;
 	borderColor: #000000;
 	borderSkin: Embed(source="kingnarestyle.swf", symbol="TextAreaBackground");
 	backgroundAlpha: 1.0; 
@@ -1155,4 +1155,10 @@ Window
 
 .communitySelectStat {
 	color: #cccccc;
+}
+
+.homeInfoTitle {
+	fontWeight: bold;
+	fontSize: 14;
+	color: #eeeeee;
 }
