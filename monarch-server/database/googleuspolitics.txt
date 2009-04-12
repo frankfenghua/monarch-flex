@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Apr 12, 2009 at 04:10 PM
+-- Generation Time: Apr 12, 2009 at 05:34 PM
 -- Server version: 5.1.30
 -- PHP Version: 5.2.8
 
@@ -25,6 +25,11 @@ CREATE TABLE IF NOT EXISTS `keywords` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_german2_ci AUTO_INCREMENT=1 ;
 
+--
+-- Dumping data for table `keywords`
+--
+
+
 -- --------------------------------------------------------
 
 --
@@ -35,6 +40,11 @@ CREATE TABLE IF NOT EXISTS `keywordstats` (
   `keyword` smallint(5) unsigned NOT NULL,
   `stat` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `keywordstats`
+--
+
 
 -- --------------------------------------------------------
 
@@ -49,6 +59,11 @@ CREATE TABLE IF NOT EXISTS `links` (
   UNIQUE KEY `baseUrl` (`baseUrl`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_german2_ci AUTO_INCREMENT=1 ;
 
+--
+-- Dumping data for table `links`
+--
+
+
 -- --------------------------------------------------------
 
 --
@@ -59,6 +74,11 @@ CREATE TABLE IF NOT EXISTS `linkstats` (
   `link` smallint(5) unsigned NOT NULL,
   `stat` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `linkstats`
+--
+
 
 -- --------------------------------------------------------
 
@@ -75,6 +95,11 @@ CREATE TABLE IF NOT EXISTS `posts` (
   `hash` varchar(8) COLLATE latin1_german2_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_german2_ci AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `posts`
+--
+
 
 -- --------------------------------------------------------
 
@@ -99,6 +124,13 @@ CREATE TABLE IF NOT EXISTS `regexes` (
   `replyMessage` varchar(250) DEFAULT '//'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `regexes`
+--
+
+INSERT INTO `regexes` (`startPage`, `nextPageOfThreads`, `nextPageOfPosts`, `threadUrl`, `threadNumViews`, `threadTitle`, `firstPostAuthor`, `firstPostAuthorUrl`, `firstPostTime`, `firstPostMessage`, `replyAuthor`, `replyAuthorUrl`, `replyTime`, `replyMessage`) VALUES
+('http://groups.google.com/group/alt.politics.usa/topics?gvc=2', '/href="(.*?)">Older &raquo;<\\/a>/', '/href="(.*?)">Newer &gt;<\\/a>/', '/<a href="(.*?)">(?:.*?)<\\/a><nobr>&nbsp;<\\/nobr><\\/td>/', '//', '/<a href="(?:.*?)">(.*?)<\\/a><nobr>&nbsp;<\\/nobr><\\/td>/', '/<span class="fontsize2 author">\\n[\\s]{2}<span style="color: #[0-9A-Za-z]{6};">(?:<i>)?(.*?)(?:<\\/i>)?<\\/span>/', '/<span class="fontsize0 " id="prof"><a target=_top href="(.*?)">/', '/<span class="fontsize0">&nbsp;<span class="(?:.*?)" id="oh_l">More options<\\/span><\\/span>\\n  <span class="fontsize2">\\n  (.*?)\\n/', '/<div id="inbdy">\\n  <a name="(?:.*?)"><\\/a>(.*?)<\\/div>/s', '/<span class="fontsize2 author">\\n[\\s]{2}<span style="color: #[0-9A-Za-z]{6};">(?:<i>)?(.*?)(?:<\\/i>)?<\\/span>/', '/<span class="fontsize0 " id="prof"><a target=_top href="(.*?)">/', '/<span class="fontsize0">&nbsp;<span class="(?:.*?)" id="oh_l">More options<\\/span><\\/span>\\n  <span class="fontsize2">\\n  (.*?)\\n/', '/<div id="inbdy">\\n  <a name="(?:.*?)"><\\/a>(.*?)<\\/div>/s');
+
 -- --------------------------------------------------------
 
 --
@@ -113,6 +145,11 @@ CREATE TABLE IF NOT EXISTS `stats` (
   `englishProficiency` float unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `stats`
+--
+
 
 -- --------------------------------------------------------
 
@@ -129,6 +166,11 @@ CREATE TABLE IF NOT EXISTS `threads` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_german2_ci AUTO_INCREMENT=1 ;
 
+--
+-- Dumping data for table `threads`
+--
+
+
 -- --------------------------------------------------------
 
 --
@@ -140,6 +182,11 @@ CREATE TABLE IF NOT EXISTS `threadstats` (
   `keyword` int(10) unsigned NOT NULL,
   `stat` int(10) unsigned NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `threadstats`
+--
+
 
 -- --------------------------------------------------------
 
@@ -158,6 +205,11 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `name_2` (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_german2_ci AUTO_INCREMENT=1 ;
 
+--
+-- Dumping data for table `users`
+--
+
+
 -- --------------------------------------------------------
 
 --
@@ -169,3 +221,8 @@ CREATE TABLE IF NOT EXISTS `userstats` (
   `keyword` int(10) unsigned NOT NULL,
   `stat` int(10) unsigned NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `userstats`
+--
+

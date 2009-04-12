@@ -345,6 +345,7 @@ class ForumPostProcessor implements Processor {
 			$englishTime = str_replace($dirt, '', $englishTime);
 
 		$englishTime = strip_tags($englishTime);
+		$englishTime = html_entity_decode($englishTime);
 		
 		return strtotime($englishTime);
 	}

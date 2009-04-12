@@ -98,7 +98,8 @@
 					case "first post message": 
 						screenshot = "FirstPostMessage";
 						descriptionText = "The very first post of the thread often has a different appearance " +
-							"than the replies. What did the first poster say?";
+							"than the replies. What did the first poster say? Tip: use the multi-line modifier: " +
+							"/yourRegex/s";
 						break;
 						
 					case "reply author":
@@ -116,7 +117,8 @@
 					
 					case "reply message":
 						screenshot = "ReplyMessage";
-						descriptionText = "What did each replyer say?";
+						descriptionText = "What did each replyer say? Tip: use the multi-line modifier: " +
+							"/yourRegex/s";
 						break;
 					
 					// TODO: this was taken out of the backend, but your regex thing still asks for it. (not anymores) [O RLY?]
