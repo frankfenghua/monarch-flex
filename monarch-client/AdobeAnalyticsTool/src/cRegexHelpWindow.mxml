@@ -108,6 +108,12 @@
 							"This excludes the very first poster.";
 						break;
 					
+					case "reply author URL":
+						screenshot = "ReplyAuthor";
+						descriptionText = "The link to the replier's profile. This helps us link back to " +
+							"ass kissers or trash talkers of certain keywords.";
+						break;
+					
 					case "reply time":
 						screenshot = "ReplyTime";
 						descriptionText = "What time did each person respond to the thread? This excludes " +
