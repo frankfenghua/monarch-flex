@@ -90,10 +90,20 @@
 						e.mTime = event.mTime;
 						e.mWebsites = communityGroupEntry.mWebsites;
 						e.mKeywords = communityGroupEntry.mKeywords;
+						
+						// Send message to server signalling that user has accessed this comm.
+						// is accessed; don't worry about getting anything back
+						HTTPService scriptCall = new HTTPService(new URLRequest(SERVER_URL+"communityAccess.php");
+						scriptCall.method = "GET";
+						scriptCall.send({"communityID":event.mCommGroupId});
+						trace("Script call:"+SERVER_URL+"communityAccess.php");
+						
 						this.dispatchEvent(e);
 						return;
 					}
 				}
+				
+				
 			}
 			
 			
@@ -187,6 +197,7 @@
 			// variable used to enable and disable the remove website label
 			private var mRemoveCommGroupLabelEnabled:Boolean = true;
 			
+			private var SERVER_URL="http://csil-srprj-2.cs.uiuc.edu/Client/";
 		]]>
 	</mx:Script>
 	<mx:LinkButton label="Home" click="homeLabelClickHandler(event)" id="mHomeButton"  x="10" y="5"/>
