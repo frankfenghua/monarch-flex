@@ -247,7 +247,7 @@
 		<mx:Label x="-2.5" y="87" text="Website Type :" textAlign="right"/>
 		<mx:TextInput x="110.5" y="11" width="296" id="mWebsiteNameTextBox"/>
 		<mx:TextInput x="110.5" y="47" width="296" id="mWebsiteURLTextBox"/>
-		<mx:RadioButton x="110.5" y="85" label="Forum"  id="mForumTypeRadioButton" groupName="typeGroup"/>
+		<mx:RadioButton x="110.5" y="85" label="Forum"  id="mForumTypeRadioButton" groupName="typeGroup" selected="true"/>
 		<mx:RadioButton x="178.5" y="85" label="Blog" id="mBlogTypeRadioButton" groupName="typeGroup"/>
 		<mx:RadioButton x="236" y="85" label="News" id="mNewsTypeRadioButton" groupName="typeGroup"/>
 	</mx:Canvas>

@@ -453,7 +453,7 @@
 			private var topLevelRegexes:Array = new Array("next page of threads", "number of views for thread", "thread url");
 			private var usrRegexes:Object = new Object();
 			private var subLevelRegexes:Array = new Array("next page of posts", "thread title", "first post author", "first post author URL",
-												  "first post time", "first post message", "reply author", "reply time",
+												  "first post time", "first post message", "reply author", "reply author URL", "reply time",
 												  "reply message");
 
 			[Bindable]
