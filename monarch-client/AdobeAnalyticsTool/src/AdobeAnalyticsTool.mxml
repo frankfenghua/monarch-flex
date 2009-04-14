@@ -192,6 +192,7 @@
 													event.mUserId,
 													event.mCommunities);
 				mLoggedInCanvas.updateInformation(mAccountInformation);
+				mLoggedInCanvas.openMyCommHomeCanvas();
 				mMainViewStack.selectedIndex = 1;
 			}
 			
