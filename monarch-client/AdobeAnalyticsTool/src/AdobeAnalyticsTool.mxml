@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="creationCompleteHandler(event)" close="closeHandler(event)" layout="absolute" width="1040" height="710" title="Monarch" showGripper="false" xmlns:local="*" viewSourceURL="srcview/index.html">
 <mx:Style source="../skin/src/style/style.css"/>	
+	<mx:Metadata>
+		[Event(name="OpenCommunityGroupHomeCanvasEvent", type="flash.events.Event")]
+	</mx:Metadata>
 	<mx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;		
@@ -20,8 +23,15 @@
 			 */
 			private function logoClickHandler(event:Event):void
 			{
-				var e:Event = new Event("OpenCommunityGroupHomeCanvasEvent");
-				this.dispatchEvent(e);
+//				var e:Event = new Event("OpenCommunityGroupHomeCanvasEvent");
+//				this.dispatchEvent(e);
+//			
+
+				// Since we are "above" the loggedIn canvas, manually adjust viewstack
+				if(mLoggedInCanvas) {
+					mLoggedInCanvas.openMyCommHomeCanvas();
+				}	
+				trace("Logo clicked");
 			}
 			
 			/**

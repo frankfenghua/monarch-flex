@@ -139,6 +139,8 @@
 			{
 				mCommunityGroupName = communityName;
 				mWebsiteName = websiteName;	
+				
+				// Send a request to the server for stats for this object
 			}
 			
 			
@@ -167,7 +169,11 @@
 		<mx:Text x="0" y="0" text="Posts per day: 99.5&#xa;Most active poster: Michael Jordan&#xa;..." width="464.5" height="215"/>
 	</mx:Panel>
 	<mx:Panel x="6" y="328" width="494.5" height="279" layout="absolute" title="Links Spoken">
-		<mx:Text x="5" y="10" text="Most mentioned: fuck.com (99123)&#xa;Least mentioned: hoe.com (4)&#xa;Most favorable: shit.com (+56.2)&#xa;Least favorable: damn.com (-12.5)&#xa;Spoken with bad English: bitch.com (-0.82)&#xa;Spoken with best English: nigger.com (0.99)" width="464.5" height="215"/>
+		<mx:Text x="5" y="10">
+		    <mx:htmlText>
+                <![CDATA[Most mentioned: <a href="http://fuck.com">Fuck.com</a><br /> (99123)&#xa;Least mentioned: hoe.com (4)&#xa;Most favorable: shit.com (+56.2)&#xa;Least favorable: damn.com (-12.5)&#xa;Spoken with bad English: bitch.com (-0.82)&#xa;Spoken with best English: nigger.com (0.99)"]]>
+            </mx:htmlText>
+        </mx:Text>
 	</mx:Panel>
 	<mx:Panel x="508" y="50" width="494" height="556" layout="absolute" title="Keywords">
 		<mx:Text x="10" y="10" text="keyword1:&#xa;&#xa;favorable threads: ................&#xa;hate threads:  .......................&#xa;mentioned a lot threads: ............&#xa;biggest lovers: ......................&#xa;biggest haters: ....................&#xa;user that said the most: .............&#xa;..................&#xa;&#xa;keyword2:&#xa;&#xa;favorable threads: ................&#xa;hate threads:  .......................&#xa;mentioned a lot threads: ............&#xa;biggest lovers: ......................&#xa;biggest haters: ....................&#xa;user that said the most: .............&#xa;..................&#xa;&#xa;keyword3:&#xa;&#xa;favorable threads: ................&#xa;hate threads:  .......................&#xa;mentioned a lot threads: ............&#xa;biggest lovers: ......................&#xa;biggest haters: ....................&#xa;user that said the most: .............&#xa;..................&#xa;&#xa;keyword4:&#xa;&#xa;favorable threads: ................&#xa;hate threads:  .......................&#xa;mentioned a lot threads: ............&#xa;biggest lovers: ......................&#xa;biggest haters: ....................&#xa;user that said the most: .............&#xa;.................." width="454" height="491"/>
