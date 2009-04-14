@@ -14,7 +14,6 @@ require_once "Url.php";
   //     -creating a StructuredCrawl object
   //     -adding all url types that you want to
   //     -calling beginCrawlFromPage to initiate crawling
-  //  -TODO: Make url map a database table
 class StructuredCrawl {
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
