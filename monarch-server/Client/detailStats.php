@@ -25,21 +25,27 @@ header('Content-Type: text/xml');
 </general>
 <links>
 <?php
+// For each link
+// <link>
 // <mostMentioned> </mostMentioned>
 // <leastMentioned> </leastMentioned>
 // <mostFavorable> </mostFavorable>
 // <leastFaborable> </leastFaborable>
 // <worstSpoken> </worstSpoken>
 // <bestSpoken> </bestSpoken>
+// </link>
 ?>
 </links>
 <keywords>
 <?php
+// For each keyword
+// <keyword>
 // <favorableThreads>... </favorableThreads>
 // <hateThreads>... </hateThreads>
 // <mentionThreads>... </mentionThreads>
 // <biggestLovers>... </biggestLovers>
 // <sayer>... </sayer>
+// </keyword>
 ?>
 </keywords>
 </root>
