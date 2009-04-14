@@ -28,8 +28,8 @@ class Database
 		$user     = 'ryan';
 		$password = 'adobe';
 		
-		$this->connect = @mysql_connect($server, $user, $password) 
-			or die('Could not connect to the master database.');
+		$this->connect = mysql_connect($server, $user, $password); 
+			// or die('Could not connect to the master database.');
 		
 		// connection
 		if($name == 'root')
@@ -49,7 +49,7 @@ class Database
 		if($name == 'master')
 			$name = 'communityanalysis';
 			
-		$this->connect = @mysql_connect($server, $user, $password) 
+		$this->connect = mysql_connect($server, $user, $password) 
 			or die('Could not connect to the database.');
 			
 		$select  = @mysql_select_db($name, $this->connect) 

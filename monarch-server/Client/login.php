@@ -1,6 +1,8 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors','1');
 
-require_once('../database/Database.php');
+require_once('database/Database.php');
 
 $email = $_GET['email'];
 $password = $_GET['password'];
