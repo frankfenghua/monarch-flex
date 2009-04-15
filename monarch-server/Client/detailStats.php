@@ -72,6 +72,7 @@ class DetailStats
 		$q = $this->database->fetch($q);
 		echo '<postsPerDay>' . $q[0] . '</postsPerDay>';
 		
+		// number of posts in the last 24 hours
 		$q = 'SELECT COUNT(*) 
 			FROM posts
 			WHERE time > ' . (time() - SECONDS_IN_DAY);
@@ -88,24 +89,28 @@ class DetailStats
 		$q = $this->database->fetch($q);
 		echo '<analyzedThreads>' . $q[0] . '</analyzedThreads>';
 		
+		// people with the most posts
 		$q = 'SELECT url, name, posts AS rating 
 			FROM users 
 			ORDER BY rating DESC
 			LIMIT 3';
-		$this->usersGroup('parrots', $q);
+		$this->usersGroup('chatterboxes', $q);
 		
+		// recently joined people
 		$q = 'SELECT url, name, created AS rating 
 			FROM users 
 			ORDER BY rating DESC
 			LIMIT 3';
 		$this->usersGroup('newbies', $q);
 		
+		// people that joined the site a long time ago (that the crawler knows of)
 		$q = 'SELECT url, name, created AS rating 
 			FROM users 
 			ORDER BY rating ASC
 			LIMIT 3';
 		$this->usersGroup('veterans', $q);
 		
+		// threads with the most posts
 		$q = 'SELECT title, url, posts AS rating 
 			FROM threads 
 			ORDER BY rating DESC
@@ -128,6 +133,7 @@ class DetailStats
 		{
 			echo '<keyword word="' . $keywordRow['word'] . '">';
 		
+			// threads that overall talk positively about the keyword
 			$q = 'SELECT t.url, t.title, s.goodness AS rating
 				FROM threads AS t, threadstats AS ts, stats AS s
 				WHERE t.id = ts.thread
@@ -138,6 +144,7 @@ class DetailStats
 			
 			$this->threadsGroup('loveThreads', $q);
 			
+			// threads that overall talk negatively about the keyword
 			$q = 'SELECT t.url, t.title, s.goodness AS rating
 				FROM threads AS t, threadstats AS ts, stats AS s
 				WHERE t.id = ts.thread
@@ -148,6 +155,7 @@ class DetailStats
 			
 			$this->threadsGroup('hateThreads', $q);
 			
+			// threads that mention the keyword a lot
 			$q = 'SELECT t.url, t.title, s.count AS rating
 				FROM threads AS t, threadstats AS ts, stats AS s
 				WHERE t.id = ts.thread
@@ -158,6 +166,7 @@ class DetailStats
 			
 			$this->threadsGroup('hotThreads', $q);
 			
+			// people who talk most positively about the keyword
 			$q = 'SELECT u.name, u.url, s.goodness AS rating
 				FROM users AS u, userstats AS us, stats AS s
 				WHERE u.id = us.user
@@ -168,6 +177,7 @@ class DetailStats
 			
 			$this->usersGroup('assKissers', $q);
 			
+			// people who talk most negatively about the keyword
 			$q = 'SELECT u.name, u.url, s.goodness AS rating
 				FROM users AS u, userstats AS us, stats AS s
 				WHERE u.id = us.user
@@ -178,6 +188,7 @@ class DetailStats
 			
 			$this->usersGroup('trashTalkers', $q);
 			
+			// people who talk a lot about the keyword
 			$q = 'SELECT u.name, u.url, s.count AS rating
 				FROM users AS u, userstats AS us, stats AS s
 				WHERE u.id = us.user
@@ -186,8 +197,9 @@ class DetailStats
 				ORDER BY rating DESC
 				LIMIT 3';
 			
-			$this->usersGroup('parrots', $q);
+			$this->usersGroup('chatterboxes', $q);
 			
+			// people who talk with good prose about the keyword
 			$q = 'SELECT u.name, u.url, s.englishProficiency AS rating
 				FROM users AS u, userstats AS us, stats AS s
 				WHERE u.id = us.user

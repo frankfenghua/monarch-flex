@@ -3,9 +3,9 @@
 
 	<mx:Metadata>
 		[Event(name="OpenCommunityGroupSelectionClickedEvent", type="flash.events.Event")]
-		[Event(name="OpenCommunityGroupHomeCanvasEvent", type="flash.events.Event")]
-		[Event(name="OpenCommunityGroupBrowserCanvasEvent", type="flash.events.Event")]
-		[Event(name="OpenRegExCanvasEvent", type="cEditWebsiteEvent")]
+		[Event(name="OpenCommunityGroupHomeCanvasEvent",       type="flash.events.Event")]
+		[Event(name="OpenCommunityGroupBrowserCanvasEvent",    type="flash.events.Event")]
+		[Event(name="OpenRegExCanvasEvent",                    type="cEditWebsiteEvent")]
 	</mx:Metadata>
 	<mx:Script>
 		<![CDATA[
@@ -35,14 +35,14 @@
 				analyzedPosts = event.result.detailStats.general.analyzedPosts;
 				analyzedThreads = event.result.detailStats.general.analyzedThreads;
 				
-				// May be arbitrarily many parrots, veterans, etc. so loop through them
-				// Set parrots HTML
+				// May be arbitrarily many chatterboxes, veterans, etc. so loop through them
+				// Set chatterboxes HTML
 				var tempString:String = "";
-				var parrots:ArrayCollection = event.result.detailStats.general.parrots.user;
-				for(i = 0; i < parrots.length; i++) {
-					tempString += "<a href=\""+parrots.getItemAt(i).url+"\">"+parrots.getItemAt(i).title+"</a> Rating="+parrots.getItemAt(i).rating+"\n";
+				var chatterboxes:ArrayCollection = event.result.detailStats.general.chatterboxes.user;
+				for(i = 0; i < chatterboxes.length; i++) {
+					tempString += "<a href=\""+chatterboxes.getItemAt(i).url+"\">"+chatterboxes.getItemAt(i).title+"</a> Rating="+chatterboxes.getItemAt(i).rating+"\n";
 				}
-				parrotsHTML = tempString;
+				chatterboxesHTML = tempString;
 				
 				// Set newbies HTML
 				tempString = "";
@@ -52,7 +52,7 @@
 				}
 				newbiesHTML = tempString;
 				
-				// Set newbies HTML
+				// Set veterans HTML
 				tempString = "";
 				var veterans:ArrayCollection = event.result.detailStats.general.veterans.user;
 				for(i = 0; i < veterans.length; i++) {
@@ -109,10 +109,10 @@
 						tempString += "<a href=\""+trashTalkers.getItemAt(j).url+"\">"+trashTalkers.getItemAt(j).title+"</a> Rating="+trashTalkers.getItemAt(j).rating+"\n";
 					}
 					
-					tempString += "Parrots:";
-					var kParrots:ArrayCollection = keywords.getItemAt(i).parrots.user;
-					for(j = 0; j < kParrots.length; j++) {
-						tempString += "<a href=\""+kParrots.getItemAt(j).url+"\">"+kParrots.getItemAt(j).title+"</a> Rating="+kParrots.getItemAt(j).rating+"\n";
+					tempString += "Chatterboxes:";
+					var kChatterboxes:ArrayCollection = keywords.getItemAt(i).chatterboxes.user;
+					for(j = 0; j < kChatterboxes.length; j++) {
+						tempString += "<a href=\""+kChatterboxes.getItemAt(j).url+"\">"+kChatterboxes.getItemAt(j).title+"</a> Rating="+kChatterboxes.getItemAt(j).rating+"\n";
 					}
 					
 					tempString += "Sophisticated orators:";
@@ -134,23 +134,7 @@
 				var e:Event = new Event("OpenCommunityGroupHomeCanvasEvent");
 				this.dispatchEvent(e);
 			}
-			
-			/**
-			 * 	Called when the user hovers the mouse over the home label.
-			 */
-			private function homeLabelRollOverHandler(event:Event):void
-			{
-				mHomeLabel.setStyle("color", "0xFF6666");
-			}
-			
-			/**
-			 * 	Called when the user hovers the mouse away from the home label.
-			 */
-			private function homeLabelRollOutHandler(event:Event):void
-			{
-				mHomeLabel.setStyle("color", "0x11d30c");
-			}
-			
+					
 			/**
 			 * 	Called when the user clicks on the community label.
 			 */
@@ -160,21 +144,6 @@
 				this.dispatchEvent(e);
 			}
 			
-			/**
-			 * 	Called when the user hovers the mouse over the community label.
-			 */
-			private function communityLabelRollOverHandler(event:Event):void
-			{
-				mCommunityGroupLabel.setStyle("color", "0xFF6666");
-			}
-			
-			/**
-			 * 	Called when the user hovers the mouse away from the community label.
-			 */
-			private function communityLabelRollOutHandler(event:Event):void
-			{
-				mCommunityGroupLabel.setStyle("color", "0x11d30c");
-			}
 			
 			/**
 			 * 	Called when the user clicks on the community group name label.
@@ -183,22 +152,6 @@
 			{
 				var e:Event = new Event("OpenCommunityGroupBrowserCanvasEvent");
 				this.dispatchEvent(e);
-			}
-			
-			/**
-			 * 	Called when the user hovers the mouse over the community group name label.
-			 */
-			private function communityNameLabelRollOverHandler(event:Event):void
-			{
-				mCommunityGroupNameLabel.setStyle("color", "0xFF6666");
-			}
-			
-			/**
-			 * 	Called when the user hovers the mouse away from the community group name label.
-			 */
-			private function communityNameLabelRollOutHandler(event:Event):void
-			{
-				mCommunityGroupNameLabel.setStyle("color", "0x11d30c");
 			}
 			
 			/**
@@ -282,7 +235,7 @@
 			private var analyzedThreads:int = 0;
 	
 			[Bindable]
-			private var parrotsHTML:String = "";
+			private var chatterboxesHTML:String = "";
 			
 			[Bindable]		
 			private var newbiesHTML:String = "";
@@ -317,7 +270,7 @@
 				  Posts today: {postsToday}&#xa; 
 				  Total posts analyzed: {analyzedPosts}&#xa; 
 				  Total threads analyzed: {analyzedThreads}&#xa;
-				  Parrots: {parrotsHTML}
+				  Chatterboxes: {chatterboxesHTML}
 				  Newbies: {newbiesHTML}
 				  Veterans: {veteransHTML}
 				  Lively threads: {livelyThreadsHTML}"/>

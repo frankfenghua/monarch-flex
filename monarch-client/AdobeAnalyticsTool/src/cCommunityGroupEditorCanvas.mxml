@@ -191,7 +191,7 @@
 		private function fileBrowseHandler(event:Event):void {
 			mUploadFileReference = new FileReference();
 			mUploadFileReference.addEventListener(Event.SELECT, fileSelectedHandler);
-			mUploadFileReference.browse([new FileFilter("JPEG images", "*.jpg;*.jpeg;*.JPG;*.JPEG")]);
+			mUploadFileReference.browse([new FileFilter("images", "*.jpg;*.jpeg;*.JPG;*.JPEG;*.gif;*.GIF;*.png;*.PNG;*.bmp;*.BMP")]);
 		}
 		
 		private function fileSelectedHandler(event:Event):void {
