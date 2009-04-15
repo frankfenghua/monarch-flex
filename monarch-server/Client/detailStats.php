@@ -12,7 +12,7 @@
 header('Content-Type: text/xml');
 
 require_once('database/Database.php');
-require_once('constants.php');
+require_once('../constants.php');
 
 class DetailStats
 {
