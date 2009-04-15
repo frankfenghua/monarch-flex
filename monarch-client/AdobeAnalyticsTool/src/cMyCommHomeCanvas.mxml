@@ -205,12 +205,12 @@
 	<mx:Label x="71" y="3" text="&gt;" styleName="breadCrumbSeparator" />
 	<mx:VBox height="526" width="390" id="mMyCommVBox" verticalScrollPolicy="off" horizontalCenter="0" verticalCenter="4">
 	</mx:VBox>
-	<mx:Button label="Create Community Group" rollOver="createCommRollOverHandler(event)" rollOut="createCommRollOutHandler(event)" click="createCommClickHandler(event)" id="mCreateCommButton" verticalCenter="-292" horizontalCenter="412" />
-	<mx:Button label="Next &#187;" horizontalCenter="158" verticalCenter="286" id="mNextCommButton" />
-	<mx:Button label="&#171; Previous" horizontalCenter="-146" verticalCenter="286" id="mPreviousCommButton" />
+	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" label="Create Community Group" rollOver="createCommRollOverHandler(event)" rollOut="createCommRollOutHandler(event)" click="createCommClickHandler(event)" id="mCreateCommButton" verticalCenter="-292" horizontalCenter="412" />
+	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" label="Next &#187;" horizontalCenter="158" verticalCenter="286" id="mNextCommButton" />
+	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" label="&#171; Previous" horizontalCenter="-146" verticalCenter="286" id="mPreviousCommButton" />
 	<mx:Canvas width="141" height="496" borderStyle="solid" cornerRadius="15" horizontalCenter="274" verticalCenter="-11">
-		<mx:Button label="Newest" width="99" horizontalCenter="0" verticalCenter="-226" id="mNewestButton" />
-		<mx:Button label="Most Viewed" width="99" horizontalCenter="0" verticalCenter="-196" id="mMostViewedButton" />
-		<mx:Button label="Alphabetical" width="99" horizontalCenter="0" verticalCenter="-166" id="mAlphabeticalButton" />
+		<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" label="Newest" width="99" horizontalCenter="0" verticalCenter="-226" id="mNewestButton" />
+		<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" label="Most Viewed" width="99" horizontalCenter="0" verticalCenter="-196" id="mMostViewedButton" />
+		<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" label="Alphabetical" width="99" horizontalCenter="0" verticalCenter="-166" id="mAlphabeticalButton" />
 	</mx:Canvas>
 </mx:Canvas>

@@ -90,7 +90,7 @@
 
 	<mx:CheckBox x="4" y="5" change="checkBoxChangeHandler(event)" id="mCheckBox"/>
 	<mx:Label x="22" y="6" text="Website Alpha" fontSize="11" width="103" fontWeight="normal" id="mNameLabel"/>
-	<mx:Button x="141" y="4" click="infoLabelClickHandler(event)" id="mInfoLabel" icon="@Embed(source='../images/information.png')" width="22"/>
+	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" x="141" y="4" click="infoLabelClickHandler(event)" id="mInfoLabel" icon="@Embed(source='../images/information.png')" width="22"/>
 
 	
 </mx:Canvas>

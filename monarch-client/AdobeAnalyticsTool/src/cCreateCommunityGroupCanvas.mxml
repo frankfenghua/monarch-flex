@@ -211,6 +211,6 @@
 		<mx:TextInput x="173" y="228" width="205" keyDown="textBoxKeyDownHandler(event)" id="mKeyword6TextBox" toolTip="Enter sixth keyword"/>
 		<mx:TextInput x="173" y="257" width="205" keyDown="textBoxKeyDownHandler(event)" id="mKeyword7TextBox" toolTip="Enter seventh keyword"/>
 		<mx:TextInput x="173" y="286" width="205" keyDown="textBoxKeyDownHandler(event)" id="mKeyword8TextBox" toolTip="Enter eight keyword"/>
-		<mx:Button x="315" y="330" click="createCommGroupButtonClickHandler(event)" label="next &#187;" id="mCreateCommButton" toolTip="Proceed with creating the community group"/>
+		<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" x="315" y="330" click="createCommGroupButtonClickHandler(event)" label="next &#187;" id="mCreateCommButton" toolTip="Proceed with creating the community group"/>
 	</mx:Panel>
 </mx:Canvas>

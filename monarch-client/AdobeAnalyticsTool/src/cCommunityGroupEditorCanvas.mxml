@@ -284,8 +284,8 @@
 		<mx:Label x="19" y="120" text="Icon :" />
 		<mx:Image x="18" y="150" width="64" height="64" source="../images/ps.png" id="communityIcon" />
 		<mx:TextInput x="18" y="222" width="236" id="mIconTextBox"/>
-		<mx:Button x="262" y="222" label="Browse" id="mBrowseButton" click="fileBrowseHandler(event)"/>
-		<mx:Button x="18" y="252" label="Save"   id="mSaveButton" click="saveClickedHandler(event)"/>
+		<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" x="262" y="222" label="Browse" id="mBrowseButton" click="fileBrowseHandler(event)"/>
+		<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" x="18" y="252" label="Save"   id="mSaveButton" click="saveClickedHandler(event)"/>
 	</mx:Panel>
 
 	<mx:Panel x="370" y="55" width="313" height="551" layout="absolute" title="Keywords" horizontalScrollPolicy="off" verticalScrollPolicy="off">
@@ -294,7 +294,7 @@
 		</mx:VBox>
 		<mx:TextInput y="477" width="217" x="0" id="mKeywordTextBox"/>
 		<mx:Label text="Add new keyword:"  y="451"/>
-		<mx:Button y="477" label="Submit" id="mSubmitButton" click="submitButtonClickHandler(event)" x="225"/>
+		<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" y="477" label="Submit" id="mSubmitButton" click="submitButtonClickHandler(event)" x="225"/>
 	</mx:Panel>
 
 	<mx:Panel x="370" y="55" width="313" height="551" layout="absolute" title="Keywords being analyzed" horizontalScrollPolicy="off" verticalScrollPolicy="off">
@@ -311,18 +311,18 @@
 			</mx:dataProvider>
 		</mx:List>
 		<mx:TextInput y="488" width="217" x="10" id="mKeywordsTextBox" toolTip="Add a new keyword to be analyzed" />
-		<mx:Button y="488" label="add" id="_mSubmitButton" x="234" icon="@Embed(source='../images/add.png')" toolTip="Add a new keyword to be analyzed" />
+		<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" y="488" label="add" id="_mSubmitButton" x="234" icon="@Embed(source='../images/add.png')" toolTip="Add a new keyword to be analyzed" />
 
 	</mx:Panel>
 
 	<mx:Panel x="701" y="55" width="311" height="551" layout="absolute" title="Websites">
 		<mx:Text text="Sites under this community:" />	
-		<mx:Button click="addWebsiteButtonClickHandler(event)" label="Add Website" id="mAddWebsiteButton" x="202" y="481"/>
+		<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" click="addWebsiteButtonClickHandler(event)" label="Add Website" id="mAddWebsiteButton" x="202" y="481"/>
 		<mx:VBox height="441" width="285" id="mWebsitesVBox" x="3" y="26">
 		</mx:VBox>
 	</mx:Panel>
 	<mx:Panel x="701" y="55" width="311" height="551" layout="absolute" title="Websites under this community">
-		<mx:Button click="addWebsiteButtonClickHandler(event)" label="Add Website" id="_mAddWebsiteButton" x="183" y="488" icon="@Embed(source='../images/application_add.png')" toolTip="Add a new website under this community group"/>
+		<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" click="addWebsiteButtonClickHandler(event)" label="Add Website" id="_mAddWebsiteButton" x="183" y="488" icon="@Embed(source='../images/application_add.png')" toolTip="Add a new website under this community group"/>
 		<mx:List height="469" width="287" id="_mWebsitesVBox" x="10" y="10">
 			<mx:dataProvider>
 				<mx:Array>

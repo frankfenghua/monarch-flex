@@ -27,7 +27,7 @@
 		]]>
 	</mx:Script>
 	<mx:Label text="Home" id="mMyCommunityGroupHomeLabel" styleName="pageTitle" x="10" y="5"/>
-	<mx:Button label="My Community Groups" click="myCommunityGroupButtonClickHandler(event)" width="240" height="54" fontSize="14" toolTip="Browse my community groups" horizontalCenter="-154" verticalCenter="-26" icon="@Embed(source='../images/arrow_left.png')" styleName="buttonBlack"/>
-	<mx:Button label="Other Community Groups" width="240" height="54" fontSize="14" toolTip="Browse other community groups" horizontalCenter="154" verticalCenter="-26" icon="@Embed(source='../images/arrow_right.png')" styleName="buttonBlack"/>
+	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" label="My Community Groups" click="myCommunityGroupButtonClickHandler(event)" width="240" height="54" fontSize="14" toolTip="Browse my community groups" horizontalCenter="-154" verticalCenter="-26" icon="@Embed(source='../images/arrow_left.png')" styleName="buttonBlack"/>
+	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" label="Other Community Groups" width="240" height="54" fontSize="14" toolTip="Browse other community groups" horizontalCenter="154" verticalCenter="-26" icon="@Embed(source='../images/arrow_right.png')" styleName="buttonBlack"/>
 	
 </mx:Canvas>

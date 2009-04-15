@@ -239,8 +239,8 @@
 		]]>
 	</mx:Script>
 	
-	<mx:Button click="createWebsiteClickHandler(event)" id="cCreateWebsiteButton" label="Add Website(s)" horizontalCenter="153" verticalCenter="188"/>
-	<mx:Button click="cancelClickHandler(event)" id="mCancelButton" label="Cancel" toolTip="Cancel the create account aperation" horizontalCenter="56" verticalCenter="188"/>
+	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" click="createWebsiteClickHandler(event)" id="cCreateWebsiteButton" label="Add Website(s)" horizontalCenter="153" verticalCenter="188"/>
+	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" click="cancelClickHandler(event)" id="mCancelButton" label="Cancel" toolTip="Cancel the create account aperation" horizontalCenter="56" verticalCenter="188"/>
 	<mx:Canvas width="418" height="113" id="mAddNewWebsiteContainer" horizontalCenter="2" verticalCenter="-111" enabled="true" disabledOverlayAlpha=".9" alpha="1" backgroundDisabledColor="#333333">
 		<mx:Label x="-2.5" y="13" text="Website Name :" keyDown="websiteNameKeyDownHandler(event)" textAlign="right"/>
 		<mx:Label x="7.5" y="49" text="Website URL :" keyDown="websiteURLKeyDownHandler(event)" textAlign="right"/>

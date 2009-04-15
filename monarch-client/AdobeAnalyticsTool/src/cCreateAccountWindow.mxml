@@ -150,6 +150,6 @@
 	<mx:TextInput width="224.5" keyDown="userNameKeyDownHandler(event)" id="mEmailTextBox" x="128" y="52" toolTip="The user name used for logging in"/>
 	<mx:TextInput width="224.5" keyDown="passwordKeyDownHandler(event)" id="mPasswordTextBox" x="128" y="78" displayAsPassword="true" toolTip="The password used for logging in"/>
 	<mx:TextInput width="224.5" keyDown="reEnterPasswordKeyDownHandler(event)" id="mReEnterPasswordTextBox" x="128" y="104" displayAsPassword="true" toolTip="To make sure that you typed it in correctly"/>
-	<mx:Button x="243.5" y="138" click="createAccountClickHandler(event)" id="cCreateAccountButton" label="Create Account" />
-	<mx:Button x="172.5" y="138" click="cancelClickHandler(event)" id="mCancelButton" label="Cancel" />
+	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" x="243.5" y="138" click="createAccountClickHandler(event)" id="cCreateAccountButton" label="Create Account" />
+	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" x="172.5" y="138" click="cancelClickHandler(event)" id="mCancelButton" label="Cancel" />
 </mx:TitleWindow>

@@ -37,8 +37,8 @@
 	</mx:Script>
 
 	<mx:Panel layout="absolute" width="467" height="582" x="10" y="21" title="Hot Community Groups">
-		<mx:Button label="&#171; Previous" enabled="false" x="10" y="504" />
-		<mx:Button label="Next &#187;" enabled="false" x="382" y="504" />
+		<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" label="&#171; Previous" enabled="false" x="10" y="504" />
+		<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" label="Next &#187;" enabled="false" x="382" y="504" />
 	</mx:Panel>
 	<mx:Panel x="496" y="21" height="582" width="507" id="mNewsVBox" title="Information">
 	</mx:Panel>

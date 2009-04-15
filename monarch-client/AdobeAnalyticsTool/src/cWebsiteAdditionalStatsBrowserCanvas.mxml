@@ -309,7 +309,7 @@
 	<mx:Label text="&gt;" styleName="breadCrumbSeparator"  top="-1" left="58" id="mSep1"/>
 	<mx:Label text="&gt;" styleName="breadCrumbSeparator"  top="-1" left="240" id="mSep2"/>
 	<mx:Label text="&gt;" styleName="breadCrumbSeparator"  id="mSep3" top="0" left="335"/>
-	<mx:Button label="Edit Website" styleName="buttonBlack" click="editWebsiteButtonClickHandler(event)" id="mEditWebsiteButton" horizontalCenter="447" verticalCenter="-293" fontWeight="bold" fontStyle="normal" cornerRadius="5" icon="@Embed(source='../images/pencil.png')"/>
+	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" label="Edit Website" styleName="buttonBlack" click="editWebsiteButtonClickHandler(event)" id="mEditWebsiteButton" horizontalCenter="447" verticalCenter="-293" fontWeight="bold" fontStyle="normal" cornerRadius="5" icon="@Embed(source='../images/pencil.png')"/>
 	<mx:Panel x="6" y="50" width="494.5" height="349" layout="absolute" title="General">
 		<mx:Text x="0" y="0" width="480.5" height="308"
 			htmlText="Number of Users: {numberOfUsers}&#xa;
