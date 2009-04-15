@@ -9,8 +9,11 @@
 	</mx:Metadata>
 	<mx:Script>
 		<![CDATA[
+			import mx.collections.XMLListCollection;
+			import mx.collections.ArrayCollection;
 		
 			import mx.controls.Alert;
+			import mx.rpc.events.ResultEvent;
 		
 			///////////////////////////////////////////////////////////////////////////////////
 			//
@@ -18,6 +21,110 @@
 			//
 			///////////////////////////////////////////////////////////////////////////////////
 			
+			/**
+			 * Called when the stat request returns
+			 */
+			private function statResultHandler(event:ResultEvent):void  {
+				// 
+				var i:int = 0; // used as counter in this function
+				trace("Load succeeded");
+				// Assign to bound variables to implicitly change the text
+				numberOfUsers = event.result.detailStats.general.numberUsers;
+				postsPerDay = event.result.detailStats.general.postsPerDay;
+				postsToday = event.result.detailStats.general.postsToday;
+				analyzedPosts = event.result.detailStats.general.analyzedPosts;
+				analyzedThreads = event.result.detailStats.general.analyzedThreads;
+				
+				// May be arbitrarily many parrots, veterans, etc. so loop through them
+				// Set parrots HTML
+				var tempString:String = "";
+				var parrots:ArrayCollection = event.result.detailStats.general.parrots.user;
+				for(i = 0; i < parrots.length; i++) {
+					tempString += "<a href=\""+parrots.getItemAt(i).url+"\">"+parrots.getItemAt(i).title+"</a> Rating="+parrots.getItemAt(i).rating+"\n";
+				}
+				parrotsHTML = tempString;
+				
+				// Set newbies HTML
+				tempString = "";
+				var newbies:ArrayCollection = event.result.detailStats.general.newbies.user;
+				for(i = 0; i < newbies.length; i++) {
+					tempString += "<a href=\""+newbies.getItemAt(i).url+"\">"+newbies.getItemAt(i).title+"</a> Rating="+newbies.getItemAt(i).rating+"\n";
+				}
+				newbiesHTML = tempString;
+				
+				// Set newbies HTML
+				tempString = "";
+				var veterans:ArrayCollection = event.result.detailStats.general.veterans.user;
+				for(i = 0; i < veterans.length; i++) {
+					tempString += "<a href=\""+veterans.getItemAt(i).url+"\">"+veterans.getItemAt(i).title+"</a> Rating="+veterans.getItemAt(i).rating+"\n";
+				}
+				veteransHTML = tempString;
+				
+				// Set lively threads HTML
+				tempString = "";
+				var livelyThreads:ArrayCollection = event.result.detailStats.general.livelyThreads.thread;
+				trace(livelyThreads);
+				for(i = 0; i < livelyThreads.length; i++) {
+					tempString += "<a href=\""+livelyThreads.getItemAt(i).url+"\">"+livelyThreads.getItemAt(i).title+"</a> Rating="+livelyThreads.getItemAt(i).rating+"\n";
+				}
+				livelyThreadsHTML = tempString;
+				
+				
+				// Set keywords HTML
+				tempString = "";
+				var keywords:ArrayCollection = event.result.detailStats.keywords.keyword;
+				for(i = 0; i < keywords.length; i++) {
+					// Print word
+					var j:int = 0;
+					tempString += keywords.getItemAt(i).word + "\n";
+					trace("Keyword "+i+" of "+keywords.length);
+					
+					tempString += "Favorable threads:";
+					var loveThreads:ArrayCollection = keywords.getItemAt(i).loveThreads.thread;
+					for(j = 0; j < loveThreads.length; j++) {
+						tempString += "<a href=\""+loveThreads.getItemAt(j).url+"\">"+loveThreads.getItemAt(j).title+"</a> Rating="+loveThreads.getItemAt(j).rating+"\n";
+					}
+					
+					tempString += "Unfavorable threads:";
+					var hateThreads:ArrayCollection = keywords.getItemAt(i).hateThreads.thread;
+					for(j = 0; j < hateThreads.length; j++) {
+						tempString += "<a href=\""+hateThreads.getItemAt(j).url+"\">"+hateThreads.getItemAt(j).title+"</a> Rating="+hateThreads.getItemAt(j).rating+"\n";
+					}
+					
+					tempString += "Hot threads:";
+					var hotThreads:ArrayCollection = keywords.getItemAt(i).hotThreads.thread;
+					for(j = 0; j < hotThreads.length; j++) {
+						tempString += "<a href=\""+hotThreads.getItemAt(j).url+"\">"+hotThreads.getItemAt(j).title+"</a> Rating="+hotThreads.getItemAt(j).rating+"\n";
+					}
+					
+					tempString += "Ass kissers:";
+					var assKissers:ArrayCollection = keywords.getItemAt(i).assKissers.user;
+					for(j = 0; j < assKissers.length; j++) {
+						tempString += "<a href=\""+assKissers.getItemAt(j).url+"\">"+assKissers.getItemAt(j).title+"</a> Rating="+assKissers.getItemAt(j).rating+"\n";
+					}
+					
+					tempString += "Trash talkers:";
+					var trashTalkers:ArrayCollection = keywords.getItemAt(i).trashTalkers.user;
+					for(j = 0; j < trashTalkers.length; j++) {
+						tempString += "<a href=\""+trashTalkers.getItemAt(j).url+"\">"+trashTalkers.getItemAt(j).title+"</a> Rating="+trashTalkers.getItemAt(j).rating+"\n";
+					}
+					
+					tempString += "Parrots:";
+					var kParrots:ArrayCollection = keywords.getItemAt(i).parrots.user;
+					for(j = 0; j < kParrots.length; j++) {
+						tempString += "<a href=\""+kParrots.getItemAt(j).url+"\">"+kParrots.getItemAt(j).title+"</a> Rating="+kParrots.getItemAt(j).rating+"\n";
+					}
+					
+					tempString += "Sophisticated orators:";
+					var sophisticatedOrators:ArrayCollection = keywords.getItemAt(i).sophisticatedOrators.user;
+					for(j = 0; j < sophisticatedOrators.length; j++) {
+						tempString += "<a href=\""+sophisticatedOrators.getItemAt(j).url+"\">"+sophisticatedOrators.getItemAt(j).title+"</a> Rating="+sophisticatedOrators.getItemAt(j).rating+"\n";
+					}
+					
+				}
+				trace(tempString.length);
+				keywordsHTML = tempString;
+			}
 		
 			/**
 			 * 	Called when the user clicks on the home label.
@@ -141,6 +248,8 @@
 				mWebsiteName = websiteName;	
 				
 				// Send a request to the server for stats for this object
+				trace("Sent stats request");
+				statRequester.send({"websiteName":mWebsiteName});
 			}
 			
 			
@@ -153,10 +262,46 @@
 			// name of the community group
 			private var mCommunityGroupName:String = "";
 			// name of the website 
-			private var mWebsiteName:String = "";	
+			private var mWebsiteName:String = "";
+			
+			private var mStatsArray:ArrayCollection;
+			
+			[Bindable]
+			private var numberOfUsers:int = 0;
+			
+			[Bindable]
+			private var postsPerDay:Number = 0;
+			
+			[Bindable]
+			private var postsToday:int = 0;
+			
+			[Bindable]
+			private var analyzedPosts:int = 0;
+			
+			[Bindable]
+			private var analyzedThreads:int = 0;
+	
+			[Bindable]
+			private var parrotsHTML:String = "";
+			
+			[Bindable]		
+			private var newbiesHTML:String = "";
+			
+			[Bindable]
+			private var veteransHTML:String = "";
+			
+			[Bindable]
+			private var livelyThreadsHTML:String = "";
+			
+			[Bindable]
+			private var keywordsHTML:String = "";
+			
+			[Bindable]
+			private var SERVER_URL:String = "http://csil-srprj-2.cs.uiuc.edu/monarch/Client/";	
 			
 		]]>
 	</mx:Script>
+	<mx:HTTPService id="statRequester" method="GET" url="{SERVER_URL}detailStats.php" result="statResultHandler(event)"/>
 	<mx:LinkButton click="homeLabelClickHandler(event)" label="Home" id="mHomeLabel" top="2" left="0" />
 	<mx:LinkButton click="communityLabelClickHandler(event)" label="My Community Groups" id="mCommunityGroupLabel" top="1" left="79" />
 	<mx:LinkButton click="communityNameLabelClickHandler(event)" id="mCommunityGroupNameLabel" top="2" left="267" />
@@ -165,10 +310,19 @@
 	<mx:Label text="&gt;" styleName="breadCrumbSeparator"  top="-1" left="240" id="mSep2"/>
 	<mx:Label text="&gt;" styleName="breadCrumbSeparator"  id="mSep3" top="0" left="335"/>
 	<mx:Button label="Edit Website" styleName="buttonBlack" click="editWebsiteButtonClickHandler(event)" id="mEditWebsiteButton" horizontalCenter="447" verticalCenter="-293" fontWeight="bold" fontStyle="normal" cornerRadius="5" icon="@Embed(source='../images/pencil.png')"/>
-	<mx:Panel x="6" y="50" width="494.5" height="270" layout="absolute" title="General">
-		<mx:Text x="0" y="0" text="Posts per day: 99.5&#xa;Most active poster: Michael Jordan&#xa;..." width="464.5" height="215"/>
+	<mx:Panel x="6" y="50" width="494.5" height="349" layout="absolute" title="General">
+		<mx:Text x="0" y="0" width="480.5" height="308"
+			htmlText="Number of Users: {numberOfUsers}&#xa;
+				  Posts per day: {postsPerDay}&#xa;
+				  Posts today: {postsToday}&#xa; 
+				  Total posts analyzed: {analyzedPosts}&#xa; 
+				  Total threads analyzed: {analyzedThreads}&#xa;
+				  Parrots: {parrotsHTML}
+				  Newbies: {newbiesHTML}
+				  Veterans: {veteransHTML}
+				  Lively threads: {livelyThreadsHTML}"/>
 	</mx:Panel>
-	<mx:Panel x="6" y="328" width="494.5" height="279" layout="absolute" title="Links Spoken">
+	<mx:Panel x="6" y="407" width="494.5" height="200" layout="absolute" title="Links Spoken">
 		<mx:Text x="5" y="10">
 		    <mx:htmlText>
                 <![CDATA[Most mentioned: <a href="http://fuck.com">Fuck.com</a><br /> (99123)&#xa;Least mentioned: hoe.com (4)&#xa;Most favorable: shit.com (+56.2)&#xa;Least favorable: damn.com (-12.5)&#xa;Spoken with bad English: bitch.com (-0.82)&#xa;Spoken with best English: nigger.com (0.99)"]]>
@@ -176,7 +330,7 @@
         </mx:Text>
 	</mx:Panel>
 	<mx:Panel x="508" y="50" width="494" height="556" layout="absolute" title="Keywords">
-		<mx:Text x="10" y="10" text="keyword1:&#xa;&#xa;favorable threads: ................&#xa;hate threads:  .......................&#xa;mentioned a lot threads: ............&#xa;biggest lovers: ......................&#xa;biggest haters: ....................&#xa;user that said the most: .............&#xa;..................&#xa;&#xa;keyword2:&#xa;&#xa;favorable threads: ................&#xa;hate threads:  .......................&#xa;mentioned a lot threads: ............&#xa;biggest lovers: ......................&#xa;biggest haters: ....................&#xa;user that said the most: .............&#xa;..................&#xa;&#xa;keyword3:&#xa;&#xa;favorable threads: ................&#xa;hate threads:  .......................&#xa;mentioned a lot threads: ............&#xa;biggest lovers: ......................&#xa;biggest haters: ....................&#xa;user that said the most: .............&#xa;..................&#xa;&#xa;keyword4:&#xa;&#xa;favorable threads: ................&#xa;hate threads:  .......................&#xa;mentioned a lot threads: ............&#xa;biggest lovers: ......................&#xa;biggest haters: ....................&#xa;user that said the most: .............&#xa;.................." width="454" height="491"/>
+		<mx:Text x="10" y="10" htmlText="{keywordsHTML}"/>
 	</mx:Panel>
 	
 </mx:Canvas>
