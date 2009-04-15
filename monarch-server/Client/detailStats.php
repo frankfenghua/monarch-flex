@@ -235,9 +235,9 @@ class DetailStats
 	private function threadNode($threadData)
 	{
 		echo '<thread>';
-		echo '<url>' . $threadData['url'] . '</url>';
-		echo '<title>' . $threadData['title'] . '</title>';
-		echo '<rating>' . $threadData['rating'] . '</rating>';
+		echo '<url>' . $this->xml($threadData['url']) . '</url>';
+		echo '<title>' . $this->xml($threadData['title']) . '</title>';
+		echo '<rating>' . $this->xml($threadData['rating']) . '</rating>';
 		echo '</thread>';
 	}
 	
@@ -273,10 +273,23 @@ class DetailStats
 	private function userNode($userData)
 	{
 		echo '<user>';
-		echo '<url>' . $userData['url'] . '</url>';
-		echo '<title>' . $userData['name'] . '</title>';
-		echo '<rating>' . $userData['rating'] . '</rating>';
+		echo '<url>' . $this->xml($userData['url']) . '</url>';
+		echo '<title>' . $this->xml($userData['name']) . '</title>';
+		echo '<rating>' . $this->xml($userData['rating']) . '</rating>';
 		echo '</user>';
+	}
+
+	// ========================================================================
+	// xml
+	//    args:  XML node data - string
+	//    ret:   "Cleaned" parameter data
+	//    about: Escapes all characters in the parameter string that might cause
+	//        an XML parser to barf.
+	// ------------------------------------------------------------------------
+	private function xml($data) {
+		$newData = str_replace('&', '', $data);
+		$newData = str_replace('<', '\<', $newData);
+		return $newData;
 	}
 
 }
