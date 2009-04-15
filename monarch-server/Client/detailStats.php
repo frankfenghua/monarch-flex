@@ -74,7 +74,7 @@ class DetailStats
 		
 		$q = 'SELECT COUNT(*) 
 			FROM posts
-			WHERE time > ' . time();
+			WHERE time > ' . (time() - SECONDS_IN_DAY);
 		$q = $this->database->fetch($q);
 		echo '<postsToday>' . $q[0] . '</postsToday>';
 		
@@ -129,7 +129,6 @@ class DetailStats
 			echo '<keyword word="' . $keywordRow['word'] . '">';
 		
 			$q = 'SELECT t.url, t.title, s.goodness AS rating
-
 				FROM threads AS t, threadstats AS ts, stats AS s
 				WHERE t.id = ts.thread
 				AND ts.keyword = ' . $keywordRow['id'] . '

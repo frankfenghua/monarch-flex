@@ -74,7 +74,7 @@ class DetailStats
 		
 		$q = 'SELECT COUNT(*) 
 			FROM posts
-			WHERE time > ' . time();
+			WHERE time > ' . (time() - SECONDS_IN_DAY);
 		$q = $this->database->fetch($q);
 		echo '<postsToday>' . $q[0] . '</postsToday>';
 		
