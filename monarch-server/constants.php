@@ -28,6 +28,8 @@ define('REGEX_DOMAIN_SUFFIXES', 'com|net|info|org|me|tv|mobi|biz|us|ca|asia|ws|a
 
 define('POST_HASH_LENGTH', 8); // helps in detecting whether a post is a duplicate or new
 
-define('LING_KEYWORD_VICINITY', 100) // number of words to the left and right of the keyword to search for potential adjectives
+define('LING_KEYWORD_VICINITY', 100); // number of words to the left and right of the keyword to search for potential adjectives
+
+define('SECONDS_IN_DAY', 86400); // number of seconds in one day
 
 ?>
