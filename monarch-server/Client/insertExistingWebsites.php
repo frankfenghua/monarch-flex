@@ -1,6 +1,6 @@
 <?php
   
-   require_once('./database/Database.php');
+   require_once('./../database/Database.php');
    require_once('./xmlWriter.php');
    $database = new Database('master');
 
