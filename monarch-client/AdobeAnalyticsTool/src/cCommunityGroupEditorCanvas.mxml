@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="showCanvasHandler(event)" show="showCanvasHandler(event)" width="1012" height="616" >
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="showCanvasHandler(event)" show="showCanvasHandler(event)" width="1012" height="616" xmlns:local="*">
 
 	<mx:Metadata>
 		[Event(name="OpenCommunityGroupSelectionClickedEvent", type="flash.events.Event")]
 		[Event(name="OpenCommunityGroupHomeCanvasEvent", type="flash.events.Event")]
 		[Event(name="OpenCommunityGroupBrowserCanvasEvent", type="flash.events.Event")]
 		[Event(name="OpenAddWebsiteWindowEvent", type="cCreateWebsiteEvent")]
+		[Event(name="RemoveWebsiteEntryFromCommunityEvent", type="cCreateWebsiteEvent")]
+		[Event(name="RemoveKeywordEntryFromCommunityEvent", type="cAllPurposeEvent")]
 	</mx:Metadata>
 	<mx:Script>
 		<![CDATA[
@@ -40,26 +42,6 @@
 		}
 		
 		/**
-		 * 	Called when the user hovers the mouse over the home label.
-		 */
-		/*
-		private function homeLabelRollOverHandler(event:Event):void
-		{
-			mHomeLabel.setStyle("color", "0xFF6666");
-		}
-		*/
-		
-		/**
-		 * 	Called when the user hovers the mouse away from the home label.
-		 */
-		/*
-		private function homeLabelRollOutHandler(event:Event):void
-		{
-			mHomeLabel.setStyle("color", "0x11d30c");
-		}
-		*/
-		
-		/**
 		 * 	Called when the user clicks on the community label.
 		 */
 		private function communityLabelClickHandler(event:Event):void
@@ -69,26 +51,6 @@
 		}
 		
 		/**
-		 * 	Called when the user hovers the mouse over the community label.
-		 */
-		/*
-		private function communityLabelRollOverHandler(event:Event):void
-		{
-			mCommunityGroupLabel.setStyle("color", "0xFF6666");
-		}
-		*/
-		
-		/**
-		 * 	Called when the user hovers the mouse away from the community label.
-		 */
-		/*
-		private function communityLabelRollOutHandler(event:Event):void
-		{
-			mCommunityGroupLabel.setStyle("color", "0x11d30c");
-		}
-		*/
-		
-		/**
 		 * 	Called when the user clicks on the community group name label.
 		 */
 		private function communityNameLabelClickHandler(event:Event):void
@@ -96,41 +58,50 @@
 			var e:Event = new Event("OpenCommunityGroupBrowserCanvasEvent");
 			this.dispatchEvent(e);
 		}
-		
+				
 		/**
-		 * 	Called when the user hovers the mouse over the community group name label.
-		 */
-		/*
-		private function communityNameLabelRollOverHandler(event:Event):void
-		{
-			mCommunityGroupNameLabel.setStyle("color", "0xFF6666");
-		}
-		*/
-		
-		/**
-		 * 	Called when the user hovers the mouse away from the community group name label.
-		 */
-		/*
-		private function communityNameLabelRollOutHandler(event:Event):void
-		{
-			mCommunityGroupNameLabel.setStyle("color", "0x11d30c");
-		}
-		*/
-		
-		/**
-		 *	 
+		 *	Called when the user clicks on the remove button in the cLabelEntryGraphic.
 		 */
 		private function removeKeywordClickedEvent(event:cAllPurposeEvent):void
 		{
-			
+			var graphic:cLabelEntryGraphic = cLabelEntryGraphic(event.target);
+			mKeywordsVBox.removeChild(graphic);
+			mEngine.changeData(mCommunityGroupId, graphic.mNameLabel.text, "rk");
+		}
+		
+		/**
+		 * 	Called when the user clicks on the remove button in the cLabelEntryGraphic.
+		 */
+		private function removeWebsiteClickedEvent(event:cAllPurposeEvent):void
+		{
+			var graphic:cLabelEntryGraphic = cLabelEntryGraphic(event.target);
+			mWebsitesVBox.removeChild(graphic);
+			mEngine.changeData(mCommunityGroupId, graphic.mNameLabel.text, "rw");
 		}
 		
 		/**
 		 * 
 		 */
-		private function removeWebsiteClickedEvent(event:cAllPurposeEvent):void
+		private function addKeywordButtonClickedHandler(event:Event):void
 		{
+			if(mKeywordsTextBox.text.length == 0) {
+				Alert.show("Please enter a keyword before proceeding.", "Error");
+				return;
+			}
+				
+			for(var i:int = 0; i < mKeywords.length; i++) {
+				var keyword:cKeywordEntry = cKeywordEntry(mKeywords.getItemAt(i));
+				if(keyword.mName == mKeywordsTextBox.text) {
+					Alert.show("The keyword [" + mKeywordsTextBox.text + "] already exists within this community.", "Error");
+					return;
+				}
+			}	
 			
+			mEngine.changeData(mCommunityGroupId, mKeywordsTextBox.text, "ak");
+			var keywordGraphic:cLabelEntryGraphic = new cLabelEntryGraphic();
+			keywordGraphic.updateInformation(mKeywordsTextBox.text);
+			keywordGraphic.addEventListener("cLabelEntryClickedEvent", removeKeywordClickedEvent);
+			mKeywordsVBox.addChild(keywordGraphic);
 		}
 		
 		/**
@@ -157,6 +128,8 @@
 		 */
 		private function showCanvasHandler(event:Event):void
 		{
+			mKeywordsTextBox.text = "";
+			
 			mCommunityGroupNameLabel.label = mCommunityGroupName;
 			mCommunityGroupNameLabel.x =+ mSep2.x + mSep2.measureText(mSep2.text).width + 10;
 			mSep3.x =+ mCommunityGroupNameLabel.x + mCommunityGroupNameLabel.width + 10;
@@ -164,24 +137,24 @@
 			mNameTextBox.text = mCommunityGroupName;
 			
 			// place the community keywords in the mKeywordsVBox
-			/*mKeywordsVBox.removeAllChildren();
+			mKeywordsVBox.removeAllChildren();
 			for(var i:int = 0; i < mKeywords.length; i++) {
 				var keyword:cKeywordEntry = cKeywordEntry(mKeywords.getItemAt(i));
-				var graphic:cLabelEntryGraphic = new cLabelEntryGraphic();
-				graphic.updateInformation(keyword.mName);
-				graphic.addEventListener("cLabelEntryClickedEvent", removeKeywordClickedEvent);
-				mKeywordsVBox.addChild(graphic);
+				var keywordGraphic:cLabelEntryGraphic = new cLabelEntryGraphic();
+				keywordGraphic.updateInformation(keyword.mName);
+				keywordGraphic.addEventListener("cLabelEntryClickedEvent", removeKeywordClickedEvent);
+				mKeywordsVBox.addChild(keywordGraphic);
 			}
 			
 			// place the community website in the mWebsitesVBox
 			mWebsitesVBox.removeAllChildren();
 			for(var j:int = 0; j < mWebsites.length; j++) {
 				var website:cWebsiteEntry = cWebsiteEntry(mWebsites.getItemAt(j));
-				var graphic:cLabelEntryGraphic = new cLabelEntryGraphic();
-				graphic.updateInformation(website.mName);
-				graphic.addEventListener("cLabelEntryClickedEvent", removeWebsiteClickedEvent);
-				mWebsitesVBox.addChild(graphic);
-			}*/
+				var websiteGraphic:cLabelEntryGraphic = new cLabelEntryGraphic();
+				websiteGraphic.updateInformation(website.mName);
+				websiteGraphic.addEventListener("cLabelEntryClickedEvent", removeWebsiteClickedEvent);
+				mWebsitesVBox.addChild(websiteGraphic);
+			}
 			
 			// TODO: move link to global variable
 			communityIcon.source = "http://csil-srprj-2.cs.uiuc.edu/images/" + mCommunityGroupId + ".jpg"; 
@@ -298,6 +271,12 @@
 	</mx:Panel>
 
 	<mx:Panel x="370" y="55" width="313" height="551" layout="absolute" title="Keywords being analyzed" horizontalScrollPolicy="off" verticalScrollPolicy="off">
+<<<<<<< .mine
+		<mx:VBox height="469" width="289" id="mKeywordsVBox" x="10" y="10">
+		</mx:VBox>
+		<mx:TextInput y="488" width="217" x="10" enter="addKeywordButtonClickedHandler(event)" id="mKeywordsTextBox" toolTip="Add a new keyword to be analyzed" />
+		<mx:Button y="488" label="add" click="addKeywordButtonClickedHandler(event)" id="mAddKeywordButton" x="234" icon="@Embed(source='../images/add.png')" toolTip="Add a new keyword to be analyzed" />
+=======
 		<mx:List height="469" width="289" id="mKeywordsVBox" x="10" y="10">
 			<mx:dataProvider>
 				<mx:Array>
@@ -312,26 +291,21 @@
 		</mx:List>
 		<mx:TextInput y="488" width="217" x="10" id="mKeywordsTextBox" toolTip="Add a new keyword to be analyzed" />
 		<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" y="488" label="add" id="_mSubmitButton" x="234" icon="@Embed(source='../images/add.png')" toolTip="Add a new keyword to be analyzed" />
+>>>>>>> .r195
 
 	</mx:Panel>
 
 	<mx:Panel x="701" y="55" width="311" height="551" layout="absolute" title="Websites">
 		<mx:Text text="Sites under this community:" />	
 		<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" click="addWebsiteButtonClickHandler(event)" label="Add Website" id="mAddWebsiteButton" x="202" y="481"/>
-		<mx:VBox height="441" width="285" id="mWebsitesVBox" x="3" y="26">
-		</mx:VBox>
 	</mx:Panel>
 	<mx:Panel x="701" y="55" width="311" height="551" layout="absolute" title="Websites under this community">
 		<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" click="addWebsiteButtonClickHandler(event)" label="Add Website" id="_mAddWebsiteButton" x="183" y="488" icon="@Embed(source='../images/application_add.png')" toolTip="Add a new website under this community group"/>
-		<mx:List height="469" width="287" id="_mWebsitesVBox" x="10" y="10">
-			<mx:dataProvider>
-				<mx:Array>
-					<mx:Object label="CNN Politics"/>
-					<mx:Object label="New York Times Politics"/>
-				</mx:Array>
-			</mx:dataProvider>
-		</mx:List>
+		<mx:VBox height="469" width="287" id="mWebsitesVBox" x="10" y="10">
+		</mx:VBox>
 
 	</mx:Panel>
-	
+	<local:cEngine id="mEngine">
+		
+	</local:cEngine>
 </mx:Canvas>

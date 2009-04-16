@@ -64,7 +64,7 @@
 			
 		]]>
 	</mx:Script>
-	<mx:Label text="Label" fontSize="12" width="220" horizontalCenter="-28" verticalCenter="0" id="mNameLabel"/>
-	<mx:Label text="remove" click="removeLabelClickedHandler(event)" horizontalCenter="114" verticalCenter="0" id="mRemoveLabel" color="#FF0000"/>
+	<mx:Label text="Label" fontSize="12" width="209" id="mNameLabel" y="4" x="4"/>
+	<mx:Button label="remove" click="removeLabelClickedHandler(event)" horizontalCenter="103" verticalCenter="0" id="mRemoveButton"/>
 	
 </mx:Canvas>

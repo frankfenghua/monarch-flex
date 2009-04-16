@@ -57,6 +57,11 @@
     		
     		[Bindable]
     		private var mWebsiteIds:String = "";
+    		[Bindable]
+    		private var mName:String = "";
+    		
+    		[Bindable]
+    		private var mType:String = "";
     		
     		//////////////////////////////////////////////////////////////////////////////////////
 			//
@@ -64,7 +69,7 @@
 			//
 			//////////////////////////////////////////////////////////////////////////////////////
     		
-    		/*
+    		/**
     		 *	Function which sends a request via the mAccountRequestHTTPService HTTPService component
     		 *  to a php file which resides on the server. The function will set the proper request
     		 *  variabled before sending the request.
@@ -89,7 +94,7 @@
     			mLogInRequestHTTPService.send();
     		}
     		
-    		/*
+    		/**
     		 *
     		 */
     		public function createCommunity(communityName:String, keyWords:Array, userId:int):void
@@ -108,7 +113,7 @@
     			mAddCommunityRequestHTTPService.send();
     		}
     		
-    		/*
+    		/**
     		 *
     		 */
     		public function addKeywordsToCommunity(communityId:int, keyWords:Array, userId:int):void
@@ -178,6 +183,24 @@
     		{
     			mAllWebsitesRequestHTTPService.send();
     		} 
+    		
+    		/**
+    		 * 	Function which gets called whenever a keyword is to be added or removed from
+    		 *  a community. It is also called when a webisite is to be removed from a community.
+    		 * 	The idenifiers which specify which operation to perform are as follows :
+    		 * 		"rk" : remove keyword from community
+    		 * 		"ak" : add keyword to community
+    		 * 		"rw" : remove website from community
+    		 */
+    		public function changeData(communityId:int,
+    								   name:String,
+    								   ident:String):void
+    		{
+    			mCommunityId = communityId.toString();
+    			mName = name;
+    			mType = ident;
+    			mChangeDataRequestHTTPService.send();
+    		}
     		
     		//////////////////////////////////////////////////////////////////////////////////////
 			//
@@ -427,6 +450,14 @@
     			Alert.show(event.result.toString());
     		}
     		
+    		/**
+    		 * 
+    		 */
+    		private function changeDataHTTPServiceResultHandler(event:ResultEvent):void
+    		{
+    			Alert.show(event.result.toString());
+    		}
+    		
     	]]>
     </mx:Script>	
 		
@@ -484,6 +515,13 @@
 		<mx:request xmlns="">
 			<community>{mCommunityId}</community>
 			<websiteName>{mWebsiteName}</websiteName>
+		</mx:request>
+	</mx:HTTPService>
+	<mx:HTTPService id="mChangeDataRequestHTTPService" result="changeDataHTTPServiceResultHandler(event)" url="http://csil-srprj-2.cs.uiuc.edu/Client/changeData.php" resultFormat="e4x" method="GET" useProxy="false">
+		<mx:request xmlns="">
+			<type>{mType}</type>
+			<name>{mName}</name>
+			<communityId>{mCommunityId}</communityId>
 		</mx:request>
 	</mx:HTTPService>
 	<mx:HTTPService id="mAddExistingWebsitesRequestHTTPService" result="addExistingWebsitesHTTPServiceResultHandler(event)" url="http://csil-srprj-2.cs.uiuc.edu/Client/insertExistingWebsites.php" resultFormat="e4x" method="GET" useProxy="false">
