@@ -13,6 +13,7 @@ header('Content-Type: text/xml');
 
 require_once('../database/Database.php');
 require_once('../constants.php');
+require_once('../Url.php');
 
 class DetailStats
 {
@@ -22,6 +23,7 @@ class DetailStats
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 	private $database; // connection to a specific website's database
+	private $startPage;  // the start page for this website
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // PUBLIC METHODS
@@ -36,6 +38,9 @@ class DetailStats
 	public function DetailStats($website)
 	{
 		$this->database = new Database($website);
+
+		$arr = $this->database->fetch('SELECT startPage FROM regexes');
+		$this->startPage = $arr['startPage'];
 		
 		echo '<detailStats>';
 		
@@ -247,7 +252,7 @@ class DetailStats
 	private function threadNode($threadData)
 	{
 		echo '<thread>';
-		echo '<url>' . $this->xml($threadData['url']) . '</url>';
+		echo '<url>' . URL::translateURLBasedOnCurrent($this->xml($threadData['url']),$this->startPage) . '</url>';
 		echo '<title>' . $this->xml($threadData['title']) . '</title>';
 		echo '<rating>' . $this->xml($threadData['rating']) . '</rating>';
 		echo '</thread>';
@@ -285,7 +290,7 @@ class DetailStats
 	private function userNode($userData)
 	{
 		echo '<user>';
-		echo '<url>' . $this->xml($userData['url']) . '</url>';
+		echo '<url>' . URL::translateURLBasedOnCurrent($this->xml($userData['url']),$this->startPage) . '</url>';
 		echo '<title>' . $this->xml($userData['name']) . '</title>';
 		echo '<rating>' . $this->xml($userData['rating']) . '</rating>';
 		echo '</user>';
