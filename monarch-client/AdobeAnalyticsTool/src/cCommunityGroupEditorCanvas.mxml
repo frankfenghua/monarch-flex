@@ -49,6 +49,7 @@
 			var e:Event = new Event("OpenCommunityGroupSelectionClickedEvent");
 			this.dispatchEvent(e);
 		}
+
 		
 		/**
 		 * 	Called when the user clicks on the community group name label.
@@ -271,27 +272,13 @@
 	</mx:Panel>
 
 	<mx:Panel x="370" y="55" width="313" height="551" layout="absolute" title="Keywords being analyzed" horizontalScrollPolicy="off" verticalScrollPolicy="off">
-<<<<<<< .mine
+
 		<mx:VBox height="469" width="289" id="mKeywordsVBox" x="10" y="10">
 		</mx:VBox>
 		<mx:TextInput y="488" width="217" x="10" enter="addKeywordButtonClickedHandler(event)" id="mKeywordsTextBox" toolTip="Add a new keyword to be analyzed" />
-		<mx:Button y="488" label="add" click="addKeywordButtonClickedHandler(event)" id="mAddKeywordButton" x="234" icon="@Embed(source='../images/add.png')" toolTip="Add a new keyword to be analyzed" />
-=======
-		<mx:List height="469" width="289" id="mKeywordsVBox" x="10" y="10">
-			<mx:dataProvider>
-				<mx:Array>
-					<mx:Object label="Obama"/>
-					<mx:Object label="Palin"/>
-					<mx:Object label="McCain"/>
-					<mx:Object label="Economy"/>
-					<mx:Object label="Michelle"/>
-					<mx:Object label="Bailout"/>
-				</mx:Array>
-			</mx:dataProvider>
-		</mx:List>
-		<mx:TextInput y="488" width="217" x="10" id="mKeywordsTextBox" toolTip="Add a new keyword to be analyzed" />
-		<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" y="488" label="add" id="_mSubmitButton" x="234" icon="@Embed(source='../images/add.png')" toolTip="Add a new keyword to be analyzed" />
->>>>>>> .r195
+		<mx:Button y="488" label="add" click="addKeywordButtonClickedHandler(event)" id="mAddKeywordButton" x="234" icon="@Embed(source='../images/add.png')" toolTip="Add a new keyword to be analyzed" useHandCursor="true" buttonMode="true" mouseChildren="false"/>
+
+
 
 	</mx:Panel>
 

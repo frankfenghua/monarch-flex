@@ -32,12 +32,24 @@
 			//
 			///////////////////////////////////////////////////////////////////////////////////
 			
+			// ================================================================================
+			// treeLabel
+			//    args:  an XML node
+			//    ret:   the text that should be displayed in the tree component
+			//    about: Tells Flex how to convert the XML into a textual tree.
+			// -------------------------------------------------------------------------------- 
 			private function treeLabel(item:Object):String
             {
 				var node:XML = XML(item);
 				return node.@value;
             }
             
+            // ================================================================================
+			// addKeyword
+			//    args:  a keyword from the server response
+			//    ret:   none
+			//    about: Adds the keyword to the tree component along with its subtree.
+			// --------------------------------------------------------------------------------
             private function addKeyword(keyword:Object):void
             {
             	var keywordNode:XML = <keyword/>;
@@ -54,6 +66,14 @@
 				addKeywordSayers("sophisticated orators", keywordNode, keyword.sophisticatedOrators);
             }
             
+            // ================================================================================
+			// addKeywordThreads
+			//    args:  * what this group of threads feels about the keyword
+			//           * a keyword on the tree
+			//           * a grouping of threads from the server response
+			//    ret:   none
+			//    about: Adds a group of threads.
+			// --------------------------------------------------------------------------------
             private function addKeywordThreads(feeling:String, keywordNode:XML, threadList:Object):void
             {
             	var feelingNode:XML = <keywordFeeling/>;
@@ -63,6 +83,13 @@
 				addThreads(feelingNode, threadList);
             }
             
+            // ================================================================================
+			// addThreads
+			//    args:  * the grouping of threads on the tree
+			//           * the grouping of threads from the server response
+			//    ret:   none
+			//    about: Adds all threads under a grouping of threads.
+			// --------------------------------------------------------------------------------
             private function addThreads(threadListNode:XML, threadList:Object):void
             {
             	var threads:ArrayCollection = threadList.thread;
@@ -75,6 +102,14 @@
             	}
             }
             
+            // ================================================================================
+			// addKeywordSayers
+			//    args:  * what this group of users feels about the keyword
+			//           * a keyword on the tree
+			//           * a grouping of users from the server response
+			//    ret:   none
+			//    about: Adds a group of users.
+			// --------------------------------------------------------------------------------
             private function addKeywordSayers(feeling:String, keywordNode:XML, userList:Object):void
             {
             	var feelingNode:XML = <userFeeling/>;
@@ -84,6 +119,13 @@
 				addUsers(feelingNode, userList);
             }
             
+            // ================================================================================
+			// addThreads
+			//    args:  * the grouping of users on the tree
+			//           * the grouping of users from the server response
+			//    ret:   none
+			//    about: Adds all users under a grouping of users.
+			// --------------------------------------------------------------------------------
             private function addUsers(userListNode:XML, userList:Object):void
             {
             	var users:ArrayCollection = userList.user;
@@ -95,7 +137,6 @@
             		userListNode.appendChild(userNode);
             	}
             }
-            
 			
 			/**
 			 * Called when the stat request returns
@@ -109,6 +150,7 @@
 				for(i = 0; i < words.length; i++)
 					addKeyword(words.getItemAt(i));
 				
+				/*
 				// addKeyword("fucker");
 				
 				var i:int = 0; // used as counter in this function
@@ -208,7 +250,8 @@
 					
 				}
 				trace(tempString.length);
-				keywordsHTML = tempString;	
+				keywordsHTML = tempString;
+				*/	
 			}
 		
 			/**
