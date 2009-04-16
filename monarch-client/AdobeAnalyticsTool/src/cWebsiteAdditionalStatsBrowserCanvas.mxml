@@ -14,6 +14,17 @@
 		
 			import mx.controls.Alert;
 			import mx.rpc.events.ResultEvent;
+            
+            [Bindable]
+            private var keywords:XML =
+              <root value="root"> 
+              	<root2 value="root2"> 
+		      	</root2>                                          
+              </root>;
+            
+            [Bindable]
+
+            private var keywordsTree:XMLListCollection = new XMLListCollection(keywords.root2)
 		
 			///////////////////////////////////////////////////////////////////////////////////
 			//
@@ -21,11 +32,85 @@
 			//
 			///////////////////////////////////////////////////////////////////////////////////
 			
+			private function treeLabel(item:Object):String
+            {
+				var node:XML = XML(item);
+				return node.@value;
+            }
+            
+            private function addKeyword(keyword:Object):void
+            {
+            	var keywordNode:XML = <keyword/>;
+				keywordNode.@value = keyword.word;
+				var rootNode:XMLList = keywords.root2;
+				rootNode.appendChild(keywordNode);
+				
+				addKeywordThreads("love threads", keywordNode, keyword.loveThreads);
+				addKeywordThreads("hate threads", keywordNode, keyword.hateThreads);
+				addKeywordThreads("hot threads", keywordNode, keyword.hotThreads);
+				addKeywordSayers("ass kissers", keywordNode, keyword.assKissers);
+				addKeywordSayers("trash talkers", keywordNode, keyword.trashTalkers);
+				addKeywordSayers("chatterboxes", keywordNode, keyword.chatterboxes);
+				addKeywordSayers("sophisticated orators", keywordNode, keyword.sophisticatedOrators);
+            }
+            
+            private function addKeywordThreads(feeling:String, keywordNode:XML, threadList:Object):void
+            {
+            	var feelingNode:XML = <keywordFeeling/>;
+				feelingNode.@value = feeling;
+				keywordNode.appendChild(feelingNode);
+				
+				addThreads(feelingNode, threadList);
+            }
+            
+            private function addThreads(threadListNode:XML, threadList:Object):void
+            {
+            	var threads:ArrayCollection = threadList.thread;
+            	
+            	for(var i:int = 0; i < threads.length; i++)
+            	{
+            		var threadNode:XML = <thread/>;
+            		threadNode.@value = threads.getItemAt(i).rating + " " + threads.getItemAt(i).title;
+            		threadListNode.appendChild(threadNode);
+            	}
+            }
+            
+            private function addKeywordSayers(feeling:String, keywordNode:XML, userList:Object):void
+            {
+            	var feelingNode:XML = <userFeeling/>;
+				feelingNode.@value = feeling;
+				keywordNode.appendChild(feelingNode);
+				
+				addUsers(feelingNode, userList);
+            }
+            
+            private function addUsers(userListNode:XML, userList:Object):void
+            {
+            	var users:ArrayCollection = userList.user;
+            	
+            	for(var i:int = 0; i < users.length; i++)
+            	{
+            		var userNode:XML = <user/>;
+            		userNode.@value = users.getItemAt(i).rating + " " + users.getItemAt(i).name;
+            		userListNode.appendChild(userNode);
+            	}
+            }
+            
+			
 			/**
 			 * Called when the stat request returns
 			 */
-			private function statResultHandler(event:ResultEvent):void  {
-				// 
+			private function statResultHandler(event:ResultEvent):void  
+			{
+				var words:ArrayCollection = event.result.detailStats.keywords.keyword;
+				
+				var i:int;
+				
+				for(i = 0; i < words.length; i++)
+					addKeyword(words.getItemAt(i));
+				
+				// addKeyword("fucker");
+				
 				var i:int = 0; // used as counter in this function
 				trace("Load succeeded");
 				// Assign to bound variables to implicitly change the text
@@ -123,7 +208,7 @@
 					
 				}
 				trace(tempString.length);
-				keywordsHTML = tempString;
+				keywordsHTML = tempString;	
 			}
 		
 			/**
@@ -165,7 +250,6 @@
 				this.dispatchEvent(e);
 			}
 			
-			
 			///////////////////////////////////////////////////////////////////////////////////
 			//
 			//						   CANVAS EVENT HANDLERS
@@ -204,7 +288,6 @@
 				trace("Sent stats request");
 				statRequester.send({"websiteName":mWebsiteName});
 			}
-			
 			
 			///////////////////////////////////////////////////////////////////////////////////
 			//
@@ -283,7 +366,7 @@
         </mx:Text>
 	</mx:Panel>
 	<mx:Panel x="508" y="50" width="494" height="556" layout="absolute" title="Keywords">
-		<mx:Text x="10" y="10" htmlText="{keywordsHTML}"/>
+		<mx:Tree id="tree" top="10" left="10" dataProvider="{keywordsTree}" labelFunction="treeLabel" width="470" height="505"/>
 	</mx:Panel>
 	
 </mx:Canvas>

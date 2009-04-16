@@ -291,7 +291,7 @@ class DetailStats
 	{
 		echo '<user>';
 		echo '<url>' . URL::translateURLBasedOnCurrent($this->xml($userData['url']),$this->startPage) . '</url>';
-		echo '<title>' . $this->xml($userData['name']) . '</title>';
+		echo '<name>' . $this->xml($userData['name']) . '</name>';
 		echo '<rating>' . $this->xml($userData['rating']) . '</rating>';
 		echo '</user>';
 	}
