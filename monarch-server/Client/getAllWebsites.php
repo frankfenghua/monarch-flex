@@ -1,6 +1,6 @@
 <?php
 
-	include "./xmlWriter.php";
+	require_once("./xmlWriter.php");
 
 	// connect to the mySQL server and select the database
 	$host = 'csil-srprj-2.cs.uiuc.edu';  
