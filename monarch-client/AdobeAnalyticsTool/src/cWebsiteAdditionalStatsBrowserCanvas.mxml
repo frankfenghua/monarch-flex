@@ -9,22 +9,22 @@
 	</mx:Metadata>
 	<mx:Script>
 		<![CDATA[
-			import mx.collections.XMLListCollection;
+//			import mx.collections.XMLListCollection;
 			import mx.collections.ArrayCollection;
 		
 			import mx.controls.Alert;
 			import mx.rpc.events.ResultEvent;
             
-            [Bindable]
-            private var keywords:XML =
-              <root value="root"> 
-              	<root2 value="root2"> 
-		      	</root2>                                          
-              </root>;
+//            [Bindable]
+//            private var keywords:XML;
+            // =
+            //  <root value="root"> 
+//              	<root2 value="root2"> 
+//		      	</root2>                                          
+            //  </root>;
             
-            [Bindable]
-
-            private var keywordsTree:XMLListCollection = new XMLListCollection(keywords.root2)
+            // [Bindable]
+            // private var keywordsTree:XMLListCollection; //  = new XMLListCollection(keywords);
 		
 			///////////////////////////////////////////////////////////////////////////////////
 			//
@@ -40,10 +40,20 @@
 			// -------------------------------------------------------------------------------- 
 			private function treeLabel(item:Object):String
             {
-				var node:XML = XML(item);
-				return node.@value;
+            	if(item.@label != "") {
+            		if(item.@rating != "") {
+            			return item.@label + " " + item.@rating;
+            		}
+            		else {
+            			// trace("Item label = "+item.@label);
+            			return item.@label;
+            		}
+            	}
+            	else {
+					return item.name();
+            	}
             }
-            
+/*            
             // ================================================================================
 			// addKeyword
 			//    args:  a keyword from the server response
@@ -54,7 +64,7 @@
             {
             	var keywordNode:XML = <keyword/>;
 				keywordNode.@value = keyword.word;
-				var rootNode:XMLList = keywords.root2;
+				var rootNode:XMLList = keywords.root;
 				rootNode.appendChild(keywordNode);
 				
 				addKeywordThreads("love threads", keywordNode, keyword.loveThreads);
@@ -137,18 +147,20 @@
             		userListNode.appendChild(userNode);
             	}
             }
-			
+*/			
 			/**
 			 * Called when the stat request returns
 			 */
 			private function statResultHandler(event:ResultEvent):void  
 			{
-				var words:ArrayCollection = event.result.detailStats.keywords.keyword;
-				
+				// var words:ArrayCollection = event.result.detailStats.keywords.keyword;
+				// keywordsTree = new XMLListCollection(event.result.keywords);
+				// trace(event.result);
+				// trace(event.result);
 				var i:int;
 				
-				for(i = 0; i < words.length; i++)
-					addKeyword(words.getItemAt(i));
+				// for(i = 0; i < words.length; i++)
+				// 	addKeyword(words.getItemAt(i));
 				
 				/*
 				// addKeyword("fucker");
@@ -376,11 +388,12 @@
 			private var keywordsHTML:String = "";
 			
 			[Bindable]
-			private var SERVER_URL:String = "http://csil-srprj-2.cs.uiuc.edu/monarch/Client/";	
+			private var SERVER_URL:String = "http://csil-srprj-2.cs.uiuc.edu/testmon/Client/";	
 			
 		]]>
 	</mx:Script>
-	<mx:HTTPService id="statRequester" method="GET" url="{SERVER_URL}detailStats.php" result="statResultHandler(event)"/>
+	<mx:XMLListCollection id="keywordsTree" source="{statRequester.lastResult.keywords.keyword}"/>
+	<mx:HTTPService id="statRequester" method="GET" url="{SERVER_URL}detailStats.php" result="statResultHandler(event)" resultFormat="e4x"/>
 	<mx:LinkButton click="homeLabelClickHandler(event)" label="Home" id="mHomeLabel" top="2" left="0" />
 	<mx:LinkButton click="communityLabelClickHandler(event)" label="My Community Groups" id="mCommunityGroupLabel" top="1" left="79" />
 	<mx:LinkButton click="communityNameLabelClickHandler(event)" id="mCommunityGroupNameLabel" top="2" left="267" />
@@ -409,7 +422,7 @@
         </mx:Text>
 	</mx:Panel>
 	<mx:Panel x="508" y="50" width="494" height="556" layout="absolute" title="Keywords">
-		<mx:Tree id="tree" top="10" left="10" dataProvider="{keywordsTree}" labelFunction="treeLabel" width="470" height="505"/>
+		<mx:Tree id="tree" top="10" left="10" dataProvider="{keywordsTree}" labelFunction="treeLabel" width="470" height="505" showRoot="true" dataTipField="word"/>
 	</mx:Panel>
 	
 </mx:Canvas>
