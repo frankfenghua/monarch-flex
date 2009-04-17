@@ -388,7 +388,7 @@
 			private var keywordsHTML:String = "";
 			
 			[Bindable]
-			private var SERVER_URL:String = "http://csil-srprj-2.cs.uiuc.edu/testmon/Client/";	
+			private var SERVER_URL:String = "http://csil-srprj-2.cs.uiuc.edu/monarch/Client/";	
 			
 		]]>
 	</mx:Script>
