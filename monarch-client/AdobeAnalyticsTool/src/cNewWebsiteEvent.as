@@ -9,7 +9,7 @@ package
 			super(type, bubbles, cancelable);
 		}
 		
-		public var mWebsiteEntry:cWebsiteEntry;
+		public var mWebsiteEntry:cWebsiteEntry = null;
 		
 	}
 }

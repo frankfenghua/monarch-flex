@@ -217,6 +217,17 @@
 				Alert.show("RegEx Processing Complete");
 			}
 			
+			/**
+			 * 	Called when the cCommunityGroupEditorCanvas receives a NewKeywordAddedEvent.
+			 */
+			private function newKeywordAddedEvent(event:cNewKeywordEvent):void
+			{
+				for(var i:int = 0; i < mUserAccountInformation.mCommunities.length; i++) {
+					var community:cCommunityGroupEntry = cCommunityGroupEntry(mUserAccountInformation.mCommunities.getItemAt(i));
+					//if(event.mKeywordEntry.mCommunityGroupId
+				}	
+			}
+			
 			///////////////////////////////////////////////////////////////////////////////////
 			//
 			//						   MEMBER FUNCTIONS
@@ -318,7 +329,9 @@
 											   OpenAddWebsiteWindowEvent="openAddWebsiteWindowHandler(event)"
 				                   			   OpenCommunityGroupBrowserCanvasEvent="reOpenCommunityGroupBrowserCanvasHandler(event)" 
 				                   			   OpenCommunityGroupHomeCanvasEvent="openCommunityGroupHomeCanvas(event)" 
-				                   			   OpenCommunityGroupSelectionClickedEvent="openCommunityGroupSelectionCanvas(event)">
+				                   			   OpenCommunityGroupSelectionClickedEvent="openCommunityGroupSelectionCanvas(event)"
+				                   			   NewKeywordAddedEvent="newKeywordAddedEvent(event)">
+				                   			   
 			</local:cCommunityGroupEditorCanvas>
 			<local:cRegularExpressionEditorCanvas id="mRegularExpressionEditorCanvas" 
 												OpenWebsiteAdditionalStatBrowserCanvasEvent="reOpenWebsiteAdditionalStatBrowserCanvasHandler(event)" 

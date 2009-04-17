@@ -8,6 +8,7 @@
 		[Event(name="OpenAddWebsiteWindowEvent", type="cCreateWebsiteEvent")]
 		[Event(name="RemoveWebsiteEntryFromCommunityEvent", type="cCreateWebsiteEvent")]
 		[Event(name="RemoveKeywordEntryFromCommunityEvent", type="cAllPurposeEvent")]
+		[Event(name="NewKeywordAddedEvent", type="cNewKeywordEvent")]
 	</mx:Metadata>
 	<mx:Script>
 		<![CDATA[
@@ -99,10 +100,6 @@
 			}	
 			
 			mEngine.changeData(mCommunityGroupId, mKeywordsTextBox.text, "ak");
-			var keywordGraphic:cLabelEntryGraphic = new cLabelEntryGraphic();
-			keywordGraphic.updateInformation(mKeywordsTextBox.text);
-			keywordGraphic.addEventListener("cLabelEntryClickedEvent", removeKeywordClickedEvent);
-			mKeywordsVBox.addChild(keywordGraphic);
 		}
 		
 		/**
@@ -114,6 +111,19 @@
 				Alert.show("Please enter a keyword before proceeding.", "Error");
 				return;
 			}
+		}
+		
+		/**
+		 *	Called when the mEngine receives a NewKeywordAddedEvent.
+		 */
+		private function newKeywordAddedHandler(event:cNewKeywordEvent):void
+		{
+			var keyword:cKeywordEntry = event.mKeywordEntry;
+			var keywordGraphic:cLabelEntryGraphic = new cLabelEntryGraphic();
+			keywordGraphic.updateInformation(keyword.mName);
+			keywordGraphic.addEventListener("cLabelEntryClickedEvent", removeKeywordClickedEvent);
+			mKeywordsVBox.addChild(keywordGraphic);
+			//this.dispatchEvent(event);
 		}
 		
 		
@@ -292,7 +302,7 @@
 		</mx:VBox>
 
 	</mx:Panel>
-	<local:cEngine id="mEngine">
+	<local:cEngine id="mEngine" NewKeywordAddedEvent="newKeywordAddedHandler(event)">
 		
 	</local:cEngine>
 </mx:Canvas>

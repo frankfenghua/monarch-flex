@@ -21,7 +21,7 @@ package
 											   goodnessCollection:ArrayCollection,
 											   englishProficiencyCollection:ArrayCollection)
 		{
-			super(id, name, color);
+			super(id, name, color, 0);
 				
 			mTimeCollection = timeCollection;
 			mCountCollection = countCollection;

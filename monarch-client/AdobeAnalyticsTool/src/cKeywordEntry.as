@@ -10,11 +10,12 @@ package
 {
 	public class cKeywordEntry
 	{
-		public function cKeywordEntry(id:int, name:String, color:uint)
+		public function cKeywordEntry(id:int, name:String, color:uint, commId:int)
 		{
 			mId = id;
 			mName = name;
 			mColor = color;
+			mCommunityGroupId = commId;
 		}
 
 		/** The keyword databse id number **/
@@ -23,6 +24,9 @@ package
 		
 		/** color for the legend **/
 		public var mColor:uint = 0xFFFFFF;	
+		
+		/** community group id **/
+		public var mCommunityGroupId:int = -1;
 
 	}
 }

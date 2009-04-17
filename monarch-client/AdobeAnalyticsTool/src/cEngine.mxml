@@ -9,6 +9,7 @@
 		[Event(name="AnalyticsReadyEvent", type="cAnalysisDataReadyEvent")]
 		[Event(name="AllWebsitesReadyEvent", type="cNewWebsitesEvent")]
 		[Event(name="FailedEvent", type="flash.events.Event")]
+		[Event(name="NewKeywordAddedEvent", type="cNewKeywordEvent")]
 	</mx:Metadata>
 
     <mx:Script>
@@ -269,7 +270,7 @@
     						var keywordId:int = int(keywordList.elements("keywordId"));
     						var keywordName:String = keywordList.elements("keywordName");
     						
-    						var keyword:cKeywordEntry = new cKeywordEntry(keywordId, keywordName, 0);
+    						var keyword:cKeywordEntry = new cKeywordEntry(keywordId, keywordName, 0, -1);
     						keywords.addItem(keyword);	
     					}
     					
@@ -344,7 +345,7 @@
 						var keywordId:int = int(keywordList.elements("keywordId"));
 						var keywordName:String = keywordList.elements("keywordName");
 						
-						var keyword:cKeywordEntry = new cKeywordEntry(keywordId, keywordName, 0);
+						var keyword:cKeywordEntry = new cKeywordEntry(keywordId, keywordName, 0, -1);
 						keywords.addItem(keyword);	
 					}
 					
@@ -455,7 +456,31 @@
     		 */
     		private function changeDataHTTPServiceResultHandler(event:ResultEvent):void
     		{
-    			Alert.show(event.result.toString());
+    			var xmlTree:XML = XML(event.result);
+    			var  keyword:XMLListCollection = new XMLListCollection(xmlTree.elements("Information"));
+    			
+    			var keywordId:int = int(keyword.elements("id"));
+    			var communityId:int = int(keyword.elements("communityId"));
+    			var keywordName:String = keyword.elements("name");
+    			var type:String = keyword.elements("type");
+    			// check if a keyword was added
+    			if(type == "ak") {
+    				var e:cNewKeywordEvent = new cNewKeywordEvent("NewKeywordAddedEvent");
+    				var color:uint = 0xFFFFFF * Math.random();
+    				var keywordEntry:cKeywordEntry = new cKeywordEntry(keywordId, 
+    																   keywordName,
+    																   color,
+    																   communityId);
+    				e.mKeywordEntry = keywordEntry;
+    				this.dispatchEvent(e);
+    			}
+    			// check if keyword was removed
+    			else if(type == "rk") {
+    				
+    			}
+    			else {
+    				
+    			}
     		}
     		
     	]]>
