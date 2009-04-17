@@ -131,7 +131,7 @@ class DetailStats
 	// ------------------------------------------------------------------------
 	private function keywords()
 	{
-		$q = 'SELECT id, word FROM keywords';
+		$q = 'SELECT id, word FROM keywords ORDER BY word ASC';
 		$keywordsQuery = $this->database->query($q);
 		
 		while($keywordRow = mysql_fetch_array($keywordsQuery))
