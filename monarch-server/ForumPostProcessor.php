@@ -345,7 +345,9 @@ class ForumPostProcessor implements Processor {
 			$englishTime = str_replace($dirt, '', $englishTime);
 
 		$englishTime = strip_tags($englishTime);
-		$englishTime = html_entity_decode($englishTime);
+		
+		// TODO: html_entity_decode is supposed to be used to remove ALL entities, but it fucks up shit.
+		$englishTime = str_replace('&nbsp;', '', $englishTime);
 		
 		return strtotime($englishTime);
 	}
