@@ -288,18 +288,10 @@ class DetailStats
 	// ------------------------------------------------------------------------
 	private function userNode($userData)
 	{
-<<<<<<< .mine
 		$url = URL::translateURLBasedOnCurrent($this->xml($userData['url']),$this->startPage);
 		$title = $this->xml($userData['name']);
 		$rating = $this->xml($userData['rating']);
 		echo '<user url="' . $url . '" label="' . $title . '" rating="' . $rating . '"/>';
-=======
-		echo '<user>';
-		echo '<url>' . URL::translateURLBasedOnCurrent($this->xml($userData['url']),$this->startPage) . '</url>';
-		echo '<name>' . $this->xml($userData['name']) . '</name>';
-		echo '<rating>' . $this->xml($userData['rating']) . '</rating>';
-		echo '</user>';
->>>>>>> .r199
 	}
 
 	// ========================================================================
