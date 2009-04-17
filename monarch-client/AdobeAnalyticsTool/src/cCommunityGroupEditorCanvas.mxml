@@ -158,7 +158,7 @@
 			}
 			
 			// TODO: move link to global variable
-			communityIcon.source = "http://csil-srprj-2.cs.uiuc.edu/images/" + mCommunityGroupId + ".jpg"; 
+			communityIcon.source = Constants.SERVER_URL+"images/" + mCommunityGroupId + ".jpg"; 
 		}
 		
 		// Called when user clicks to browse for file to upload
@@ -197,7 +197,7 @@
 			
 			// TODO: move link to global variable
 			communityIcon.source = "ifIDontDoThisTheImageWontRefresh";
-			communityIcon.source = "http://csil-srprj-2.cs.uiuc.edu/images/" + mCommunityGroupId + ".jpg"; 
+			communityIcon.source = Constants.SERVER_URL+"images/" + mCommunityGroupId + ".jpg"; 
 		}
 		
 		
@@ -241,7 +241,7 @@
 		// Constant specifying URL of the script to use to upload images; 
 		// TODO: make this a shared constant; also used in cCommGroupLargeGraphic.mxml
 		// TODO: unhardcode this URL. Not going to work when they move it to Puneet's lair. 
-		public var IMAGE_UPLOAD_URL:String = "http://csil-srprj-2.cs.uiuc.edu/imageUpload.php";
+		public var IMAGE_UPLOAD_URL:String = Constants.SERVER_URL+"imageUpload.php";
 			
 		]]>
 	</mx:Script>

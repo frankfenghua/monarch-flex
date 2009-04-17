@@ -258,7 +258,7 @@
 			private var mCommImageURL:String = "../images/ps.png";
 			// Constant specifying the path to server images 
 			// TODO: don't hardcode because eventually we have to move it to Puneet's lair (They are constants, an improvement on hard-coding; easy to modify--What do you suggest)
-			public var IMAGE_URL:String = "http://csil-srprj-2.cs.uiuc.edu/images/";
+			public var IMAGE_URL:String = Constants.SERVER_URL+"images/";
 		
 		]]>
 	</mx:Script>

@@ -233,7 +233,7 @@
 			// variable used to enable and disable the remove website label
 			private var mRemoveCommGroupLabelEnabled:Boolean = true;
 			
-			private var SERVER_URL:String ="http://csil-srprj-2.cs.uiuc.edu/Client/";			
+			private var SERVER_URL:String =Constants.SERVER_URL+"Client/";			
 		]]>
 	</mx:Script>
 	<mx:Label text="My Community Groups" id="mHomeLoggedOutAccountLabel" styleName="pageTitle"  x="90" y="4"/>

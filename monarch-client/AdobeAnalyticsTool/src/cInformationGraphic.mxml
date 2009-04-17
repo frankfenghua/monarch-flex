@@ -71,7 +71,7 @@
 			 */
 			public function setIcon(path:String):void
 			{
-				mIconPath = "http://csil-srprj-2.cs.uiuc.edu/images/" + path;
+				mIconPath = Constants.SERVER_URL+"images/" + path;
 			}
 			
 			
