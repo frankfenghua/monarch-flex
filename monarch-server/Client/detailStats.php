@@ -136,7 +136,7 @@ class DetailStats
 		
 		while($keywordRow = mysql_fetch_array($keywordsQuery))
 		{
-			echo '<keyword word="' . $keywordRow['word'] . '">';
+			echo '<keyword label="' . $keywordRow['word'] . '">';
 		
 			// threads that overall talk positively about the keyword
 			$q = 'SELECT t.url, t.title, s.goodness AS rating
@@ -230,7 +230,7 @@ class DetailStats
 	// ------------------------------------------------------------------------
 	private function threadsGroup($type, $query)
 	{
-		echo '<' . $type . '>';
+		echo '<' . $type . ' label="' . $type . '">';
 		
 		$threadsQuery = $this->database->query($query);
 		
@@ -251,11 +251,10 @@ class DetailStats
 	// ------------------------------------------------------------------------
 	private function threadNode($threadData)
 	{
-		echo '<thread>';
-		echo '<url>' . URL::translateURLBasedOnCurrent($this->xml($threadData['url']),$this->startPage) . '</url>';
-		echo '<title>' . $this->xml($threadData['title']) . '</title>';
-		echo '<rating>' . $this->xml($threadData['rating']) . '</rating>';
-		echo '</thread>';
+		$url = URL::translateURLBasedOnCurrent($this->xml($threadData['url']),$this->startPage);
+		$title = $this->xml($threadData['title']);
+		$rating = $this->xml($threadData['rating']);
+		echo '<thread url="' . $url . '" label="' . $title . '" rating="' . $rating . '"/>';
 	}
 	
 	// ========================================================================
@@ -268,7 +267,7 @@ class DetailStats
 	// ------------------------------------------------------------------------
 	private function usersGroup($type, $query)
 	{
-		echo '<' . $type . '>';
+		echo '<' . $type . ' label ="' . $type . '">';
 		
 		$usersQuery = $this->database->query($query);
 		
@@ -289,11 +288,18 @@ class DetailStats
 	// ------------------------------------------------------------------------
 	private function userNode($userData)
 	{
+<<<<<<< .mine
+		$url = URL::translateURLBasedOnCurrent($this->xml($userData['url']),$this->startPage);
+		$title = $this->xml($userData['name']);
+		$rating = $this->xml($userData['rating']);
+		echo '<user url="' . $url . '" label="' . $title . '" rating="' . $rating . '"/>';
+=======
 		echo '<user>';
 		echo '<url>' . URL::translateURLBasedOnCurrent($this->xml($userData['url']),$this->startPage) . '</url>';
 		echo '<name>' . $this->xml($userData['name']) . '</name>';
 		echo '<rating>' . $this->xml($userData['rating']) . '</rating>';
 		echo '</user>';
+>>>>>>> .r199
 	}
 
 	// ========================================================================
