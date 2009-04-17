@@ -14,6 +14,8 @@
 		
 			import mx.controls.Alert;
 			import mx.rpc.events.ResultEvent;
+			import mx.events.ListEvent;
+			// import flash.net.navigateToURL;
             
 //            [Bindable]
 //            private var keywords:XML;
@@ -266,6 +268,17 @@
 				*/	
 			}
 		
+			private function treeClickHandler(event:ListEvent):void
+			{
+				var node:XML = event.currentTarget.selectedItem;
+				
+				// If this is a leaf node then do something
+				if(node.elements().length() == 0) {
+					// trace("This is leaf");
+					navigateToURL(new URLRequest(node.@url), "_blank");
+				}
+			}
+			
 			/**
 			 * 	Called when the user clicks on the home label.
 			 */
@@ -388,7 +401,7 @@
 			private var keywordsHTML:String = "";
 			
 			[Bindable]
-			private var SERVER_URL:String = "http://csil-srprj-2.cs.uiuc.edu/monarch/Client/";	
+			private var SERVER_URL:String = "http://csil-srprj-2.cs.uiuc.edu/testmon/Client/";	
 			
 		]]>
 	</mx:Script>
@@ -422,7 +435,7 @@
         </mx:Text>
 	</mx:Panel>
 	<mx:Panel x="508" y="50" width="494" height="556" layout="absolute" title="Keywords">
-		<mx:Tree id="tree" top="10" left="10" dataProvider="{keywordsTree}" labelFunction="treeLabel" width="470" height="505" showRoot="true" dataTipField="word"/>
+		<mx:Tree id="tree" top="10" left="10" dataProvider="{keywordsTree}" labelFunction="treeLabel" itemClick="treeClickHandler(event)" width="470" height="505" showRoot="true"/>
 	</mx:Panel>
 	
 </mx:Canvas>
