@@ -340,14 +340,12 @@ class ForumPostProcessor implements Processor {
 	{
 		$dirty[] = "'";
 		$dirty[] = 'at';
+		$dirty[] = '&nbsp;'; // TODO: html_entity_decode is supposed to be used to remove ALL entities, but it fucks up shit.
 		
 		foreach($dirty as $dirt)
-			$englishTime = str_replace($dirt, '', $englishTime);
+			$englishTime = str_replace($dirt, ' ', $englishTime);
 
 		$englishTime = strip_tags($englishTime);
-		
-		// TODO: html_entity_decode is supposed to be used to remove ALL entities, but it fucks up shit.
-		$englishTime = str_replace('&nbsp;', '', $englishTime);
 		
 		return strtotime($englishTime);
 	}

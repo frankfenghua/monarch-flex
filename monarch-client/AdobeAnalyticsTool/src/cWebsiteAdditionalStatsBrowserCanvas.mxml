@@ -435,7 +435,6 @@
         </mx:Text>
 	</mx:Panel>
 	<mx:Panel x="508" y="50" width="494" height="556" layout="absolute" title="Keywords">
-		<mx:Tree id="tree" top="10" left="10" dataProvider="{keywordsTree}" labelFunction="treeLabel" itemClick="treeClickHandler(event)" width="470" height="505" showRoot="true"/>
-	</mx:Panel>
+		<mx:Tree id="tree" top="10" left="10" dataProvider="{keywordsTree}" labelFunction="treeLabel" itemClick="treeClickHandler(event)" width="470" height="505" showRoot="true"/>	</mx:Panel>
 	
 </mx:Canvas>

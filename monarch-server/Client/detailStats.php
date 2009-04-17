@@ -5,8 +5,8 @@
 // AUTHOR:  Ryan Lin, Andrew Spencer
 // CREATED: April 14, 2009
 // ABOUT:   prints out an XML file showing detailed stats of a website
-// USAGE:   DetailStats.php?websiteName=1 or 
-//          DetailStats.php?websiteName=threadless
+// USAGE:   detailStats.php?websiteName=1 or 
+//          detailStats.php?websiteName=threadless
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 header('Content-Type: text/xml');
@@ -144,6 +144,7 @@ class DetailStats
 				WHERE t.id = ts.thread
 				AND ts.keyword = ' . $keywordRow['id'] . '
 				AND ts.stat = s.id
+				AND s.goodness > 0
 				ORDER BY rating DESC
 				LIMIT 3';
 			
@@ -155,6 +156,7 @@ class DetailStats
 				WHERE t.id = ts.thread
 				AND ts.keyword = ' . $keywordRow['id'] . '
 				AND ts.stat = s.id
+				AND s.goodness < 0
 				ORDER BY rating ASC
 				LIMIT 3';
 			
@@ -177,6 +179,7 @@ class DetailStats
 				WHERE u.id = us.user
 				AND us.keyword = ' . $keywordRow['id'] . '
 				AND us.stat = s.id
+				AND s.goodness > 0
 				ORDER BY rating DESC
 				LIMIT 3';
 			
@@ -188,6 +191,7 @@ class DetailStats
 				WHERE u.id = us.user
 				AND us.keyword = ' . $keywordRow['id'] . '
 				AND us.stat = s.id
+				AND s.goodness < 0
 				ORDER BY rating ASC
 				LIMIT 3';
 			
@@ -309,6 +313,9 @@ class DetailStats
 
 }
 
-$detailStats = new DetailStats($_GET['websiteName']);
+if(isset($_GET['websiteName']))
+	$detailStats = new DetailStats($_GET['websiteName']);
+else
+	die('USAGE: detailStats.php?websiteName=1 or detailStats.php?websiteName=threadless');
 
 ?>
