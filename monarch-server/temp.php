@@ -1,5 +1,5 @@
 <?php
 
-echo strtotime('december     19, 2007');
+echo strip_tags('asdfa &nbsp; asdfasd');
 
 ?>

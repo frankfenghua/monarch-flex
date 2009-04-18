@@ -9,24 +9,12 @@
 	</mx:Metadata>
 	<mx:Script>
 		<![CDATA[
-//			import mx.collections.XMLListCollection;
+
 			import mx.collections.ArrayCollection;
-		
 			import mx.controls.Alert;
 			import mx.rpc.events.ResultEvent;
 			import mx.events.ListEvent;
-			// import flash.net.navigateToURL;
-            
-//            [Bindable]
-//            private var keywords:XML;
-            // =
-            //  <root value="root"> 
-//              	<root2 value="root2"> 
-//		      	</root2>                                          
-            //  </root>;
-            
-            // [Bindable]
-            // private var keywordsTree:XMLListCollection; //  = new XMLListCollection(keywords);
+
 		
 			///////////////////////////////////////////////////////////////////////////////////
 			//
@@ -55,117 +43,12 @@
 					return item.name();
             	}
             }
-/*            
-            // ================================================================================
-			// addKeyword
-			//    args:  a keyword from the server response
-			//    ret:   none
-			//    about: Adds the keyword to the tree component along with its subtree.
-			// --------------------------------------------------------------------------------
-            private function addKeyword(keyword:Object):void
-            {
-            	var keywordNode:XML = <keyword/>;
-				keywordNode.@value = keyword.word;
-				var rootNode:XMLList = keywords.root;
-				rootNode.appendChild(keywordNode);
-				
-				addKeywordThreads("love threads", keywordNode, keyword.loveThreads);
-				addKeywordThreads("hate threads", keywordNode, keyword.hateThreads);
-				addKeywordThreads("hot threads", keywordNode, keyword.hotThreads);
-				addKeywordSayers("ass kissers", keywordNode, keyword.assKissers);
-				addKeywordSayers("trash talkers", keywordNode, keyword.trashTalkers);
-				addKeywordSayers("chatterboxes", keywordNode, keyword.chatterboxes);
-				addKeywordSayers("sophisticated orators", keywordNode, keyword.sophisticatedOrators);
-            }
-            
-            // ================================================================================
-			// addKeywordThreads
-			//    args:  * what this group of threads feels about the keyword
-			//           * a keyword on the tree
-			//           * a grouping of threads from the server response
-			//    ret:   none
-			//    about: Adds a group of threads.
-			// --------------------------------------------------------------------------------
-            private function addKeywordThreads(feeling:String, keywordNode:XML, threadList:Object):void
-            {
-            	var feelingNode:XML = <keywordFeeling/>;
-				feelingNode.@value = feeling;
-				keywordNode.appendChild(feelingNode);
-				
-				addThreads(feelingNode, threadList);
-            }
-            
-            // ================================================================================
-			// addThreads
-			//    args:  * the grouping of threads on the tree
-			//           * the grouping of threads from the server response
-			//    ret:   none
-			//    about: Adds all threads under a grouping of threads.
-			// --------------------------------------------------------------------------------
-            private function addThreads(threadListNode:XML, threadList:Object):void
-            {
-            	var threads:ArrayCollection = threadList.thread;
-            	
-            	for(var i:int = 0; i < threads.length; i++)
-            	{
-            		var threadNode:XML = <thread/>;
-            		threadNode.@value = threads.getItemAt(i).rating + " " + threads.getItemAt(i).title;
-            		threadListNode.appendChild(threadNode);
-            	}
-            }
-            
-            // ================================================================================
-			// addKeywordSayers
-			//    args:  * what this group of users feels about the keyword
-			//           * a keyword on the tree
-			//           * a grouping of users from the server response
-			//    ret:   none
-			//    about: Adds a group of users.
-			// --------------------------------------------------------------------------------
-            private function addKeywordSayers(feeling:String, keywordNode:XML, userList:Object):void
-            {
-            	var feelingNode:XML = <userFeeling/>;
-				feelingNode.@value = feeling;
-				keywordNode.appendChild(feelingNode);
-				
-				addUsers(feelingNode, userList);
-            }
-            
-            // ================================================================================
-			// addThreads
-			//    args:  * the grouping of users on the tree
-			//           * the grouping of users from the server response
-			//    ret:   none
-			//    about: Adds all users under a grouping of users.
-			// --------------------------------------------------------------------------------
-            private function addUsers(userListNode:XML, userList:Object):void
-            {
-            	var users:ArrayCollection = userList.user;
-            	
-            	for(var i:int = 0; i < users.length; i++)
-            	{
-            		var userNode:XML = <user/>;
-            		userNode.@value = users.getItemAt(i).rating + " " + users.getItemAt(i).name;
-            		userListNode.appendChild(userNode);
-            	}
-            }
-*/			
-			/**
-			 * Called when the stat request returns
-			 */
-			private function statResultHandler(event:ResultEvent):void  
+
+			// TODO: I called the server twice. This time, I got it in normal response form
+			//       not a resourceful method.
+			private function statResultHandler2(event:ResultEvent):void  
 			{
-				// var words:ArrayCollection = event.result.detailStats.keywords.keyword;
-				// keywordsTree = new XMLListCollection(event.result.keywords);
-				// trace(event.result);
-				// trace(event.result);
-				var i:int;
-				
-				// for(i = 0; i < words.length; i++)
-				// 	addKeyword(words.getItemAt(i));
-				
-				/*
-				// addKeyword("fucker");
+				Alert.show("statResultHandler2 was called");
 				
 				var i:int = 0; // used as counter in this function
 				trace("Load succeeded");
@@ -176,41 +59,35 @@
 				analyzedPosts = event.result.detailStats.general.analyzedPosts;
 				analyzedThreads = event.result.detailStats.general.analyzedThreads;
 				
-				// May be arbitrarily many chatterboxes, veterans, etc. so loop through them
-				// Set chatterboxes HTML
-				var tempString:String = "";
-				var chatterboxes:ArrayCollection = event.result.detailStats.general.chatterboxes.user;
-				for(i = 0; i < chatterboxes.length; i++) {
-					tempString += "<a href=\""+chatterboxes.getItemAt(i).url+"\">"+chatterboxes.getItemAt(i).title+"</a> Rating="+chatterboxes.getItemAt(i).rating+"\n";
-				}
-				chatterboxesHTML = tempString;
+				var chatterboxes:ArrayCollection = event.result.detailStats.general.chatterboxes.user;			
+				chatterboxName   = chatterboxes.getItemAt(0).label;
+				chatterboxUrl    = chatterboxes.getItemAt(0).url;
+				chatterboxRating = chatterboxes.getItemAt(0).rating;
 				
-				// Set newbies HTML
-				tempString = "";
-				var newbies:ArrayCollection = event.result.detailStats.general.newbies.user;
-				for(i = 0; i < newbies.length; i++) {
-					tempString += "<a href=\""+newbies.getItemAt(i).url+"\">"+newbies.getItemAt(i).title+"</a> Rating="+newbies.getItemAt(i).rating+"\n";
-				}
-				newbiesHTML = tempString;
+				var newbies:ArrayCollection = event.result.detailStats.general.newbies.user;			
+				newbieName   = newbies.getItemAt(0).label;
+				newbieUrl    = newbies.getItemAt(0).url;
+				newbieRating = newbies.getItemAt(0).rating;
 				
-				// Set veterans HTML
-				tempString = "";
-				var veterans:ArrayCollection = event.result.detailStats.general.veterans.user;
-				for(i = 0; i < veterans.length; i++) {
-					tempString += "<a href=\""+veterans.getItemAt(i).url+"\">"+veterans.getItemAt(i).title+"</a> Rating="+veterans.getItemAt(i).rating+"\n";
-				}
-				veteransHTML = tempString;
+				var veterans:ArrayCollection = event.result.detailStats.general.veterans.user;			
+				veteranName   = veterans.getItemAt(0).label;
+				veteranUrl    = veterans.getItemAt(0).url;
+				veteranRating = veterans.getItemAt(0).rating;
 				
-				// Set lively threads HTML
-				tempString = "";
-				var livelyThreads:ArrayCollection = event.result.detailStats.general.livelyThreads.thread;
-				trace(livelyThreads);
-				for(i = 0; i < livelyThreads.length; i++) {
-					tempString += "<a href=\""+livelyThreads.getItemAt(i).url+"\">"+livelyThreads.getItemAt(i).title+"</a> Rating="+livelyThreads.getItemAt(i).rating+"\n";
-				}
-				livelyThreadsHTML = tempString;
-				
-				
+				var livelyThreads:ArrayCollection = event.result.detailStats.general.livelyThreads.user;			
+				livelyThreadTitle   = livelyThreads.getItemAt(0).label;
+				livelyThreadUrl     = livelyThreads.getItemAt(0).url;
+				livelyThreadRating  = livelyThreads.getItemAt(0).rating;
+			}
+
+			/**
+			 * Called when the stat request returns
+			 */
+			private function statResultHandler(event:ResultEvent):void  
+			{
+				Alert.show("original statResultHandler was called");
+
+				/*
 				// Set keywords HTML
 				tempString = "";
 				var keywords:ArrayCollection = event.result.detailStats.keywords.keyword;
@@ -265,7 +142,7 @@
 				}
 				trace(tempString.length);
 				keywordsHTML = tempString;
-				*/	
+				*/
 			}
 		
 			private function treeClickHandler(event:ListEvent):void
@@ -386,19 +263,40 @@
 			private var analyzedThreads:int = 0;
 	
 			[Bindable]
-			private var chatterboxesHTML:String = "";
-			
-			[Bindable]		
-			private var newbiesHTML:String = "";
+			private var chatterboxName:String = "not enough activity on website for this stat";
 			
 			[Bindable]
-			private var veteransHTML:String = "";
+			private var chatterboxUrl:String = "http://www.error.com"; // TODO: create 404 error page
 			
 			[Bindable]
-			private var livelyThreadsHTML:String = "";
+			private var chatterboxRating:Number = 0; 
 			
 			[Bindable]
-			private var keywordsHTML:String = "";
+			private var newbieName:String = "not enough activity on website for this stat";
+			
+			[Bindable]
+			private var newbieUrl:String = "http://www.error.com"; // TODO: create 404 error page
+			
+			[Bindable]
+			private var newbieRating:Number = 0;
+			
+			[Bindable]
+			private var veteranName:String = "not enough activity on website for this stat";
+			
+			[Bindable]
+			private var veteranUrl:String = "http://www.error.com"; // TODO: create 404 error page
+			
+			[Bindable]
+			private var veteranRating:Number = 0;
+			
+			[Bindable]
+			private var livelyThreadTitle:String = "not enough activity on website for this stat";
+			
+			[Bindable]
+			private var livelyThreadUrl:String = "http://www.error.com"; // TODO: create 404 error page
+			
+			[Bindable]
+			private var livelyThreadRating:Number = 0;
 			
 			[Bindable]
 			private var SERVER_URL:String = Constants.SERVER_URL+"monarch/Client/";	
@@ -406,7 +304,8 @@
 		]]>
 	</mx:Script>
 	<mx:XMLListCollection id="keywordsTree" source="{statRequester.lastResult.keywords.keyword}"/>
-	<mx:HTTPService id="statRequester" method="GET" url="{SERVER_URL}detailStats.php" result="statResultHandler(event)" resultFormat="e4x"/>
+	<mx:HTTPService id="statRequester2" method="GET" url="{SERVER_URL}detailStats.php" result="statResultHandler2(event)" />
+	<mx:HTTPService id="statRequester" method="GET" url="{SERVER_URL}detailStats.php" result="statResultHandler(event)" resultFormat="e4x"/>	
 	<mx:LinkButton click="homeLabelClickHandler(event)" label="Home" id="mHomeLabel" top="2" left="0" />
 	<mx:LinkButton click="communityLabelClickHandler(event)" label="My Community Groups" id="mCommunityGroupLabel" top="1" left="79" />
 	<mx:LinkButton click="communityNameLabelClickHandler(event)" id="mCommunityGroupNameLabel" top="2" left="267" />
@@ -416,16 +315,160 @@
 	<mx:Label text="&gt;" styleName="breadCrumbSeparator"  id="mSep3" top="0" left="335"/>
 	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" label="Edit Website" styleName="buttonBlack" click="editWebsiteButtonClickHandler(event)" id="mEditWebsiteButton" horizontalCenter="447" verticalCenter="-293" fontWeight="bold" fontStyle="normal" cornerRadius="5" icon="@Embed(source='../images/pencil.png')"/>
 	<mx:Panel x="6" y="50" width="494.5" height="349" layout="absolute" title="General">
-		<mx:Text x="0" y="0" width="480.5" height="308"
-			htmlText="Number of Users: {numberOfUsers}&#xa;
-				  Posts per day: {postsPerDay}&#xa;
-				  Posts today: {postsToday}&#xa; 
-				  Total posts analyzed: {analyzedPosts}&#xa; 
-				  Total threads analyzed: {analyzedThreads}&#xa;
-				  Chatterboxes: {chatterboxesHTML}
-				  Newbies: {newbiesHTML}
-				  Veterans: {veteransHTML}
-				  Lively threads: {livelyThreadsHTML}"/>
+		<mx:Label 
+			text="posts per day:" 
+			x="10" 
+		 	y="10"
+			toolTip="the average number of new posts per day"
+			styleName="websiteGeneralInfoCategory"
+		/>
+		<mx:Label 
+			text="{postsPerDay}" 
+			x="130" 
+		 	y="70"
+			toolTip="the average number of new posts per day"
+			styleName="websiteGeneralInfoRating"
+		/>
+		<mx:Label 
+			text="posts today:" 
+			x="10" 
+			y="40" 
+			toolTip="the number of new posts made today"
+			styleName="websiteGeneralInfoCategory"
+		/>
+		<mx:Label 
+			text="{postsPerDay}" 
+			x="130" 
+		 	y="40"
+			toolTip="the number of new posts made today"
+			styleName="websiteGeneralInfoRating"
+		/>
+		<mx:Label 
+			text="posts analyzed:" 
+			x="10" 
+			y="70"
+			toolTip="the total number of posts Monarch has analyzed since you added this website"
+			styleName="websiteGeneralInfoCategory"
+		/>
+		<mx:Label 
+			text="{postsPerDay}" 
+			x="130" 
+		 	y="10"
+			toolTip="the total number of posts Monarch has analyzed since you added this website"
+			styleName="websiteGeneralInfoRating"
+		/>
+		<mx:Label 
+			text="threads analyzed:" 
+			x="10"
+			y="100"
+			toolTip="the total number of posts Monarch has analyzed since you added this website"
+			styleName="websiteGeneralInfoCategory"
+		/>
+		<mx:Label 
+			text="{postsPerDay}" 
+			x="130" 
+		 	y="100"
+			toolTip="the total number of posts Monarch has analyzed since you added this website"
+			styleName="websiteGeneralInfoRating"
+		/>
+		<mx:Label 
+			text="users:" 
+			x="10"
+			y="130"
+			toolTip="the total number of people that have posted at least once since you added this site to Monarch"
+			styleName="websiteGeneralInfoCategory"
+		/>
+		<mx:Label 
+			text="{numberOfUsers}" 
+			x="130" 
+		 	y="130"
+			toolTip="the total number of people that have posted at least once since you added this site to Monarch"
+			styleName="websiteGeneralInfoRating"
+		/>
+		<mx:Label 
+			text="chatterbox:" 
+			x="10"
+			y="160"
+			toolTip="user with most posts"
+			styleName="websiteGeneralInfoCategory"
+		/>
+		<mx:Label 
+			text="{chatterboxRating} posts" 
+			x="130"
+			y="160"
+			toolTip="user with most posts"
+			styleName="websiteGeneralInfoRating"
+		/>
+		<mx:LinkButton
+			label="{chatterboxName}"
+			x="223" 
+		 	y="160"
+			toolTip="user with most posts"
+			click="navigateToURL(new URLRequest('http://www.error.com'), '_blank')"
+		/>
+		<mx:Label 
+			text="newbie:" 
+			x="10"
+			y="190"
+			toolTip="the newest person that joined this website"
+			styleName="websiteGeneralInfoCategory"
+		/>
+		<mx:Label 
+			text="joined {newbieRating}" 
+			x="130"
+			y="190"
+			toolTip="user with most posts"
+			styleName="websiteGeneralInfoRating"
+		/>
+		<mx:LinkButton
+			label="{newbieName}"
+			x="223" 
+		 	y="190"
+			toolTip="the newest user that joined this website"
+			click="navigateToURL(new URLRequest('http://www.error.com'), '_blank')"
+		/>
+		<mx:Label 
+			text="veteran:" 
+			x="10"
+			y="220"
+			toolTip="the user that joined the website earliest (that Monarch knows of)"
+			styleName="websiteGeneralInfoCategory"
+		/>
+		<mx:LinkButton
+			label="{veteranName}"
+			x="223" 
+		 	y="220"
+			toolTip="the user that joined the website earliest (that Monarch knows of)"
+			click="navigateToURL(new URLRequest('http://www.error.com'), '_blank')"
+		/>
+		<mx:Label 
+			text="joined {veteranRating}" 
+			x="130"
+			y="220"
+			toolTip="user with most posts"
+			styleName="websiteGeneralInfoRating"
+		/>
+		<mx:Label 
+			text="lively thread:" 
+			x="10"
+			y="250"
+			toolTip="the thread with the most replies (that Monarch knows of)"
+			styleName="websiteGeneralInfoCategory"
+		/>
+		<mx:Label 
+			text="{livelyThreadRating} posts" 
+			x="130"
+			y="250"
+			toolTip="user with most posts"
+			styleName="websiteGeneralInfoRating"
+		/>
+		<mx:LinkButton
+			label="{livelyThreadTitle}"
+			x="223" 
+		 	y="250"
+			toolTip="the thread with the most replies (that Monarch knows of)"
+			click="navigateToURL(new URLRequest('http://www.error.com'), '_blank')"
+		/>
 	</mx:Panel>
 	<mx:Panel x="6" y="407" width="494.5" height="200" layout="absolute" title="Links Spoken">
 		<mx:Text x="5" y="10">

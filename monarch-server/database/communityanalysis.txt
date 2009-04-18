@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Apr 17, 2009 at 12:49 AM
+-- Generation Time: Apr 17, 2009 at 11:15 PM
 -- Server version: 5.1.30
 -- PHP Version: 5.2.8
 
@@ -754,6 +754,7 @@ INSERT INTO `badwords` (`word`) VALUES
 ('raped'),
 ('raper'),
 ('rapes'),
+('raping'),
 ('rapist'),
 ('rascal'),
 ('rascals'),
@@ -794,8 +795,8 @@ INSERT INTO `badwords` (`word`) VALUES
 ('satan'),
 ('satanic'),
 ('satanism'),
-('savage'),
 
+('savage'),
 ('savages'),
 ('scary'),
 ('schlong'),
@@ -1464,10 +1465,10 @@ INSERT INTO `inverters` (`word`) VALUES
 ('bad'),
 ('barely'),
 ('by no means'),
-('can not'),
 ('can''t'),
 ('could be'),
 ('could have been'),
+('could never be'),
 ('could not'),
 ('couldn''t'),
 ('did not'),
@@ -1494,6 +1495,8 @@ INSERT INTO `inverters` (`word`) VALUES
 ('had never been'),
 ('had not been'),
 ('hardly'),
+('hardly a'),
+('hardly an'),
 ('hardly ever'),
 ('has never been'),
 ('has not been'),
@@ -1511,6 +1514,7 @@ INSERT INTO `inverters` (`word`) VALUES
 ('imperceptibly'),
 ('in no way'),
 ('infrequently'),
+('is not'),
 ('is not really'),
 ('need her to'),
 ('need him to'),
@@ -1527,6 +1531,10 @@ INSERT INTO `inverters` (`word`) VALUES
 ('needs to support'),
 ('neither'),
 ('never'),
+('never a'),
+('never an'),
+('never be a'),
+('never be an'),
 ('never being a'),
 ('never ever could'),
 ('never really'),
@@ -1534,8 +1542,12 @@ INSERT INTO `inverters` (`word`) VALUES
 ('no way is'),
 ('none'),
 ('not'),
+('not a'),
 ('not a bit'),
+('not an'),
 ('not at all'),
+('not be a'),
+('not be an'),
 ('not being a'),
 ('not likely'),
 ('not markedly'),
@@ -1545,6 +1557,7 @@ INSERT INTO `inverters` (`word`) VALUES
 ('not noticeably'),
 ('not often'),
 ('not quite'),
+('not very'),
 ('nought'),
 ('prefer her to'),
 ('prefer him to'),
@@ -1556,6 +1569,7 @@ INSERT INTO `inverters` (`word`) VALUES
 ('seldom'),
 ('should'),
 ('should have'),
+
 ('should have been'),
 ('should have had'),
 ('should try to'),
@@ -1576,6 +1590,7 @@ INSERT INTO `inverters` (`word`) VALUES
 ('won''t'),
 ('wont'),
 ('would be'),
+('would never be'),
 ('would not'),
 ('would work'),
 ('wouldn'),
@@ -1619,7 +1634,7 @@ CREATE TABLE IF NOT EXISTS `websites` (
   `scrapeInterval` tinyint(3) unsigned NOT NULL DEFAULT '40',
   PRIMARY KEY (`id`),
   KEY `domain` (`name`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COLLATE=latin1_german2_ci COMMENT='shows which community this website belongs under and the set' AUTO_INCREMENT=22 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COLLATE=latin1_german2_ci COMMENT='shows which community this website belongs under and the set' AUTO_INCREMENT=23 ;
 
 --
 -- Dumping data for table `websites`
@@ -1627,4 +1642,5 @@ CREATE TABLE IF NOT EXISTS `websites` (
 
 INSERT INTO `websites` (`id`, `user`, `community`, `name`, `created`, `type`, `scrapeNumTopLevel`, `scrapeInterval`) VALUES
 (1, 1, 1, 'threadless', 1223060915, 'forum', 2, 41),
-(2, 1, 2, 'nytimespolitics', 1235169885, 'news', 1, 120);
+(2, 1, 2, 'nytimespolitics', 1235169885, 'news', 1, 120),
+(22, 1, 2, 'googleuspolitics', 1239987796, 'forum', 2, 40);
