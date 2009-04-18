@@ -23,10 +23,6 @@
 			 */
 			private function logoClickHandler(event:Event):void
 			{
-//				var e:Event = new Event("OpenCommunityGroupHomeCanvasEvent");
-//				this.dispatchEvent(e);
-//			
-
 				// Since we are "above" the loggedIn canvas, manually adjust viewstack
 				if(mLoggedInCanvas) {
 					mLoggedInCanvas.openMyCommHomeCanvas();
@@ -394,12 +390,9 @@
 	<!--
 	I forgot where Puneet said to put this:
 	<mx:Label fontSize="12" textAlign="right" width="442" id="mUserNameLabel" />
-	
-	Puneet said to put this in the bottom right status bar:
-	<mx:Label text="Connection Status : Not Connected" id="mConnectionStatusLabel" toolTip="Displays internet connection status" textAlign="left" verticalCenter="-302" horizontalCenter="-404" selectable="false"/>
 	-->
 	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" label="Register" click="createAccountClickHandler(event)" id="mCreateAccountButton" verticalCenter="-326" horizontalCenter="371" icon="@Embed(source='../images/user_add.png')" styleName="buttonBlack"/>
 	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" label="Sign In" click="signInClickHandler(event)" id="mSignInLabel" verticalCenter="-326" horizontalCenter="463" icon="@Embed(source='../images/door_in.png')" styleName="buttonBlack"/>
 	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" click="signOutClickHandler(event)" label="Sign Out" id="mSignOutButton" visible="false" horizontalCenter="467" verticalCenter="-330" icon="@Embed(source='../images/door_out.png')" styleName="buttonBlack"/>
-	<mx:Image x="20" y="12" source="@Embed('../images/monarchLogo.png')" click="logoClickHandler(event)" />
+	<mx:Image useHandCursor="true" buttonMode="true" mouseChildren="false" toolTip="takes you back to the homepage" x="20" y="12" source="@Embed('../images/monarchLogo.png')" click="logoClickHandler(event)" />
 </mx:WindowedApplication>

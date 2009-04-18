@@ -266,6 +266,7 @@
 		<mx:Label x="20" y="25" text="Name :"/>
 		<mx:TextInput x="20" y="51" width="236" id="mNameTextBox"/>
 		<mx:Label x="19" y="120" text="Icon :" />
+		<mx:Image x="16" y="148" width="68" height="68" source="@Embed('../images/thumbnailBorder.png')" />
 		<mx:Image x="18" y="150" width="64" height="64" source="../images/ps.png" id="communityIcon" />
 		<mx:TextInput x="18" y="222" width="236" id="mIconTextBox"/>
 		<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" x="262" y="222" label="Browse" id="mBrowseButton" click="fileBrowseHandler(event)"/>
