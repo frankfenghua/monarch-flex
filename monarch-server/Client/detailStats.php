@@ -144,7 +144,7 @@ class DetailStats
 		// go through the aggregate stats of each link and as we're going along, keep track of the min/max
 		while($link = mysql_fetch_array($allLinks))
 		{
-			$q = 'SELECT l.id, l.baseUrl, SUM(s.count), SUM(goodness)
+			$q = 'SELECT l.id, l.baseUrl, SUM(s.count), SUM(s.goodness)
 				FROM links AS l, linkstats AS ls, stats AS s
 				WHERE l.id = ' . $link['id'] . '
 				AND l.id = ls.link
@@ -157,19 +157,19 @@ class DetailStats
 			if($linkStats['SUM(s.count)'] > $mostMentionedCount || $linkStats['id'] == 1)
 			{
 				$mostMentionedCount = $linkStats['SUM(s.count)'];
-				$mostMentionedLink  = $linkStats['SUM(baseUrl)'];
+				$mostMentionedLink  = $linkStats['baseUrl'];
 			}
 			
 			if($linkStats['SUM(s.goodness)'] > $mostLikedRating || $linkStats['id'] == 1)
 			{
 				$mostLikedRating = $linkStats['SUM(s.goodness)'];
-				$mostLikedLink   = $linkStats['SUM(baseUrl)'];
+				$mostLikedLink   = $linkStats['baseUrl'];
 			}
 			
 			if($linkStats['SUM(s.goodness)'] < $leastLikedRating || $linkStats['id'] == 1)
 			{
 				$leastLikedRating = $linkStats['SUM(s.goodness)'];
-				$leastLikedLink   = $linkStats['SUM(baseUrl)'];
+				$leastLikedLink   = $linkStats['baseUrl'];
 			}
 		}
 		
