@@ -67,12 +67,6 @@
 						e.mWebsites = communityGroupEntry.mWebsites;
 						e.mKeywords = communityGroupEntry.mKeywords;
 						e.mCanvasType = mCanvasType;
-						// Send message to server signalling that user has accessed this comm.
-						// is accessed; don't worry about getting anything back
-						var scriptCall:HTTPService = new HTTPService(SERVER_URL+"communityAccess.php");
-						scriptCall.method = "GET";
-						scriptCall.send({"communityID":event.mCommGroupId});
-						trace("Script call:"+SERVER_URL+"communityAccess.php");
 
 						this.dispatchEvent(e);
 						return;
@@ -194,7 +188,7 @@
 			// variable used to enable and disable the remove website label
 			private var mRemoveCommGroupLabelEnabled:Boolean = true;
 			
-			private var SERVER_URL:String =Constants.SERVER_URL+"Client/";
+			private var SERVER_URL:String =Constants.SERVER_URL+"monarch/Client/";
 			
 			// the type of canvas to display : either MY_COMMUNITY or ALL_COMMUNITY
 			public var mCanvasType:String = "";			

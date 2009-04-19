@@ -65,15 +65,25 @@
 			 */
 			public function updateInformation(event:cCreateWebsiteEvent):void
 			{
-				mCommunityGroupName = event.mCommunityGroupName;
-				mCommunityGroupId = event.mCommunityGroupId;
-				mWebsiteName = event.mWebsiteName;
-				mWebsiteURL = event.mWebsiteURL;
-				mWebsiteType = event.mWebsiteType;	
+//				mCommunityGroupName = event.mCommunityGroupName;
+//				mCommunityGroupId = event.mCommunityGroupId;
+//				mWebsiteName = event.mWebsiteName;
+//				mWebsiteURL = event.mWebsiteURL;
+//				mWebsiteType = event.mWebsiteType;
 				
 				urlToLoad = event.mWebsiteURL;
-				RegExProcessingCompleteEvent  = event;
-				
+				RegExProcessingCompleteEvent  = new cCreateWebsiteEvent("RegExProcessingCompleteEvent");
+
+				// Copy existing fields over to new event
+				RegExProcessingCompleteEvent.mCommunityGroupName = event.mCommunityGroupName;
+				RegExProcessingCompleteEvent.mCommunityGroupId = event.mCommunityGroupId;
+				RegExProcessingCompleteEvent.mWebsiteName = event.mWebsiteName;
+				RegExProcessingCompleteEvent.mWebsiteURL = event.mWebsiteURL;
+				RegExProcessingCompleteEvent.mWebsiteType = event.mWebsiteType;	
+				RegExProcessingCompleteEvent.regularExpressionMap = event.regularExpressionMap;
+				RegExProcessingCompleteEvent.topLevelBreadth = event.topLevelBreadth;
+				RegExProcessingCompleteEvent.crawlingPeriod = event.crawlingPeriod;
+
 				if(urlToLoad.substr(0, 7) != "http://") {
 					urlToLoad = "http://" + urlToLoad;
 				}
@@ -141,8 +151,7 @@
 			
 			// ================================================================
 			// regexHelp
-			//    args:  nigger, don't ask me. I don't know what an event is. 
-			//           Aint even used in this mofo.
+			//    args:  Event - (Click) event that triggered the help display
 			//    ret:   void
 			//    about: Pops up a help window showing an screenshot of 
 			//           Threadless and some more descriptive text.
@@ -190,7 +199,7 @@
 						index = subLevelRegexes.indexOf(currState);
 
 						if(index == subLevelRegexes.length -1) { // this is last sub-level regex
-							mMainViewStack.selectedChild = finalView;
+							mMainViewStack.selectedChild = finalView;	
 						}
 						else {								
 							// Set the regex to be collected to the next in the list
@@ -215,7 +224,7 @@
 					// Dispatch event: will be handled by the server
 					trace("RegEx:");
 					trace(RegExProcessingCompleteEvent);
-					var e:cCreateWebsiteEvent = new cCreateWebsiteEvent("RegExProcessingCompleteEvent");
+					// var e:cCreateWebsiteEvent = new cCreateWebsiteEvent("RegExProcessingCompleteEvent");
 					this.dispatchEvent(RegExProcessingCompleteEvent);
 				}	
 						
@@ -456,6 +465,7 @@
 												  "first post time", "first post message", "reply author", "reply author URL", "reply time",
 												  "reply message");
 
+
 			[Bindable]
 			private var currState:String;
 			
@@ -482,6 +492,7 @@
 			// highlighter for page source
 			private var highlighter:Highlighter;
 			// We will populate this event using user input
+			[Bindable]
 			private var RegExProcessingCompleteEvent :cCreateWebsiteEvent;	
 			// Boolean used to signal that a page is still being loaded
 			private var pageIsLoading:Boolean = false;
@@ -538,11 +549,11 @@
 			<mx:Text x="10" y="10" text="Select your crawling preferences:" width="441" fontSize="12"/>
 			<mx:HBox x="91" y="71" width="100%" height="22">
 				<mx:Text text="Minutes to wait between crawls:" width="393" fontSize="12"/>
-				<mx:NumericStepper id="mMinutesBetweenCrawlsTextInput"  value="30" minimum="5" maximum="255" stepSize="1"/>
+				<mx:NumericStepper id="mMinutesBetweenCrawlsTextInput"  value="{RegExProcessingCompleteEvent.crawlingPeriod}" minimum="5" maximum="255" stepSize="1"/>
 			</mx:HBox>
 			<mx:HBox x="91" y="114" width="100%" height="22">
 				<mx:Text text="Number of top-level pages to explore per crawl:" width="393" height="22" fontSize="12"/>
-				<mx:NumericStepper id="mNumToplevelTextInput"  value="2" minimum="1" maximum="20" stepSize="1"/>
+				<mx:NumericStepper id="mNumToplevelTextInput"  value="{RegExProcessingCompleteEvent.topLevelBreadth}" minimum="1" maximum="20" stepSize="1"/>
 			</mx:HBox>
 			<mx:Text x="91" y="178" text="Note: we will do our best to accomodate your crawling preferences. However, please note that we are in possession of only finite resources. As a general guideline, the default values should be suitable for most sites." width="441" fontSize="12"/>
 		</mx:Canvas>

@@ -11,6 +11,7 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import mx.rpc.events.ResultEvent;
 			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
 		
@@ -166,13 +167,82 @@
 			}
 			
 			/**
-			 * 	Opens the regular expression canvas.
+			 * 	Sends request to server for current website settings
 			 */
-			private function OpenRegExCanvasHandler(event:cEditWebsiteEvent):void
+			private function EditWebsiteHandler(event:cEditWebsiteEvent):void
 			{
-				//mMyCommViewStack.selectedIndex = 6;
-				//mRegularExpressionEditorCanvas.updateInformation(event);
+				trace("EditWebsiteHandler");
+				// Rather than sending this to the engine, I choose to add an HTTPService
+				// to this class and handle it here (easier to follow)
+				websiteSettingsRequester.send({"websiteName":event.mWebsiteName});
+				
+
 			}
+			
+			/**
+			 * Called when we have received the result from the server
+			 */
+			private function settingsResultHandler(event:ResultEvent):void
+			{
+				trace(event.result);
+				var websiteSettings:Object = parseWebsiteSettings(String(event.result));				
+
+				// TODO: Copy the settings that server returned into an event and
+				// call updateInformation to initialize the regular expression
+				// handler
+				var evt:cCreateWebsiteEvent = new cCreateWebsiteEvent("edit");
+				evt.mWebsiteURL = websiteSettings["startPage"];
+				
+				var regexList:Array = RegexUtilities.getAllRegexFieldnames();
+				
+				// Populate regular expression map
+				for each(var regex:String in regexList) {
+					evt.regularExpressionMap[RegexUtilities.fieldnameToEnglish(regex)] = websiteSettings[regex];
+				}
+				
+				evt.topLevelBreadth = websiteSettings["scrapeNumTopLevel"];
+				trace("Top level="+evt.topLevelBreadth);
+				evt.crawlingPeriod = websiteSettings["scrapeInterval"];
+				trace("C. per="+evt.crawlingPeriod);
+
+				openRegularExpressionEditorCanvas(evt);	
+				
+			}
+			
+			/**
+			 * Accepts a string containing website settings info and returns
+			 * the information in a key-value pair Object
+			 */ 
+			private function parseWebsiteSettings(str:String):Object
+			{
+				var returnValue:Object = {};
+				var settingsFormat:RegExp = new RegExp("startPage=(.*);nextPageOfThreads=(.*);nextPageOfPosts=(.*);threadUrl=(.*);threadNumViews=(.*);threadTitle=(.*);firstPostAuthor=(.*);firstPostAuthorUrl=(.*);firstPostTime=(.*);firstPostMessage=(.*);replyAuthor=(.*);replyAuthorUrl=(.*);replyTime=(.*);replyMessage=(.*);parentUrl=(.*);scrapeNumTopLevel=(.*);scrapeInterval=(.*);");
+				var regExpResult:Object = settingsFormat.exec(str);
+				trace("Regex match:"+regExpResult[0]);
+				
+				returnValue["startPage"] = regExpResult[1];
+				returnValue["nextPageOfThreads"] = regExpResult[2];
+				returnValue["nextPageOfPosts"] = regExpResult[3];
+				returnValue["threadUrl"] = regExpResult[4];
+				returnValue["threadNumViews"] = regExpResult[5];
+				returnValue["threadTitle"] = regExpResult[6];
+				returnValue["firstPostAuthor"] = regExpResult[7];
+				returnValue["firstPostAuthorUrl"] = regExpResult[8];
+				returnValue["firstPostTime"] = regExpResult[9];
+				returnValue["firstPostMessage"] = regExpResult[10];
+				returnValue["replyAuthor"] = regExpResult[11];
+				returnValue["replyAuthorUrl"] = regExpResult[12];
+				returnValue["replyTime"] = regExpResult[13];
+				returnValue["replyMessage"] = regExpResult[14];
+				trace("Top level = "+regExpResult[15]);
+				returnValue["scrapeNumTopLevel"] = int(regExpResult[15]);
+				trace("Interval = "+regExpResult[16]);
+				returnValue["scrapeInterval"] = int(regExpResult[16]);
+				
+				return returnValue;
+			}
+			
+			
 			
 			/**
 			 *	 Detects a request to open the regular expression editor canvas.
@@ -339,6 +409,7 @@
 				
 		]]>
 	</mx:Script>
+	<mx:HTTPService id="websiteSettingsRequester" url="{Constants.SERVER_URL}testmon/Client/getWebsiteSettings.php" resultFormat="text" result="settingsResultHandler(event)"/>
 	<mx:ViewStack x="0" y="0" id="mNavigatorViewStack" width="1013" height="625">
 		<mx:ViewStack id="mMyCommViewStack" label="My Community Groups" width="1013" height="625">
 			<local:cCommunityGroupHomeCanvas id="mMyCommunityGroupHomeCanvas" 
@@ -366,7 +437,7 @@
 																				  OpenCommunityGroupHomeCanvasEvent="openCommunityGroupHomeCanvas(event)" >
 			</local:cCommunityGroupBrowserCanvas>
 			<local:cWebsiteAdditionalStatsBrowserCanvas id="mWebsiteAdditionalInformationStatBrowserCanvas" 
-																		OpenRegExCanvasEvent="OpenRegExCanvasHandler(event)" 
+																		OpenRegExCanvasEvent="EditWebsiteHandler(event)" 
 																		OpenCommunityGroupBrowserCanvasEvent="reOpenCommunityGroupBrowserCanvasHandler(event)" 
 																		OpenCommunityGroupHomeCanvasEvent="openCommunityGroupHomeCanvas(event)" 
 																		OpenCommunityGroupSelectionClickedEvent="openCommunityGroupSelectionCanvas(event)">

@@ -9,6 +9,7 @@
 	</mx:Metadata>
 	<mx:Script>
 		<![CDATA[
+			import mx.rpc.events.FaultEvent;
 
 			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
@@ -81,6 +82,14 @@
 			}
 
 			/**
+			 * Called when the stat request results in error
+			 */
+			private function statRetrievalErrorHandler(event:FaultEvent):void 
+			{
+				Alert.show("Problems");
+			}
+			
+			/**
 			 * Called when the stat request returns
 			 */
 			private function statResultHandler(event:ResultEvent):void  
@@ -95,7 +104,8 @@
 				postsToday = statRequester.lastResult[0].general.postsToday;
 				analyzedPosts = statRequester.lastResult[0].general.analyzedPosts;
 				analyzedThreads = statRequester.lastResult[0].general.analyzedThreads;
-				
+
+				trace(event.result);				
 				trace(statRequester.lastResult.general);
 				var chatterboxes:XMLList = statRequester.lastResult[0].general.chatterboxes.user;
 				trace(chatterboxes);		
@@ -197,7 +207,7 @@
 					// trace("This is leaf");
 					navigateToURL(new URLRequest(node.@url), "_blank");
 				}
-				//else 
+
 			}
 			
 			/**
@@ -381,7 +391,7 @@
 	</mx:Script>
 	<mx:XMLListCollection id="keywordsTree" source="{statRequester.lastResult.keywords.keyword}"/>
 	<mx:HTTPService id="statRequester2" method="GET" url="{SERVER_URL}detailStats.php" result="statResultHandler2(event)" />
-	<mx:HTTPService id="statRequester" method="GET" url="{SERVER_URL}detailStats.php" result="statResultHandler(event)" resultFormat="e4x"/>	
+	<mx:HTTPService id="statRequester" method="GET" url="{SERVER_URL}detailStats.php" result="statResultHandler(event)" fault="statRetrievalErrorHandler(event)" resultFormat="e4x"/>	
 	<mx:LinkButton click="homeLabelClickHandler(event)" label="Home" id="mHomeLabel" top="2" left="0" />
 	<mx:LinkButton click="communityLabelClickHandler(event)" label="My Community Groups" id="mCommunityGroupLabel" top="1" left="79" />
 	<mx:LinkButton click="communityNameLabelClickHandler(event)" id="mCommunityGroupNameLabel" top="2" left="267" />
