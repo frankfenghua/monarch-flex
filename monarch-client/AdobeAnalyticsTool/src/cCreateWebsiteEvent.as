@@ -39,7 +39,10 @@ package
 		public var mWebsiteIds:String = null;
 		
 		// Crawling settings for this website
+		[Bindable]
 		public var topLevelBreadth:int = 2;
+		
+		[Bindable]
 		public var crawlingPeriod:int = 30; // Defaults to 30 minutes
 	}
 }

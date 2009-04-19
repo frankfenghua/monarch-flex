@@ -216,7 +216,7 @@
 			private function parseWebsiteSettings(str:String):Object
 			{
 				var returnValue:Object = {};
-				var settingsFormat:RegExp = new RegExp("startPage=(.*);nextPageOfThreads=(.*);nextPageOfPosts=(.*);threadUrl=(.*);threadNumViews=(.*);threadTitle=(.*);firstPostAuthor=(.*);firstPostAuthorUrl=(.*);firstPostTime=(.*);firstPostMessage=(.*);replyAuthor=(.*);replyAuthorUrl=(.*);replyTime=(.*);replyMessage=(.*);parentUrl=(.*);scrapeNumTopLevel=(.*);scrapeInterval=(.*);");
+				var settingsFormat:RegExp = new RegExp("startPage=(.*);nextPageOfThreads=(.*);nextPageOfPosts=(.*);threadUrl=(.*);threadNumViews=(.*);threadTitle=(.*);firstPostAuthor=(.*);firstPostAuthorUrl=(.*);firstPostTime=(.*);firstPostMessage=(.*);replyAuthor=(.*);replyAuthorUrl=(.*);replyTime=(.*);replyMessage=(.*);scrapeNumTopLevel=(.*);scrapeInterval=(.*);");
 				var regExpResult:Object = settingsFormat.exec(str);
 				trace("Regex match:"+regExpResult[0]);
 				
