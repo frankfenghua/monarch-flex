@@ -185,6 +185,7 @@
 				
 				mMyCommVBox.removeAllChildren();
 				
+				trace("Updating info");
 				// var delay:int = 100;
 				var i:int;
 				var communityGroupEntry:cCommunityGroupEntry;
@@ -197,6 +198,7 @@
 						justCreated = true;
 						communityGroupEntry.mJustCreated = false;
 					}
+					trace(communityGroupEntry.mName + " added");
 					commGroupGraphicEntry.updateInformation(communityGroupEntry.mName,
 															mUserAccountInformation.mUserName,
 															communityGroupEntry.mCreatedTime.toString(),
@@ -233,7 +235,7 @@
 			// variable used to enable and disable the remove website label
 			private var mRemoveCommGroupLabelEnabled:Boolean = true;
 			
-			private var SERVER_URL:String =Constants.SERVER_URL+"Client/";			
+			private var SERVER_URL:String =Constants.SERVER_URL+"monarch/Client/";			
 		]]>
 	</mx:Script>
 	<mx:Label text="My Community Groups" id="mHomeLoggedOutAccountLabel" styleName="pageTitle"  x="90" y="4"/>

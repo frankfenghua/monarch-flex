@@ -215,6 +215,7 @@
     		private function logInHTTPServiceResultHandler(event:ResultEvent):void
     		{    			    			    			
     			var xmlTree:XML = XML(event.result);
+    			trace(xmlTree);
     			var  userAccountInformationList:XMLListCollection = new XMLListCollection(xmlTree.elements("UserAccountInformation"));
 				if(userAccountInformationList.children().length() > 0) {    				
     				//Alert.show("You have successfully logged in.", "Login Successful");
@@ -228,6 +229,7 @@
     							
     				var  userAccountCommunityGroupList:XMLListCollection = new XMLListCollection(xmlTree.elements("CommunityGroups"));			
     				var numberOfCommunityGroups:int = int(userAccountCommunityGroupList.elements("NumberOfCommunityGroups"));
+    				trace(numberOfCommunityGroups);
     				
     				for(var i:int = 0; i < numberOfCommunityGroups; i++)
     				{
@@ -283,6 +285,7 @@
     				}
     				
     				e.mCommunities = communities;	
+    				trace(communities.length);
 			 		dispatchEvent(e);
     			}
     			else {
@@ -486,20 +489,20 @@
     	]]>
     </mx:Script>	
 		
-	<mx:HTTPService id="mAccountRequestHTTPService" result="createAccountHTTPServiceResultHandler(event)" url="{Constants.SERVER_URL}Client/register.php" resultFormat="e4x" method="GET" useProxy="false">
+	<mx:HTTPService id="mAccountRequestHTTPService" result="createAccountHTTPServiceResultHandler(event)" url="{Constants.SERVER_URL}monarch/Client/register.php" resultFormat="e4x" method="GET" useProxy="false">
 		<mx:request xmlns="">
 			<fullName>{mFullName}</fullName>
 			<email>{mEmail}</email>
 			<password>{mPassword}</password>
 		</mx:request>
 	</mx:HTTPService>	
-	<mx:HTTPService id="mLogInRequestHTTPService" result="logInHTTPServiceResultHandler(event)" url="{Constants.SERVER_URL}Client/login.php" resultFormat="e4x" method="GET" useProxy="false">
+	<mx:HTTPService id="mLogInRequestHTTPService" result="logInHTTPServiceResultHandler(event)" url="{Constants.SERVER_URL}monarch/Client/login.php" resultFormat="e4x" method="GET" useProxy="false">
 		<mx:request xmlns="">
 			<email>{mEmail}</email>
 			<password>{mPassword}</password>
 		</mx:request>
 	</mx:HTTPService>
-	<mx:HTTPService id="mAddCommunityRequestHTTPService" result="addCommintyHTTPServiceResultHandler(event)" url="{Constants.SERVER_URL}Client/insertCommunity.php" resultFormat="e4x" method="GET" useProxy="false">
+	<mx:HTTPService id="mAddCommunityRequestHTTPService" result="addCommintyHTTPServiceResultHandler(event)" url="{Constants.SERVER_URL}monarch/Client/insertCommunity.php" resultFormat="e4x" method="GET" useProxy="false">
 		<mx:request xmlns="">
 			<communityName>{mCommunityName}</communityName>
 			<userId>{mUserId}</userId>
@@ -513,7 +516,7 @@
 			<keyWord8>{mKeyWord8}</keyWord8>
 		</mx:request>
 	</mx:HTTPService>	
-	<mx:HTTPService id="mAddKeywordsToCommunityRequestHTTPService" result="addKeywordsToCommunityHTTPServiceResultHandler(event)" url="{Constants.SERVER_URL}Client/insertKeywordsIntoComm.php" resultFormat="e4x" method="GET" useProxy="false">
+	<mx:HTTPService id="mAddKeywordsToCommunityRequestHTTPService" result="addKeywordsToCommunityHTTPServiceResultHandler(event)" url="{Constants.SERVER_URL}monarch/Client/insertKeywordsIntoComm.php" resultFormat="e4x" method="GET" useProxy="false">
 		<mx:request xmlns="">
 			<communityId>{mCommunityId}</communityId>
 			<userId>{mUserId}</userId>
@@ -527,7 +530,7 @@
 			<keyWord8>{mKeyWord8}</keyWord8>
 		</mx:request>
 	</mx:HTTPService>	
-	<mx:HTTPService id="mAddWebsiteRequestHTTPService" result="addWebsiteHTTPServiceResultHandler(event)" url="{Constants.SERVER_URL}Client/insertWebsite.php" resultFormat="e4x" method="GET" useProxy="false">
+	<mx:HTTPService id="mAddWebsiteRequestHTTPService" result="addWebsiteHTTPServiceResultHandler(event)" url="{Constants.SERVER_URL}monarch/Client/insertWebsite.php" resultFormat="e4x" method="GET" useProxy="false">
 		<mx:request xmlns="">
 			<community>{mCommunityId}</community>
 			<userId>{mUserId}</userId>
@@ -536,25 +539,25 @@
 			<type>{mWebsiteType}</type>
 		</mx:request>
 	</mx:HTTPService>
-	<mx:HTTPService id="mAnalyticsRequestHTTPService" result="analyticsHTTPServiceResultHandler(event)" url="{Constants.SERVER_URL}Client/getAnalytics.php" resultFormat="e4x" method="GET" useProxy="false">
+	<mx:HTTPService id="mAnalyticsRequestHTTPService" result="analyticsHTTPServiceResultHandler(event)" url="{Constants.SERVER_URL}monarch/Client/getAnalytics.php" resultFormat="e4x" method="GET" useProxy="false">
 		<mx:request xmlns="">
 			<community>{mCommunityId}</community>
 			<websiteName>{mWebsiteName}</websiteName>
 		</mx:request>
 	</mx:HTTPService>
-	<mx:HTTPService id="mChangeDataRequestHTTPService" result="changeDataHTTPServiceResultHandler(event)" url="{Constants.SERVER_URL}Client/changeData.php" resultFormat="e4x" method="GET" useProxy="false">
+	<mx:HTTPService id="mChangeDataRequestHTTPService" result="changeDataHTTPServiceResultHandler(event)" url="{Constants.SERVER_URL}monarch/Client/changeData.php" resultFormat="e4x" method="GET" useProxy="false">
 		<mx:request xmlns="">
 			<type>{mType}</type>
 			<name>{mName}</name>
 			<communityId>{mCommunityId}</communityId>
 		</mx:request>
 	</mx:HTTPService>
-	<mx:HTTPService id="mAddExistingWebsitesRequestHTTPService" result="addExistingWebsitesHTTPServiceResultHandler(event)" url="{Constants.SERVER_URL}Client/insertExistingWebsites.php" resultFormat="e4x" method="GET" useProxy="false">
+	<mx:HTTPService id="mAddExistingWebsitesRequestHTTPService" result="addExistingWebsitesHTTPServiceResultHandler(event)" url="{Constants.SERVER_URL}monarch/Client/insertExistingWebsites.php" resultFormat="e4x" method="GET" useProxy="false">
 		<mx:request xmlns="">
 			<communityId>{mCommunityId}</communityId>
 			<websiteIds>{mWebsiteIds}</websiteIds>
 		</mx:request>
 	</mx:HTTPService>
-	<mx:HTTPService id="mAllWebsitesRequestHTTPService" result="allWebsitesHTTPServiceResultHandler(event)" url="{Constants.SERVER_URL}Client/getAllWebsites.php" resultFormat="e4x" method="GET" useProxy="false">
+	<mx:HTTPService id="mAllWebsitesRequestHTTPService" result="allWebsitesHTTPServiceResultHandler(event)" url="{Constants.SERVER_URL}monarch/Client/getAllWebsites.php" resultFormat="e4x" method="GET" useProxy="false">
 	</mx:HTTPService>		
 </mx:Module>
