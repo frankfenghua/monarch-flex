@@ -69,7 +69,7 @@
 					keywordEntry = cKeywordEntry(mKeywords.getItemAt(i));
 					var keywordGraphic:cAccordionKeywordGraphicCanvas = new cAccordionKeywordGraphicCanvas();
 					keywordGraphic.addEventListener("cAccordionKeywordGraphicEvent", accordionKeywordGraphicEventHandler);
-					keywordGraphic.updateInformation(keywordEntry.mName);
+					keywordGraphic.updateInformation(keywordEntry.mName, keywordEntry.mIsSelected);
 					keywordGraphic.y = inc;
 					inc += 28;
 					mKeywordsSpokenCanvas.addChild(keywordGraphic);	

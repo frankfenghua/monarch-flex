@@ -27,6 +27,8 @@ package
 		
 		/** community group id **/
 		public var mCommunityGroupId:int = -1;
+		
+		public var mIsSelected:Boolean = true;
 
 	}
 }

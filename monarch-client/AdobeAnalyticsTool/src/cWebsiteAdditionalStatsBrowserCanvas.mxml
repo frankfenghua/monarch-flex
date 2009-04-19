@@ -184,7 +184,7 @@
 					// trace("This is leaf");
 					navigateToURL(new URLRequest(node.@url), "_blank");
 				}
-				else 
+				//else 
 			}
 			
 			/**
@@ -242,6 +242,16 @@
 				mCommunityGroupNameLabel.x =+ mSep2.x + mSep2.measureText(mSep2.text).width + 10;
 				mSep3.x =+ mCommunityGroupNameLabel.x + mCommunityGroupNameLabel.width + 10;
 				mWebsiteNameLabel.x =+ mSep3.x + mSep3.measureText(mSep3.text).width + 10;
+				
+				// hide certain components if mCanvasType is ALL_COMMUNITY
+				if((new cCommunityGroupSelectionCanvas()).OTHER_COMMUNITY == mCanvasType) {
+					mEditWebsiteButton.visible = false;
+					mCommunityGroupLabel.label = "Other Community Group";
+				}	
+				else {
+					mEditWebsiteButton.visible = true;
+					mCommunityGroupLabel.label = "My Community Group";
+				}
 			}
 			
 			
@@ -255,10 +265,12 @@
 			 * 	Updates the internal information of this object.
 			 */
 			public function updateInformation(websiteName:String,
-											  communityName:String):void
+											  communityName:String,
+											  canvasType:String):void
 			{
 				mCommunityGroupName = communityName;
 				mWebsiteName = websiteName;	
+				mCanvasType = canvasType;
 				
 				// Send a request to the server for stats for this object
 				trace("Sent stats request");
@@ -275,6 +287,8 @@
 			private var mCommunityGroupName:String = "";
 			// name of the website 
 			private var mWebsiteName:String = "";
+			// the type of canvas to display : either MY_COMMUNITY or ALL_COMMUNITY
+			public var mCanvasType:String = "";	
 			
 			private var mStatsArray:ArrayCollection;
 			

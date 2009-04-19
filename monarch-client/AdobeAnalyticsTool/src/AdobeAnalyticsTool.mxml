@@ -169,6 +169,24 @@
 				mEngine.getAnalytics(event.mCommGroupId, event.mWebsiteName);
 			}
 			
+			/**
+			 * 	Called when the cCommunityGroupEditorCanvas receives a NewKeywordAddedEvent.
+			 */
+			private function newKeywordAddedEvent(event:cNewKeywordEvent):void
+			{
+				for(var i:int = 0; i < mAccountInformation.mCommunities.length; i++) {
+					var community:cCommunityGroupEntry = cCommunityGroupEntry(mAccountInformation.mCommunities.getItemAt(i));
+					if(event.mKeywordEntry.mCommunityGroupId == community.mId) {
+						for(var j:int = 0; j < community.mKeywords.length; j++) {
+							var keyword:cKeywordEntry = cKeywordEntry(community.mKeywords.getItemAt(j));
+							if(keyword.mName == event.mKeywordEntry.mName)
+								return;
+						}
+						community.mKeywords.addItem(event.mKeywordEntry);
+					}
+				}	
+			}
+			
 			
 			///////////////////////////////////////////////////////////////////////////////////
 			//
@@ -186,7 +204,8 @@
 													event.mEmail,
 													event.mPassword,
 													event.mUserId,
-													event.mCommunities);
+													event.mCommunities,
+													event.mOtherCommunities);
 				mLoggedInCanvas.updateInformation(mAccountInformation);
 				mLoggedInCanvas.openMyCommHomeCanvas();
 				mMainViewStack.selectedIndex = 1;
@@ -202,7 +221,8 @@
 													event.mEmail,
 													event.mPassword,
 													event.mUserId,
-													event.mCommunities);
+													event.mCommunities,
+													event.mOtherCommunities);
 				mLoggedInCanvas.updateInformation(mAccountInformation);
 				mMainViewStack.selectedIndex = 1; 
 				mLoggedInCanvas.openMyCommHomeCanvas();
@@ -336,7 +356,8 @@
 													   			 userName:String,
 													   			 password:String,
 													   			 userId:int,
-													   			 communities:ArrayCollection):void
+													   			 communities:ArrayCollection,
+													   			 otherCommunities:ArrayCollection):void
 			{
 				mSignInLabel.visible = false;
 				mSignOutButton.visible = true;
@@ -347,7 +368,8 @@
 															  userName,
 															  password,
 															  userId,
-															  communities);
+															  communities,
+															  otherCommunities);
 			}
 			
 			
@@ -359,8 +381,6 @@
 			
 			// hold user account information
 			private var mAccountInformation:cAccountInformation = null;
-			// loader used to display a loading status to the user
-			private var mLoader:cLoadingIndicator = new cLoadingIndicator();
 			// object which monitors internet connection for the application
 			private var mURLMonitor:URLMonitor = null;
 			// connection status variable
@@ -376,7 +396,8 @@
 		<local:cLoggedInCanvas id="mLoggedInCanvas" OpenWebsiteCreatorWindowEvent="openWebsiteCreatorWindowHandler(event)" 
 													RequestWebsiteStatsEvent="requestWebsiteStatHandler(event)" 
 													CreateCommunityGroupEvent="createCommunityGroupEventHandler(event)"
-													OpenAddWebsiteWindowEvent="openWebsiteCreatorWindowHandler(event)">
+													OpenAddWebsiteWindowEvent="openWebsiteCreatorWindowHandler(event)"
+													NewKeywordAddedEvent="newKeywordAddedEvent(event)">
 		</local:cLoggedInCanvas>
 	</mx:ViewStack>
 	<local:cEngine id="mEngine" LoggedInCreatedEvent="loggedInServiceHandler(event)"

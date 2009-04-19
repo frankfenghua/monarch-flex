@@ -167,6 +167,7 @@
 					var e:cAccordionWebsiteGraphicEvent = new cAccordionWebsiteGraphicEvent("OpenAdditionalWebsiteInformationEvent");
 					e.mWebsiteName = event.mWebsiteName;
 					e.mCommuniutyGroupName = mCommunityGroupNameLabel.text;
+					e.mCanvasType = mCanvasType;
 					this.dispatchEvent(e);
 				}
 				else if(event.mType == event.WEBSITE_CHECKED) {
@@ -329,8 +330,11 @@
 										      creator:String,
 										      dateCreated:String,
 									     	  websites:ArrayCollection,
-									     	  keywords:ArrayCollection):void
+									     	  keywords:ArrayCollection,
+									     	  canvasType:String):void
 			{
+				mCanvasType = canvasType;
+				
 				if(mCommGroupId != commGroupId) {
 					mCommunityParserCollection.removeAll();
 				}
@@ -351,6 +355,19 @@
 					var keywordEntry:cKeywordEntry = cKeywordEntry(mKeywords.getItemAt(i));
 					mSelectedKeywords.addItem(keywordEntry.mName);
 				}
+				
+				mCanvasType = canvasType;
+			}
+			
+			/**
+			 * 	Updates the keyword collection for 
+			 */
+			public function updateKeywords(keywords:ArrayCollection):void
+			{
+				mKeywords = keywords;
+				mStatOptionAccordion.updateInformation(mWebsites, mKeywords);
+				//mAnalyticsParser.
+				//mLineChartCanvas.updateInformation(mAnalyticsParser, mStatEvent, mSelectedKeywords);
 			}
 			
 			/**
@@ -411,6 +428,7 @@
 				
 				// REMOVE THIS LATER
 				mAnalyticsParser = analyticsParser;
+					
 			}
 			
 			
@@ -441,13 +459,6 @@
 				
 				mGraphControlPanel.enabled = false;
 				mChartTimeSelectPanel.enabled = false;
-				
-				
-				///  REMOVE - HELPER CLOUD TO GUIDE FIRST TIME USER 
-				//var c:cHelperCloud = new cHelperCloud();
-				//c.x = 400;
-				//c.y = 250;
-				//this.addChild(c);
 			}
 			
 			/**
@@ -462,6 +473,18 @@
 					mCommunityGroupNameLabel.text = mCommGroupName;
 				}
 				mStatOptionAccordion.updateInformation(mWebsites, mKeywords);
+		
+				// hide certain components if mCanvasType is ALL_COMMUNITY
+				if((new cCommunityGroupSelectionCanvas()).OTHER_COMMUNITY == mCanvasType) {
+					mEditCommunityGroupButton.visible = false;
+					mAddWebsiteButton.visible = false;
+					mCommunityGroupLabel.label = "Other Community Group";
+				}	
+				else {
+					mEditCommunityGroupButton.visible = true;
+					mAddWebsiteButton.visible = true;
+					mCommunityGroupLabel.label = "My Community Group";
+				}
 			}
 			
 			
@@ -487,6 +510,8 @@
 			private var mSelectedKeywords:ArrayCollection = new ArrayCollection();
 			// collection of website parsers for a community
 			private var mCommunityParserCollection:ArrayCollection = new ArrayCollection();
+			// the type of canvas to display : either MY_COMMUNITY or ALL_COMMUNITY
+			public var mCanvasType:String = "";	
 			
 			private var mAnalyticsParser:cAnalyticsParser = null;
 			private var mStatEvent:cStatOptionSelectedEvent = new cStatOptionSelectedEvent("dummy");

@@ -209,8 +209,8 @@
 			//
 			//////////////////////////////////////////////////////////////////////////////////////
     		
-    		/*
-    		 *
+    		/**
+    		 *	Called when the server returns user login data from the server. 
     		 */
     		private function logInHTTPServiceResultHandler(event:ResultEvent):void
     		{    			    			    			
@@ -225,9 +225,11 @@
     				e.mPassword = userAccountInformationList.elements("password").toString();
     				e.mUserId = int(userAccountInformationList.elements("userId"));
     							
-    				var communities:ArrayCollection = new ArrayCollection();			
-    							
-    				var  userAccountCommunityGroupList:XMLListCollection = new XMLListCollection(xmlTree.elements("CommunityGroups"));			
+    				var communities:ArrayCollection = new ArrayCollection();
+    				var otherCommunities:ArrayCollection = new ArrayCollection();			
+    						
+    				// Extract communities which the user has created, called my communities.			
+    				var  userAccountCommunityGroupList:XMLListCollection = new XMLListCollection(xmlTree.elements("MyCommunityGroups"));			
     				var numberOfCommunityGroups:int = int(userAccountCommunityGroupList.elements("NumberOfCommunityGroups"));
     				trace(numberOfCommunityGroups);
     				
@@ -237,6 +239,7 @@
     					var communtyGroupId:int = int(communityGroupList.elements("communityGroupId"));
     					var communtyGroupName:String = communityGroupList.elements("communityGroupName");
     					var communityGroupCreatedTime:int = int(communityGroupList.elements("communityGroupCreatedTime"));
+    					var communityGroupCreator:String = communityGroupList.elements("communityGroupCreator");
     					
     					var communityGroupWebsitesList:XMLListCollection = new 
     					                 XMLListCollection(communityGroupList.elements("CommunityGroup" + i + "Websites"));	
@@ -279,12 +282,73 @@
     					var community:cCommunityGroupEntry = new cCommunityGroupEntry(communtyGroupId,
     																				  communtyGroupName,
     																				  communityGroupCreatedTime,
+    																				  communityGroupCreator,
     																				  websites,
     																				  keywords);
 					  	communities.addItem(community);														  
     				}
     				
-    				e.mCommunities = communities;	
+    				// Extract communities which the user has NOT created, called other communities.
+    				var otherCommunityGroupsList:XMLListCollection = new XMLListCollection(xmlTree.elements("OtherCommunityGroups"));			
+    				var numberOfOtherCommunityGroups:int = int(otherCommunityGroupsList.elements("NumberOfCommunityGroups"));
+
+    				for(var n:int = 0; n < numberOfOtherCommunityGroups; n++)
+    				{
+    					var otherCommunityGroupList:XMLListCollection = new XMLListCollection(otherCommunityGroupsList.elements("CommunityGroup" + n));
+    					var _communtyGroupId:int = int(otherCommunityGroupList.elements("communityGroupId"));
+    					var _communtyGroupName:String = otherCommunityGroupList.elements("communityGroupName");
+    					var _communityGroupCreatedTime:int = int(otherCommunityGroupList.elements("communityGroupCreatedTime"));
+    					var _communityGroupCreator:String = otherCommunityGroupList.elements("communityGroupCreator");
+
+    					var _communityGroupWebsitesList:XMLListCollection = new 
+    					                 XMLListCollection(otherCommunityGroupList.elements("CommunityGroup" + n + "Websites"));	
+    					var _numberOfCommunityGroupWebsites:int = int(_communityGroupWebsitesList.elements("NumberOfWebsites"));
+    					
+    					var _websites:ArrayCollection = new ArrayCollection();
+    					
+    					for(var m:int = 0; m < _numberOfCommunityGroupWebsites; m++)
+    					{		
+    						var _websiteList:XMLListCollection = new XMLListCollection(_communityGroupWebsitesList.elements("Website" + m));
+    						var _websiteId:int = int(_websiteList.elements("websiteId"));
+    						var _websiteName:String = _websiteList.elements("websiteName");
+    						var _websiteType:String = _websiteList.elements("websiteType");
+    						var _websiteCreatedTime:int = int(_websiteList.elements("websiteCreatedTime"));
+    						
+    						var _website:cWebsiteEntry = new cWebsiteEntry(_websiteId, 
+    																	   _websiteName,
+    																	   "",
+    																	   _websiteType,
+    																	   _websiteCreatedTime);
+    						_websites.addItem(_website);
+    					}
+    					
+    					var _communityGroupKeywordList:XMLListCollection = new 
+    					                 XMLListCollection(otherCommunityGroupList.elements("CommunityGroup" + n + "Keywords"));	
+    					var _numberOfCommunityGroupKeywords:int = int(_communityGroupKeywordList.elements("NumberOfKeywords"));
+    					
+    					var _keywords:ArrayCollection = new ArrayCollection();
+    			    					
+    					for(var p:int = 0; p < _numberOfCommunityGroupKeywords; p++)
+    					{		
+    						var _keywordList:XMLListCollection = new XMLListCollection(_communityGroupKeywordList.elements("Keyword" + p));
+    						var _keywordId:int = int(_keywordList.elements("keywordId"));
+    						var _keywordName:String = _keywordList.elements("keywordName");
+    						
+    						var _keyword:cKeywordEntry = new cKeywordEntry(_keywordId, _keywordName, 0, -1);
+    						_keywords.addItem(_keyword);	
+    					}
+    					
+    					var _community:cCommunityGroupEntry = new cCommunityGroupEntry(_communtyGroupId,
+    																				   _communtyGroupName,
+    																				   _communityGroupCreatedTime,
+    																				   _communityGroupCreator,
+    																				   _websites,
+    																				   _keywords);														   													
+					  	otherCommunities.addItem(_community);													  
+    				}
+    				    				
+    				e.mCommunities = communities;
+    				e.mOtherCommunities = otherCommunities;    				
     				trace(communities.length);
 			 		dispatchEvent(e);
     			}
@@ -296,8 +360,8 @@
     			}
     		}
     		
-    		/*
-    		 *
+    		/**
+    		 *	Called when the server returns user registration data from the server. 
     		 */
     		private function createAccountHTTPServiceResultHandler(event:ResultEvent):void
     		{
@@ -310,8 +374,70 @@
     				e.mPassword = userAccountInformationList.elements("password").toString();
     				e.mUserId = int(userAccountInformationList.elements("userId"));
     				
-    				var communities:ArrayCollection = new ArrayCollection();		
-    				e.mCommunities = communities;	
+    				var communities:ArrayCollection = new ArrayCollection();
+    				var otherCommunities:ArrayCollection = new ArrayCollection();	
+    				
+    				// Extract communities which the user has NOT created, called other communities.
+    				var otherCommunityGroupsList:XMLListCollection = new XMLListCollection(xmlTree.elements("OtherCommunityGroups"));			
+    				var numberOfOtherCommunityGroups:int = int(otherCommunityGroupsList.elements("NumberOfCommunityGroups"));
+
+    				for(var n:int = 0; n < numberOfOtherCommunityGroups; n++)
+    				{
+    					var otherCommunityGroupList:XMLListCollection = new XMLListCollection(otherCommunityGroupsList.elements("CommunityGroup" + n));
+    					var _communtyGroupId:int = int(otherCommunityGroupList.elements("communityGroupId"));
+    					var _communtyGroupName:String = otherCommunityGroupList.elements("communityGroupName");
+    					var _communityGroupCreatedTime:int = int(otherCommunityGroupList.elements("communityGroupCreatedTime"));
+    					var _communityGroupCreator:String = otherCommunityGroupList.elements("communityGroupCreator");
+    					
+    					var _communityGroupWebsitesList:XMLListCollection = new 
+    					                 XMLListCollection(otherCommunityGroupList.elements("CommunityGroup" + n + "Websites"));	
+    					var _numberOfCommunityGroupWebsites:int = int(_communityGroupWebsitesList.elements("NumberOfWebsites"));
+    					
+    					var _websites:ArrayCollection = new ArrayCollection();
+    					
+    					for(var m:int = 0; m < _numberOfCommunityGroupWebsites; m++)
+    					{		
+    						var _websiteList:XMLListCollection = new XMLListCollection(_communityGroupWebsitesList.elements("Website" + m));
+    						var _websiteId:int = int(_websiteList.elements("websiteId"));
+    						var _websiteName:String = _websiteList.elements("websiteName");
+    						var _websiteType:String = _websiteList.elements("websiteType");
+    						var _websiteCreatedTime:int = int(_websiteList.elements("websiteCreatedTime"));
+    						
+    						var _website:cWebsiteEntry = new cWebsiteEntry(_websiteId, 
+    																	   _websiteName,
+    																	   "",
+    																	   _websiteType,
+    																	   _websiteCreatedTime);
+    						_websites.addItem(_website);
+    					}
+    					
+    					var _communityGroupKeywordList:XMLListCollection = new 
+    					                 XMLListCollection(otherCommunityGroupList.elements("CommunityGroup" + n + "Keywords"));	
+    					var _numberOfCommunityGroupKeywords:int = int(_communityGroupKeywordList.elements("NumberOfKeywords"));
+    					
+    					var _keywords:ArrayCollection = new ArrayCollection();
+    			    					
+    					for(var p:int = 0; p < _numberOfCommunityGroupKeywords; p++)
+    					{		
+    						var _keywordList:XMLListCollection = new XMLListCollection(_communityGroupKeywordList.elements("Keyword" + p));
+    						var _keywordId:int = int(_keywordList.elements("keywordId"));
+    						var _keywordName:String = _keywordList.elements("keywordName");
+    						
+    						var _keyword:cKeywordEntry = new cKeywordEntry(_keywordId, _keywordName, 0, -1);
+    						_keywords.addItem(_keyword);	
+    					}
+    					
+    					var _community:cCommunityGroupEntry = new cCommunityGroupEntry(_communtyGroupId,
+    																				   _communtyGroupName,
+    																				   _communityGroupCreatedTime,
+    																				   _communityGroupCreator,
+    																				   _websites,
+    																				   _keywords);														   													
+					  	otherCommunities.addItem(_community);													  
+    				}
+    				    				
+    				e.mCommunities = communities;
+    				e.mOtherCommunities = otherCommunities;    				
 			 		dispatchEvent(e);
 			 		
 			 		Alert.show("Your account was successfully created.\nYou are now logged in.", "Account Created");
@@ -337,6 +463,7 @@
     				var communityName:String = newCommunityInformationList.elements("communityGroupName");
     				var communityId:int = int(newCommunityInformationList.elements("communityGroupId"));
     				var communityCreatedTime:int = int(newCommunityInformationList.elements("communityGroupCreatedTime"));
+    				var communityGroupCreator:String = newCommunityInformationList.elements("communityGroupCreator");
     				
     				var  keywordsList:XMLListCollection = new XMLListCollection(xmlTree.elements("CommunityGroupKeywords"));
 
@@ -351,10 +478,11 @@
 						var keyword:cKeywordEntry = new cKeywordEntry(keywordId, keywordName, 0, -1);
 						keywords.addItem(keyword);	
 					}
-					
+					Alert.show(communityGroupCreator);
 					var community:cCommunityGroupEntry = new cCommunityGroupEntry(communityId, 
 																				  communityName, 
 																				  communityCreatedTime, 
+																				  communityGroupCreator,
 																				  websites, 
 																				  keywords);
 					community.mJustCreated = true;
@@ -474,6 +602,7 @@
     																   keywordName,
     																   color,
     																   communityId);
+    				keywordEntry.mIsSelected = false;
     				e.mKeywordEntry = keywordEntry;
     				this.dispatchEvent(e);
     			}

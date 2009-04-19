@@ -21,30 +21,6 @@
 			///////////////////////////////////////////////////////////////////////////////////
 			
 			/**
-			 * 	Called when the user hovers the mouse over the main canvas.
-			 */
-			/*
-			private function mainPanelRollOverHandler(event:Event):void
-			{
-				if(!mRemoveLabelOn) {
-					mMainPanelCanvas.setStyle("borderColor", "0xffe400");
-				}
-			}
-			*/
-			
-			/**
-			 * 	Called when the user hovers the mouse away from the main canvas.
-			 */
-			/*
-			private function mainPanelRollOutHandler(event:Event):void
-			{
-				if(!mRemoveLabelOn) {
-					mMainPanelCanvas.setStyle("borderColor", "0xb7babc");
-				}
-			}
-			*/
-			
-			/**
 			 *  Fires an event signaling that the user has clicked the community
 			 *  group graphic.
 			 */
@@ -55,7 +31,7 @@
 						// mMainPanelCanvas.setStyle("backgroundColor", "0x65ACC9");
 						this.mJustCreated = false;
 					}
-					
+
 					var e:cCommGroupGraphicClickedEvent = new cCommGroupGraphicClickedEvent("cCommGroupGraphicClickedEvent");
 					e.mCommGroupName = mCommGroupName;
 					e.mCommGroupId = mId;
@@ -113,35 +89,6 @@
 			//
 			///////////////////////////////////////////////////////////////////////////////////
 			
-			/**
-			 * 	Called when the user hovers the mouse away from this canvas.
-			 */
-			/*
-			private function canvasRollOverHandler(event:Event):void
-			{
-				var fade:Fade = new Fade();
-				fade.alphaFrom = 0.8;
-				fade.alphaTo = 1;
-				fade.duration = 500;
-				fade.target = this;
-				fade.play();
-			}
-			*/
-			
-			/**
-			 * 	Called when the user hovers the mouse away from this canvas.
-			 */
-			/*
-			private function canvasRollOutHandler(event:Event):void
-			{
-				var fade:Fade = new Fade();
-				fade.alphaFrom = 1;
-				fade.alphaTo = 0.8;
-				fade.duration = 500;
-				fade.target = this;
-				fade.play();
-			}
-			*/
 			
 			
 			///////////////////////////////////////////////////////////////////////////////////
@@ -184,15 +131,6 @@
 				move.target = mRemoveCommGroupLabel;
 				move.duration = 500;
 				move.play();
-				
-				/*
-				var fade:Fade = new Fade();
-				fade.alphaFrom = 0;
-				fade.alphaTo = 1;
-				fade.duration = 500;
-				fade.target = mRemoveCommGroupLabel;
-				fade.play();
-				*/
 				
 				mRemoveLabelOn = true;
 			}

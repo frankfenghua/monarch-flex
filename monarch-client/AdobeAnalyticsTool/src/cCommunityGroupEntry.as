@@ -19,12 +19,14 @@ package
 		public function cCommunityGroupEntry(id:int, 
 		 									 name:String, 
 		 									 time:int,
+		 									 creator:String,
 		 									 websites:ArrayCollection,
 		 									 keywords:ArrayCollection)
 		{
 			mId = id;
 			mName = name;
 			mCreatedTime = time;
+			mCommunityGroupCreator = creator;
 			mWebsites = websites;
 			mKeywords = keywords;
 		}
@@ -39,7 +41,9 @@ package
 		public var mWebsites:ArrayCollection = new ArrayCollection();
 		/** The collection of keywords for this community **/
 		public var mKeywords:ArrayCollection = new ArrayCollection();
-		
+		/** The creator of the community group **/
+		public var mCommunityGroupCreator:String = "";
+				
 		/** Used to track if the entry was just created or not **/
 		public var mJustCreated:Boolean = false;
 

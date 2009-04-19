@@ -15,7 +15,9 @@ package
 		public var mEmail:String;
 		public var mPassword:String;
 		public var mUserId:int;
-		
+		// collection of communities which the user created
 		public var mCommunities:ArrayCollection = new ArrayCollection();
+		// collection of communities which the user did NOT create
+		public var mOtherCommunities:ArrayCollection = new ArrayCollection();
 	}
 }

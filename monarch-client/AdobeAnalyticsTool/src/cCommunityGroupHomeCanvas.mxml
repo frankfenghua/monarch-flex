@@ -3,6 +3,7 @@
 	
 	<mx:Metadata>
 		[Event(name="MyCommunityGroupClickedEvent", type="flash.events.Event")]
+		[Event(name="AllCommunityGroupClickedEvent", type="flash.events.Event")]
 	</mx:Metadata>
 	
 	<mx:Script>
@@ -15,7 +16,7 @@
 			///////////////////////////////////////////////////////////////////////////////////
 			
 			/**
-			 * 	Event handler which displatches a event when the user clicks the my community
+			 * 	Event handler which dispatches an event when the user clicks the my community
 			 * 	group button.
 			 */
 			private function myCommunityGroupButtonClickHandler(event:Event):void
@@ -24,10 +25,20 @@
 				this.dispatchEvent(e);
 			}
 			
+			/**
+			 * 	Event hander which dispatches an event when the user clicks the all community
+			 * 	group button.
+			 */
+			private function allCommunityGroupButtonClickHandler(event:Event):void
+			{
+				var e:Event = new Event("AllCommunityGroupClickedEvent");
+				this.dispatchEvent(e);
+			}
+			
 		]]>
 	</mx:Script>
 	<mx:Label text="Home" id="mMyCommunityGroupHomeLabel" styleName="pageTitle" x="10" y="5"/>
 	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" label="My Community Groups" click="myCommunityGroupButtonClickHandler(event)" width="240" height="54" fontSize="14" toolTip="Browse my community groups" horizontalCenter="-154" verticalCenter="-26" icon="@Embed(source='../images/arrow_left.png')" styleName="buttonBlack"/>
-	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" label="Other Community Groups" width="240" height="54" fontSize="14" toolTip="Browse other community groups" horizontalCenter="154" verticalCenter="-26" icon="@Embed(source='../images/arrow_right.png')" styleName="buttonBlack"/>
+	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" label="Other Community Groups" click="allCommunityGroupButtonClickHandler(event)" width="240" height="54" fontSize="14" toolTip="Browse other community groups" horizontalCenter="154" verticalCenter="-26" icon="@Embed(source='../images/arrow_right.png')" styleName="buttonBlack"/>
 	
 </mx:Canvas>

@@ -123,7 +123,9 @@
 			keywordGraphic.updateInformation(keyword.mName);
 			keywordGraphic.addEventListener("cLabelEntryClickedEvent", removeKeywordClickedEvent);
 			mKeywordsVBox.addChild(keywordGraphic);
-			//this.dispatchEvent(event);
+			var e:cNewKeywordEvent = new cNewKeywordEvent("NewKeywordAddedEvent");
+			e.mKeywordEntry = event.mKeywordEntry
+			this.dispatchEvent(e);
 		}
 		
 		

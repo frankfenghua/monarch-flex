@@ -6,6 +6,7 @@
 		[Event(name="OpenWebsiteCreatorWindowEvent", type="cCreateWebsiteEvent")]
 		[Event(name="EditWebsiteLabelClickedEvent", type="cEditWebsiteEvent")]
 		[Event(name="OpenAddWebsiteWindowEvent", type="cCreateWebsiteEvent")]
+		[Event(name="NewKeywordAddedEvent", type="cNewKeywordEvent")]
 	</mx:Metadata>
 	
 	<mx:Script>
@@ -88,13 +89,14 @@
 			 */
 			private function openCommunityGroupBrowserCanvasHandler(event:cCommGroupGraphicClickedEvent):void
 			{
-				mMyCommViewStack.selectedIndex = 3;
 				mCommunityGroupBrowserCanvas.updateInformation(event.mCommGroupName,
 															   event.mCommGroupId,
 															   event.mCreator,
 															   event.mTime.toString(),
 															   event.mWebsites,
-															   event.mKeywords);
+															   event.mKeywords,
+															   event.mCanvasType);
+				mMyCommViewStack.selectedIndex = 3;
 			}
 			
 			/**
@@ -124,7 +126,8 @@
 			{
 				mMyCommViewStack.selectedIndex = 4;
 				mWebsiteAdditionalInformationStatBrowserCanvas.updateInformation(event.mWebsiteName,
-																			     event.mCommuniutyGroupName);
+																			     event.mCommuniutyGroupName,
+																			     event.mCanvasType);
 			}
 			
 			/**
@@ -132,7 +135,12 @@
 			 */
 			private function openCommunityGroupSelectionCanvas(event:Event):void
 			{
-				mMyCommViewStack.selectedIndex = 1;
+				if(mCanvasType == (new cCommunityGroupSelectionCanvas()).MY_COMMUNITY) {
+					mMyCommViewStack.selectedIndex = 1;
+				}
+				else {
+					mMyCommViewStack.selectedIndex = 7;
+				}
 			}
 			
 			/**
@@ -179,7 +187,17 @@
 			 */
 			private function myCommunityGroupClickedHandler(event:Event):void
 			{
+				mCommunitySelectionCanvas.updateCanvasTypeInformation(mCanvasType);
 				mMyCommViewStack.selectedIndex = 1;
+			}
+			
+			/**
+			 * 	Handler which displays the All Community Group Selection Canvas.
+			 */
+			private function allCommunityGroupClickedHandler(event:Event):void
+			{
+				mCommunitySelectionCanvas.updateCanvasTypeInformation(mCanvasType);
+				mMyCommViewStack.selectedIndex = 7;
 			}
 			
 			/**
@@ -187,7 +205,21 @@
 			 */
 			private function showMyCommunityGroupsSelectionCanvasHandler(event:Event):void
 			{
-				mMyCommHomeCanvas.updateInformation(mUserAccountInformation);
+				mCommunitySelectionCanvas.updateInformation(mUserAccountInformation,
+													mCommunitySelectionCanvas.MY_COMMUNITY);
+				// tell the application to display the my community group canvas's
+				mCanvasType = mCommunitySelectionCanvas.MY_COMMUNITY;
+			}
+			
+			/**
+			 * 	Called when the all community group selection canvas is displayed
+			 */
+			private function showAllCommunityGroupsSelectionCanvasHandler(event:Event):void
+			{
+				mAllCommHomeCanvas.updateInformation(mUserAccountInformation,
+													 mAllCommHomeCanvas.OTHER_COMMUNITY);
+				// tell the application to display the other community group canvas's
+				mCanvasType = mCommunitySelectionCanvas.OTHER_COMMUNITY;
 			}
 			
 			/**
@@ -224,7 +256,14 @@
 			{
 				for(var i:int = 0; i < mUserAccountInformation.mCommunities.length; i++) {
 					var community:cCommunityGroupEntry = cCommunityGroupEntry(mUserAccountInformation.mCommunities.getItemAt(i));
-					//if(event.mKeywordEntry.mCommunityGroupId
+					if(event.mKeywordEntry.mCommunityGroupId == community.mId) {
+						community.mKeywords.addItem(event.mKeywordEntry);
+						mCommunityGroupBrowserCanvas.updateKeywords(community.mKeywords);
+						var e:cNewKeywordEvent = new cNewKeywordEvent("NewKeywordAddedEvent");
+						e.mKeywordEntry = event.mKeywordEntry;
+						this.dispatchEvent(e);
+						return;
+					}
 				}	
 			}
 			
@@ -294,22 +333,29 @@
 			private var mWebsiteSelectedURL:String = "";
 			private var mWebsiteSelectedType:String = "";
 			private var mWebsiteSelectedCreatedTime:String = "";
+			
+			// the type of canvas to display : either MY_COMMUNITY or ALL_COMMUNITY
+			public var mCanvasType:String = "";
 				
 		]]>
 	</mx:Script>
 	<mx:ViewStack x="0" y="0" id="mNavigatorViewStack" width="1013" height="625">
 		<mx:ViewStack id="mMyCommViewStack" label="My Community Groups" width="1013" height="625">
-			<local:cMyCommunityGroupHomeCanvas id="mMyCommunityGroupHomeCanvas" MyCommunityGroupClickedEvent="myCommunityGroupClickedHandler(event)" height="616" width="1012">
-			</local:cMyCommunityGroupHomeCanvas>
-			<local:cMyCommunityGroupSelectionCanvas id="mMyCommHomeCanvas" OpenCommunityGroupHomeCanvasEvent="openCommunityGroupHomeCanvas(event)" 
+			<local:cCommunityGroupHomeCanvas id="mMyCommunityGroupHomeCanvas" 
+												MyCommunityGroupClickedEvent="myCommunityGroupClickedHandler(event)" 
+												AllCommunityGroupClickedEvent="allCommunityGroupClickedHandler(event)"
+												height="616" width="1012">
+			</local:cCommunityGroupHomeCanvas>
+			<local:cCommunityGroupSelectionCanvas id="mCommunitySelectionCanvas" OpenCommunityGroupHomeCanvasEvent="openCommunityGroupHomeCanvas(event)" 
 																		   show="showMyCommunityGroupsSelectionCanvasHandler(event)" 
 																		   OpenCommunityGroupBrowserCanvasEvent="openCommunityGroupBrowserCanvasHandler(event)" 
 																		   OpenCreateCommunityGroupCanvasEvent="openCreateCommGroupCanvasHandler(event)" 
 																		   label="My Community Groups" height="616" width="1012">
-			</local:cMyCommunityGroupSelectionCanvas>
+			</local:cCommunityGroupSelectionCanvas>
 			<local:cCreateCommunityGroupCanvas id="mCreateCommunityGroupCanvas" OpenCommunityGroupSelectionClickedEvent="myCommunityGroupClickedHandler(event)" 
 																				OpenCommunityGroupHomeCanvasEvent="openCommunityGroupHomeCanvas(event)" 
 																				BackLabelClickedEvent="createCommBackLabelClickedHandler(event)" 
+																				CreateCommunityGroupEvent="createCommunityGroupHandler(event)"
 																				height="577" width="1003">
 			</local:cCreateCommunityGroupCanvas>
 			<local:cCommunityGroupBrowserCanvas id="mCommunityGroupBrowserCanvas" OpenAddWebsiteWindowEvent="openAddWebsiteWindowHandler(event)" 
@@ -340,6 +386,11 @@
 												RegExProcessingCompleteEvent="regExProcessingCompleteHandler(event)"
 												OpenCommunityGroupSelectionClickedEvent="openCommunityGroupSelectionCanvas(event)">
 			</local:cRegularExpressionEditorCanvas>
+			<local:cCommunityGroupSelectionCanvas id="mAllCommHomeCanvas" OpenCommunityGroupHomeCanvasEvent="openCommunityGroupHomeCanvas(event)" 
+																		   show="showAllCommunityGroupsSelectionCanvasHandler(event)" 
+																		   OpenCommunityGroupBrowserCanvasEvent="openCommunityGroupBrowserCanvasHandler(event)" 
+																		   label="My Community Groups" height="616" width="1012">
+			</local:cCommunityGroupSelectionCanvas>
 		</mx:ViewStack>
 		<mx:ViewStack id="mAllCommViewStack" label="All Community Groups" width="1013" height="585">
 			<mx:Canvas label="All Community Groups" width="100%" height="100%">

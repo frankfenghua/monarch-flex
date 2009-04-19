@@ -30,5 +30,7 @@ package
 		public var mWebsites:ArrayCollection = null;
 		// community group keywords
 		public var mKeywords:ArrayCollection = null;
+		// type : either MY_COMMUNITY or OTHER_COMMUNITY
+		public var mCanvasType:String = "";
 	}
 }

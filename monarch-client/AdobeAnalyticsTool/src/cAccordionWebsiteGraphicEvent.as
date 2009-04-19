@@ -26,6 +26,8 @@ package
 		public var mCommuniutyGroupName:String = "";
 		// the type of event
 		public var mType:String = "";
+		// type : either MY_COMMUNITY or OTHER_COMMUNITY
+		public var mCanvasType:String = "";
 		
 	}
 }
