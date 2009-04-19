@@ -173,7 +173,7 @@ class DetailStats
 		}
 		
 		printf('<mostLiked rating="%s" url="%s" />', $mostLikedRating, $mostLikedLink);
-		printf('<leastLiked rating="%s" url"%s" />', $leastLikedRating, $leastLikedLink);
+		printf('<leastLiked rating="%s" url="%s" />', $leastLikedRating, $leastLikedLink);
 		printf('<mostMentioned rating="%s" url="%s" />', $mostMentionedCount, $mostMentionedLink);
 	}
 
