@@ -30,9 +30,18 @@ if(mysql_num_rows($query) > 0)
      $communityId = mysql_insert_id();
 
      // store the community id and name
+	 // get the creator of the community group
+	 $creatorQuery = "SELECT user FROM communities WHERE id = '" . $communityId . "'";
+	 $creatorResult = mysql_query($creatorQuery);
+	 $creatorId = mysql_result($creatorResult, 0, "user");
+	 $creatorQuery = "SELECT username FROM users WHERE id = '" . $creatorId . "'";
+	 $creatorResult = mysql_query($creatorQuery);
+	 $creatorName = mysql_result($creatorResult, 0, "username");
+
      $xml->element("communityGroupId", $communityId);
      $xml->element("communityGroupName", $comName);
      $xml->element("communityGroupCreatedTime", $time);
+	 $xml->element("communityGroupCreator", $creatorName);	
      $xml->pop();
 
      // store the community keywords

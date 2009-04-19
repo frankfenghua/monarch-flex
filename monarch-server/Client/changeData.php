@@ -25,6 +25,25 @@ else if($type === "ak") {
 	$query = "INSERT INTO allowedkeywords (community, word) 
 			 VALUES ('" . $communityId . "','" . $name . "')";
 	$database->query($query);
+
+	$query = "SELECT id FROM allowedkeywords WHERE community = '" .
+	                 $communityId . "' AND word = '" . $name . "'";
+	$result = $database->query($query);
+	
+	$xml = new cXmlWriter();
+	$xml->push("NewKeyword");
+	$xml->push("Information");
+	
+	$id = mysql_result($result, 0, "id");
+
+	$xml->element("id", $id);
+	$xml->element("communityId", $communityId);
+	$xml->element("name", $name);
+	$xml->element("type", "ak");
+
+	$xml->pop();
+	$xml->pop();
+	echo $xml->getXML();
 }
 // remove website from community
 else if($type === "rw") {
