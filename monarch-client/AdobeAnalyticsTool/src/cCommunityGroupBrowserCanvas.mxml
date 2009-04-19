@@ -20,12 +20,21 @@
 			import mx.effects.Tween;
 			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
+			import mx.rpc.events.ResultEvent;
 					
 			///////////////////////////////////////////////////////////////////////////////////
 			//
 			//						   EVENT HANDLERS
 			//
 			///////////////////////////////////////////////////////////////////////////////////
+			
+			/**
+			 * 	when the server is done incrementing the community view count, this is called
+			 */
+			private function viewCountHandler(event:ResultEvent):void  
+			{
+				// do nothing
+			}
 
 			/**
 			 * 	Called when the user clicks the edit community group button.
@@ -357,6 +366,9 @@
 				}
 				
 				mCanvasType = canvasType;
+				
+				// tell the server to increment the view count for this community
+				viewCountIncrementer.send({"communityId":mCommGroupId});
 			}
 			
 			/**
@@ -516,9 +528,12 @@
 			private var mAnalyticsParser:cAnalyticsParser = null;
 			private var mStatEvent:cStatOptionSelectedEvent = new cStatOptionSelectedEvent("dummy");
 			
+			[Bindable]
+			private var SERVER_URL:String = Constants.SERVER_URL+"monarch/Client/";	
+			
 		]]>
 	</mx:Script>
-
+	<mx:HTTPService id="viewCountIncrementer" method="GET" url="{SERVER_URL}communityIncrementView.php" result="viewCountHandler(event)" />
 	<mx:LinkButton click="homeLabelClickHandler(event)" label="Home" id="mHomeLabel" x="12" y="5"/>
 	<mx:Label x="72" y="3" text="&gt;" styleName="breadCrumbSeparator" />
 	<mx:LinkButton click="communityLabelClickHandler(event)" label="My Community Groups" id="mCommunityGroupLabel"  horizontalCenter="-339" verticalCenter="-291" />
@@ -530,16 +545,6 @@
 		<mx:Canvas label="1 year" width="100%" height="100%">
 		</mx:Canvas>
 	</mx:ViewStack>
-	
-	<!--
-	Puneet said that radio buttons were user unfriendly
-	<mx:RadioButton label="1 Year" change="_1YearTimeSpanRadioButtonChangeHandler(event)" id="m1YearTimeSpanRadioButton" horizontalCenter="62" verticalCenter="286"/>
-	<mx:RadioButton label="9 Months" change="_9MonthsTimeSpanRadioButtonChangeHandler(event)" id="m9MonthsTimeSpanRadioButton" verticalCenter="286" horizontalCenter="138"/>
-	<mx:RadioButton label="6 Months" change="_6MonthsTimeSpanRadioButtonChangeHandler(event)" id="m6MonthsTimeSpanRadioButton" verticalCenter="286" horizontalCenter="222"/>
-	<mx:RadioButton label="1 Month" change="_1MonthTimeSpanRadioButtonChangeHandler(event)" id="m1MonthTimeSpanRadioButton" verticalCenter="286" horizontalCenter="303"/>
-	<mx:RadioButton label="2 Weeks" change="_2WeeksTimeSpanRadioButtonChangeHandler(event)" id="m2WeeksTimeSpanRadioButton" verticalCenter="286" horizontalCenter="383"/>
-	<mx:RadioButton label="1 Week" selected="true" change="_1WeekTimeSpanRadioButtonChangeHandler(event)" id="m1WeekSpanRadioButton" verticalCenter="286" horizontalCenter="462"/>
-	-->
 	<ns1:cStatOptionsAccordion id="mStatOptionAccordion"
 							   AccordionWebsiteGraphicEvent="accordionWebsiteGraphicEventHandler(event)"
 							   AccordionKeywordGraphicEvent="accordionKeywordGraphicHandler(event)"
