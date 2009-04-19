@@ -146,9 +146,10 @@ class DetailStats
 		{
 			$q = 'SELECT l.id, l.baseUrl, SUM(s.count), SUM(goodness)
 				FROM links AS l, linkstats AS ls, stats AS s
-				WHERE l.id = 1
+				WHERE l.id = ' . $link['id'] . '
 				AND l.id = ls.link
-				AND ls.stat = s.id';
+				AND ls.stat = s.id
+				GROUP BY l.id';
 			
 			$linkStats = $this->database->fetch($q);
 			
