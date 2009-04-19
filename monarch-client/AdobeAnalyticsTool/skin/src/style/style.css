@@ -1022,7 +1022,7 @@ Tree
 	disclosureOpenIcon: Embed(source="kingnarestyle.swf",symbol="Tree_disclosureOpenIcon");
 	folderClosedIcon: Embed(source="kingnarestyle.swf",symbol="Tree_folderClosedIcon");
 	folderOpenIcon: Embed(source="kingnarestyle.swf",symbol="Tree_folderOpenIcon");
-	useRollOver: false;
+	useRollOver: true;
 	backgroundColor: #333333;
 	/* borderSkin: Embed(source="kingnarestyle.swf",symbol="Tree_borderSkin");  */
 }

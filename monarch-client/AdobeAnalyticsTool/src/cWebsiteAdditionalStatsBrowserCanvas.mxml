@@ -184,6 +184,7 @@
 					// trace("This is leaf");
 					navigateToURL(new URLRequest(node.@url), "_blank");
 				}
+				else 
 			}
 			
 			/**
