@@ -1,5 +1,7 @@
 <?php
 
-echo strip_tags('asdfa &nbsp; asdfasd');
+$a = $b = $c = 'fuck';
+
+echo $a . $b . $c;
 
 ?>

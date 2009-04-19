@@ -48,6 +48,10 @@ class DetailStats
 		$this->general();
 		echo '</general>';
 		
+		echo '<links>';
+		$this->links();
+		echo '</links>';
+		
 		echo '<keywords>';
 		$this->keywords();
 		echo '</keywords>';
@@ -60,7 +64,7 @@ class DetailStats
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 	// ========================================================================
-	// keywords
+	// general
 	//    args:  none
 	//    ret:   void
 	//    about: Prints out general stats about the website
@@ -121,6 +125,56 @@ class DetailStats
 			ORDER BY rating DESC
 			LIMIT 3';
 		$this->threadsGroup('livelyThreads', $q);	
+	}
+	
+	//=========================================================================
+	// links
+	//    args:  none
+	//    ret:   void
+	//    about: stats about the external links people said
+	//-------------------------------------------------------------------------
+	private function links()
+	{
+		$q = 'SELECT id FROM links';
+		$allLinks = $this->database->query($q);
+		
+		$mostMentionedLink  = $mostLikedLink   = $leastLikedLink   = '404error.html';
+		$mostMentionedCount = $mostLikedRating = $leastLikedRating = 0;
+		
+		// go through the aggregate stats of each link and as we're going along, keep track of the min/max
+		while($link = mysql_fetch_array($allLinks))
+		{
+			$q = 'SELECT l.id, l.baseUrl, SUM(s.count), SUM(goodness)
+				FROM links AS l, linkstats AS ls, stats AS s
+				WHERE l.id = 1
+				AND l.id = ls.link
+				AND ls.stat = s.id';
+			
+			$linkStats = $this->database->fetch($q);
+			
+			// the very first link has no previous link to compare to, so just set it as the most/least everything
+			if($linkStats['SUM(s.count)'] > $mostMentionedCount || $linkStats['id'] == 1)
+			{
+				$mostMentionedCount = $linkStats['SUM(s.count)'];
+				$mostMentionedLink  = $linkStats['SUM(baseUrl)'];
+			}
+			
+			if($linkStats['SUM(s.goodness)'] > $mostLikedRating || $linkStats['id'] == 1)
+			{
+				$mostLikedRating = $linkStats['SUM(s.goodness)'];
+				$mostLikedLink   = $linkStats['SUM(baseUrl)'];
+			}
+			
+			if($linkStats['SUM(s.goodness)'] < $leastLikedRating || $linkStats['id'] == 1)
+			{
+				$leastLikedRating = $linkStats['SUM(s.goodness)'];
+				$leastLikedLink   = $linkStats['SUM(baseUrl)'];
+			}
+		}
+		
+		printf('<mostLiked rating="%s" url="%s" />', $mostLikedRating, $mostLikedLink);
+		printf('<leastLiked rating="%s" url"%s" />', $leastLikedRating, $leastLikedLink);
+		printf('<mostMentioned rating="%s" url="%s" />', $mostMentionedCount, $mostMentionedLink);
 	}
 
 	// ========================================================================

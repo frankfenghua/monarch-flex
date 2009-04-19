@@ -117,6 +117,19 @@
 				livelyThreadTitle   = livelyThreads[0].@label;
 				livelyThreadUrl     = livelyThreads[0].@url;
 				livelyThreadRating  = livelyThreads[0].@rating;
+				
+				var linkMostMentioned:XMLList = statRequester.lastResult[0].links.mostMentioned;
+				mostMentionedBaseUrl = linkMostMentioned.@url;
+				mostMentionedCount   = linkMostMentioned.@rating;
+				
+				var linkMostLiked:XMLList = statRequester.lastResult[0].links.mostLiked;
+				mostLikedBaseUrl = linkMostLiked.@url;
+				mostLikedRating  = linkMostLiked.@rating;
+				
+				var linkLeastLiked:XMLList = statRequester.lastResult[0].links.leastLiked;
+				leastLikedBaseUrl = linkLeastLiked.@url;
+				leastLikedRating  = linkLeastLiked.@rating;
+				
 				/*
 				// Set keywords HTML
 				tempString = "";
@@ -344,6 +357,24 @@
 			private var livelyThreadRating:Number = 0;
 			
 			[Bindable]
+			private var mostLikedBaseUrl:String = Constants.SERVER_URL + "monarch/Client/404error.html";
+			
+			[Bindable]
+			private var mostLikedRating:Number = 0;
+			
+			[Bindable]
+			private var leastLikedBaseUrl:String = Constants.SERVER_URL + "monarch/Client/404error.html";
+			
+			[Bindable]
+			private var leastLikedRating:Number = 0;
+			
+			[Bindable]
+			private var mostMentionedBaseUrl:String = Constants.SERVER_URL + "monarch/Client/404error.html";
+			
+			[Bindable]
+			private var mostMentionedCount:Number = 0;
+			
+			[Bindable]
 			private var SERVER_URL:String = Constants.SERVER_URL+"monarch/Client/";	
 			
 		]]>
@@ -370,7 +401,7 @@
 		<mx:Label 
 			text="{postsPerDay}" 
 			x="130" 
-		 	y="70"
+		 	y="10"
 			toolTip="the average number of new posts per day"
 			styleName="websiteGeneralInfoRating"
 		/>
@@ -396,9 +427,9 @@
 			styleName="websiteGeneralInfoCategory"
 		/>
 		<mx:Label 
-			text="{analyzedPosts}" 
+			text="{analyzedPosts}"
 			x="130" 
-		 	y="10"
+		 	y="70"
 			toolTip="the total number of posts Monarch has analyzed since you added this website"
 			styleName="websiteGeneralInfoRating"
 		/>
@@ -446,8 +477,8 @@
 		/>
 		<mx:LinkButton
 			label="{chatterboxName}"
-			x="223" 
-		 	y="160"
+			x="233" 
+		 	y="157"
 			toolTip="user with most posts"
 			click="navigateToURL(new URLRequest('http://www.error.com'), '_blank')"
 		/>
@@ -467,8 +498,8 @@
 		/>
 		<mx:LinkButton
 			label="{newbieName}"
-			x="223" 
-		 	y="190"
+			x="233" 
+		 	y="187"
 			toolTip="the newest user that joined this website"
 			click="navigateToURL(new URLRequest('http://www.error.com'), '_blank')"
 		/>
@@ -481,8 +512,8 @@
 		/>
 		<mx:LinkButton
 			label="{veteranName}"
-			x="223" 
-		 	y="220"
+			x="233" 
+		 	y="217"
 			toolTip="the user that joined the website earliest (that Monarch knows of)"
 			click="navigateToURL(new URLRequest('http://www.error.com'), '_blank')"
 		/>
@@ -509,18 +540,76 @@
 		/>
 		<mx:LinkButton
 			label="{livelyThreadTitle}"
-			x="223" 
-		 	y="250"
+			x="233" 
+		 	y="247"
 			toolTip="the thread with the most replies (that Monarch knows of)"
 			click="navigateToURL(new URLRequest('http://www.error.com'), '_blank')"
 		/>
 	</mx:Panel>
 	<mx:Panel x="6" y="407" width="494.5" height="200" layout="absolute" title="Links Spoken">
-		<mx:Text x="5" y="10">
-		    <mx:htmlText>
-                <![CDATA[Most mentioned: <a href="http://fuck.com">Fuck.com</a><br /> (99123)&#xa;Least mentioned: hoe.com (4)&#xa;Most favorable: shit.com (+56.2)&#xa;Least favorable: damn.com (-12.5)&#xa;Spoken with bad English: bitch.com (-0.82)&#xa;Spoken with best English: nigger.com (0.99)"]]>
-            </mx:htmlText>
-        </mx:Text>
+		<mx:Label 
+			text="most mentioned:" 
+			x="10"
+			y="10"
+			toolTip="the external base URL that was most linked to"
+			styleName="websiteGeneralInfoCategory"
+		/>
+		<mx:Label 
+			text="{mostMentionedCount}x" 
+			x="130"
+			y="10"
+			toolTip="the external base URL that was most linked to"
+			styleName="websiteGeneralInfoRating"
+		/>
+		<mx:LinkButton
+			label="{mostMentionedBaseUrl}"
+			x="213" 
+		 	y="8"
+			toolTip="the external base URL that was most linked to"
+			click="navigateToURL(new URLRequest('http://www.error.com'), '_blank')"
+		/>
+		<mx:Label 
+			text="most liked:" 
+			x="10"
+			y="40"
+			toolTip="the external link that people on this website presumably most like"
+			styleName="websiteGeneralInfoCategory"
+		/>
+		<mx:Label 
+			text="{mostLikedRating} rating" 
+			x="130"
+			y="40"
+			toolTip="the external link that people on this website presumably most like"
+			styleName="websiteGeneralInfoRating"
+		/>
+		<mx:LinkButton
+			label="{mostLikedBaseUrl}"
+			x="213" 
+		 	y="38"
+			toolTip="the external link that people on this website presumably most like"
+			click="navigateToURL(new URLRequest('http://www.error.com'), '_blank')"
+		/>
+		<mx:Label 
+			text="least liked:" 
+			x="10"
+			y="70"
+			toolTip="the external link that people on this website presumably most hate"
+			styleName="websiteGeneralInfoCategory"
+		/>
+		<mx:Label 
+			text="{leastLikedRating} rating" 
+			x="130"
+			y="70"
+			toolTip="the external link that people on this website presumably most hate"
+			styleName="websiteGeneralInfoRating"
+		/>
+		<mx:LinkButton
+			label="{leastLikedBaseUrl}"
+			x="213" 
+		 	y="68"
+			toolTip="the external link that people on this website presumably most hate"
+			click="navigateToURL(new URLRequest('http://www.error.com'), '_blank')"
+		/>
 	</mx:Panel>
 	<mx:Panel x="508" y="50" width="494" height="556" layout="absolute" title="Keywords">
 		<mx:Tree id="tree" top="10" left="10" dataProvider="{keywordsTree}" labelFunction="treeLabel" itemClick="treeClickHandler(event)" width="470" height="505" showRoot="true"/>	</mx:Panel>
