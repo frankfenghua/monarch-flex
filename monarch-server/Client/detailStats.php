@@ -1,7 +1,7 @@
 <?php
 
 // TITLE:   DetailStats
-// TYPE:    class with automatic instantiation
+// TYPE:    Class with automatic instantiation
 // AUTHOR:  Ryan Lin, Andrew Spencer
 // CREATED: April 14, 2009
 // ABOUT:   prints out an XML file showing detailed stats of a website
@@ -14,7 +14,6 @@ header('Content-Type: text/xml');
 require_once('../database/Database.php');
 require_once('../constants.php');
 require_once('../Url.php');
-require_once('../Utilities.php');
 
 class DetailStats
 {
@@ -311,9 +310,9 @@ class DetailStats
 	// ------------------------------------------------------------------------
 	private function threadNode($threadData)
 	{
-		$url = URL::translateURLBasedOnCurrent(xmlSanitize($threadData['url']),$this->startPage);
-		$title = xmlSanitize($threadData['title']);
-		$rating = xmlSanitize($threadData['rating']);
+		$url = URL::translateURLBasedOnCurrent($this->xml($threadData['url']),$this->startPage);
+		$title = $this->xml($threadData['title']);
+		$rating = $this->xml($threadData['rating']);
 		echo '<thread url="' . $url . '" label="' . $title . '" rating="' . $rating . '"/>';
 	}
 	
@@ -348,12 +347,24 @@ class DetailStats
 	// ------------------------------------------------------------------------
 	private function userNode($userData)
 	{
-		$url = URL::translateURLBasedOnCurrent(xmlSanitize($userData['url']),$this->startPage);
-		$title = xmlSanitize($userData['name']);
-		$rating = xmlSanitize($userData['rating']);
+		$url = URL::translateURLBasedOnCurrent($this->xml($userData['url']),$this->startPage);
+		$title = $this->xml($userData['name']);
+		$rating = $this->xml($userData['rating']);
 		echo '<user url="' . $url . '" label="' . $title . '" rating="' . $rating . '"/>';
 	}
 
+	// ========================================================================
+	// xml
+	//    args:  XML node data - string
+	//    ret:   "Cleaned" parameter data
+	//    about: Escapes all characters in the parameter string that might cause
+	//        an XML parser to barf.
+	// ------------------------------------------------------------------------
+	private function xml($data) {
+		$newData = str_replace('&', '', $data);
+		$newData = str_replace('<', '\<', $newData);
+		return $newData;
+	}
 
 }
 
