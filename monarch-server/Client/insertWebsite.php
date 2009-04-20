@@ -13,7 +13,6 @@ $type = $_GET['type'];
 
 //echo $userId . " " . $community . " " . $websiteName . " " . $websiteURL . " " . $type;
 
-
 $websiteName = strtolower($websiteName);
 $websiteName = str_replace(' ', '', $websiteName);
 
@@ -40,7 +39,7 @@ if($num_rows > 0)
      $database->query($query);
      
      $websiteId = mysql_insert_id();
-     
+    
      $database = new Database('root');
      
      $database->query('CREATE DATABASE ' . $websiteName);
