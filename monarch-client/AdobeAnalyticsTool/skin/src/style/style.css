@@ -1171,3 +1171,10 @@ Window
 	color: #eeeeee;	
 	fontStyle: italic;
 }
+
+.subHead {
+	fontWeight: bold;
+	fontSize: 12;
+	textDecoration: underline;
+	color: #aaaaaa;
+}

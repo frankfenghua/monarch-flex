@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Apr 17, 2009 at 11:15 PM
+-- Generation Time: Apr 19, 2009 at 04:13 PM
 -- Server version: 5.1.30
 -- PHP Version: 5.2.8
 
@@ -430,6 +430,7 @@ INSERT INTO `badwords` (`word`) VALUES
 ('fails'),
 ('failure'),
 ('fallacious'),
+('false'),
 ('fart'),
 ('farted'),
 ('farting'),
@@ -439,6 +440,7 @@ INSERT INTO `badwords` (`word`) VALUES
 ('fatasses'),
 ('faulty'),
 ('feeble'),
+('fibber'),
 ('fight'),
 ('fighting'),
 ('flabby'),
@@ -620,6 +622,11 @@ INSERT INTO `badwords` (`word`) VALUES
 ('lesbians'),
 ('lesbo'),
 ('lezzie'),
+('liar'),
+('liars'),
+('lie'),
+('lied'),
+('lies'),
 ('limited'),
 ('limp'),
 ('loafed'),
@@ -789,13 +796,13 @@ INSERT INTO `badwords` (`word`) VALUES
 ('ruin'),
 ('ruined'),
 ('ruins'),
+
 ('sad'),
 ('sadly'),
 ('sandnigger'),
 ('satan'),
 ('satanic'),
 ('satanism'),
-
 ('savage'),
 ('savages'),
 ('scary'),
@@ -1010,6 +1017,7 @@ CREATE TABLE IF NOT EXISTS `communities` (
   `user` mediumint(8) unsigned NOT NULL,
   `name` varchar(30) NOT NULL,
   `created` int(10) unsigned NOT NULL,
+  `accessCount` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='A community is an umbrella for multiple websites' AUTO_INCREMENT=3 ;
@@ -1018,9 +1026,9 @@ CREATE TABLE IF NOT EXISTS `communities` (
 -- Dumping data for table `communities`
 --
 
-INSERT INTO `communities` (`id`, `user`, `name`, `created`) VALUES
-(1, 1, 't-shirts', 1228522900),
-(2, 1, 'politics', 1235169885);
+INSERT INTO `communities` (`id`, `user`, `name`, `created`, `accessCount`) VALUES
+(1, 1, 't-shirts', 1228522900, 0),
+(2, 1, 'politics', 1235169885, 0);
 
 -- --------------------------------------------------------
 
@@ -1310,6 +1318,7 @@ INSERT INTO `goodwords` (`word`) VALUES
 ('perfectly'),
 ('pert'),
 ('photogenic'),
+
 ('pinnacle'),
 ('piquant'),
 ('pleasant'),
@@ -1569,7 +1578,6 @@ INSERT INTO `inverters` (`word`) VALUES
 ('seldom'),
 ('should'),
 ('should have'),
-
 ('should have been'),
 ('should have had'),
 ('should try to'),
@@ -1604,7 +1612,7 @@ INSERT INTO `inverters` (`word`) VALUES
 
 CREATE TABLE IF NOT EXISTS `users` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `username` varchar(20) NOT NULL,
+  `username` varchar(40) NOT NULL,
   `password` varchar(41) NOT NULL,
   `realName` varchar(30) NOT NULL,
   `created` int(10) unsigned NOT NULL,

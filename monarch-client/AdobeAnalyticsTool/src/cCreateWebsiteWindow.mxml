@@ -251,10 +251,10 @@
 		<mx:RadioButton x="178.5" y="85" label="Blog" id="mBlogTypeRadioButton" groupName="typeGroup"/>
 		<mx:RadioButton x="236" y="85" label="News" id="mNewsTypeRadioButton" groupName="typeGroup"/>
 	</mx:Canvas>
-	<mx:RadioButton label="Add New Website" change="addNewWebsiteChangeHandler(event)" selected="true" id="mAddNewWebsiteRadioButton" x="10" verticalCenter="-185" groupName="selectionGroup">
+	<mx:RadioButton label="Add New Website" change="addNewWebsiteChangeHandler(event)" selected="true" id="mAddNewWebsiteRadioButton" x="10" verticalCenter="-185" groupName="selectionGroup" styleName="subHead">
 		<mx:toolTip>Create and add a website which has not been previously created</mx:toolTip>
 	</mx:RadioButton>
-	<mx:RadioButton x="14" label="Add Previously Setup Websites" change="addPreviousWebsiteChangeHandler(event)" id="mAddPrevWebsiteRadioButton" verticalCenter="-16" groupName="selectionGroup">
+	<mx:RadioButton x="14" label="Add Previously Setup Websites" change="addPreviousWebsiteChangeHandler(event)" id="mAddPrevWebsiteRadioButton" verticalCenter="-16" groupName="selectionGroup" styleName="subHead">
 		<mx:toolTip>Add a website which has been previously created and added</mx:toolTip>
 	</mx:RadioButton>
 	<mx:VBox height="166" width="418" enabled="false" disabledOverlayAlpha=".9" alpha="1" backgroundDisabledColor="#333333" id="mAddPrevWebsiteContainer" horizontalCenter="2" verticalCenter="86" verticalScrollPolicy="on" horizontalScrollPolicy="off">
@@ -262,5 +262,6 @@
 	<local:cEngine id="mEngine" AllWebsitesReadyEvent="allWebsitesReadyServiceHandler(event)">
 		
 	</local:cEngine>
+	<mx:HRule x="20" y="168" width="400"/>
 </mx:TitleWindow>	
 

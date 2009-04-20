@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<controls:CanvasButton xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:controls="controls.*" creationComplete="showCanvasHandler(event)" click="graphicClickedHandler(event)" width="390" height="86">
+<controls:CanvasButton useHandCursor="true" buttonMode="true" mouseChildren="false" xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:controls="controls.*" creationComplete="showCanvasHandler(event)" click="graphicClickedHandler(event)" width="390" height="86">
 	
 	<mx:Metadata>
 		[Event(name="CommGroupGraphicClickedEvent", type="cCommGroupGraphicClickedEvent")]
@@ -66,20 +66,20 @@
 					}
 				}
 				if(mCreator.length == 0) {
-					mCreatorLabel.text = "Created by : [Not Available]";
+					mCreatorLabel.text = "Creator : [Not Available]";
 				}
 				else {
-					mCreatorLabel.text = "Created by : " + mCreator;
+					mCreatorLabel.text = "Creator : " + mCreator;
 				}
 				if(mDateCreated.length == 0) {
-					mDateLabel.text = "Created on : [Not Available]";
+					mDateLabel.text = "Created : [Not Available]";
 				}
 				else {
 					var currDate:Date = new Date(int(mDateCreated)*1000); 
 					var theDate:String = ((currDate.getMonth()+ 1) + "/" + currDate.getDate() + "/" + currDate.getFullYear());
-					mDateLabel.text = "Created on : " + theDate;
+					mDateLabel.text = "Created : " + theDate;
 				}
-				mNumWebsiteLabel.text = "Number Of Websites : " + mNumWebsites
+				mNumWebsiteLabel.text = "Websites : " + mNumWebsites
 			}
 			
 			
@@ -201,12 +201,12 @@
 		]]>
 	</mx:Script>
 	<mx:Canvas width="377" id="mMainPanelCanvas" horizontalCenter="-1" verticalCenter="0">
-		<mx:Label x="89" y="34" text="Created on December 12, 2030" width="276" id="mDateLabel" styleName="communitySelectStat" />
-		<mx:Label x="89" y="45" text="Creator : Mariusz Choroszy" width="276" id="mCreatorLabel" styleName="communitySelectStat" />
-		<mx:Label x="89" y="57" text="Number of Websites : 0" width="276" id="mNumWebsiteLabel" styleName="communitySelectStat" />
-		<mx:Label x="89" y="12" text="Some Communty Group" width="276" id="mCommNameLabel" styleName="communitySelectName" />
+		<mx:Label x="89" y="7" text="Some Communty Group" width="276" id="mCommNameLabel" styleName="communitySelectName" />
+		<mx:Label x="89" y="29" text="Created on December 12, 2030" width="276" id="mDateLabel" styleName="communitySelectStat" toolTip="when analysis began on this community" />
+		<mx:Label x="89" y="40" text="Creator : Mariusz Choroszy" width="276" id="mCreatorLabel" styleName="communitySelectStat" toolTip="creator of this community" />
+		<mx:Label x="89" y="52" text="Websites : 0" width="276" id="mNumWebsiteLabel" styleName="communitySelectStat" toolTip="number of websites under this community" />
 		<mx:Image x="15" y="6" width="68" height="68" source="@Embed('../images/thumbnailBorder.png')" />
-		<mx:Image x="17" y="8" width="64" height="64" source="{mCommImageURL}" id="mImageCanvas">
+		<mx:Image x="17" y="8" width="64" height="64" source="{mCommImageURL}" id="mImageCanvas" toolTip="community thumbnail">
 		</mx:Image>
 		<mx:Canvas x="0" y="0" width="375" height="78" id="mOverlayCanvas">
 			<mx:Canvas x="286" y="54" width="50" height="20" backgroundImage="@Embed(source='../images/removeIcon.jpg')" id="mRemoveCommGroupLabel" visible="false" toolTip="Remove the community group">

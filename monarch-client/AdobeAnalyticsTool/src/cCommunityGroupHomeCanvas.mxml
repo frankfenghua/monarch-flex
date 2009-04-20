@@ -38,7 +38,9 @@
 		]]>
 	</mx:Script>
 	<mx:Label text="Home" id="mMyCommunityGroupHomeLabel" styleName="pageTitle" x="10" y="5"/>
-	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" label="My Community Groups" click="myCommunityGroupButtonClickHandler(event)" width="240" height="54" fontSize="14" toolTip="Browse my community groups" horizontalCenter="-154" verticalCenter="-26" icon="@Embed(source='../images/arrow_left.png')" styleName="buttonBlack"/>
-	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" label="Other Community Groups" click="allCommunityGroupButtonClickHandler(event)" width="240" height="54" fontSize="14" toolTip="Browse other community groups" horizontalCenter="154" verticalCenter="-26" icon="@Embed(source='../images/arrow_right.png')" styleName="buttonBlack"/>
+	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" label="My Community Groups" click="myCommunityGroupButtonClickHandler(event)" width="240" height="54" fontSize="14" toolTip="Browse only the communities that I've created" horizontalCenter="-184" verticalCenter="64" icon="@Embed(source='../images/arrow_left.png')" styleName="buttonBlack"/>
+	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" label="Other Community Groups" click="allCommunityGroupButtonClickHandler(event)" width="240" height="54" fontSize="14" toolTip="Browse community groups that other people around the world have created" horizontalCenter="184" verticalCenter="64" icon="@Embed(source='../images/arrow_right.png')" styleName="buttonBlack"/>
+	<mx:Image x="259" y="189" source="@Embed('../images/Misc.png')" width="128" height="128"/>
+	<mx:Image x="626" y="189" source="@Embed('../images/Internet.png')" width="128" height="128"/>
 	
 </mx:Canvas>
