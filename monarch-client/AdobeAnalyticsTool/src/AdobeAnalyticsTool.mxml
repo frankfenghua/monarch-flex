@@ -79,6 +79,7 @@
 					createWebsiteEvent.mWebsiteName = event.mWebsiteName;
 					createWebsiteEvent.mWebsiteType = event.mWebsiteType;
 					createWebsiteEvent.mWebsiteURL = event.mWebsiteURL;
+					createWebsiteEvent.mUserId = mAccountInformation.mUserId; 
 					mLoggedInCanvas.openRegularExpressionEditorCanvas(createWebsiteEvent);		
 					/*mEngine.insertWebsite(mAccountInformation.mSelectedCommunityId, 
 										  mAccountInformation.mUserId,

@@ -40,6 +40,7 @@ package
 			}
 			return id;
 		}
+	
 		// user information
 		public var mFullName:String = "";
 		public var mUserName:String = "";

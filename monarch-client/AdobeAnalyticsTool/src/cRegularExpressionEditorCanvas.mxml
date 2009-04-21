@@ -83,6 +83,7 @@
 				RegExProcessingCompleteEvent.regularExpressionMap = event.regularExpressionMap;
 				RegExProcessingCompleteEvent.topLevelBreadth = event.topLevelBreadth;
 				RegExProcessingCompleteEvent.crawlingPeriod = event.crawlingPeriod;
+				RegExProcessingCompleteEvent.mUserId = event.mUserId;
 
 				if(urlToLoad.substr(0, 7) != "http://") {
 					urlToLoad = "http://" + urlToLoad;

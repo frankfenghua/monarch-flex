@@ -28,6 +28,9 @@ package
 			}
 			
 			returnValue["websiteName"] = mWebsiteName;
+			returnValue["type"] = mWebsiteType;
+			returnValue["userID"] = mUserId;
+			returnValue["startPage"] = mWebsiteURL;
 			returnValue["communityId"] = mCommunityGroupId;
 			returnValue["scrapeNumTopLevel"] = topLevelBreadth;
 			returnValue["scrapeInterval"] = crawlingPeriod;

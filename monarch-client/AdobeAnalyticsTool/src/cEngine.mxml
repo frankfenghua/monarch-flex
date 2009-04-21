@@ -28,6 +28,7 @@
     		
     		[Bindable]
     		private var mCommunityName:String = "";
+    		
     		[Bindable]
     		private var mUserId:String = "";
     		[Bindable]
