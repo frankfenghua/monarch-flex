@@ -1141,6 +1141,7 @@ Window
 .pageTitle {
 	fontWeight: bold;
 	fontSize: 16;
+	color: #9fd4da;
 }
 
 .breadCrumbSeparator {
