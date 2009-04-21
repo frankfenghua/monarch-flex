@@ -265,9 +265,9 @@
 	<mx:Label text="&gt;" styleName="breadCrumbSeparator" top="5" left="324" id="mSep3"/>
 	<mx:Label text="Edit" id="mEditLabel" styleName="pageTitle" top="5" left="351"/>
 	<mx:Panel x="0" y="55" width="352" height="551" layout="absolute" title="Basic Info">
-		<mx:Label x="20" y="25" text="Name :" styleName="subHead" />
+		<mx:Label x="20" y="21" text="Name" styleName="subHead" />
 		<mx:TextInput x="20" y="51" width="236" id="mNameTextBox"/>
-		<mx:Label x="19" y="120" text="Icon :" styleName="subHead" />
+		<mx:Label x="19" y="120" text="Icon" styleName="subHead" />
 		<mx:Image x="18" y="148" width="68" height="68" source="@Embed('../images/thumbnailBorder.png')" />
 		<mx:Image x="20" y="150" width="64" height="64" source="../images/ps.png" id="communityIcon" />
 		<mx:TextInput x="18" y="222" width="236" id="mIconTextBox"/>

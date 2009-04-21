@@ -65,6 +65,8 @@
 
 					signInWindow.addEventListener("cSignInEvent", signInWindowCloseHandler);
 				}
+				else
+					Alert.show("You must be connected to the internet before signing in", "Error")
 			}
 			
 			/**
@@ -143,6 +145,8 @@
 					// createAccountWindow.alwaysInFront = true;
 					this.enabled = false;
 				}
+				else
+					Alert.show("You must be connected to the internet before registering", "Error")
 			}
 			
 			

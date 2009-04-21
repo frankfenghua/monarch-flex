@@ -507,15 +507,40 @@
 	<mx:LinkButton label="My Community Groups"  id="mCommunityGroupLabel" click="communityLabelClickHandler(event)" styleName="breadCrumb"  top="15" left="81" textAlign="left"/>
 	<mx:LinkButton label="{mCommunityGroupName}" id="mCommunityGroupNameLabel" click="communityNameLabelClickHandler(event)" styleName="breadCrumb"  top="15" left="256" textAlign="center"/>
 	<mx:LinkButton click="websiteNameLabelClickHandler(event)" id="mWebsiteNameLabel" top="15" left="346" textAlign="center" textDecoration="normal" visible="false"/>
-	<mx:Label text="RegEx Editor" id="mRexExEditorLabel" styleName="pageTitle"  top="13" left="344" textAlign="left"/>
+	<mx:Label text="Adapter Editor" id="mRexExEditorLabel" styleName="pageTitle"  top="13" left="344" textAlign="left"/>
 	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" id="rightButton" click="advanceWizard(event)" horizontalCenter="478" verticalCenter="-284" icon="@Embed(source='../images/arrow_right.png')" toolTip="next regex" width="30" height="30" />
 	<!--<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" horizontalCenter="370" verticalCenter="-284" id="mExitButton" click="exitButtonClickHandler(event)" toolTip="exit" icon="@Embed(source='../images/door_out.png')" width="30" height="30"/>-->
 	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" click="backWizard(event)" horizontalCenter="427" verticalCenter="-284" icon="@Embed(source='../images/arrow_left.png')" toolTip="previous regex" width="30" height="30"/>
-	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" click="regexHelp(event)" horizontalCenter="315" verticalCenter="-284" icon="@Embed(source='../images/help.png')" toolTip="help on this particular regex" width="30" height="30"/>
+	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" click="regexHelp(event)" horizontalCenter="375" verticalCenter="-284" icon="@Embed(source='../images/help.png')" toolTip="help on this particular regex" width="30" height="30"/>
 	
 	<mx:ViewStack x="10" y="55" id="mMainViewStack" width="992" height="551">
 		<mx:Canvas id="OpeningScreen" width="100%" height="100%">
-			<mx:Text text="Welcome to the Adapter Creation Wizard. The following screens will walk you through the creation of a custom plugin. &#xd;Click on the right arrow to continue." width="971.95" textAlign="center" horizontalCenter="-1" verticalCenter="-232" fontSize="12"/>
+			<mx:Text text="Welcome to the adapter editor.  Through the next few steps, you will be asked to specify regular expressions on how to crawl your website.  Regexes allow Monarch to locate where the threads are, what the posters' names are, how to get the the next page of posts on a thread, etc...&#xa;&#xa;We will be using the popular Perl style regular expression format.  When asked to match some part of your website, enclose the answer with ( ) and enclose your entire regex in / /, ending with an optional modifier.  Monarch will only look at the first ( ).  If you want to use parentheses strictly for grouping but not for matching, use (?:someStuff)." width="407.95" textAlign="left" horizontalCenter="-283" verticalCenter="5" fontSize="12" height="402"/>
+			<mx:Text width="407.95" textAlign="left" horizontalCenter="197" verticalCenter="28" fontSize="12" height="494" color="#FFFFFF"> 
+				<mx:htmlText>
+				<![CDATA[
+<b><font color="#9fd4da">.</font></b> <font color="#cccccc">= any character except newline</font>
+<b><font color="#d2e58c">/myRegex/</font><font color="#9fd4da">s</font></b> <font color="#cccccc">= modifier that allows . to recognize newline</font>
+<b><font color="#d2e58c">/myRegex/</font><font color="#9fd4da">i</font></b> <font color="#cccccc">= case insensitive modifier</font>
+<b><font color="#9fd4da">*</font></b> <font color="#cccccc">= 0 or more occurences</font>
+<b><font color="#9fd4da">+</font></b> <font color="#cccccc">= 1 or more occurences</font>
+<b><font color="#9fd4da">?</font></b> <font color="#cccccc">= 0 or 1 occurence</font>
+<b><font color="#9fd4da">{</font><font color="#d2e58c">3</font><font color="#9fd4da">}</font></b> <font color="#cccccc">= specific number of occurences</font>
+<b><font color="#9fd4da">(</font><font color="#d2e58c">answer</font><font color="#9fd4da">)</font></b> <font color="#cccccc">= match</font>
+<b><font color="#9fd4da">(?:</font><font color="#d2e58c">chunk</font><font color="#9fd4da">)</font></b> <font color="#cccccc">= grouping without match</font>
+<b><font color="#9fd4da">.*?</font></b> <font color="#cccccc">= greedy match</font>
+<b><font color="#9fd4da">^</font></b> <font color="#cccccc">= not</font>
+<b><font color="#9fd4da">\</font></b> <font color="#cccccc">= escape special characters</font>
+<b><font color="#9fd4da">\t</font></b> <font color="#cccccc">= tab</font>
+<b><font color="#9fd4da">\n</font></b> <font color="#cccccc">= newline</font>
+<b><font color="#9fd4da">\W</font></b> <font color="#cccccc">= whitespace</font>
+<b><font color="#9fd4da">[0-9]</font></b> <font color="#cccccc">= any number</font>
+<b><font color="#9fd4da">[A-Za-z0-9]</font></b> <font color="#cccccc">= alphanumeric</font>
+				]]>
+        		</mx:htmlText>
+			</mx:Text>
+			<mx:Label x="10" y="24" text="Info" styleName="subHead"/>
+			<mx:Label x="490" y="24" text="Useful Regex Things (TODO: find better word)" styleName="subHead"/>
 		</mx:Canvas>
 		<mx:Canvas id="RegexEntry" width="100%" height="100%" creationComplete="viewAppearanceHandler(event)" show="viewAppearanceHandler(event)">
 			<mx:Text id="infoText" text="Enter a regular expression that matches {currState}:" width="972" height="22" fontSize="12" horizontalCenter="0" verticalCenter="-256"/>
