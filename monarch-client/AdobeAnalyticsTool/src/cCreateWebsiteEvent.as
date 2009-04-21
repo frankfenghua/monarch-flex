@@ -1,8 +1,6 @@
 package
 {
 	import flash.events.Event;
-	
-	import mx.collections.ArrayCollection;
 
 	public class cCreateWebsiteEvent extends Event
 	{
@@ -19,6 +17,23 @@ package
 			super(type, bubbles, cancelable);
 		}
 		
+		// Returns a dictionary containing all the fields of this object that the server requires.
+		// This includes all regular expressions in the regularExpressionMap, the website name, and
+		// the website's crawling settings
+		public function getSettingsObject():Object 
+		{
+			var returnValue:Object = {};
+			for each(var fieldname:String in RegexUtilities.getAllRegexFieldnames()) {
+				returnValue[fieldname] = regularExpressionMap[RegexUtilities.fieldnameToEnglish(fieldname)]
+			}
+			
+			returnValue["websiteName"] = mWebsiteName;
+			returnValue["communityId"] = mCommunityGroupId;
+			returnValue["scrapeNumTopLevel"] = topLevelBreadth;
+			returnValue["scrapeInterval"] = crawlingPeriod;
+			
+			return returnValue;
+		}
 		///////////////////////////////////////////////////////////////////////////////////////////
 		//
 		//									DATA MEMBERS

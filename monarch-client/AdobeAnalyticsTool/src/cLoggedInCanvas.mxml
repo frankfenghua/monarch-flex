@@ -42,7 +42,7 @@
 			 */
 			private function RegularExpressionEditorBackClickedHandler(event:Event):void
 			{
-				mMyCommViewStack.selectedIndex = 2;
+				mMyCommViewStack.selectedIndex = previousView;
 			}
 			
 			/**
@@ -176,7 +176,9 @@
 				// to this class and handle it here (easier to follow)
 				websiteSettingsRequester.send({"websiteName":event.mWebsiteName});
 				
-
+				// Set this variable so we know which community is selected to show in
+				// the breadcrumbs
+				mCommunitySelectedName = event.mCommunityGroupName;
 			}
 			
 			/**
@@ -192,6 +194,7 @@
 				// handler
 				var evt:cCreateWebsiteEvent = new cCreateWebsiteEvent("edit");
 				evt.mWebsiteURL = websiteSettings["startPage"];
+				evt.mCommunityGroupName = mCommunitySelectedName;
 				
 				var regexList:Array = RegexUtilities.getAllRegexFieldnames();
 				
@@ -249,6 +252,7 @@
 			 */
 			private function editWebsiteLabelClickedHandler(event:cEditWebsiteEvent):void
 			{
+				previousView = mMyCommViewStack.selectedIndex;
 				mMyCommViewStack.selectedIndex = 4;
 			}
 			
@@ -317,6 +321,18 @@
 			private function regExProcessingCompleteHandler(event:cCreateWebsiteEvent):void
 			{
 				Alert.show("RegEx Processing Complete");
+				mMyCommViewStack.selectedIndex = previousView;
+				var settingsObj:Object = event.getSettingsObject();
+				
+				// Package up data and ship it to the server
+				websiteSettingsSetter.send(settingsObj);
+				// TODO: Return user to the screen that they were viewing prior to entering the regular expression
+				//  editor
+			}
+			
+			private function setSettingsReplyHandler(event:ResultEvent):void 
+			{
+				trace("Server reply:"+event.result);
 			}
 			
 			/**
@@ -348,6 +364,7 @@
 			 */
 			public function openRegularExpressionEditorCanvas(event:cCreateWebsiteEvent):void
 			{
+				previousView = mMyCommViewStack.selectedIndex;
 				mMyCommViewStack.selectedIndex = 6;
 				mRegularExpressionEditorCanvas.updateInformation(event);
 			}
@@ -404,12 +421,20 @@
 			private var mWebsiteSelectedType:String = "";
 			private var mWebsiteSelectedCreatedTime:String = "";
 			
+			private var mCommunitySelectedName:String = "";
+			
+			// This is used to store the view to restore after the user has completed the regular expression
+			//  wizard
+			private var previousView:int = -1;
+			
 			// the type of canvas to display : either MY_COMMUNITY or ALL_COMMUNITY
 			public var mCanvasType:String = "";
+			
 				
 		]]>
 	</mx:Script>
 	<mx:HTTPService id="websiteSettingsRequester" url="{Constants.SERVER_URL}testmon/Client/getWebsiteSettings.php" resultFormat="text" result="settingsResultHandler(event)"/>
+	<mx:HTTPService id="websiteSettingsSetter" url="{Constants.SERVER_URL}testmon/Client/setWebsiteSettings.php" resultFormat="text" result="setSettingsReplyHandler(event)"/>
 	<mx:ViewStack x="0" y="0" id="mNavigatorViewStack" width="1013" height="625">
 		<mx:ViewStack id="mMyCommViewStack" label="My Community Groups" width="1013" height="625">
 			<local:cCommunityGroupHomeCanvas id="mMyCommunityGroupHomeCanvas" 

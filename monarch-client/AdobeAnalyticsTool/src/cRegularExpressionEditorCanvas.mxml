@@ -65,11 +65,11 @@
 			 */
 			public function updateInformation(event:cCreateWebsiteEvent):void
 			{
-//				mCommunityGroupName = event.mCommunityGroupName;
-//				mCommunityGroupId = event.mCommunityGroupId;
-//				mWebsiteName = event.mWebsiteName;
-//				mWebsiteURL = event.mWebsiteURL;
-//				mWebsiteType = event.mWebsiteType;
+				mCommunityGroupName = event.mCommunityGroupName;
+				mCommunityGroupId = event.mCommunityGroupId;
+				mWebsiteName = event.mWebsiteName;
+				mWebsiteURL = event.mWebsiteURL;
+				mWebsiteType = event.mWebsiteType;
 				
 				urlToLoad = event.mWebsiteURL;
 				RegExProcessingCompleteEvent  = new cCreateWebsiteEvent("RegExProcessingCompleteEvent");
@@ -143,9 +143,9 @@
 			private function handlePageOfPostsError(event:Event):void {
 				// When there is an error in loading a page of posts, alert
 				// the user and return to previous page
-				Alert.show("Your regular expression for Thread URL did not return a valid URL");
-				mMainViewStack.selectedChild = RegexEntry;
-				currState = topLevelRegexes[topLevelRegexes.length - 1];
+				// Alert.show("Your regular expression for Thread URL did not return a valid URL");
+				// mMainViewStack.selectedChild = RegexEntry;
+				// currState = topLevelRegexes[topLevelRegexes.length - 1];
 				
 			}
 			
@@ -480,6 +480,7 @@
 			private var html:HTMLLoader;
 			
 			// name of the community group
+			[Bindable]
 			private var mCommunityGroupName:String = "";
 			// id of the community group
 			private var mCommunityGroupId:int = -1;
@@ -503,7 +504,7 @@
 	</mx:Script>
 	<mx:LinkButton label="Home" id="mHomeLabel" click="homeLabelClickHandler(event)"  top="15" left="9" textAlign="left"/>
 	<mx:LinkButton label="My Community Groups"  id="mCommunityGroupLabel" click="communityLabelClickHandler(event)" styleName="breadCrumb"  top="15" left="81" textAlign="left"/>
-	<mx:LinkButton id="mCommunityGroupNameLabel" click="communityNameLabelClickHandler(event)" styleName="breadCrumb"  top="15" left="256" textAlign="center"/>
+	<mx:LinkButton label="{mCommunityGroupName}" id="mCommunityGroupNameLabel" click="communityNameLabelClickHandler(event)" styleName="breadCrumb"  top="15" left="256" textAlign="center"/>
 	<mx:LinkButton click="websiteNameLabelClickHandler(event)" id="mWebsiteNameLabel" top="15" left="346" textAlign="center" textDecoration="normal" visible="false"/>
 	<mx:Label text="RegEx Editor" id="mRexExEditorLabel" styleName="pageTitle"  top="13" left="344" textAlign="left"/>
 	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" id="rightButton" click="advanceWizard(event)" horizontalCenter="478" verticalCenter="-284" icon="@Embed(source='../images/arrow_right.png')" toolTip="next regex" width="30" height="30" />

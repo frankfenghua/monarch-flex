@@ -105,7 +105,7 @@
 				analyzedPosts = statRequester.lastResult[0].general.analyzedPosts;
 				analyzedThreads = statRequester.lastResult[0].general.analyzedThreads;
 
-				trace(event.result);				
+				// trace(event.result);				
 				trace(statRequester.lastResult.general);
 				var chatterboxes:XMLList = statRequester.lastResult[0].general.chatterboxes.user;
 				trace(chatterboxes);		
