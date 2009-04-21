@@ -54,6 +54,7 @@
 	// Using these values, it either initializes the new website
 	// or updates information for an existing website
 	
+	print_r($_GET);
 	$database = new Database('master');
 	
 	// Remove all hacks and decode anything that could have had the entities for anything 
@@ -67,7 +68,7 @@
 	$firstPostMessage   = mysql_real_escape_string(html_entity_decode($_GET['firstPostMessage']));
 	$nextPageOfThreads  = mysql_real_escape_string(html_entity_decode($_GET['nextPageOfThreads']));
 	$replyMessage       = mysql_real_escape_string(html_entity_decode($_GET['replyMessage']));
-	$threadNumViews     = mysql_real_escape_string(html_entity_decode($_GET['threadNmViews']));
+	$threadNumViews     = mysql_real_escape_string(html_entity_decode($_GET['threadNumViews']));
 	$firstPostTime      = mysql_real_escape_string(html_entity_decode($_GET['firstPostTime']));
 	$nextPageOfPosts    = mysql_real_escape_string(html_entity_decode($_GET['nextPageOfPosts']));
 	$firstPostAuthorUrl = mysql_real_escape_string(html_entity_decode($_GET['firstPostAuthorUrl']));
@@ -129,6 +130,7 @@
 			"' . $threadNumViews    . '",
 			"' . $threadTitle       . '",
 			"' . $firstPostAuthor   . '",
+			"' . $firstPostAuthorUrl. '",
 			"' . $firstPostTime     . '",
 			"' . $firstPostMessage  . '",
 			"' . $replyAuthor       . '",
@@ -179,7 +181,6 @@
 	}
 	
 	echo 'website info succesfully saved';
-	print_r($_GET);
 
 
 ?>
