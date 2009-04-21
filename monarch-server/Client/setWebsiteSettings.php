@@ -174,7 +174,7 @@
 			replyAuthor       = "' . $replyAuthor       . '",
 			replyAuthorUrl    = "' . $replyAuthorUrl    . '",
 			replyTime         = "' . $replyTime         . '",
-			replyMessage      = "' . $replyMessage      . '")';
+			replyMessage      = "' . $replyMessage      . '"';
 			
 		$database->query($q);
 	}
