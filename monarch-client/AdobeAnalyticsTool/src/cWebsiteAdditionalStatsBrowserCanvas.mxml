@@ -108,38 +108,51 @@
 				// trace(event.result);				
 				trace(statRequester.lastResult.general);
 				var chatterboxes:XMLList = statRequester.lastResult[0].general.chatterboxes.user;
-				trace(chatterboxes);		
-				chatterboxName   = chatterboxes[0].@label;
-				chatterboxUrl    = chatterboxes[0].@url;
-				chatterboxRating = chatterboxes[0].@rating;
+				trace("0:"+chatterboxes[0]);
+				if(chatterboxes[0]) {		
+					chatterboxName   = chatterboxes[0].@label;
+					chatterboxUrl    = chatterboxes[0].@url;
+					chatterboxRating = chatterboxes[0].@rating;
+				}
 				
 				var newbies:XMLList = statRequester.lastResult[0].general.newbies.user;			
-				newbieName   = newbies[0].@label;
-				newbieUrl    = newbies[0].@url;
-				newbieRating = newbies[0].@rating;
+				if(newbies[0]) {
+					newbieName   = newbies[0].@label;
+					newbieUrl    = newbies[0].@url;
+					newbieRating = newbies[0].@rating;
+				}
 				
 				var veterans:XMLList = statRequester.lastResult[0].general.veterans.user;			
-				veteranName   = veterans[0].@label;
-				veteranUrl    = veterans[0].@url;
-				veteranRating = veterans[0].@rating;
+				if(veterans[0]) {
+					veteranName   = veterans[0].@label;
+					veteranUrl    = veterans[0].@url;
+					veteranRating = veterans[0].@rating;
+				}
 				
 				var livelyThreads:XMLList = statRequester.lastResult[0].general.livelyThreads.thread;			
+				if(livelyThreads[0]) {
 				livelyThreadTitle   = livelyThreads[0].@label;
 				livelyThreadUrl     = livelyThreads[0].@url;
 				livelyThreadRating  = livelyThreads[0].@rating;
+				}
 				
 				var linkMostMentioned:XMLList = statRequester.lastResult[0].links.mostMentioned;
-				mostMentionedBaseUrl = linkMostMentioned.@url;
-				mostMentionedCount   = linkMostMentioned.@rating;
+				if(linkMostMentioned) {
+					mostMentionedBaseUrl = linkMostMentioned.@url;
+					mostMentionedCount   = linkMostMentioned.@rating;
+				}
 				
 				var linkMostLiked:XMLList = statRequester.lastResult[0].links.mostLiked;
-				mostLikedBaseUrl = linkMostLiked.@url;
-				mostLikedRating  = linkMostLiked.@rating;
+				if(linkMostLiked) {
+					mostLikedBaseUrl = linkMostLiked.@url;
+					mostLikedRating  = linkMostLiked.@rating;
+				}
 				
 				var linkLeastLiked:XMLList = statRequester.lastResult[0].links.leastLiked;
-				leastLikedBaseUrl = linkLeastLiked.@url;
-				leastLikedRating  = linkLeastLiked.@rating;
-				
+				if(linkLeastLiked) {
+					leastLikedBaseUrl = linkLeastLiked.@url;
+					leastLikedRating  = linkLeastLiked.@rating;
+				}
 				/*
 				// Set keywords HTML
 				tempString = "";

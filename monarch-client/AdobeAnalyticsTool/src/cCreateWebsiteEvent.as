@@ -29,7 +29,7 @@ package
 			
 			returnValue["websiteName"] = mWebsiteName;
 			returnValue["type"] = mWebsiteType;
-			returnValue["userID"] = mUserId;
+			returnValue["userId"] = mUserId;
 			returnValue["startPage"] = mWebsiteURL;
 			returnValue["communityId"] = mCommunityGroupId;
 			returnValue["scrapeNumTopLevel"] = topLevelBreadth;
