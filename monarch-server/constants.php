@@ -24,7 +24,7 @@ define('REGEX_ENGLISH_WORD', 'a-zA-Z0-9');
 define('REGEX_SENTENCE_WO_PUNCT', '^\?\.!');
 define('REGEX_INPROPER_FIRST_CHAR_OF_WORD', 'a-z0-9\W');
 define('REGEX_SANDWICHED_PERIOD', '[a-zA-Z0-9]\.[a-zA-Z0-9]');
-define('REGEX_DOMAIN_SUFFIXES', 'com|net|info|org|me|tv|mobi|biz|us|ca|asia|ws|ag|am|at|be|cc|cn|de|eu|fm|fm|gs|jobs|jp|ms|nu|co|nz|tc|tw|idv|uk|vg');
+define('REGEX_DOMAIN_SUFFIXES', 'com|net|info|org|me|tv|mobi|biz|us|ca|asia|ws|ag|am|at|be|cc|cn|de|eu|fm|fm|gs|jobs|jp|ms|nu|co|nz|tc|tw|idv|uk|vg|ly');
 
 define('POST_HASH_LENGTH', 8); // helps in detecting whether a post is a duplicate or new
 

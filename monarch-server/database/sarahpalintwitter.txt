@@ -1,0 +1,228 @@
+-- phpMyAdmin SQL Dump
+-- version 3.1.1
+-- http://www.phpmyadmin.net
+--
+-- Host: localhost
+-- Generation Time: Apr 21, 2009 at 06:19 PM
+-- Server version: 5.1.30
+-- PHP Version: 5.2.8
+
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+
+--
+-- Database: `sarahpalintwitter`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `keywords`
+--
+
+CREATE TABLE IF NOT EXISTS `keywords` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `word` varchar(30) COLLATE latin1_german2_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_german2_ci AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `keywords`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `keywordstats`
+--
+
+CREATE TABLE IF NOT EXISTS `keywordstats` (
+  `keyword` smallint(5) unsigned NOT NULL,
+  `stat` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `keywordstats`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `links`
+--
+
+CREATE TABLE IF NOT EXISTS `links` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `baseUrl` varchar(61) COLLATE latin1_german2_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `baseUrl` (`baseUrl`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_german2_ci AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `links`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `linkstats`
+--
+
+CREATE TABLE IF NOT EXISTS `linkstats` (
+  `link` smallint(5) unsigned NOT NULL,
+  `stat` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `linkstats`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `posts`
+--
+
+CREATE TABLE IF NOT EXISTS `posts` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user` int(10) unsigned NOT NULL,
+  `time` int(10) unsigned NOT NULL,
+  `length` int(10) unsigned NOT NULL,
+  `thread` int(10) unsigned NOT NULL,
+  `hash` varchar(8) COLLATE latin1_german2_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_german2_ci AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `posts`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `regexes`
+--
+
+CREATE TABLE IF NOT EXISTS `regexes` (
+  `startPage` varchar(512) DEFAULT '//',
+  `nextPageOfThreads` varchar(512) DEFAULT '//',
+  `nextPageOfPosts` varchar(512) DEFAULT '//',
+  `threadUrl` varchar(512) DEFAULT '//',
+  `threadNumViews` varchar(512) DEFAULT '//',
+  `threadTitle` varchar(512) DEFAULT '//',
+  `firstPostAuthor` varchar(512) DEFAULT '//',
+  `firstPostAuthorUrl` varchar(512) NOT NULL DEFAULT '//',
+  `firstPostTime` varchar(512) DEFAULT '//',
+  `firstPostMessage` varchar(512) DEFAULT '//',
+  `replyAuthor` varchar(512) DEFAULT '//',
+  `replyAuthorUrl` varchar(512) NOT NULL DEFAULT '//',
+  `replyTime` varchar(512) DEFAULT '//',
+  `replyMessage` varchar(512) DEFAULT '//'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `regexes`
+--
+
+INSERT INTO `regexes` (`startPage`, `nextPageOfThreads`, `nextPageOfPosts`, `threadUrl`, `threadNumViews`, `threadTitle`, `firstPostAuthor`, `firstPostAuthorUrl`, `firstPostTime`, `firstPostMessage`, `replyAuthor`, `replyAuthorUrl`, `replyTime`, `replyMessage`) VALUES
+('http://twitter.com/SarahPalin', '//', '//', '#latest-status" id="status_[0-9]+"><span class="status-body"><span class="entry-content">(?:.*?)</span><span class="meta entry-meta"><a href="(.*?)/status/#', '//', '#\\n[\\s]{4}(.*?)\\n[\\s]{2}</h2>#', '#latest-status" id="status_[0-9]+"><span class="status-body"><span class="entry-content">(?:.*?)</span><span class="meta entry-meta"><a href="(?:.*?)/status/[0-9]+" class="entry-date" rel="bookmark"><span class="published">(?:.*?)</span></a> <span>from <a href="(?:.*?)">(.*?)</a>#', '#latest-status" id="status_[0-9]+"><span class="status-body"><span class="entry-content">(?:.*?)</span><span class="meta entry-meta"><a href="(?:.*?)/status/[0-9]+" class="entry-date" rel="bookmark"><span class="published">(?:.*?)</span></a> <span>from <a href="(.*?)">#', '#latest-status" id="status_[0-9]+"><span class="status-body"><span class="entry-content">(?:.*?)</span><span class="meta entry-meta"><a href="(?:.*?)/status/[0-9]+" class="entry-date" rel="bookmark"><span class="published">(?:about )?(.*?)</span>#', '#latest-status" id="status_[0-9]+"><span class="status-body"><span class="entry-content">(.*?)</span>#s', '#<li class="hentry status u-(?:.*?)" id="status_[0-9]+"><span class="status-body"><span class="entry-content">(?:.*?)</span><span class="meta entry-meta"><a href="(?:.*?)" class="entry-date" rel="bookmark"><span class="published">(?:about )?(?:.*?)</span></a> <span>from <a href="(?:.*?)">(.*?)</a>#', '#<li class="hentry status u-(?:.*?)" id="status_[0-9]+"><span class="status-body"><span class="entry-content">(?:.*?)</span><span class="meta entry-meta"><a href="(?:.*?)" class="entry-date" rel="bookmark"><span class="published">(?:about )?(?:.*?)</span></a> <span>from <a href="(.*?)"#', '#<li class="hentry status u-(?:.*?)" id="status_[0-9]+"><span class="status-body"><span class="entry-content">(?:.*?)</span><span class="meta entry-meta"><a href="(?:.*?)" class="entry-date" rel="bookmark"><span class="published">(?:about )?(.*?)<#', '#<li class="hentry status u-(?:.*?)" id="status_[0-9]+"><span class="status-body"><span class="entry-content">(.*?)</span>#s');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `stats`
+--
+
+CREATE TABLE IF NOT EXISTS `stats` (
+  `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+  `time` int(10) unsigned NOT NULL DEFAULT '0',
+  `count` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `goodness` float NOT NULL DEFAULT '0',
+  `englishProficiency` float unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `stats`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `threads`
+--
+
+CREATE TABLE IF NOT EXISTS `threads` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `url` varchar(200) COLLATE latin1_german2_ci DEFAULT NULL,
+  `posts` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `views` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `title` varchar(50) COLLATE latin1_german2_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_german2_ci AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `threads`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `threadstats`
+--
+
+CREATE TABLE IF NOT EXISTS `threadstats` (
+  `thread` int(10) unsigned NOT NULL,
+  `keyword` int(10) unsigned NOT NULL,
+  `stat` int(10) unsigned NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `threadstats`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE IF NOT EXISTS `users` (
+  `url` varchar(200) COLLATE latin1_german2_ci DEFAULT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(40) COLLATE latin1_german2_ci NOT NULL,
+  `posts` int(10) unsigned NOT NULL DEFAULT '1',
+  `created` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`),
+  UNIQUE KEY `name_2` (`name`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_german2_ci AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `users`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `userstats`
+--
+
+CREATE TABLE IF NOT EXISTS `userstats` (
+  `user` int(10) unsigned NOT NULL,
+  `keyword` int(10) unsigned NOT NULL,
+  `stat` int(10) unsigned NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `userstats`
+--
+
