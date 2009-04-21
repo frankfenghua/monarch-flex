@@ -8,7 +8,6 @@
 	ini_set('display_errors','1');
 
 	require_once('../database/Database.php');
-	require_once('../Utilities.php');
 
 	// ======================================================
 	// Function definitions
