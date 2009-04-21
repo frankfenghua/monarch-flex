@@ -9,7 +9,6 @@
 	ini_set('display_errors','1');
 
 	require_once('../database/Database.php');
-	//require_once('../Utilities.php'); // TODO: what is this file?
 
 	// ======================================================
 	// Function definitions
@@ -26,9 +25,9 @@
 	// ==Website Information==
 	// =======================
         //    websiteName
-        //    communityId
-		//    userId TODO: ############################## you didn't have this ###############################
-		//    type   TODO: ############################## you didn't have this ###############################
+        //    communityId (undefined for existing website)
+	//    userId  (undefined for existing website)
+	//    type    (undefined for existing website)
 	// =======================
 	// ==Regular Expressions==
 	// =======================
@@ -45,7 +44,7 @@
         //    replyAuthorUrl
         //    replyTime
         //    threadUrl
-		//    startPage   TODO: ############################## you didn't have this ###############################
+	//    startPage    
 	// =======================
 	// ==Scraping Parameters==
 	// =======================
@@ -180,7 +179,7 @@
 	}
 	
 	echo 'website info succesfully saved';
-
 	print_r($_GET);
+
 
 ?>
