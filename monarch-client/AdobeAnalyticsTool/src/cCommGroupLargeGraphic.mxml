@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<controls:CanvasButton xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:controls="controls.*" creationComplete="showCanvasHandler(event)" click="graphicClickedHandler(event)" width="390" height="86">
+<controls:CanvasButton useHandCursor="true" buttonMode="true" xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:controls="controls.*" creationComplete="showCanvasHandler(event)" click="graphicClickedHandler(event)" width="390" height="86">
 	
 	<mx:Metadata>
 		[Event(name="CommGroupGraphicClickedEvent", type="cCommGroupGraphicClickedEvent")]
@@ -209,10 +209,10 @@
 		]]>
 	</mx:Script>
 	<mx:Canvas width="377" id="mMainPanelCanvas" horizontalCenter="-1" verticalCenter="0">
-		<mx:Label x="89" y="34" text="Date created : {mDateCreated}" width="276" id="mDateLabel" styleName="communitySelectStat" />
-		<mx:Label x="89" y="45" text="Created by : {mCreator}" width="276" id="mCreatorLabel" styleName="communitySelectStat" />
-		<mx:Label x="89" y="57" text="Number of Websites : {mNumWebsites}" width="276" id="mNumWebsiteLabel" styleName="communitySelectStat" />
-		<mx:Label x="89" y="12" text="{mCommGroupName}" width="276" id="mCommNameLabel" styleName="communitySelectName" />
+		<mx:Label x="89" y="29" text="Created : {mDateCreated}" width="276" id="mDateLabel" styleName="communitySelectStat" />
+		<mx:Label x="89" y="40" text="Crator : {mCreator}" width="276" id="mCreatorLabel" styleName="communitySelectStat" />
+		<mx:Label x="89" y="52" text="Websites : {mNumWebsites}" width="276" id="mNumWebsiteLabel" styleName="communitySelectStat" />
+		<mx:Label x="89" y="6" text="{mCommGroupName}" width="276" id="mCommNameLabel" styleName="communitySelectName" />
 		<mx:Image x="15" y="6" width="68" height="68" source="@Embed('../images/thumbnailBorder.png')" />
 		<mx:Image x="17" y="8" width="64" height="64" source="{mCommImageURL}" id="mImageCanvas">
 		</mx:Image>

@@ -99,10 +99,11 @@
 				var i:int = 0; // used as counter in this function
 
 				// Assign to bound variables to implicitly change the text
-				numberOfUsers = statRequester.lastResult[0].general.numberUsers;
-				postsPerDay = statRequester.lastResult[0].general.postsPerDay;
-				postsToday = statRequester.lastResult[0].general.postsToday;
-				analyzedPosts = statRequester.lastResult[0].general.analyzedPosts;
+				url             = statRequester.lastResult[0].general.url;
+				numberOfUsers   = statRequester.lastResult[0].general.numberUsers;
+				postsPerDay     = statRequester.lastResult[0].general.postsPerDay;
+				postsToday      = statRequester.lastResult[0].general.postsToday;
+				analyzedPosts   = statRequester.lastResult[0].general.analyzedPosts;
 				analyzedThreads = statRequester.lastResult[0].general.analyzedThreads;
 
 				// trace(event.result);				
@@ -329,6 +330,9 @@
 			private var mStatsArray:ArrayCollection;
 			
 			[Bindable]
+			private var url:String = "";
+			
+			[Bindable]
 			private var numberOfUsers:int = 0;
 			
 			[Bindable]
@@ -415,18 +419,25 @@
 	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" label="Edit Website" styleName="buttonBlack" click="editWebsiteButtonClickHandler(event)" id="mEditWebsiteButton" horizontalCenter="447" verticalCenter="-293" fontWeight="bold" fontStyle="normal" cornerRadius="5" icon="@Embed(source='../images/pencil.png')"/>
 	<mx:Panel x="6" y="50" width="494.5" height="349" layout="absolute" title="General">
 		<mx:Label 
+			text="website URL:" 
+			x="10" 
+		 	y="10"
+			toolTip="the entry page of this website"
+			styleName="websiteGeneralInfoCategory"
+		/>
+		<mx:LinkButton
+			label="{url}"
+			x="130" 
+		 	y="10"
+			toolTip="the entry page of this website"
+			click="navigateToURL(new URLRequest('http://www.error.com'), '_blank')"
+		/>
+		<mx:Label 
 			text="posts per day:" 
 			x="10" 
 		 	y="10"
 			toolTip="the average number of new posts per day"
 			styleName="websiteGeneralInfoCategory"
-		/>
-		<mx:Label 
-			text="{postsPerDay}" 
-			x="130" 
-		 	y="10"
-			toolTip="the average number of new posts per day"
-			styleName="websiteGeneralInfoRating"
 		/>
 		<mx:Label 
 			text="posts today:" 

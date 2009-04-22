@@ -71,6 +71,11 @@ class DetailStats
 	// ------------------------------------------------------------------------
 	private function general()
 	{
+		// website URL
+		$q = 'SELECT startPage FROM regexes';
+		$q = $this->database->fetch($q);
+		echo '<url>' . $q[0] . '</url>';
+		
 		// total number of users
 		$q = 'SELECT COUNT(*) FROM users';
 		$q = $this->database->fetch($q);
