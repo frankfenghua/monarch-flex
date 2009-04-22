@@ -88,6 +88,27 @@
 			{
 				Alert.show("Problems");
 			}
+		
+			/**
+			 * converts unix timestamp to MM/DD/YYYY
+			 */
+			private function unixToDate(unix:int):String
+			{
+				var date:Date      = new Date(unix * 1000);     
+				var day:Number     = date.getDay();
+				var month:Number   = date.getMonth() + 1;
+				var year:Number    = date.getFullYear();
+				
+				return month + "/" + day + "/" + year;
+			}
+			
+			/**
+			 *  turns a really long-winded float to only have 2 numbers after the decimal
+			 */
+			private function twoDecimalPrecision(preciseNumber:Number):Number
+			{
+				return Math.round(preciseNumber *100) / 100;
+			}
 			
 			/**
 			 * Called when the stat request returns
@@ -101,7 +122,7 @@
 				// Assign to bound variables to implicitly change the text
 				url             = statRequester.lastResult[0].general.url;
 				numberOfUsers   = statRequester.lastResult[0].general.numberUsers;
-				postsPerDay     = statRequester.lastResult[0].general.postsPerDay;
+				postsPerDay     = twoDecimalPrecision(Number(statRequester.lastResult[0].general.postsPerDay));
 				postsToday      = statRequester.lastResult[0].general.postsToday;
 				analyzedPosts   = statRequester.lastResult[0].general.analyzedPosts;
 				analyzedThreads = statRequester.lastResult[0].general.analyzedThreads;
@@ -120,14 +141,14 @@
 				if(newbies[0]) {
 					newbieName   = newbies[0].@label;
 					newbieUrl    = newbies[0].@url;
-					newbieRating = newbies[0].@rating;
+					newbieRating = unixToDate(int(newbies[0].@rating));
 				}
 				
 				var veterans:XMLList = statRequester.lastResult[0].general.veterans.user;			
 				if(veterans[0]) {
 					veteranName   = veterans[0].@label;
 					veteranUrl    = veterans[0].@url;
-					veteranRating = veterans[0].@rating;
+					veteranRating = unixToDate(int(veterans[0].@rating));
 				}
 				
 				var livelyThreads:XMLList = statRequester.lastResult[0].general.livelyThreads.thread;			
@@ -146,13 +167,13 @@
 				var linkMostLiked:XMLList = statRequester.lastResult[0].links.mostLiked;
 				if(linkMostLiked) {
 					mostLikedBaseUrl = linkMostLiked.@url;
-					mostLikedRating  = linkMostLiked.@rating;
+					mostLikedRating  = twoDecimalPrecision(Number(linkMostLiked.@rating));
 				}
 				
 				var linkLeastLiked:XMLList = statRequester.lastResult[0].links.leastLiked;
 				if(linkLeastLiked) {
 					leastLikedBaseUrl = linkLeastLiked.@url;
-					leastLikedRating  = linkLeastLiked.@rating;
+					leastLikedRating  = twoDecimalPrecision(Number(linkLeastLiked.@rating));
 				}
 				/*
 				// Set keywords HTML
@@ -363,7 +384,7 @@
 			private var newbieUrl:String = "http://www.error.com"; // TODO: create 404 error page
 			
 			[Bindable]
-			private var newbieRating:Number = 0;
+			private var newbieRating:String = "";
 			
 			[Bindable]
 			private var veteranName:String = "not enough activity on website for this stat";
@@ -372,7 +393,7 @@
 			private var veteranUrl:String = "http://www.error.com"; // TODO: create 404 error page
 			
 			[Bindable]
-			private var veteranRating:Number = 0;
+			private var veteranRating:String = "";
 			
 			[Bindable]
 			private var livelyThreadTitle:String = "not enough activity on website for this stat";
@@ -427,7 +448,7 @@
 		/>
 		<mx:LinkButton
 			label="{url}"
-			x="130" 
+			x="121" 
 		 	y="10"
 			toolTip="the entry page of this website"
 			click="navigateToURL(new URLRequest('http://www.error.com'), '_blank')"
@@ -435,147 +456,154 @@
 		<mx:Label 
 			text="posts per day:" 
 			x="10" 
-		 	y="10"
+		 	y="40"
 			toolTip="the average number of new posts per day"
 			styleName="websiteGeneralInfoCategory"
 		/>
 		<mx:Label 
+			text="{postsPerDay}" 
+			x="130" 
+		 	y="40"
+			toolTip="the average number of new posts per day"
+			styleName="websiteGeneralInfoRating"
+		/>
+		<mx:Label 
 			text="posts today:" 
 			x="10" 
-			y="40" 
+			y="70" 
 			toolTip="the number of new posts made today"
 			styleName="websiteGeneralInfoCategory"
 		/>
 		<mx:Label 
 			text="{postsToday}" 
 			x="130" 
-		 	y="40"
+		 	y="70"
 			toolTip="the number of new posts made today"
 			styleName="websiteGeneralInfoRating"
 		/>
 		<mx:Label 
 			text="posts analyzed:" 
 			x="10" 
-			y="70"
+			y="100"
 			toolTip="the total number of posts Monarch has analyzed since you added this website"
 			styleName="websiteGeneralInfoCategory"
 		/>
 		<mx:Label 
 			text="{analyzedPosts}"
 			x="130" 
-		 	y="70"
+		 	y="100"
 			toolTip="the total number of posts Monarch has analyzed since you added this website"
 			styleName="websiteGeneralInfoRating"
 		/>
 		<mx:Label 
 			text="threads analyzed:" 
 			x="10"
-			y="100"
+			y="130"
 			toolTip="the total number of posts Monarch has analyzed since you added this website"
 			styleName="websiteGeneralInfoCategory"
 		/>
 		<mx:Label 
 			text="{analyzedThreads}" 
 			x="130" 
-		 	y="100"
+		 	y="130"
 			toolTip="the total number of posts Monarch has analyzed since you added this website"
 			styleName="websiteGeneralInfoRating"
 		/>
 		<mx:Label 
 			text="users:" 
 			x="10"
-			y="130"
+			y="160"
 			toolTip="the total number of people that have posted at least once since you added this site to Monarch"
 			styleName="websiteGeneralInfoCategory"
 		/>
 		<mx:Label 
 			text="{numberOfUsers}" 
 			x="130" 
-		 	y="130"
+		 	y="160"
 			toolTip="the total number of people that have posted at least once since you added this site to Monarch"
 			styleName="websiteGeneralInfoRating"
 		/>
 		<mx:Label 
 			text="chatterbox:" 
 			x="10"
-			y="160"
+			y="190"
 			toolTip="user with most posts"
 			styleName="websiteGeneralInfoCategory"
 		/>
 		<mx:Label 
 			text="{chatterboxRating} posts" 
 			x="130"
-			y="160"
+			y="190"
 			toolTip="user with most posts"
 			styleName="websiteGeneralInfoRating"
 		/>
 		<mx:LinkButton
 			label="{chatterboxName}"
 			x="233" 
-		 	y="157"
+		 	y="187"
 			toolTip="user with most posts"
 			click="navigateToURL(new URLRequest('http://www.error.com'), '_blank')"
 		/>
 		<mx:Label 
 			text="newbie:" 
 			x="10"
-			y="190"
+			y="220"
 			toolTip="the newest person that joined this website"
 			styleName="websiteGeneralInfoCategory"
 		/>
 		<mx:Label 
 			text="joined {newbieRating}" 
 			x="130"
-			y="190"
+			y="220"
 			toolTip="user with most posts"
 			styleName="websiteGeneralInfoRating"
 		/>
 		<mx:LinkButton
 			label="{newbieName}"
 			x="233" 
-		 	y="187"
+		 	y="217"
 			toolTip="the newest user that joined this website"
 			click="navigateToURL(new URLRequest('http://www.error.com'), '_blank')"
 		/>
 		<mx:Label 
 			text="veteran:" 
 			x="10"
-			y="220"
+			y="250"
 			toolTip="the user that joined the website earliest (that Monarch knows of)"
 			styleName="websiteGeneralInfoCategory"
 		/>
 		<mx:LinkButton
 			label="{veteranName}"
 			x="233" 
-		 	y="217"
+		 	y="247"
 			toolTip="the user that joined the website earliest (that Monarch knows of)"
 			click="navigateToURL(new URLRequest('http://www.error.com'), '_blank')"
 		/>
 		<mx:Label 
 			text="joined {veteranRating}" 
 			x="130"
-			y="220"
+			y="250"
 			toolTip="user with most posts"
 			styleName="websiteGeneralInfoRating"
 		/>
 		<mx:Label 
 			text="lively thread:" 
 			x="10"
-			y="250"
+			y="280"
 			toolTip="the thread with the most replies (that Monarch knows of)"
 			styleName="websiteGeneralInfoCategory"
 		/>
 		<mx:Label 
 			text="{livelyThreadRating} posts" 
 			x="130"
-			y="250"
+			y="280"
 			toolTip="user with most posts"
 			styleName="websiteGeneralInfoRating"
 		/>
 		<mx:LinkButton
 			label="{livelyThreadTitle}"
 			x="233" 
-		 	y="247"
+		 	y="277"
 			toolTip="the thread with the most replies (that Monarch knows of)"
 			click="navigateToURL(new URLRequest('http://www.error.com'), '_blank')"
 		/>
@@ -589,7 +617,7 @@
 			styleName="websiteGeneralInfoCategory"
 		/>
 		<mx:Label 
-			text="{mostMentionedCount}x" 
+			text="{mostMentionedCount} times" 
 			x="130"
 			y="10"
 			toolTip="the external base URL that was most linked to"

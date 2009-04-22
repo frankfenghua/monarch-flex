@@ -515,7 +515,7 @@
 	
 	<mx:ViewStack x="10" y="55" id="mMainViewStack" width="992" height="551">
 		<mx:Canvas id="OpeningScreen" width="100%" height="100%">
-			<mx:Text text="Welcome to the adapter editor.  Through the next few steps, you will be asked to specify regular expressions on how to crawl your website.  Regexes allow Monarch to locate where the threads are, what the posters' names are, how to get the the next page of posts on a thread, etc...&#xa;&#xa;We will be using the popular Perl style regular expression format.  When asked to match some part of your website, enclose the answer with ( ) and enclose your entire regex in / /, ending with an optional modifier.  Monarch will only look at the first ( ).  If you want to use parentheses strictly for grouping but not for matching, use (?:someStuff)." width="407.95" textAlign="left" horizontalCenter="-283" verticalCenter="5" fontSize="12" height="402"/>
+			<mx:Text text="Welcome to the adapter editor.  Through the next few steps, you will be asked to specify regular expressions on how to crawl your website.  Regexes allow Monarch to locate where the threads are, what the posters' names are, how to get the the next page of posts on a thread, etc...&#xa;&#xa;We will be using the popular Perl style regular expression format.  When asked to match some part of your website, enclose the answer with ( ) and enclose your entire regex in / /, ending with an optional modifier.  Monarch will only look at the first ( ).  If you want to use parentheses strictly for grouping but not for matching, use (?:someStuff).&#xa;&#xa;Click the next arrow to the upper right to begin!" width="407.95" textAlign="left" horizontalCenter="-283" verticalCenter="5" fontSize="12" height="402"/>
 			<mx:Text width="407.95" textAlign="left" horizontalCenter="197" verticalCenter="28" fontSize="12" height="494" color="#FFFFFF"> 
 				<mx:htmlText>
 				<![CDATA[
@@ -585,7 +585,7 @@
 			<mx:Text x="91" y="178" text="Note: we will do our best to accomodate your crawling preferences. However, please note that we are in possession of only finite resources. As a general guideline, the default values should be suitable for most sites." width="441" fontSize="12"/>
 		</mx:Canvas>
 	</mx:ViewStack>
-	<mx:HRule width="993" height="14.56" verticalCenter="-261" horizontalCenter="0"  />
+	<mx:HRule width="993" verticalCenter="-261" horizontalCenter="0"  />
 	<mx:Label text="&gt;" styleName="breadCrumbSeparator"  fontWeight="bold" top="13" left="61" id="mSep1"/>
 	<mx:Label text="&gt;" styleName="breadCrumbSeparator"  top="13" left="232" id="mSep2"/>
 	<mx:Label text="&gt;" styleName="breadCrumbSeparator"  top="13" left="322" id="mSep3"/>
