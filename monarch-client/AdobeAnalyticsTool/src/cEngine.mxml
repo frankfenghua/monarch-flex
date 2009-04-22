@@ -241,6 +241,7 @@
     					var communtyGroupName:String = communityGroupList.elements("communityGroupName");
     					var communityGroupCreatedTime:int = int(communityGroupList.elements("communityGroupCreatedTime"));
     					var communityGroupCreator:String = communityGroupList.elements("communityGroupCreator");
+    					var communityGroupAccesses:int = int(communityGroupList.elements("communityGroupAccesses"));
     					
     					var communityGroupWebsitesList:XMLListCollection = new 
     					                 XMLListCollection(communityGroupList.elements("CommunityGroup" + i + "Websites"));	
@@ -285,7 +286,8 @@
     																				  communityGroupCreatedTime,
     																				  communityGroupCreator,
     																				  websites,
-    																				  keywords);
+    																				  keywords,
+    																				  communityGroupAccesses);
 					  	communities.addItem(community);														  
     				}
     				
@@ -300,7 +302,8 @@
     					var _communtyGroupName:String = otherCommunityGroupList.elements("communityGroupName");
     					var _communityGroupCreatedTime:int = int(otherCommunityGroupList.elements("communityGroupCreatedTime"));
     					var _communityGroupCreator:String = otherCommunityGroupList.elements("communityGroupCreator");
-
+						var _communityGroupAccesses:int = int(otherCommunityGroupList.elements("communityGroupAccesses"));
+    					
     					var _communityGroupWebsitesList:XMLListCollection = new 
     					                 XMLListCollection(otherCommunityGroupList.elements("CommunityGroup" + n + "Websites"));	
     					var _numberOfCommunityGroupWebsites:int = int(_communityGroupWebsitesList.elements("NumberOfWebsites"));
@@ -344,7 +347,8 @@
     																				   _communityGroupCreatedTime,
     																				   _communityGroupCreator,
     																				   _websites,
-    																				   _keywords);														   													
+    																				   _keywords,
+    																				   _communityGroupAccesses);														   													
 					  	otherCommunities.addItem(_community);													  
     				}
     				    				
@@ -389,7 +393,7 @@
     					var _communtyGroupName:String = otherCommunityGroupList.elements("communityGroupName");
     					var _communityGroupCreatedTime:int = int(otherCommunityGroupList.elements("communityGroupCreatedTime"));
     					var _communityGroupCreator:String = otherCommunityGroupList.elements("communityGroupCreator");
-    					
+    					var _communityGroupAccesses:int = int(otherCommunityGroupList.elements("communityGroupAccesses"));
     					var _communityGroupWebsitesList:XMLListCollection = new 
     					                 XMLListCollection(otherCommunityGroupList.elements("CommunityGroup" + n + "Websites"));	
     					var _numberOfCommunityGroupWebsites:int = int(_communityGroupWebsitesList.elements("NumberOfWebsites"));
@@ -433,7 +437,8 @@
     																				   _communityGroupCreatedTime,
     																				   _communityGroupCreator,
     																				   _websites,
-    																				   _keywords);														   													
+    																				   _keywords,
+    																				   _communityGroupAccesses);														   													
 					  	otherCommunities.addItem(_community);													  
     				}
     				    				
@@ -455,7 +460,7 @@
     		/*
     		 *
     		 */
-    		private function addCommintyHTTPServiceResultHandler(event:ResultEvent):void
+    		private function addCommunityHTTPServiceResultHandler(event:ResultEvent):void
     		{	    			
     			var xmlTree:XML = XML(event.result);
     			var  newCommunityInformationList:XMLListCollection = new XMLListCollection(xmlTree.elements("CommunityInformation"));
@@ -626,13 +631,13 @@
 			<password>{mPassword}</password>
 		</mx:request>
 	</mx:HTTPService>	
-	<mx:HTTPService id="mLogInRequestHTTPService" result="logInHTTPServiceResultHandler(event)" url="{Constants.SERVER_URL}monarch/Client/login.php" resultFormat="e4x" method="GET" useProxy="false">
+	<mx:HTTPService id="mLogInRequestHTTPService" result="logInHTTPServiceResultHandler(event)" url="{Constants.SERVER_URL}testmon/Client/login.php" resultFormat="e4x" method="GET" useProxy="false">
 		<mx:request xmlns="">
 			<email>{mEmail}</email>
 			<password>{mPassword}</password>
 		</mx:request>
 	</mx:HTTPService>
-	<mx:HTTPService id="mAddCommunityRequestHTTPService" result="addCommintyHTTPServiceResultHandler(event)" url="{Constants.SERVER_URL}monarch/Client/insertCommunity.php" resultFormat="e4x" method="GET" useProxy="false">
+	<mx:HTTPService id="mAddCommunityRequestHTTPService" result="addCommunityHTTPServiceResultHandler(event)" url="{Constants.SERVER_URL}monarch/Client/insertCommunity.php" resultFormat="e4x" method="GET" useProxy="false">
 		<mx:request xmlns="">
 			<communityName>{mCommunityName}</communityName>
 			<userId>{mUserId}</userId>

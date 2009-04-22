@@ -74,16 +74,18 @@
 				}
 			}
 			
-			// TODO: no backend
 			// shows the newest community groups 
 			private function newestCommunities(event:Event):void
 			{
 				mNewestButton.enabled = false;
 				mMostViewedButton.enabled = true;
 				mAlphabeticalButton.enabled = true;
+				
+				/* Reorder communities using new criteria and re-show them */
+				sortCommunities(newestSortFunction) ;
+				showCommunities();
 			}
 			
-			// TODO: no backend
 			// shows the most viewed community groups
 			private function mostViewedCommunities(event:Event):void
 			{
@@ -91,16 +93,21 @@
 				mMostViewedButton.enabled = false;
 				mAlphabeticalButton.enabled = true;
 
+				/* Reorder communities using new criteria and re-show them */
+				sortCommunities(mostViewedSortFunction) ;
+				showCommunities();
 			}
 			
-			// TODO: no backend
 			// shows the community groups in alphabetical order
 			private function alphabeticalCommunities(event:Event):void
 			{
 				mNewestButton.enabled = true;
 				mMostViewedButton.enabled = true;
 				mAlphabeticalButton.enabled = false;
-
+				
+				/* Reorder communities using new criteria and re-show them */
+				sortCommunities(alphabeticalSortFunction);
+				showCommunities();
 			}
 			
 			
@@ -134,6 +141,14 @@
 			public function updateInformation(userAccountInformation:cAccountInformation,
 											  canvasType:String):void
 			{
+				
+				// Initialize canvas type
+				mCanvasType = canvasType;
+				if(canvasType == this.OTHER_COMMUNITY) {
+					mCreateCommButton.visible = false;
+					mHomeLoggedOutAccountLabel.text = "Other Community Groups";
+				}
+
 				mUserAccountInformation = userAccountInformation;
 				
 				mMyCommVBox.removeAllChildren();
@@ -143,30 +158,68 @@
 				if(canvasType == (new cCommunityGroupSelectionCanvas()).OTHER_COMMUNITY) {
 					communities = userAccountInformation.mOtherCommunities;
 				}
+				trace("Selection update : "+communities.length);
+				mCommunityGraphicList = new Array();
+				
+				// To start, order communities by newness
+				communities.source.sort(newestSortFunction);
+				 
 				for(i = 0; i < communities.length; i++) {
-					communityGroupEntry = cCommunityGroupEntry(communities.getItemAt(i));
 					var commGroupGraphicEntry:cCommGroupLargeGraphic = new cCommGroupLargeGraphic();
+					mCommunityGraphicList.push(commGroupGraphicEntry);
 					commGroupGraphicEntry.addEventListener("cCommGroupGraphicClickedEvent", commGroupGraphicClickedHandler);
 					var justCreated:Boolean = false;
+					
+												
+					mMyCommVBox.addChild(commGroupGraphicEntry);
+				}	
+				showCommunities();
+				
+			}
+			
+			/*
+			 * Populates the community graphic entries using the ordering of the member communities array
+			 */
+			private function showCommunities():void {
+				var justCreated:Boolean;
+				var communities:ArrayCollection;
+				
+				if(mCanvasType == (new cCommunityGroupSelectionCanvas()).OTHER_COMMUNITY) {
+					communities = mUserAccountInformation.mOtherCommunities;
+				}
+				else {
+				    communities = mUserAccountInformation.mCommunities;
+				}
+				
+				trace("CommLength = "+communities.length);
+				for(var i:int = 0; i < communities.length; i++) {
+					var communityGroupEntry:cCommunityGroupEntry = cCommunityGroupEntry(communities.getItemAt(i));
+										
+					/* I'm not sure what this is doing: RFC */
 					if(communityGroupEntry.mJustCreated) {
 						justCreated = true;
 						communityGroupEntry.mJustCreated = false;
 					}
-					commGroupGraphicEntry.updateInformation(communityGroupEntry.mName,
+					else {
+						justCreated = false;
+					}
+					mCommunityGraphicList[i].updateInformation(communityGroupEntry.mName,
 															communityGroupEntry.mCommunityGroupCreator,
 															communityGroupEntry.mCreatedTime.toString(),
 															communityGroupEntry.mWebsites.length.toString(),
 															communityGroupEntry.mId,
-															justCreated);													
-					mMyCommVBox.addChild(commGroupGraphicEntry);
-				}	
-				
-				mCanvasType = canvasType;
-				if(canvasType == this.OTHER_COMMUNITY) {
-					mCreateCommButton.visible = false;
-					mHomeLoggedOutAccountLabel.text = "Other Community Groups";
+															justCreated);	
 				}
 			}
+			
+			/*
+			 *
+			 */
+			public function sortCommunities(sortFunction:Object):void 
+			{
+				mUserAccountInformation.mCommunities.source.sort(sortFunction);	
+			}
+			
 			
 			/**
 			 *
@@ -191,7 +244,28 @@
 			private var SERVER_URL:String =Constants.SERVER_URL+"monarch/Client/";
 			
 			// the type of canvas to display : either MY_COMMUNITY or ALL_COMMUNITY
-			public var mCanvasType:String = "";			
+			public var mCanvasType:String = "";	
+			
+			private var mCommunityGraphicList:Array;
+			
+			// Sort functions
+			private var alphabeticalSortFunction:Object = 
+					function (a:Object,b:Object):int 
+					{ 
+						return a.mName.localeCompare(b.mName); 
+					};		
+					
+			private var newestSortFunction:Object =
+					function (a:Object,b:Object):int
+					{
+						return b.mCreatedTime - a.mCreatedTime;
+					};
+			
+			private var mostViewedSortFunction:Object =
+					function (a:Object,b:Object):int
+					{
+						return b.mAccesses - a.mAccesses;
+					};
 		]]>
 	</mx:Script>
 	<mx:Label text="My Community Groups" id="mHomeLoggedOutAccountLabel" styleName="pageTitle"  x="90" y="4"/>
@@ -208,5 +282,5 @@
 	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" label="Alphabetical" click="alphabeticalCommunities(event)" width="120" id="mAlphabeticalButton" horizontalCenter="134" verticalCenter="-261" icon="@Embed(source='../images/text_uppercase.png')"/>
 	<mx:VRule height="20" horizontalCenter="-69" verticalCenter="-262" />
 	<mx:VRule height="20" horizontalCenter="67" verticalCenter="-262" />
-	<mx:Label x="67" y="4" text="&gt;" styleName="breadCrumbSeparator" />
+	<mx:Label x="67" y="4" text="&gt;" styleName="breadCrumbSeparator"/>
 </mx:Canvas>

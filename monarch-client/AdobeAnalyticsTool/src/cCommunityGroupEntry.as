@@ -21,7 +21,8 @@ package
 		 									 time:int,
 		 									 creator:String,
 		 									 websites:ArrayCollection,
-		 									 keywords:ArrayCollection)
+		 									 keywords:ArrayCollection,
+		 									 accesses:int = 0)
 		{
 			mId = id;
 			mName = name;
@@ -29,6 +30,7 @@ package
 			mCommunityGroupCreator = creator;
 			mWebsites = websites;
 			mKeywords = keywords;
+			mAccesses = accesses;
 		}
 		
 		/** The community database id **/
@@ -43,6 +45,8 @@ package
 		public var mKeywords:ArrayCollection = new ArrayCollection();
 		/** The creator of the community group **/
 		public var mCommunityGroupCreator:String = "";
+		/** The number of accesses of this community group **/
+		public var mAccesses:int;
 				
 		/** Used to track if the entry was just created or not **/
 		public var mJustCreated:Boolean = false;

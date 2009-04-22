@@ -11,6 +11,7 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
 			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
@@ -245,7 +246,12 @@
 				return returnValue;
 			}
 			
-			
+			/**
+			 * Called when there is a problem connecting
+			 */
+			private function faultHandler(event:FaultEvent) {
+				Alert.show("Action failed with the following error: "+event.fault);
+			}
 			
 			/**
 			 *	 Detects a request to open the regular expression editor canvas.
@@ -433,8 +439,8 @@
 				
 		]]>
 	</mx:Script>
-	<mx:HTTPService id="websiteSettingsRequester" url="{Constants.SERVER_URL}monarch/Client/getWebsiteSettings.php" resultFormat="text" result="settingsResultHandler(event)"/>
-	<mx:HTTPService id="websiteSettingsSetter" url="{Constants.SERVER_URL}monarch/Client/setWebsiteSettings.php" resultFormat="text" result="setSettingsReplyHandler(event)"/>
+	<mx:HTTPService id="websiteSettingsRequester" url="{Constants.SERVER_URL}monarch/Client/getWebsiteSettings.php" resultFormat="text" result="settingsResultHandler(event)" fault="faultHandler(event)"/>
+	<mx:HTTPService id="websiteSettingsSetter" url="{Constants.SERVER_URL}monarch/Client/setWebsiteSettings.php" resultFormat="text" result="setSettingsReplyHandler(event)" fault="faultHandler(event)"/>
 	<mx:ViewStack x="0" y="0" id="mNavigatorViewStack" width="1013" height="625">
 		<mx:ViewStack id="mMyCommViewStack" label="My Community Groups" width="1013" height="625">
 			<local:cCommunityGroupHomeCanvas id="mMyCommunityGroupHomeCanvas" 
