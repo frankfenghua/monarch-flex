@@ -318,7 +318,7 @@ class DetailStats
 		$url = URL::translateURLBasedOnCurrent($this->xml($threadData['url']),$this->startPage);
 		$title = $this->xml($threadData['title']);
 		$rating = $this->xml($threadData['rating']);
-		echo '<thread url="' . $url . '" label="' . $title . '" rating="' . $rating . '"/>';
+		echo '<thread url="' . $url . '" label="' . $title . '" rating="' . $this->rating($rating) . '"/>';
 	}
 	
 	// ========================================================================
@@ -355,7 +355,26 @@ class DetailStats
 		$url = URL::translateURLBasedOnCurrent($this->xml($userData['url']),$this->startPage);
 		$title = $this->xml($userData['name']);
 		$rating = $this->xml($userData['rating']);
-		echo '<user url="' . $url . '" label="' . $title . '" rating="' . $rating . '"/>';
+		echo '<user url="' . $url . '" label="' . $title . '" rating="' . $this->rating($rating) . '"/>';
+	}
+	
+	// ========================================================================
+	// rating
+	//    args:  either a float or int
+	//    ret:   string
+	//    about: Based on whether this is an int or floay, we can determine if
+	//           this is a count or some rating. We will truncate the float, so
+	//           it's not too long.  We will append what kind of number this 
+	//           is.
+	// ------------------------------------------------------------------------
+	private function rating($number)
+	{
+		// int => count
+		if(round($number) == $number)
+			return $number . ' mentions';
+		// float => sentiment | english proficiency
+		else
+			return $number . ' rating';
 	}
 
 	// ========================================================================
@@ -373,6 +392,7 @@ class DetailStats
 
 }
 
+// instantiation of class
 if(isset($_GET['websiteName']))
 	$detailStats = new DetailStats($_GET['websiteName']);
 else

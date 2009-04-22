@@ -33,7 +33,7 @@
             {
             	if(item.@label != "") {
             		if(item.@rating != "") {
-            			return item.@label + " " + item.@rating;
+            			return "[" + item.@rating + "]" + item.@label;
             		}
             		else {
             			// trace("Item label = "+item.@label);
