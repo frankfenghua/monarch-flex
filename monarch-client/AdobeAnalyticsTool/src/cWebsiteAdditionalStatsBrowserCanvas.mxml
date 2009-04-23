@@ -33,7 +33,11 @@
             {
             	if(item.@label != "") {
             		if(item.@rating != "") {
-            			return "[" + item.@rating + "]" + item.@label;
+            			var rate:String = "[" + item.@rating + "] ";
+            			if(rate.length >= 4) 
+            				return rate + item.@label;
+            			else
+            				return item.@label;
             		}
             		else {
             			// trace("Item label = "+item.@label);
