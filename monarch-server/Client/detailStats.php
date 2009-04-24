@@ -130,6 +130,14 @@ class DetailStats
 			ORDER BY rating DESC
 			LIMIT 3';
 		$this->threadsGroup('livelyThreads', $q);	
+		
+		// threads with the most posts
+		$q = 'SELECT title, url, views AS rating 
+			FROM threads 
+			WHERE views > 0
+			ORDER BY rating DESC
+			LIMIT 3';
+		$this->threadsGroup('mostViewedThreads', $q);	
 	}
 	
 	//=========================================================================
