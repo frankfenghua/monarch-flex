@@ -269,7 +269,7 @@ class DetailStats
 			$this->usersGroup('chatterboxes', $q);
 			
 			// people who talk with good prose about the keyword
-			$q = 'SELECT u.name, u.url, s.englishProficiency AS rating
+			$q = 'SELECT u.name, u.url, s.englishProficiency / s.count AS rating
 				FROM users AS u, userstats AS us, stats AS s
 				WHERE u.id = us.user
 				AND us.keyword = ' . $keywordRow['id'] . '
