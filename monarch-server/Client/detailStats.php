@@ -374,7 +374,7 @@ class DetailStats
 			return $number . ' mentions';
 		// float => sentiment | english proficiency
 		else
-			return $number . ' rating';
+			return sprintf('%.2f', $number) . ' rating';
 	}
 
 	// ========================================================================
