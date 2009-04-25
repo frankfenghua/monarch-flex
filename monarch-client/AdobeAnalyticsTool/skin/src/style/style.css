@@ -889,6 +889,11 @@ TextArea
 	backgroundAlpha: 1.0; 
 }
 
+Text
+{
+	color: #cccccc;	
+}
+
 
 /*
 //------------------------------
@@ -1161,7 +1166,7 @@ Window
 .homeInfoTitle {
 	fontWeight: bold;
 	fontSize: 14;
-	color: #eeeeee;
+	color: #9fd4da;
 }
 
 .websiteGeneralInfoCategory {

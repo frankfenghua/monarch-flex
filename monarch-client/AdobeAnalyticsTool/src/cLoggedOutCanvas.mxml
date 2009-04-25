@@ -21,8 +21,15 @@
 					"the keyword, and general sentiment (hate/love).");
 				intro.setIcon("homeGraph.png");
 				
+				var alg:cInformationGraphic = new cInformationGraphic();
+				alg.setTitle("Patented sentiment algorithm");
+				alg.setBody("For the first time in the history of computer science, you can now detect the tone of voice " +
+					"of someone who is talking about your keyword. You can use this info to exploit the stock market, " + 
+					"track how well your product is doing, or even see the fluctuating popularity of a celebrity or politician!");
+				alg.setIcon("heart.png");
+				
 				var info1:cInformationGraphic = new cInformationGraphic();
-				info1.setTitle("Create an account:");	
+				info1.setTitle("Create an account");	
 				info1.setBody("An account allows you to group websites under a community. " +
 					"All websites under a community will be scraped for the same keywords. " + 
 					"This allows you to see on average how popular your keywords are doing. " +
@@ -30,17 +37,13 @@
 				info1.setIcon("homeWebsiteSceenshots.png");
 					
 				mNewsVBox.addChild(intro);
+				mNewsVBox.addChild(alg);
 				mNewsVBox.addChild(info1);
 			}
 			
 		]]>
 	</mx:Script>
-
-	<mx:Panel layout="absolute" width="467" height="582" x="10" y="21" title="Hot Community Groups">
-		<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" label="&#171; Previous" enabled="false" x="10" y="504" />
-		<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" label="Next &#187;" enabled="false" x="382" y="504" />
-	</mx:Panel>
-	<mx:Panel x="496" y="21" height="582" width="507" id="mNewsVBox" title="Information">
+	<mx:Panel x="239" y="21" height="582" width="507" id="mNewsVBox" title="Information">
 	</mx:Panel>
 	
 </mx:Canvas>

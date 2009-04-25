@@ -269,18 +269,15 @@
 		]]>
 	</mx:Script>
 	<mx:Label text="My Community Groups" id="mHomeLoggedOutAccountLabel" styleName="pageTitle"  x="90" y="4"/>
-	<mx:VBox height="513" width="390" id="mMyCommVBox" verticalScrollPolicy="off" x="312" y="62">
+	<mx:VBox height="513" width="390" id="mMyCommVBox" verticalScrollPolicy="off" x="312" y="82">
 	</mx:VBox>
 	<mx:LinkButton label="Home" styleName="breadCrumb" click="homeLabelClickHandler(event)" horizontalCenter="-473" verticalCenter="-291" id="mHomeButton"/>
 	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" label="Create Community Group" click="createCommClickHandler(event)" id="mCreateCommButton" verticalCenter="-292" horizontalCenter="412" styleName="buttonBlack">
 		<mx:icon>@Embed(source='../images/application_cascade.png')</mx:icon>
 	</mx:Button>
-	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" label="Next &#187;" horizontalCenter="158" verticalCenter="286" id="mNextCommButton" enabled="false"/>
-	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" label="&#171; Previous" horizontalCenter="-146" verticalCenter="286" id="mPreviousCommButton" enabled="false"/>
 	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" label="Newest" click="newestCommunities(event)" width="120" id="mNewestButton" horizontalCenter="-134" verticalCenter="-261" icon="@Embed(source='../images/clock.png')" enabled="false"/>
 	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" label="Most Viewed" click="mostViewedCommunities(event)" width="120" id="mMostViewedButton" horizontalCenter="-2" verticalCenter="-261" icon="@Embed(source='../images/eye.png')"/>
 	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" label="Alphabetical" click="alphabeticalCommunities(event)" width="120" id="mAlphabeticalButton" horizontalCenter="134" verticalCenter="-261" icon="@Embed(source='../images/text_uppercase.png')"/>
-	<mx:VRule height="20" horizontalCenter="-69" verticalCenter="-262" />
-	<mx:VRule height="20" horizontalCenter="67" verticalCenter="-262" />
 	<mx:Label x="67" y="4" text="&gt;" styleName="breadCrumbSeparator"/>
+	<mx:HRule x="313" y="69" width="388"/>
 </mx:Canvas>

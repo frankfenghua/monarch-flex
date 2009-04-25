@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="creationCompleteCanvasHandler(event)" show="showCanvasHandler(event)" width="490" height="156" useHandCursor="true">
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="creationCompleteCanvasHandler(event)" show="showCanvasHandler(event)" width="490" height="170" useHandCursor="true">
 	
 	<mx:Script>
 		<![CDATA[
@@ -118,10 +118,8 @@
 		]]>
 	</mx:Script>
 	
-	<mx:Label text="Welcome to the Adobe Community Analytics Tool !" width="341" horizontalCenter="73" verticalCenter="-32" id="mTitleLabel" styleName="homeInfoTitle"/>
-	<mx:TextArea width="341" editable="false" wordWrap="true" horizontalCenter="73" verticalCenter="35" borderThickness="0" textAlign="left" selectable="false" id="mTextBox" height="84">
-		<mx:text>This tool allows you to formulate community groups to monitor keywords across the websites of your choice.</mx:text>
-	</mx:TextArea>
-	<mx:Image id="mIcon" x="20" y="35" width="101" height="116"/>
+	<mx:Label text="Welcome to the Adobe Community Analytics Tool !" width="341" horizontalCenter="73" verticalCenter="-39" id="mTitleLabel" styleName="homeInfoTitle"/>
+	<mx:Text id="mTextBox" text="fart" width="332" height="98" x="148" y="58"/>
+	<mx:Image id="mIcon" x="20" y="35"/>
 	
 </mx:Canvas>

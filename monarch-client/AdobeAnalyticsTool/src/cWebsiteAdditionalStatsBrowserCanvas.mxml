@@ -470,7 +470,7 @@
 		/>
 		<mx:LinkButton
 			label="{url}"
-			x="120" 
+			x="125" 
 		 	y="0"
 			toolTip="the entry page of this website"
 			click="navigateToURL(new URLRequest('http://www.error.com'), '_blank')"
@@ -484,7 +484,7 @@
 		/>
 		<mx:Label 
 			text="{postsPerDay}" 
-			x="129" 
+			x="134" 
 		 	y="25"
 			toolTip="the average number of new posts per day"
 			styleName="websiteGeneralInfoRating"
@@ -498,7 +498,7 @@
 		/>
 		<mx:Label 
 			text="{postsToday}" 
-			x="129" 
+			x="134" 
 		 	y="50"
 			toolTip="the number of new posts made today"
 			styleName="websiteGeneralInfoRating"
@@ -512,7 +512,7 @@
 		/>
 		<mx:Label 
 			text="{analyzedPosts}"
-			x="129" 
+			x="134" 
 		 	y="75"
 			toolTip="the total number of posts Monarch has analyzed since you added this website"
 			styleName="websiteGeneralInfoRating"
@@ -526,7 +526,7 @@
 		/>
 		<mx:Label 
 			text="{analyzedThreads}" 
-			x="129" 
+			x="134" 
 		 	y="100"
 			toolTip="the total number of posts Monarch has analyzed since you added this website"
 			styleName="websiteGeneralInfoRating"
@@ -540,7 +540,7 @@
 		/>
 		<mx:Label 
 			text="{numberOfUsers}" 
-			x="129" 
+			x="134" 
 		 	y="125"
 			toolTip="the total number of people that have posted at least once since you added this site to Monarch"
 			styleName="websiteGeneralInfoRating"
@@ -554,14 +554,14 @@
 		/>
 		<mx:Label 
 			text="{chatterboxRating} posts" 
-			x="129"
+			x="134"
 			y="150"
 			toolTip="user with most posts"
 			styleName="websiteGeneralInfoRating"
 		/>
 		<mx:LinkButton
 			label="{chatterboxName}"
-			x="232" 
+			x="237" 
 		 	y="147"
 			toolTip="user with most posts"
 			click="navigateToURL(new URLRequest('http://www.error.com'), '_blank')"
@@ -575,14 +575,14 @@
 		/>
 		<mx:Label 
 			text="joined {newbieRating}" 
-			x="129"
+			x="134"
 			y="175"
 			toolTip="user with most posts"
 			styleName="websiteGeneralInfoRating"
 		/>
 		<mx:LinkButton
 			label="{newbieName}"
-			x="232" 
+			x="237" 
 		 	y="172"
 			toolTip="the newest user that joined this website"
 			click="navigateToURL(new URLRequest('http://www.error.com'), '_blank')"
@@ -596,14 +596,14 @@
 		/>
 		<mx:LinkButton
 			label="{veteranName}"
-			x="232" 
+			x="237" 
 		 	y="197"
 			toolTip="the user that joined the website earliest (that Monarch knows of)"
 			click="navigateToURL(new URLRequest('http://www.error.com'), '_blank')"
 		/>
 		<mx:Label 
 			text="joined {veteranRating}" 
-			x="129"
+			x="134"
 			y="200"
 			toolTip="user with most posts"
 			styleName="websiteGeneralInfoRating"
@@ -617,14 +617,14 @@
 		/>
 		<mx:Label 
 			text="{livelyThreadRating} posts" 
-			x="129"
+			x="134"
 			y="225"
 			toolTip="user with most posts"
 			styleName="websiteGeneralInfoRating"
 		/>
 		<mx:LinkButton
 			label="{livelyThreadTitle}"
-			x="232" 
+			x="237" 
 		 	y="222"
 			toolTip="the thread with the most replies (that Monarch knows of)"
 			click="navigateToURL(new URLRequest('http://www.error.com'), '_blank')"
@@ -638,14 +638,14 @@
 		/>
 		<mx:Label 
 			text="{mostViewedThreadRating} views" 
-			x="129"
+			x="134"
 			y="250"
 			toolTip="user with most posts"
 			styleName="websiteGeneralInfoRating"
 		/>
 		<mx:LinkButton
 			label="{mostViewedThreadTitle}"
-			x="232" 
+			x="237" 
 		 	y="247"
 			toolTip="the thread with the most replies (that Monarch knows of)"
 			click="navigateToURL(new URLRequest('http://www.error.com'), '_blank')"

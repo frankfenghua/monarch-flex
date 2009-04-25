@@ -107,28 +107,28 @@ class DetailStats
 		$q = 'SELECT url, name, posts AS rating 
 			FROM users 
 			ORDER BY rating DESC
-			LIMIT 3';
+			LIMIT 1';
 		$this->usersGroup('chatterboxes', $q);
 		
 		// recently joined people
 		$q = 'SELECT url, name, created AS rating 
 			FROM users 
 			ORDER BY rating DESC
-			LIMIT 3';
+			LIMIT 1';
 		$this->usersGroup('newbies', $q);
 		
 		// people that joined the site a long time ago (that the crawler knows of)
 		$q = 'SELECT url, name, created AS rating 
 			FROM users 
 			ORDER BY rating ASC
-			LIMIT 3';
+			LIMIT 1';
 		$this->usersGroup('veterans', $q);
 		
 		// threads with the most posts
 		$q = 'SELECT title, url, posts AS rating 
 			FROM threads 
 			ORDER BY rating DESC
-			LIMIT 3';
+			LIMIT 1';
 		$this->threadsGroup('livelyThreads', $q);	
 		
 		// threads with the most posts
@@ -136,7 +136,7 @@ class DetailStats
 			FROM threads 
 			WHERE views > 0
 			ORDER BY rating DESC
-			LIMIT 3';
+			LIMIT 1';
 		$this->threadsGroup('mostViewedThreads', $q);	
 	}
 	
