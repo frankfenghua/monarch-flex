@@ -1184,3 +1184,18 @@ Window
 	textDecoration: underline;
 	color: #aaaaaa;
 }
+
+Legend {
+	markerHeight: 7; 
+	markerWidth: 7; 
+	color: #cccccc;
+}
+
+LineChart {
+	color: #cccccc;
+	axisTitleStyleName: "lineChartAxisTitle";
+}
+
+.lineChartAxisTitle {
+	fontWeight: bold;
+}

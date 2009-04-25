@@ -37,8 +37,6 @@
 				var mLineGraphData:Array = new Array();
 			
 				// set the text and axis color and font
-				this.mLineChart.setStyle("color", "Black");
-				this.mLineChart.setStyle("fontSize", "12");
 				this.mLineChart.showDataTips = true;
 				
 				vAxis.title = statOptionSelected.mTitle;
@@ -54,9 +52,11 @@
 				// current date as reference
 				var date:Date = new Date();
 				
+				hAxis.title = "time";
+				
 				if(statOptionSelected.mTimeSpan == statOptionSelected.TIME_SPAN_1_WEEK) {
 					hAxis.displayName = "Date";
-					hAxis.title = "Time (Past 7 Days)";
+					//hAxis.title = "Time (Past 7 Days)"; redundant information
 					hAxis.dataUnits = "days";
 					hAxis.labelUnits = "days";
 					
@@ -65,7 +65,7 @@
 				}
 				else if (statOptionSelected.mTimeSpan == statOptionSelected.TIME_SPAN_2_WEEKS) {
 					hAxis.displayName = "Date";
-					hAxis.title = "Time (Past 14 Days)";
+					//hAxis.title = "Time (Past 14 Days)"; redundant information
 					hAxis.dataUnits = "days";
 					hAxis.labelUnits = "days";
 					
@@ -74,7 +74,7 @@
 				}
 				else if(statOptionSelected.mTimeSpan == statOptionSelected.TIME_SPAN_1_MONTH) {
 					hAxis.displayName = "Date";
-					hAxis.title = "Time (Past 30 days/1 month)";
+					//hAxis.title = "Time (Past 30 days/1 month)"; redundant information
 					hAxis.dataUnits = "weeks";
 					hAxis.labelUnits = "weeks";
 					
@@ -83,7 +83,7 @@
 				}
 				else if(statOptionSelected.mTimeSpan == statOptionSelected.TIME_SPAN_6_MONTHS) {
 					hAxis.displayName = "Date";
-					hAxis.title = "Time (Past 6 Months)";
+					//hAxis.title = "Time (Past 6 Months)"; redundant information
 					hAxis.dataUnits = "weeks";
 					hAxis.labelUnits = "weeks";
 					
@@ -92,7 +92,7 @@
 				}
 				else if(statOptionSelected.mTimeSpan == statOptionSelected.TIME_SPAN_9_MONTHS) {
 					hAxis.displayName = "Date";
-					hAxis.title = "Time (Past 9 Months)";
+					//hAxis.title = "Time (Past 9 Months)"; redundant information
 					hAxis.dataUnits = "months";
 					hAxis.labelUnits = "months";
 					
@@ -101,7 +101,7 @@
 				}
 				else if(statOptionSelected.mTimeSpan == statOptionSelected.TIME_SPAN_1_YEAR) {
 					hAxis.displayName = "Date";
-					hAxis.title = "Time (Past 1 Year)";
+					//hAxis.title = "Time (Past 1 Year)"; redundant information
 					hAxis.dataUnits = "months";
 					hAxis.labelUnits = "months";
 					
@@ -144,11 +144,14 @@
 						}		
 						
 						trace("timeCollection length = "+keyword.mTimeCollection.length);
+						/*
 						var stroke:Stroke = new Stroke();
 						// move this out 
+		        		
 		        		stroke.color = keyword.mColor;
 		        		stroke.weight = 3;
 		 				series.setStyle("lineStroke", stroke);
+		 				*/
 		        		series.xField = i.toString();
 		        		series.yField = i.toString()+"b";  
 		        		
@@ -163,7 +166,7 @@
 
 				this.mLineChartLegend.dataProvider = this.mLineChart;				
 				
-				this.mLineChartLegend.toolTip = "Not Available";
+				this.mLineChartLegend.toolTip = "legend";
 			}
 			
 			
@@ -176,10 +179,10 @@
 				mVMaximum = vAxis.maximum;
 				
 				if(mVMinimum < -1) {
-					mVMinimum = mVMinimum + 1;
+					mVMinimum = mVMinimum + 10;
 				}
 				if(mVMaximum > 1) {
-					mVMaximum = mVMaximum - 1;
+					mVMaximum = mVMaximum - 10;
 				}
 				vAxis.minimum = mVMinimum;
 				vAxis.maximum = mVMaximum;
@@ -190,8 +193,8 @@
 			 */
 			public function zoomOut():void
 			{
-				mVMinimum = mVMinimum - 1;
-				mVMaximum = mVMaximum + 1;
+				mVMinimum = mVMinimum - 10;
+				mVMaximum = mVMaximum + 10;
 				vAxis.minimum = mVMinimum;
 				vAxis.maximum = mVMaximum;
 			}
@@ -253,7 +256,7 @@
 				label.text = "To View Statistics Click on a Website on the Right.";
 				label.x = (this.width / 2) - 100;
 				label.y = (this.height / 2) - 20;
-				this.addChild(label);*/
+				this.addChild(label);*/				
 			}
 			
 			
@@ -275,11 +278,23 @@
 		]]>
 	</mx:Script>
 
-	<mx:LineChart id="mLineChart" creationComplete="lineChartCreationCompleteHandler(event)" width="815" height="492" verticalCenter="-19" horizontalCenter="0">
+	<mx:LineChart 
+		id="mLineChart" 
+		creationComplete="lineChartCreationCompleteHandler(event)" 
+		width="815" 
+		height="492" 
+		verticalCenter="-19" 
+		horizontalCenter="0">
 		<mx:series>
-			<mx:LineSeries displayName="Series 1"/>
+			<mx:LineSeries displayName="Series 1" id="lineChartSeries" />
 		</mx:series>
 	</mx:LineChart>
-	<mx:Legend width="815" height="29" id="mLineChartLegend" verticalCenter="250" horizontalCenter="0"/>
+	<mx:Legend 
+		width="815" 
+		height="29" 
+		id="mLineChartLegend" 
+		verticalCenter="250" 
+		horizontalCenter="0"
+		/>
 	
 </mx:Canvas>

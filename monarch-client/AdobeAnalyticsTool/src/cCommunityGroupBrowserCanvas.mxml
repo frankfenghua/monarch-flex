@@ -58,21 +58,6 @@
 				this.dispatchEvent(e);
 			}
 			
-			/**
-			 * 	Called when the user hovers the mouse over the home label.
-			 */
-			private function homeLabelRollOverHandler(event:Event):void
-			{
-				mHomeLabel.setStyle("color", "0xFF6666");
-			}
-			
-			/**
-			 * 	Called when the user hovers the mouse away from the home label.
-			 */
-			private function homeLabelRollOutHandler(event:Event):void
-			{
-				mHomeLabel.setStyle("color", "0x11d30c");
-			}
 			
 			/**
 			 * 	Called when the user clicks on the community label.
@@ -82,22 +67,7 @@
 				var e:Event = new Event("OpenCommunityGroupSelectionClickedEvent");
 				this.dispatchEvent(e);
 			}
-			
-			/**
-			 * 	Called when the user hovers the mouse over the community label.
-			 */
-			private function communityLabelRollOverHandler(event:Event):void
-			{
-				mCommunityGroupLabel.setStyle("color", "0xFF6666");
-			}
-			
-			/**
-			 * 	Called when the user hovers the mouse away from the community label.
-			 */
-			private function communityLabelRollOutHandler(event:Event):void
-			{
-				mCommunityGroupLabel.setStyle("color", "0x11d30c");
-			}
+		
 			
 			/**
 			 *  
