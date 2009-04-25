@@ -227,38 +227,85 @@
 			}
 			
 			/**
+			 *  When user toggles between showing count and sentiment in the graph controls
+			 */
+			private function graphControlHandler(event:ItemClickEvent):void 
+			{
+				if(event.currentTarget.selectedValue == "countRadio")
+				{
+					mStatEvent.mCountWeight = 1;
+					mStatEvent.mGoodnessWeight = 0;
+					
+					// TODO: only allow english to be paired with sentiment (or should we?)
+					//englishCheck.enabled = false;
+				}
+				else if(event.currentTarget.selectedValue == "sentimentRadio")
+				{
+					mStatEvent.mCountWeight = 0;
+					mStatEvent.mGoodnessWeight = 1;
+					
+					// TODO: I couldn't re-enable it
+					//englishCheck.enabled = true;					
+				}
+					
+				mLineChartCanvas.updateInformation(mAnalyticsParser, mStatEvent, mSelectedKeywords);
+			}
+
+			
+			/**
 			 * 
 			 */
+			 /*
 			private function countWeightSliderChangeHandler(event:Event):void
 			{
 				mCountInfoLabel.text = mCountWeightSlider.value.toString().slice(0, 5);
 				mStatEvent.mCountWeight = mCountWeightSlider.value;
 				mLineChartCanvas.updateInformation(mAnalyticsParser, mStatEvent, mSelectedKeywords);
 			}
+			*/
 			
 			/**
 			 * 
 			 */
+			 /*
 			private function goodnessWeightSliderChangeHandler(event:Event):void
 			{
 				mGoodnessInfoLabel.text = mEnglishProficiencyWeightSlider.value.toString().slice(0, 5);
 				mStatEvent.mGoodnessWeight = mEnglishProficiencyWeightSlider.value;
 				mLineChartCanvas.updateInformation(mAnalyticsParser, mStatEvent, mSelectedKeywords);
 			}
+			*/
+			
+			/**
+			 *  When user toggles on and off english proficiency in the graph controls
+			 */
+			private function englishCheckHandler():void 
+			{
+				if(englishCheck.selected)  
+					mStatEvent.mEnglishProficiency = 1;
+				else
+					mStatEvent.mEnglishProficiency = 0;
+				           
+				mLineChartCanvas.updateInformation(mAnalyticsParser, mStatEvent, mSelectedKeywords);    
+			}
+
 			
 			/**
 			 * 
 			 */
+			 /*
 			private function proficiencyWeightSliderChangeHandler(event:Event):void
 			{
 				mEnglishProficiencyInfoLabel.text = mGoodnessWeightSlider.value.toString().slice(0, 5);
 				mStatEvent.mEnglishProficiency = mGoodnessWeightSlider.value;
 				mLineChartCanvas.updateInformation(mAnalyticsParser, mStatEvent, mSelectedKeywords);
 			}
+			*/
 			
 			/**
 			 * 
 			 */
+			/*
 			private function presetsComboBoxChangeHandler(event:Event):void
 			{
 				if(mPresetsComboBox.selectedItem.toString() == "Count") {
@@ -307,6 +354,7 @@
 				
 				mLineChartCanvas.updateInformation(mAnalyticsParser, mStatEvent, mSelectedKeywords);
 			}
+			*/
 			
 			/**
 			 * 	Called when the user clicks on the zoom in button.
@@ -427,9 +475,29 @@
 				}
 				*/
 				mStatEvent.mTimeSpan = timeSpan;
+				
+				// TODO: why did you set the mStatEvent things again? I thought they are set prior to calling this function.
+				if(sentimentRadio.selected)
+				{
+					mStatEvent.mCountWeight = 0;
+					mStatEvent.mGoodnessWeight = 1;
+				}
+				else
+				{
+					mStatEvent.mCountWeight = 1;
+					mStatEvent.mGoodnessWeight = 0;
+				}
+				
+				if(englishCheck.selected)
+					mStatEvent.mEnglishProficiency = 1;
+				else
+					mStatEvent.mEnglishProficiency = 0;
+				
+				/*
 				mStatEvent.mCountWeight = mCountWeightSlider.value;
 				mStatEvent.mGoodnessWeight = mEnglishProficiencyWeightSlider.value;
 				mStatEvent.mEnglishProficiency = mGoodnessWeightSlider.value;
+				*/
 				
 				mLineChartCanvas.updateInformation(analyticsParser, mStatEvent, mSelectedKeywords);
 				
@@ -462,12 +530,16 @@
 					mCommunityGroupNameLabel.text = mCommGroupName;
 				}
 				
+				countRadio.selected = true;
+				
+				/*
 				mCountWeightSlider.value = 1;
 				mEnglishProficiencyWeightSlider.value = 0;
 				mGoodnessWeightSlider.value = 0;
 				mCountInfoLabel.text = mCountWeightSlider.value.toString().slice(0, 5);
 				mGoodnessInfoLabel.text = mEnglishProficiencyWeightSlider.value.toString().slice(0, 5);
 				mEnglishProficiencyInfoLabel.text = mGoodnessWeightSlider.value.toString().slice(0, 5);
+				*/
 				
 				mGraphControlPanel.enabled = false;
 				mChartTimeSelectPanel.enabled = false;
@@ -548,15 +620,30 @@
 	<ns1:cStatOptionsAccordion id="mStatOptionAccordion"
 							   AccordionWebsiteGraphicEvent="accordionWebsiteGraphicEventHandler(event)"
 							   AccordionKeywordGraphicEvent="accordionKeywordGraphicHandler(event)"
-							   height="355" horizontalCenter="-412" verticalCenter="-88">
+							   height="441" horizontalCenter="-412" verticalCenter="-45">
 	</ns1:cStatOptionsAccordion>
 	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" label="Add Website" click="addWebsiteClickHandler(event)" id="mAddWebsiteButton" styleName="buttonBlack"  x="897" y="4" icon="@Embed(source='../images/application_add.png')"/>
 	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" label="Edit Community Group" click="editCommunityGroupButtonClickHandler(event)" id="mEditCommunityGroupButton" styleName="buttonBlack"  x="723" y="4" icon="@Embed(source='../images/pencil.png')"/>
-
-	
-
-	<mx:Panel layout="absolute" height="199" y="411" x="9" width="172" title="graph controls" verticalScrollPolicy="off" horizontalScrollPolicy="off" id="mGraphControlPanel" toolTip="This panel allows you to control weights of how to gauge a keyword or link's hotness.">
-
+	<mx:Panel layout="absolute" height="117" y="491" x="9" width="172" title="graph controls" verticalScrollPolicy="off" horizontalScrollPolicy="off" id="mGraphControlPanel" toolTip="This panel allows you to control weights of how to gauge a keyword or link's hotness.">
+		<mx:VBox x="10">
+			<mx:RadioButtonGroup id="graphControl" itemClick="graphControlHandler(event)"/>
+			<mx:RadioButton 
+				groupName="graphControl" 
+				id="countRadio"
+				label="count"
+				toolTip="How many times this keyword or link has been mentioned."/>
+			<mx:RadioButton 
+				groupName="graphControl" 
+				id="sentimentRadio"
+				label="sentiment"
+				toolTip="The level of approval of the keyword or link. Do people hate or love it?"/>
+			<mx:CheckBox 
+				id="englishCheck" 
+				label="english proficiency" 
+				click="englishCheckHandler()"
+				toolTip="When this keyword or link was said, how good was the speaker's English? Slide this higher if you want more weight for more carefule prose."/>
+        </mx:VBox>
+		<!--
 		<mx:HSlider x="8" y="55" change="countWeightSliderChangeHandler(event)" width="149" minimum="0" maximum="1" allowTrackClick="true" liveDragging="true" value="1" enabled="true" id="mCountWeightSlider"/>
 		<mx:HSlider x="8" y="135" change="goodnessWeightSliderChangeHandler(event)" width="149" minimum="0" maximum="1" allowTrackClick="true" liveDragging="true" value="1" enabled="true" id="mEnglishProficiencyWeightSlider"/>
 		<mx:HSlider x="8" y="95" change="proficiencyWeightSliderChangeHandler(event)" width="149" allowTrackClick="true" minimum="0" maximum="1" liveDragging="true" value="1" enabled="true" id="mGoodnessWeightSlider"/>
@@ -577,6 +664,7 @@
 		<mx:Label x="112" y="41" text="Label" textAlign="right" id="mCountInfoLabel" width="40" selectable="false"/>
 		<mx:Label x="132" y="121" text="Label" textAlign="right" id="mGoodnessInfoLabel"/>
 		<mx:Label x="132" y="81" text="Label" textAlign="right" id="mEnglishProficiencyInfoLabel"/>
+		-->
 	</mx:Panel>
 	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" x="199" y="585" label="Zoom In" click="zoomInButtonClickHandler(event)" id="mZoomInButton" width="24" height="24" icon="@Embed(source='../images/magnifier_zoom_in.png')" toolTip="zoom in"/>
 	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" x="227" y="585" label="Zoom Out" click="zoomOutButtonClickHandler(event)" id="mZoomOutButton" width="24" height="24" icon="@Embed(source='../images/magnifier_zoom_out.png')" toolTip="zoom out" />

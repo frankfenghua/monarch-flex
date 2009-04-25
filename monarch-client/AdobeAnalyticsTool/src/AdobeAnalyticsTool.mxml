@@ -417,8 +417,8 @@
 	I forgot where Puneet said to put this:
 	<mx:Label fontSize="12" textAlign="right" width="442" id="mUserNameLabel" />
 	-->
-	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" label="Register" click="createAccountClickHandler(event)" id="mCreateAccountButton" verticalCenter="-326" horizontalCenter="371" icon="@Embed(source='../images/user_add.png')" styleName="buttonBlack"/>
-	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" label="Sign In" click="signInClickHandler(event)" id="mSignInLabel" verticalCenter="-326" horizontalCenter="463" icon="@Embed(source='../images/door_in.png')" styleName="buttonBlack"/>
+	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" label="Register" click="createAccountClickHandler(event)" id="mCreateAccountButton" verticalCenter="-326" horizontalCenter="371" icon="@Embed(source='../images/user_add.png')" styleName="buttonBlack" toolTip="an account is necessary to use Monarch"/>
+	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" label="Sign In" click="signInClickHandler(event)" id="mSignInLabel" verticalCenter="-326" horizontalCenter="463" icon="@Embed(source='../images/door_in.png')" styleName="buttonBlack" toolTip="login to begin using Monarch"/>
 	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" click="signOutClickHandler(event)" label="Sign Out" id="mSignOutButton" visible="false" horizontalCenter="467" verticalCenter="-330" icon="@Embed(source='../images/door_out.png')" styleName="buttonBlack"/>
 	<mx:Image useHandCursor="true" buttonMode="true" mouseChildren="false" toolTip="takes you back to the homepage" x="20" y="12" source="@Embed('../images/monarchLogo.png')" click="logoClickHandler(event)" />
 </mx:WindowedApplication>
