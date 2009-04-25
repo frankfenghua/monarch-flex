@@ -230,22 +230,22 @@
 			 *  When user toggles between showing count and sentiment in the graph controls
 			 */
 			private function graphControlHandler(event:ItemClickEvent):void 
-			{
-				if(event.currentTarget.selectedValue == "countRadio")
+			{	
+				// count
+				if(event.currentTarget.selectedValue == "count")
 				{
 					mStatEvent.mCountWeight = 1;
 					mStatEvent.mGoodnessWeight = 0;
 					
-					// TODO: only allow english to be paired with sentiment (or should we?)
-					//englishCheck.enabled = false;
+					englishCheck.enabled = false;
 				}
-				else if(event.currentTarget.selectedValue == "sentimentRadio")
+				// english proficiency
+				else
 				{
 					mStatEvent.mCountWeight = 0;
 					mStatEvent.mGoodnessWeight = 1;
-					
-					// TODO: I couldn't re-enable it
-					//englishCheck.enabled = true;					
+
+					englishCheck.enabled = true;					
 				}
 					
 				mLineChartCanvas.updateInformation(mAnalyticsParser, mStatEvent, mSelectedKeywords);
@@ -530,7 +530,9 @@
 					mCommunityGroupNameLabel.text = mCommGroupName;
 				}
 				
+				// default to showing count first
 				countRadio.selected = true;
+				englishCheck.selected = false;
 				
 				/*
 				mCountWeightSlider.value = 1;
@@ -625,7 +627,7 @@
 	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" label="Add Website" click="addWebsiteClickHandler(event)" id="mAddWebsiteButton" styleName="buttonBlack"  x="897" y="4" icon="@Embed(source='../images/application_add.png')"/>
 	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" label="Edit Community Group" click="editCommunityGroupButtonClickHandler(event)" id="mEditCommunityGroupButton" styleName="buttonBlack"  x="723" y="4" icon="@Embed(source='../images/pencil.png')"/>
 	<mx:Panel layout="absolute" height="117" y="491" x="9" width="172" title="graph controls" verticalScrollPolicy="off" horizontalScrollPolicy="off" id="mGraphControlPanel" toolTip="This panel allows you to control weights of how to gauge a keyword or link's hotness.">
-		<mx:VBox x="10">
+		<mx:VBox x="10" y="2">
 			<mx:RadioButtonGroup id="graphControl" itemClick="graphControlHandler(event)"/>
 			<mx:RadioButton 
 				groupName="graphControl" 
@@ -641,7 +643,7 @@
 				id="englishCheck" 
 				label="english proficiency" 
 				click="englishCheckHandler()"
-				toolTip="When this keyword or link was said, how good was the speaker's English? Slide this higher if you want more weight for more carefule prose."/>
+				toolTip="When this keyword or link was said, how good was the speaker's English? Check this if you want more weight for more careful prose."/>
         </mx:VBox>
 		<!--
 		<mx:HSlider x="8" y="55" change="countWeightSliderChangeHandler(event)" width="149" minimum="0" maximum="1" allowTrackClick="true" liveDragging="true" value="1" enabled="true" id="mCountWeightSlider"/>
