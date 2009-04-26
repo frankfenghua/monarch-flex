@@ -502,7 +502,7 @@
 				
 				// default to showing count first
 				countRadio.selected = true;
-				englishCheck.selected = false;
+				englishCheck.enabled = false;
 				
 				/*
 				mCountWeightSlider.value = 1;
