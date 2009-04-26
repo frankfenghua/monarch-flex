@@ -306,7 +306,15 @@
 				// Match text of "thread url" regular expression and load page from that
 				// url.
 				var threadUrlMatch:Object;
-				var threadUrlRegex:RegExp = new RegExp(RegExProcessingCompleteEvent.regularExpressionMap["thread url"], "g");
+				var threadUrlRegex:RegExp = RegexUtilities.perlSyntaxToNative(RegExProcessingCompleteEvent.regularExpressionMap["thread url"]);
+				// var threadUrlRegex:RegExp = new RegExp(RegExProcessingCompleteEvent.regularExpressionMap["thread url"], "g");
+				if(threadUrlRegex == null) {
+					trace("threadUrl invalid");
+					return;
+				}
+				if(threadUrlRegex.source.length == 0) {
+					return;
+				}
 				trace(threadUrlRegex);
 				trace(mPageSourceText);
 				threadUrlMatch = threadUrlRegex.exec(urlContents);
@@ -335,9 +343,11 @@
 			 */
 			private function onTextInputChange(event:Event):void {
 				// Build regular expression from user string
-				var regex:RegExp = new RegExp(regexString.text, "g");
+				var regex:RegExp = RegexUtilities.perlSyntaxToNative(regexString.text);
+				
+				// var regex:RegExp = new RegExp(regexString.text, "g");
 
-				if(regexString.text.length > 0) {
+				if(regex != null && regex.source.length != 0) {
 					if(feedbackTabs.selectedChild == htmlViewTab) {
 						// TODO: highlight HTML
 					}
