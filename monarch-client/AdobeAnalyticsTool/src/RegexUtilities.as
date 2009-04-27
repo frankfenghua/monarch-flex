@@ -34,21 +34,20 @@ package {
 			var modifiers:String = "g";
 			
 			if(perlRegex.indexOf("/") != 0) {
-				trace("No opening slash");
-				return null;
+				throw new Error("No opening slash");
 			}
+			
 			// Find closing '/'
 			var closingIndex:int = perlRegex.lastIndexOf("/");
 			if(closingIndex <= 0) {
-				trace("No closing slash");
-				return null;
+				throw new Error("No closing slash");
 			}
 			
 			// Look for modifier at the end of the Regular Expression
 			var modifierSyntax:RegExp = /[imsx]*/;
 			var result:Object = perlRegex.substr(closingIndex+1).match(modifierSyntax);
 			if(!result || result[0] != perlRegex.substr(closingIndex+1)) {
-				return null;
+				throw new Error("Invalid modifier");
 			}
 			
 			modifiers += result[0];
@@ -58,8 +57,7 @@ package {
 			// Look for unescaped '/'
 			var invalidSlash:RegExp = /[^\\]\//;
 			if(asRegexString.match(invalidSlash) != null) {
-				trace("Unescaped slash");
-				return null;
+				throw new Error("Unescaped slash");
 			}
 		
 			// TODO: translate unsupported Perl features

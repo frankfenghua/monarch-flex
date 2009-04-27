@@ -114,7 +114,9 @@
 				trace("Page Source set to string of length "+urlContents.length);
 				
 				// Initialize highlighter
-				highlighter = new Highlighter(getTextField(mPageSourceText));		
+				highlighter = new Highlighter(getTextField(mPageSourceText));
+				
+				onTextInputChange(new Event("dummy"));		
 			}
 		
 			private function handlePageLoaded(event:Event):void {
@@ -176,6 +178,8 @@
 				
 				// Modify state variables and store user input in Site Event 
 				if(mMainViewStack.selectedChild == OpeningScreen) {
+					leftButton.enabled = true;
+					inputError = true;
 					mMainViewStack.selectedChild = RegexEntry;
 					currState = topLevelRegexes[0];
 				}
@@ -190,6 +194,7 @@
 					if(index == topLevelRegexes.length - 1) { // this is last toplevel regex
 						trace("last toplevel regex");
 
+						topLevelContents = urlContents;
 						mMainViewStack.selectedChild = pageOfPostsVerify;
 						if(pageOfPostsHTML) {
 							initializePageOfPostsVerify(new Event("dummy"));
@@ -215,6 +220,7 @@
 				else if(mMainViewStack.selectedChild == pageOfPostsVerify) {
 					mMainViewStack.selectedChild = RegexEntry;
 					currState = subLevelRegexes[0];
+					urlContents = pageOfPostsContents;
 				}	
 				else { // viewstack1.selectedChild == finalView
 					// Store user input in Site Event
@@ -248,14 +254,14 @@
 				// When the user presses back, whatever they had already typed in the
 				//  next screen is lost.
 				if(mMainViewStack.selectedChild == OpeningScreen) {
-					// Should we disable back on the opening screen? I think so.
+					// Should we disable back on the opening screen? I think so. --Done
 				}
 				else if(mMainViewStack.selectedChild == RegexEntry) {
 					// Given current state, either go to next regular expression or 
 					//  change to the next canvas in the viewstack
 					var index:int = topLevelRegexes.indexOf(currState);
 					if(index == 0) { // this is first toplevel regex
-						mMainViewStack.selectedChild = OpeningScreen;
+						initializeOpeningScreen();
 					}
 					else if(index == -1) { // must be a sub-level regular expression
 						index = subLevelRegexes.indexOf(currState);
@@ -275,6 +281,7 @@
 				else if(mMainViewStack.selectedChild == pageOfPostsVerify) {
 					mMainViewStack.selectedChild = RegexEntry;
 					currState = topLevelRegexes[topLevelRegexes.length-1];
+					urlContents = topLevelContents;
 				}	
 				else { // viewstack1.selectedChild == finalView
 					mMainViewStack.selectedChild = RegexEntry;
@@ -296,6 +303,12 @@
 				}	
 			}
 			
+			private function initializeOpeningScreen():void {
+				inputError = false;
+				leftButton.enabled = false;
+				mMainViewStack.selectedChild = OpeningScreen;
+				currentPageLevel = TOP_LEVEL;
+			}
 			private function initializeFinalView(event:Event):void {
 				// Initialize this view's text inputs to the values carried by the event
 				mNumToplevelTextInput.value = RegExProcessingCompleteEvent.topLevelBreadth;
@@ -320,7 +333,14 @@
 				threadUrlMatch = threadUrlRegex.exec(urlContents);
 				if(threadUrlMatch && threadUrlMatch.length > 1) {
 					searchTerms.text = threadUrlMatch[1];
-					pageOfPostsLoader = new URLLoader(new URLRequest(searchTerms.text));
+					pageOfPostsLoader = new URLLoader();
+					pageOfPostsLoader.addEventListener(IOErrorEvent.IO_ERROR, catchIOError);
+					function catchIOError(event:IOErrorEvent):void {
+						pageOfPostsContents = "<h1>"+event.text+"</h1>\n\nThere was an error in loading the matched URL. You are " +
+							"strongly urged to revise your 'thread URL' regular expression.";
+					}
+					
+					pageOfPostsLoader.load(new URLRequest(searchTerms.text));
 					pageOfPostsLoader.addEventListener(Event.COMPLETE, handlePageOfPostsLoaded);
 					pageOfPostsLoader.addEventListener(ErrorEvent.ERROR, handlePageOfPostsError);
 					pageIsLoading = true;
@@ -342,44 +362,62 @@
 			 * Clears highlighting and re-highlights matches
 			 */
 			private function onTextInputChange(event:Event):void {
+				//
+				trace("saw change");
 				// Build regular expression from user string
-				var regex:RegExp = RegexUtilities.perlSyntaxToNative(regexString.text);
+				try {
+					var regex:RegExp = RegexUtilities.perlSyntaxToNative(regexString.text);
 				
-				// var regex:RegExp = new RegExp(regexString.text, "g");
+					// var regex:RegExp = new RegExp(regexString.text, "g");
 
-				if(regex != null && regex.source.length != 0) {
-					if(feedbackTabs.selectedChild == htmlViewTab) {
+					if(regex != null && regex.source.length != 0) {
+						if(feedbackTabs.selectedChild == htmlViewTab) {
 						// TODO: highlight HTML
-					}
-					else if(feedbackTabs.selectedChild == sourceTab) {
-						if(highlighter) {
-							highlighter.reset();
-							highlighter.highlightMatches(regex);
 						}
-					} 
-					else { // selectedChild == textMatchesTab
-						// Find all matches for text in the source view and
-						// output them in the textMatchesTab TextArea
-						var matchObject:Object;
-						var matchesString:String = "";
-						
-						// Construct string of text matches
-						matchObject = regex.exec(urlContents);
-						while(matchObject != null) {
-							if(matchObject.length > 1) {
-								matchesString = matchesString + "\n\n"+matchObject[1];
+						else if(feedbackTabs.selectedChild == sourceTab) {
+							if(highlighter) {
+								highlighter.reset();
+								highlighter.highlightMatches(regex);
 							}
+						} 
+						else {
+							trace("textMatchesTab");
+							// selectedChild == textMatchesTab
+							// Find all matches for text in the source view and
+							// output them in the textMatchesTab TextArea
+							var matchObject:Object;
+							var matchesString:String = "";
+							
+							// Construct string of text matches
 							matchObject = regex.exec(urlContents);
+							while(matchObject != null) {
+								if(matchObject.length > 1) {
+									matchesString = matchesString + "\n\n"+matchObject[1];
+								}
+								matchObject = regex.exec(urlContents);
+							}
+							
+							// Set matches test to string of text matches
+							matchesText.text = matchesString;
 						}
-						
-						// Set matches test to string of text matches
-						matchesText.text = matchesString;
 					}
+					else {
+						// Clear highlighting
+						if(feedbackTabs.selectedChild == sourceTab && highlighter) {
+							highlighter.reset();
+						}
+					}
+					inputError = false;
 				}
-				else {
-					// Clear highlighting
+				catch(e:Error) {
+					inputError = true;
+					userInputErrorImage.toolTip = e.message;
+					
 					if(feedbackTabs.selectedChild == sourceTab && highlighter) {
 						highlighter.reset();
+					}
+					else if(feedbackTabs.selectedChild == textMatchesTab && matchesText) {
+						matchesText.text = "";
 					}
 				}		
 			}
@@ -405,6 +443,14 @@
 			//
 			///////////////////////////////////////////////////////////////////////////////////
 
+			private function onFeedbackTabChange(event:Event):void
+			{
+				if(feedbackTabs.selectedChild == sourceTab) {
+					mPageSourceText.text = urlContents;
+				}
+				
+				onTextInputChange(event);	
+			}
 			
 			/**
 			 * Called when the HTML view is added to the stage
@@ -476,7 +522,11 @@
 												  "first post time", "first post message", "reply author", "reply author URL", "reply time",
 												  "reply message");
 
-
+			
+			private const TOP_LEVEL:int = 0;
+			private const PAGE_OF_POSTS:int = 1;
+			private var currentPageLevel:int;
+			
 			[Bindable]
 			private var currState:String;
 			
@@ -488,6 +538,8 @@
 			private var urlContents:String = "<html>No website loaded</html>";
 			[Bindable]
 			private var pageOfPostsContents:String = "<html>No website loaded</html>";
+			[Bindable]
+			private var topLevelContents:String = "<html>No website loaded</html>";
 			private var html:HTMLLoader;
 			
 			// name of the community group
@@ -509,6 +561,9 @@
 			// Boolean used to signal that a page is still being loaded
 			private var pageIsLoading:Boolean = false;
 			
+			[Bindable]
+			private var inputError:Boolean = false;
+			
 			private var IMAGE_URL:String = Constants.SERVER_URL+"monarch/images";
 			
 		]]>
@@ -518,9 +573,9 @@
 	<mx:LinkButton label="{mCommunityGroupName}" id="mCommunityGroupNameLabel" click="communityNameLabelClickHandler(event)" styleName="breadCrumb"  top="15" left="256" textAlign="center"/>
 	<mx:LinkButton click="websiteNameLabelClickHandler(event)" id="mWebsiteNameLabel" top="15" left="346" textAlign="center" textDecoration="normal" visible="false"/>
 	<mx:Label text="Adapter Editor" id="mRexExEditorLabel" styleName="pageTitle"  top="13" left="344" textAlign="left"/>
-	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" id="rightButton" click="advanceWizard(event)" horizontalCenter="478" verticalCenter="-284" icon="@Embed(source='../images/arrow_right.png')" toolTip="next regex" width="30" height="30" />
+	<mx:Button id="rightButton" useHandCursor="{!inputError}" buttonMode="true" mouseChildren="false" click="advanceWizard(event)" horizontalCenter="478" verticalCenter="-284" icon="@Embed(source='../images/arrow_right.png')" toolTip="next regex" width="30" height="30"  enabled="{!inputError}"/>
 	<!--<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" horizontalCenter="370" verticalCenter="-284" id="mExitButton" click="exitButtonClickHandler(event)" toolTip="exit" icon="@Embed(source='../images/door_out.png')" width="30" height="30"/>-->
-	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" click="backWizard(event)" horizontalCenter="427" verticalCenter="-284" icon="@Embed(source='../images/arrow_left.png')" toolTip="previous regex" width="30" height="30"/>
+	<mx:Button id="leftButton" useHandCursor="false" buttonMode="true" mouseChildren="false" click="backWizard(event)" horizontalCenter="427" verticalCenter="-284" icon="@Embed(source='../images/arrow_left.png')" toolTip="previous regex" width="30" height="30" enabled="false"/>
 	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" click="regexHelp(event)" horizontalCenter="375" verticalCenter="-284" icon="@Embed(source='../images/help.png')" toolTip="help on this particular regex" width="30" height="30"/>
 	
 	<mx:ViewStack x="10" y="55" id="mMainViewStack" width="992" height="551">
@@ -550,12 +605,12 @@
         		</mx:htmlText>
 			</mx:Text>
 			<mx:Label x="10" y="24" text="Info" styleName="subHead"/>
-			<mx:Label x="490" y="24" text="Useful Regex Things (TODO: find better word)" styleName="subHead"/>
+			<mx:Label x="490" y="24" text="Regex Syntax Notes" styleName="subHead"/>
 		</mx:Canvas>
 		<mx:Canvas id="RegexEntry" width="100%" height="100%" creationComplete="viewAppearanceHandler(event)" show="viewAppearanceHandler(event)">
 			<mx:Text id="infoText" text="Enter a regular expression that matches {currState}:" width="972" height="22" fontSize="12" horizontalCenter="0" verticalCenter="-256"/>
 			<mx:TextInput id="regexString" change="onTextInputChange(event)"  width="292" horizontalCenter="-340" verticalCenter="-231" borderStyle="solid" borderThickness="0" color="#EFEFEF"/>
-			<mx:TabNavigator id="feedbackTabs" width="974.95" height="481" horizontalCenter="2" verticalCenter="35" change="onTextInputChange(event)">
+			<mx:TabNavigator id="feedbackTabs" creationPolicy="all" width="974.95" height="481" horizontalCenter="2" verticalCenter="35" change="onFeedbackTabChange(event)">
 	    		<mx:Canvas label="View" id="htmlViewTab" width="100%" height="100%" color="#EFEFEF">
 	    		    <mx:HTML id="htmlComponent" htmlText="{urlContents}" x="10" y="10" width="952.95" height="440" addedToStage="htmlViewAddedHandler(event)"/>
 	    		</mx:Canvas>
@@ -563,14 +618,15 @@
 	    		    <mx:TextArea creationComplete="initializePageSourceText(event)" show="initializePageSourceText(event)" width="972" height="447" id="mPageSourceText" selectable="true" verticalScrollPolicy="on" editable="false" wordWrap="true"/>
 	    		</mx:VBox>
 	   		    <mx:HBox label="Text Matches" id="textMatchesTab" width="100%" height="100%" color="#EFEFEF">
-	    		    <mx:TextArea id="matchesText" width="970" height="446">
+	    		    <mx:TextArea id="matchesText" width="970" height="446" creationComplete="onTextInputChange(event)" show="onTextInputChange(event)">
 	    		    </mx:TextArea>
 	    		</mx:HBox>
 			</mx:TabNavigator>
+			<mx:Image id="userInputErrorImage" x="310" y="39" width="14" height="15" source="@Embed(source='../images/error.png')" scaleContent="false" visible="{inputError}" toolTip="No opening slash"/>
 		</mx:Canvas>
 		<mx:Canvas id="pageOfPostsVerify" label="" width="100%" height="100%">
 			<mx:Canvas width="100%" height="100%" x="-0.05" y="10">
-				<mx:TabNavigator width="973" height="483" horizontalCenter="0" verticalCenter="20" change="onTextInputChange(event)">
+				<mx:TabNavigator width="973" height="483" horizontalCenter="0" verticalCenter="20">
 				  		<mx:Canvas label="View" width="100%" height="100%" backgroundColor="#FFFFFF">
 				  		  		<mx:HBox color="#F4F4F4">
 				  		  			<mx:Label text="Website ;"  width="68" fontSize="12"/>
