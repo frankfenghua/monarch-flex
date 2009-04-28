@@ -23,6 +23,78 @@
 			//
 			///////////////////////////////////////////////////////////////////////////////////
 			
+			/**
+			 * opens scraper starter page in browser
+			 */
+			private function goUrl():void
+			{
+				navigateToURL(new URLRequest(url), "_blank")
+			}
+			
+			/**
+			 * opens profile of most talkative person in browser
+			 */
+			private function goChatterbox():void
+			{
+				navigateToURL(new URLRequest(chatterboxUrl), "_blank")
+			}
+			
+			/**
+			 * opens up profile of newest member in browser
+			 */
+			private function goNewbie():void
+			{
+				navigateToURL(new URLRequest(newbieUrl), "_blank")
+			}
+			
+			/**
+			 * opens up profile of oldest member in browser
+			 */
+			private function goVeteran():void
+			{
+				navigateToURL(new URLRequest(veteranUrl), "_blank")
+			}
+			
+			/**
+			 * opens up most lively thread in browser
+			 */
+			private function goLivelyThread():void
+			{
+				navigateToURL(new URLRequest(livelyThreadUrl), "_blank")
+			}
+			
+			/**
+			 * opens up most viewed thread in browser
+			 */
+			private function goMostViewedThread():void
+			{
+				navigateToURL(new URLRequest(mostViewedThreadUrl), "_blank")
+			}
+			
+			/**
+			 * opens up most mentioned base URL in browser
+			 */
+			private function goMostMentionedBaseUrl():void
+			{
+				navigateToURL(new URLRequest("http://" + mostMentionedBaseUrl), "_blank")
+			}
+			
+			/**
+			 * opens up most liked base URL in browser
+			 */
+			private function goMostLikedBaseUrl():void
+			{
+				navigateToURL(new URLRequest("http://" + mostLikedBaseUrl), "_blank")
+			}
+			
+			/**
+			 * opens up least liked base URL in browser
+			 */
+			private function goLeastLikedBaseUrl():void
+			{
+				navigateToURL(new URLRequest("http://" + leastLikedBaseUrl), "_blank")
+			}
+			
 			// ================================================================================
 			// treeLabel
 			//    args:  an XML node
@@ -48,51 +120,6 @@
 					return item.name();
             	}
             }
-
-			// TODO: I called the server twice. This time, I got it in normal response form
-			//       not a resourceful method.
-			private function statResultHandler2(event:ResultEvent):void  
-			{
-				Alert.show("statResultHandler2 was called");
-				
-				var i:int = 0; // used as counter in this function
-				trace("Load succeeded");
-				// Assign to bound variables to implicitly change the text
-				numberOfUsers = event.result.detailStats.general.numberUsers;
-				postsPerDay = event.result.detailStats.general.postsPerDay;
-				postsToday = event.result.detailStats.general.postsToday;
-				analyzedPosts = event.result.detailStats.general.analyzedPosts;
-				analyzedThreads = event.result.detailStats.general.analyzedThreads;
-				
-				var chatterboxes:ArrayCollection = event.result.detailStats.general.chatterboxes.user;			
-				chatterboxName   = chatterboxes.getItemAt(0).label;
-				chatterboxUrl    = chatterboxes.getItemAt(0).url;
-				chatterboxRating = chatterboxes.getItemAt(0).rating;
-				
-				var newbies:ArrayCollection = event.result.detailStats.general.newbies.user;			
-				newbieName   = newbies.getItemAt(0).label;
-				newbieUrl    = newbies.getItemAt(0).url;
-				newbieRating = newbies.getItemAt(0).rating;
-				
-				var veterans:ArrayCollection = event.result.detailStats.general.veterans.user;			
-				veteranName   = veterans.getItemAt(0).label;
-				veteranUrl    = veterans.getItemAt(0).url;
-				veteranRating = veterans.getItemAt(0).rating;
-				
-				var livelyThreads:ArrayCollection = event.result.detailStats.general.livelyThreads.thread;			
-				livelyThreadTitle   = livelyThreads.getItemAt(0).label;
-				livelyThreadUrl     = livelyThreads.getItemAt(0).url;
-				livelyThreadRating  = livelyThreads.getItemAt(0).rating;
-				
-				// not all sites have a thread view count
-				var mostViewedThreads:ArrayCollection = event.result.detailStats.general.mostViewedThreads.thread;	
-				if(mostViewedThreads.length > 0)
-				{		
-					mostViewedThreadTitle   = mostViewedThreads.getItemAt(0).label;
-					mostViewedThreadUrl     = mostViewedThreads.getItemAt(0).url;
-					mostViewedThreadRating  = mostViewedThreads.getItemAt(0).rating;
-				}
-			}
 
 			/**
 			 * Called when the stat request results in error
@@ -188,64 +215,11 @@
 					leastLikedBaseUrl = linkLeastLiked.@url;
 					leastLikedRating  = twoDecimalPrecision(Number(linkLeastLiked.@rating));
 				}
-				/*
-				// Set keywords HTML
-				tempString = "";
-				var keywords:ArrayCollection = event.result.detailStats.keywords.keyword;
-				for(i = 0; i < keywords.length; i++) {
-					// Print word
-					var j:int = 0;
-					tempString += keywords.getItemAt(i).word + "\n";
-					trace("Keyword "+i+" of "+keywords.length);
-					
-					tempString += "Favorable threads:";
-					var loveThreads:ArrayCollection = keywords.getItemAt(i).loveThreads.thread;
-					for(j = 0; j < loveThreads.length; j++) {
-						tempString += "<a href=\""+loveThreads.getItemAt(j).url+"\">"+loveThreads.getItemAt(j).title+"</a> Rating="+loveThreads.getItemAt(j).rating+"\n";
-					}
-					
-					tempString += "Unfavorable threads:";
-					var hateThreads:ArrayCollection = keywords.getItemAt(i).hateThreads.thread;
-					for(j = 0; j < hateThreads.length; j++) {
-						tempString += "<a href=\""+hateThreads.getItemAt(j).url+"\">"+hateThreads.getItemAt(j).title+"</a> Rating="+hateThreads.getItemAt(j).rating+"\n";
-					}
-					
-					tempString += "Hot threads:";
-					var hotThreads:ArrayCollection = keywords.getItemAt(i).hotThreads.thread;
-					for(j = 0; j < hotThreads.length; j++) {
-						tempString += "<a href=\""+hotThreads.getItemAt(j).url+"\">"+hotThreads.getItemAt(j).title+"</a> Rating="+hotThreads.getItemAt(j).rating+"\n";
-					}
-					
-					tempString += "Ass kissers:";
-					var assKissers:ArrayCollection = keywords.getItemAt(i).assKissers.user;
-					for(j = 0; j < assKissers.length; j++) {
-						tempString += "<a href=\""+assKissers.getItemAt(j).url+"\">"+assKissers.getItemAt(j).title+"</a> Rating="+assKissers.getItemAt(j).rating+"\n";
-					}
-					
-					tempString += "Trash talkers:";
-					var trashTalkers:ArrayCollection = keywords.getItemAt(i).trashTalkers.user;
-					for(j = 0; j < trashTalkers.length; j++) {
-						tempString += "<a href=\""+trashTalkers.getItemAt(j).url+"\">"+trashTalkers.getItemAt(j).title+"</a> Rating="+trashTalkers.getItemAt(j).rating+"\n";
-					}
-					
-					tempString += "Chatterboxes:";
-					var kChatterboxes:ArrayCollection = keywords.getItemAt(i).chatterboxes.user;
-					for(j = 0; j < kChatterboxes.length; j++) {
-						tempString += "<a href=\""+kChatterboxes.getItemAt(j).url+"\">"+kChatterboxes.getItemAt(j).title+"</a> Rating="+kChatterboxes.getItemAt(j).rating+"\n";
-					}
-					
-					tempString += "Sophisticated orators:";
-					var sophisticatedOrators:ArrayCollection = keywords.getItemAt(i).sophisticatedOrators.user;
-					for(j = 0; j < sophisticatedOrators.length; j++) {
-						tempString += "<a href=\""+sophisticatedOrators.getItemAt(j).url+"\">"+sophisticatedOrators.getItemAt(j).title+"</a> Rating="+sophisticatedOrators.getItemAt(j).rating+"\n";
-					}
-					
-				}
-				trace(tempString.length);
-				keywordsHTML = tempString;
-				*/
 			}
 		
+			/**
+			 * takes you to a thread or user's page in the browser when you click on a tree item
+			 */
 			private function treeClickHandler(event:ListEvent):void
 			{
 				var node:XML = event.currentTarget.selectedItem;
@@ -354,6 +328,9 @@
 			//
 			///////////////////////////////////////////////////////////////////////////////////
 			
+			[Bindable]
+			private var SERVER_URL:String = Constants.SERVER_URL+"monarch/Client/";	
+			
 			// name of the community group
 			private var mCommunityGroupName:String = "";
 			// name of the website 
@@ -385,7 +362,7 @@
 			private var chatterboxName:String = "not enough activity on website for this stat";
 			
 			[Bindable]
-			private var chatterboxUrl:String = "http://www.error.com"; // TODO: create 404 error page
+			private var chatterboxUrl:String = SERVER_URL + "404error.html";
 			
 			[Bindable]
 			private var chatterboxRating:Number = 0; 
@@ -394,7 +371,7 @@
 			private var newbieName:String = "not enough activity on website for this stat";
 			
 			[Bindable]
-			private var newbieUrl:String = "http://www.error.com"; // TODO: create 404 error page
+			private var newbieUrl:String = SERVER_URL + "404error.html";
 			
 			[Bindable]
 			private var newbieRating:String = "";
@@ -403,7 +380,7 @@
 			private var veteranName:String = "not enough activity on website for this stat";
 			
 			[Bindable]
-			private var veteranUrl:String = "http://www.error.com"; // TODO: create 404 error page
+			private var veteranUrl:String = SERVER_URL + "404error.html";
 			
 			[Bindable]
 			private var veteranRating:String = "";
@@ -412,7 +389,7 @@
 			private var livelyThreadTitle:String = "not enough activity on website for this stat";
 			
 			[Bindable]
-			private var livelyThreadUrl:String = "http://www.error.com"; // TODO: create 404 error page
+			private var livelyThreadUrl:String = SERVER_URL + "404error.html";
 			
 			[Bindable]
 			private var livelyThreadRating:Number = 0;
@@ -421,36 +398,31 @@
 			private var mostViewedThreadTitle:String = "this website does not store view count";
 			
 			[Bindable]
-			private var mostViewedThreadUrl:String = "http://www.error.com"; // TODO: create 404 error page
+			private var mostViewedThreadUrl:String = SERVER_URL + "404error.html";
 			
 			[Bindable]
 			private var mostViewedThreadRating:Number = 0;
 			
 			[Bindable]
-			private var mostLikedBaseUrl:String = Constants.SERVER_URL + "monarch/Client/404error.html";
+			private var mostLikedBaseUrl:String = SERVER_URL + "404error.html";
 			
 			[Bindable]
 			private var mostLikedRating:Number = 0;
 			
 			[Bindable]
-			private var leastLikedBaseUrl:String = Constants.SERVER_URL + "monarch/Client/404error.html";
+			private var leastLikedBaseUrl:String = SERVER_URL + "404error.html";
 			
 			[Bindable]
 			private var leastLikedRating:Number = 0;
 			
 			[Bindable]
-			private var mostMentionedBaseUrl:String = Constants.SERVER_URL + "monarch/Client/404error.html";
-			
+			private var mostMentionedBaseUrl:String = SERVER_URL + "404error.html";
 			[Bindable]
 			private var mostMentionedCount:Number = 0;
-			
-			[Bindable]
-			private var SERVER_URL:String = Constants.SERVER_URL+"monarch/Client/";	
 			
 		]]>
 	</mx:Script>
 	<mx:XMLListCollection id="keywordsTree" source="{statRequester.lastResult.keywords.keyword}"/>
-	<mx:HTTPService id="statRequester2" method="GET" url="{SERVER_URL}detailStats.php" result="statResultHandler2(event)" />
 	<mx:HTTPService id="statRequester" method="GET" url="{SERVER_URL}detailStats.php" result="statResultHandler(event)" fault="statRetrievalErrorHandler(event)" resultFormat="e4x"/>	
 	<mx:LinkButton click="homeLabelClickHandler(event)" label="Home" id="mHomeLabel" top="2" left="0" />
 	<mx:LinkButton click="communityLabelClickHandler(event)" label="My Community Groups" id="mCommunityGroupLabel" top="1" left="79" />
@@ -473,7 +445,7 @@
 			x="125" 
 		 	y="0"
 			toolTip="the entry page of this website"
-			click="navigateToURL(new URLRequest('http://www.error.com'), '_blank')"
+			click="goUrl()"
 		/>
 		<mx:Label 
 			text="posts per day:" 
@@ -564,7 +536,7 @@
 			x="237" 
 		 	y="147"
 			toolTip="user with most posts"
-			click="navigateToURL(new URLRequest('http://www.error.com'), '_blank')"
+			click="goChatterbox()"
 		/>
 		<mx:Label 
 			text="newbie:" 
@@ -585,7 +557,7 @@
 			x="237" 
 		 	y="172"
 			toolTip="the newest user that joined this website"
-			click="navigateToURL(new URLRequest('http://www.error.com'), '_blank')"
+			click="goNewbie()"
 		/>
 		<mx:Label 
 			text="veteran:" 
@@ -599,7 +571,7 @@
 			x="237" 
 		 	y="197"
 			toolTip="the user that joined the website earliest (that Monarch knows of)"
-			click="navigateToURL(new URLRequest('http://www.error.com'), '_blank')"
+			click="goVeteran()"
 		/>
 		<mx:Label 
 			text="joined {veteranRating}" 
@@ -627,7 +599,7 @@
 			x="237" 
 		 	y="222"
 			toolTip="the thread with the most replies (that Monarch knows of)"
-			click="navigateToURL(new URLRequest('http://www.error.com'), '_blank')"
+			click="goLivelyThread()"
 		/>
 		<mx:Label 
 			text="most viewed thread:" 
@@ -648,7 +620,7 @@
 			x="237" 
 		 	y="247"
 			toolTip="the thread with the most replies (that Monarch knows of)"
-			click="navigateToURL(new URLRequest('http://www.error.com'), '_blank')"
+			click="goMostViewedThread()"
 		/>
 	</mx:Panel>
 	<mx:Panel x="6" y="407" width="494.5" height="200" layout="absolute" title="Links Spoken">
@@ -671,7 +643,7 @@
 			x="213" 
 		 	y="8"
 			toolTip="the external base URL that was most linked to"
-			click="navigateToURL(new URLRequest('http://www.error.com'), '_blank')"
+			click="goMostMentionedBaseUrl()"
 		/>
 		<mx:Label 
 			text="most liked:" 
@@ -692,7 +664,7 @@
 			x="213" 
 		 	y="38"
 			toolTip="the external link that people on this website presumably most like"
-			click="navigateToURL(new URLRequest('http://www.error.com'), '_blank')"
+			click="goMostLikedBaseUrl()"
 		/>
 		<mx:Label 
 			text="least liked:" 
@@ -713,7 +685,7 @@
 			x="213" 
 		 	y="68"
 			toolTip="the external link that people on this website presumably most hate"
-			click="navigateToURL(new URLRequest('http://www.error.com'), '_blank')"
+			click="goLeastLikedBaseUrl()"
 		/>
 	</mx:Panel>
 	<mx:Panel x="508" y="50" width="494" height="556" layout="absolute" title="Keywords">
