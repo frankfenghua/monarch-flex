@@ -395,6 +395,7 @@ class DetailStats
 	private function xml($data) {
 		$newData = str_replace('&', '', $data);
 		$newData = str_replace('<', '\<', $newData);
+		$newData = str_replace('"', '', $newData);
 		return $newData;
 	}
 

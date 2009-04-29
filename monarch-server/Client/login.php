@@ -58,13 +58,15 @@ if(mysql_num_rows($q) == 0)
 	 $xml->element("NumberOfCommunityGroups", $num_rows);
 	 for($i = 0; $i < $num_rows; $i++)
 	 {
-       	$xml->push("CommunityGroup".$i);
+       		$xml->push("CommunityGroup".$i);
 		$commId = mysql_result($result, $i, "id"); 
-        $commName = mysql_result($result, $i, "name");
+        	$commName = mysql_result($result, $i, "name");
 		$time = mysql_result($result, $i, "created");
+		$accesses = mysql_result($result, $i, "accessCount");
 		$xml->element("communityGroupId", $commId);
 		$xml->element("communityGroupName", $commName);
 		$xml->element("communityGroupCreatedTime", $time);
+		$xml->element("communityGroupAccesses", $accesses);
 
 		// get the creator of the community group
 		$creatorQuery = "SELECT user FROM communities WHERE id = '" . $commId . "'";
