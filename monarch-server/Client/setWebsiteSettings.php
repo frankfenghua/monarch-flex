@@ -71,11 +71,13 @@
 	$threadNumViews     = mysql_real_escape_string(html_entity_decode($_GET['threadNumViews']));
 	$firstPostTime      = mysql_real_escape_string(html_entity_decode($_GET['firstPostTime']));
 	$nextPageOfPosts    = mysql_real_escape_string(html_entity_decode($_GET['nextPageOfPosts']));
+	$firstPostAuthor    = mysql_real_escape_string(html_entity_decode($_GET['firstPostAuthor']));
 	$firstPostAuthorUrl = mysql_real_escape_string(html_entity_decode($_GET['firstPostAuthorUrl']));
 	$replyAuthorUrl     = mysql_real_escape_string(html_entity_decode($_GET['replyAuthorUrl']));
 	$replyTime          = mysql_real_escape_string(html_entity_decode($_GET['replyTime']));
 	$threadUrl          = mysql_real_escape_string(html_entity_decode($_GET['threadUrl']));
 	$startPage          = mysql_real_escape_string(html_entity_decode($_GET['startPage']));
+	$threadTitle        = mysql_real_escape_string(html_entity_decode($_GET['threadTitle']));
 	$scrapeInterval     = mysql_real_escape_string($_GET['scrapeInterval']);
 	$scrapeNumTopLevel  = mysql_real_escape_string($_GET['scrapeNumTopLevel']);
 	
