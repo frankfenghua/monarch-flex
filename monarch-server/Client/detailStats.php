@@ -332,7 +332,7 @@ class DetailStats
 		if($appendUnits)
 			$rating = $this->appendUnits($rating);
 		
-		echo '<thread url="' . $url . '" label="' . $title . '" rating="' . $$rating . '"/>';
+		echo '<thread url="' . $url . '" label="' . $title . '" rating="' . $rating . '"/>';
 	}
 	
 	// ========================================================================
