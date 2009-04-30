@@ -572,7 +572,7 @@
 	<mx:LinkButton label="My Community Groups"  id="mCommunityGroupLabel" click="communityLabelClickHandler(event)" styleName="breadCrumb"  top="15" left="81" textAlign="left"/>
 	<mx:LinkButton label="{mCommunityGroupName}" id="mCommunityGroupNameLabel" click="communityNameLabelClickHandler(event)" styleName="breadCrumb"  top="15" left="256" textAlign="center"/>
 	<mx:LinkButton click="websiteNameLabelClickHandler(event)" id="mWebsiteNameLabel" top="15" left="346" textAlign="center" textDecoration="normal" visible="false"/>
-	<mx:Label text="Adapter Editor" id="mRexExEditorLabel" styleName="pageTitle"  top="13" left="344" textAlign="left"/>
+	<mx:Label text="Adapter Editor" id="mRexExEditorLabel" styleName="pageTitle"  top="13" left="424" textAlign="left"/>
 	<mx:Button id="rightButton" useHandCursor="{!inputError}" buttonMode="true" mouseChildren="false" click="advanceWizard(event)" horizontalCenter="478" verticalCenter="-284" icon="@Embed(source='../images/arrow_right.png')" toolTip="next regex" width="30" height="30"  enabled="{!inputError}"/>
 	<!--<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" horizontalCenter="370" verticalCenter="-284" id="mExitButton" click="exitButtonClickHandler(event)" toolTip="exit" icon="@Embed(source='../images/door_out.png')" width="30" height="30"/>-->
 	<mx:Button id="leftButton" useHandCursor="false" buttonMode="true" mouseChildren="false" click="backWizard(event)" horizontalCenter="427" verticalCenter="-284" icon="@Embed(source='../images/arrow_left.png')" toolTip="previous regex" width="30" height="30" enabled="false"/>
@@ -654,6 +654,6 @@
 	<mx:HRule width="993" verticalCenter="-261" horizontalCenter="0"  />
 	<mx:Label text="&gt;" styleName="breadCrumbSeparator"  fontWeight="bold" top="13" left="61" id="mSep1"/>
 	<mx:Label text="&gt;" styleName="breadCrumbSeparator"  top="13" left="232" id="mSep2"/>
-	<mx:Label text="&gt;" styleName="breadCrumbSeparator"  top="13" left="322" id="mSep3"/>
+	<mx:Label text="&gt;" styleName="breadCrumbSeparator"  top="13" left="402" id="mSep3"/>
 	<mx:Label text="&gt;" styleName="breadCrumbSeparator"  top="12" left="415" id="mSep4" visible="false"/>
 </mx:Canvas>
