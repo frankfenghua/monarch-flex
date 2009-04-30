@@ -32,15 +32,19 @@ package {
 		static public function perlSyntaxToNative(perlRegex:String):RegExp {
 			// The modifiers for the ActionScript regular expression
 			var modifiers:String = "g";
-			
-			if(perlRegex.indexOf("/") != 0) {
-				throw new Error("No opening slash");
+			if(perlRegex == null || perlRegex.length == 0) {
+				throw new Error("An empty regular expression must include delimiting characters ('##' or '//')");
+			}
+			var delimitingChar:String = perlRegex.charAt(0);
+			if(delimitingChar != "#" && delimitingChar != "/") {
+				throw new Error("Invalid delimiting character: string must begin with '#' or '/'");
 			}
 			
+			
 			// Find closing '/'
-			var closingIndex:int = perlRegex.lastIndexOf("/");
+			var closingIndex:int = perlRegex.lastIndexOf(delimitingChar);
 			if(closingIndex <= 0) {
-				throw new Error("No closing slash");
+				throw new Error("No closing delimitor: "+delimitingChar);
 			}
 			
 			// Look for modifier at the end of the Regular Expression
@@ -53,11 +57,13 @@ package {
 			modifiers += result[0];
 		
 			var asRegexString:String = perlRegex.substring(1, closingIndex);
+			trace("Actionscript string: "+asRegexString);
 			
-			// Look for unescaped '/'
-			var invalidSlash:RegExp = /[^\\]\//;
-			if(asRegexString.match(invalidSlash) != null) {
-				throw new Error("Unescaped slash");
+			// Look for unescaped delimiting character
+			var invalidDelimitor:RegExp = new RegExp("[^\\\\]" + delimitingChar);
+			trace("Match: " + asRegexString.match(invalidDelimitor));
+			if(asRegexString.match(invalidDelimitor) != null) {
+				throw new Error("Unescaped delimiting character: "+delimitingChar);
 			}
 		
 			// TODO: translate unsupported Perl features
