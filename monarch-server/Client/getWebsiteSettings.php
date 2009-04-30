@@ -14,7 +14,7 @@
 	// ======================================================
 
 	// ======================================================
-	// removePregSyntax
+	// removePregSyntax - Deprecated
 	//   args:  string - a string representing a Perl-style regular 
 	//            expression (i.e. '/[a-z]+/'
 	//   ret:   string which does not have Perl-style specific features
@@ -50,7 +50,8 @@
 
 	// Output in flashvars format
 	foreach($cols as $regexName) {
-		$regexValue = removePregSyntax($result[$regexName]);
+		// $regexValue = removePregSyntax($result[$regexName]);
+		$regexValue = $result[$regexName];
 		echo $regexName.'='.$regexValue.';';	
 	}
 
