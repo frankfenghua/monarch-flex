@@ -216,7 +216,7 @@ class DetailStats
 				ORDER BY rating DESC
 				LIMIT 3';
 			
-			$this->threadsGroup('loveThreads', $q);
+			$this->threadsGroup('loveThreads', $q, true);
 			
 			// threads that overall talk negatively about the keyword
 			$q = 'SELECT t.url, t.title, s.goodness AS rating
@@ -228,7 +228,7 @@ class DetailStats
 				ORDER BY rating ASC
 				LIMIT 3';
 			
-			$this->threadsGroup('hateThreads', $q);
+			$this->threadsGroup('hateThreads', $q, true);
 			
 			// threads that mention the keyword a lot
 			$q = 'SELECT t.url, t.title, s.count AS rating
@@ -239,7 +239,7 @@ class DetailStats
 				ORDER BY rating DESC
 				LIMIT 3';
 			
-			$this->threadsGroup('hotThreads', $q);
+			$this->threadsGroup('hotThreads', $q, true);
 			
 			// people who talk most positively about the keyword
 			$q = 'SELECT u.name, u.url, s.goodness AS rating
@@ -251,7 +251,7 @@ class DetailStats
 				ORDER BY rating DESC
 				LIMIT 3';
 			
-			$this->usersGroup('assKissers', $q);
+			$this->usersGroup('assKissers', $q, true);
 			
 			// people who talk most negatively about the keyword
 			$q = 'SELECT u.name, u.url, s.goodness AS rating
@@ -263,7 +263,7 @@ class DetailStats
 				ORDER BY rating ASC
 				LIMIT 3';
 			
-			$this->usersGroup('trashTalkers', $q);
+			$this->usersGroup('trashTalkers', $q, true);
 			
 			// people who talk a lot about the keyword
 			$q = 'SELECT u.name, u.url, s.count AS rating
@@ -274,7 +274,7 @@ class DetailStats
 				ORDER BY rating DESC
 				LIMIT 3';
 			
-			$this->usersGroup('chatterboxes', $q);
+			$this->usersGroup('chatterboxes', $q, true);
 			
 			// people who talk with good prose about the keyword
 			$q = 'SELECT u.name, u.url, s.englishProficiency / s.count AS rating
@@ -285,7 +285,7 @@ class DetailStats
 				ORDER BY rating DESC
 				LIMIT 3';
 			
-			$this->usersGroup('sophisticatedOrators', $q);
+			$this->usersGroup('sophisticatedOrators', $q, true);
 			
 			echo '</keyword>';
 		}
@@ -297,17 +297,18 @@ class DetailStats
 	//                    threads? etc...
 	//           string - MySQL query for all threads of the aforementioned 
 	//                    type
+	//           bool   - add "mentions" or "rating" after the value
 	//    ret:   void
 	//    about: Prints out a group of threads.
 	// ------------------------------------------------------------------------
-	private function threadsGroup($type, $query)
+	private function threadsGroup($type, $query, $appendUnits = false)
 	{
 		echo '<' . $type . ' label="' . $type . '">';
 		
 		$threadsQuery = $this->database->query($query);
 		
 		while($threadRow = mysql_fetch_array($threadsQuery))
-			$this->threadNode($threadRow);
+			$this->threadNode($threadRow, $appendUnits);
 		
 		echo '</' . $type . '>';
 	}
@@ -318,15 +319,20 @@ class DetailStats
 	//              * url
 	//              * title
 	//              * rating
+	//           bool   - add "mentions" or "rating" after the value
 	//    ret:   void
 	//    about: Prints out a thread node with data about this thread.
 	// ------------------------------------------------------------------------
-	private function threadNode($threadData)
+	private function threadNode($threadData, $appendUnits = false)
 	{
 		$url = URL::translateURLBasedOnCurrent($this->xml($threadData['url']),$this->startPage);
 		$title = $this->xml($threadData['title']);
 		$rating = $this->xml($threadData['rating']);
-		echo '<thread url="' . $url . '" label="' . $title . '" rating="' . $this->rating($rating) . '"/>';
+		
+		if($appendUnits)
+			$rating = $this->appendUnits($rating);
+		
+		echo '<thread url="' . $url . '" label="' . $title . '" rating="' . $$rating . '"/>';
 	}
 	
 	// ========================================================================
@@ -334,17 +340,18 @@ class DetailStats
 	//    args:  string - what type of users are these? Haters? Lovers? etc...
 	//           string - MySQL query for all users of the aforementioned 
 	//                    type
+	//           bool   - add "mentions" or "rating" after the value
 	//    ret:   void
 	//    about: Prints out a group of users.
 	// ------------------------------------------------------------------------
-	private function usersGroup($type, $query)
+	private function usersGroup($type, $query, $appendUnits = false)
 	{
 		echo '<' . $type . ' label ="' . $type . '">';
 		
 		$usersQuery = $this->database->query($query);
 		
 		while($userRow = mysql_fetch_array($usersQuery))
-			$this->userNode($userRow);
+			$this->userNode($userRow, $appendUnits);
 		
 		echo '</' . $type . '>';
 	}
@@ -355,19 +362,24 @@ class DetailStats
 	//              * url
 	//              * name
 	//              * rating
+	//           bool   - add "mentions" or "rating" after the value
 	//    ret:   void
 	//    about: Prints out a user node with data about this user.
 	// ------------------------------------------------------------------------
-	private function userNode($userData)
+	private function userNode($userData, $appendUnits = false)
 	{
 		$url = URL::translateURLBasedOnCurrent($this->xml($userData['url']),$this->startPage);
 		$title = $this->xml($userData['name']);
 		$rating = $this->xml($userData['rating']);
-		echo '<user url="' . $url . '" label="' . $title . '" rating="' . $this->rating($rating) . '"/>';
+		
+		if($appendUnits)
+			$rating = $this->appendUnits($rating);
+		
+		echo '<user url="' . $url . '" label="' . $title . '" rating="' . $rating . '"/>';
 	}
 	
 	// ========================================================================
-	// rating
+	// appendUnits
 	//    args:  either a float or int
 	//    ret:   string
 	//    about: Based on whether this is an int or floay, we can determine if
@@ -375,7 +387,7 @@ class DetailStats
 	//           it's not too long.  We will append what kind of number this 
 	//           is.
 	// ------------------------------------------------------------------------
-	private function rating($number)
+	private function appendUnits($number)
 	{
 		// int => count
 		if(round($number) == $number)
