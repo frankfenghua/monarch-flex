@@ -94,7 +94,7 @@ class DetailStats
 		$q = $this->database->fetch($q);
 		$numPosts = $q['COUNT(*)'];
 		
-		echo '<postsPerDay>' . ($numPosts / (time() - $timeStartScrape) / SECONDS_IN_DAY ) . '</postsPerDay>';
+		echo '<postsPerDay>' . ($numPosts / ((time() - $timeStartScrape) / SECONDS_IN_DAY)) . '</postsPerDay>';
 		
 		// number of posts in the last 24 hours
 		$q = 'SELECT COUNT(*) 
