@@ -326,6 +326,14 @@
 				
 				// Send a request to the server for stats for this object
 				trace("Sent stats request");
+				// Disable panel until we have received stats
+				if(mGeneralPanel)
+					mGeneralPanel.enabled = false;
+				if(mLinksPanel)
+					mLinksPanel.enabled = false;
+				if(mKeywordsPanel)
+					mKeywordsPanel.enabled = false;
+				
 				statRequester.send({"websiteName":mWebsiteName});
 			}
 			
