@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="showCanvasHandler(event)" show="showCanvasHandler(event)" width="418" height="20" >
-	<mx:Label text="Label" color="#FFFFFF" x="4" y="1" width="363.8" id="mNameLabel"/>
-	<mx:CheckBox x="381.8" y="1" id="mRadioButton"/>
+	<mx:Label text="Label" color="#FFFFFF" x="42" y="1" width="363.8" id="mNameLabel"/>
+	<mx:CheckBox x="14.75" y="1" id="mRadioButton"/>
 
 	
 	<mx:Script>

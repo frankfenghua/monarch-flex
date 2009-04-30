@@ -155,8 +155,6 @@
 			 */
 			private function statResultHandler(event:ResultEvent):void  
 			{
-				Alert.show("original statResultHandler was called");
-
 				var i:int = 0; // used as counter in this function
 
 				// Assign to bound variables to implicitly change the text

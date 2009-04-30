@@ -26,7 +26,6 @@
 			public function disableAll():void
 			{
 				mKeywordsSpokenCanvas.enabled = false;
-				mLinksSpokenCanvas.enabled = false;
 			}
 			
 			/**
@@ -51,7 +50,6 @@
 				this.selectedIndex = 0;
 				mWebsitesCanvas.removeAllChildren();
 				mKeywordsSpokenCanvas.removeAllChildren();
-				mLinksSpokenCanvas.removeAllChildren();
 				var inc:int = 0;
 				for(var i:int = 0; i < mWebsites.length; i++) {
 					websiteEntry = cWebsiteEntry(mWebsites.getItemAt(i));
@@ -98,20 +96,6 @@
 				}
 			}
 			
-			/**
-			 * 
-			 */
-			private function linksSpokenCanvasShowHandler(event:Event):void
-			{
-				if(mLinks != null) {
-					if(mLinks.length == 0) {
-						mNoLinksAvailableLabel.visible = true;
-					}
-					else {
-						mNoLinksAvailableLabel.visible = false;
-					}
-				}
-			}
 			
 			/**
 			 * 
@@ -139,7 +123,6 @@
 				this.dispatchEvent(e);
 				
 				mKeywordsSpokenCanvas.enabled = true;
-				mLinksSpokenCanvas.enabled = true;
 			}
 			
 			/**
@@ -166,7 +149,6 @@
 			private function showAccordionHandler(event:Event):void
 			{
 				mKeywordsSpokenCanvas.enabled = false;
-				mLinksSpokenCanvas.enabled = false;
 			}
 			
 			
@@ -192,8 +174,5 @@
 	<mx:Canvas label="Keywords Spoken" width="100%" height="100%" creationComplete="keywordSpokenCanvasShowHandler(event)" show="keywordSpokenCanvasShowHandler(event)" id="mKeywordsSpokenCanvas" toolTip="Keywords spoken by people in the websites under this community" horizontalScrollPolicy="off">
 		<mx:Label text="No Keywords Available" horizontalCenter="0" verticalCenter="-218" id="mNoKeywordsAvailableLabel" toolTip="Perhaps no keywords where registered"/>
 		</mx:Canvas>
-	<mx:Canvas label="Links Spoken" width="100%" height="100%" creationComplete="linksSpokenCanvasShowHandler(event)" show="linksSpokenCanvasShowHandler(event)" id="mLinksSpokenCanvas" toolTip="URL's spoken by people in the websites under this community.  These could have been links to images or external websites." horizontalScrollPolicy="off">
-		<mx:Label text="No Links Available" horizontalCenter="0" verticalCenter="-218" id="mNoLinksAvailableLabel" toolTip="Perhaps no links where found"/>
-	</mx:Canvas>
 	
 </mx:Accordion>

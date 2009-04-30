@@ -609,7 +609,7 @@
 		</mx:Canvas>
 		<mx:Canvas id="RegexEntry" width="100%" height="100%" creationComplete="viewAppearanceHandler(event)" show="viewAppearanceHandler(event)">
 			<mx:Text id="infoText" text="Enter a regular expression that matches {currState}:" width="972" height="22" fontSize="12" horizontalCenter="0" verticalCenter="-256"/>
-			<mx:TextInput id="regexString" change="onTextInputChange(event)"  width="292" horizontalCenter="-340" verticalCenter="-231" borderStyle="solid" borderThickness="0" color="#EFEFEF"/>
+			<mx:TextInput id="regexString" change="onTextInputChange(event)"  width="342" horizontalCenter="-310" verticalCenter="-231" borderStyle="solid" borderThickness="0" color="#EFEFEF"/>
 			<mx:TabNavigator id="feedbackTabs" creationPolicy="all" width="974.95" height="481" horizontalCenter="2" verticalCenter="35" change="onFeedbackTabChange(event)">
 	    		<mx:Canvas label="View" id="htmlViewTab" width="100%" height="100%" color="#EFEFEF">
 	    		    <mx:HTML id="htmlComponent" htmlText="{urlContents}" x="10" y="10" width="952.95" height="440" addedToStage="htmlViewAddedHandler(event)"/>
@@ -622,7 +622,7 @@
 	    		    </mx:TextArea>
 	    		</mx:HBox>
 			</mx:TabNavigator>
-			<mx:Image id="userInputErrorImage" x="310" y="39" width="14" height="15" source="@Embed(source='../images/error.png')" scaleContent="false" visible="{inputError}" toolTip="No opening slash"/>
+			<mx:Image id="userInputErrorImage" x="370" y="39" width="16" height="16" source="@Embed(source='../images/error.png')" scaleContent="false" visible="{inputError}" toolTip="No opening slash"/>
 		</mx:Canvas>
 		<mx:Canvas id="pageOfPostsVerify" label="" width="100%" height="100%">
 			<mx:Canvas width="100%" height="100%" x="-0.05" y="10">
@@ -639,7 +639,7 @@
 			</mx:Canvas>
 		</mx:Canvas>
 		<mx:Canvas label="" width="100%" height="100%" id="finalView">
-			<mx:Text x="10" y="10" text="Select your crawling preferences:" width="441" fontSize="12"/>
+			<mx:Text x="10" y="10" text="Select your crawling preferences:" width="441" styleName="subHead" />
 			<mx:HBox x="91" y="71" width="100%" height="22">
 				<mx:Text text="Minutes to wait between crawls:" width="393" fontSize="12"/>
 				<mx:NumericStepper id="mMinutesBetweenCrawlsTextInput"  value="{RegExProcessingCompleteEvent.crawlingPeriod}" minimum="5" maximum="255" stepSize="1"/>

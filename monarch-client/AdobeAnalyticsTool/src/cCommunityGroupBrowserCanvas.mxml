@@ -596,7 +596,7 @@
 	</ns1:cStatOptionsAccordion>
 	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" label="Add Website" click="addWebsiteClickHandler(event)" id="mAddWebsiteButton" styleName="buttonBlack"  x="897" y="4" icon="@Embed(source='../images/application_add.png')"/>
 	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" label="Edit Community Group" click="editCommunityGroupButtonClickHandler(event)" id="mEditCommunityGroupButton" styleName="buttonBlack"  x="723" y="4" icon="@Embed(source='../images/pencil.png')"/>
-	<mx:Panel layout="absolute" height="117" y="491" x="9" width="172" title="stat type" verticalScrollPolicy="off" horizontalScrollPolicy="off" id="mGraphControlPanel" toolTip="change what type of statistic you want to see for your keywords or links">
+	<mx:Panel layout="absolute" height="117" y="491" x="9" width="172" title="Stat Type" verticalScrollPolicy="off" horizontalScrollPolicy="off" id="mGraphControlPanel" toolTip="change what type of statistic you want to see for your keywords or links">
 		<mx:VBox x="10" y="2">
 			<mx:RadioButtonGroup id="graphControl" itemClick="graphControlHandler(event)"/>
 			<mx:RadioButton 
@@ -641,7 +641,7 @@
 	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" x="199" y="585" label="Zoom In" click="zoomInButtonClickHandler(event)" id="mZoomInButton" width="24" height="24" icon="@Embed(source='../images/magnifier_zoom_in.png')" toolTip="zoom in"/>
 	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" x="227" y="585" label="Zoom Out" click="zoomOutButtonClickHandler(event)" id="mZoomOutButton" width="24" height="24" icon="@Embed(source='../images/magnifier_zoom_out.png')" toolTip="zoom out" />
 
-	<mx:ToggleButtonBar x="567" y="581" itemClick="changeTimeSpan(event);" selectedIndex="5" id="mChartTimeSelectPanel" toolTip="Adjust how far back the stats you want to see">
+	<mx:ToggleButtonBar x="577" y="590" itemClick="changeTimeSpan(event);" selectedIndex="5" id="mChartTimeSelectPanel" toolTip="Adjust how far back the stats you want to see">
 		<mx:dataProvider>
 		       <mx:Array>
 		           <mx:String>1 year</mx:String>
