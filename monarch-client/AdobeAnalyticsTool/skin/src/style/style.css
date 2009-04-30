@@ -689,11 +689,9 @@ Panel
 	borderThicknessBottom: 0;
 	borderThicknessTop: -1;
 	
-	/*
-	disabledColor: #DDDDDD;	
-	disabledOverlayAlpha: 0.2;
-	backgroundDisabledColor: #333333;
-	*/
+	backgroundDisabledColor: #000000;
+	disabledColor: #000000;
+	
 }
 
 /* Panel with ControlBar. */

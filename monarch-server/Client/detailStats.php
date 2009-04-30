@@ -82,9 +82,19 @@ class DetailStats
 		echo '<numberUsers>' . $q[0] . '</numberUsers>';
 		
 		// posts per day
-		$q = 'SELECT ((MAX(time) - MIN(time)) / ' . SECONDS_IN_DAY . ') FROM posts';
+		$q = 'SELECT MIN(time) FROM stats';
 		$q = $this->database->fetch($q);
-		echo '<postsPerDay>' . $q[0] . '</postsPerDay>';
+		$timeStartScrape = $q['MIN(time)'];
+		
+		$q = 'SELECT COUNT(*) 
+			FROM posts
+			WHERE time 
+			BETWEEN ' . $timeStartScrape . '
+			AND ' . time();
+		$q = $this->database->fetch($q);
+		$numPosts = $q['COUNT(*)'];
+		
+		echo '<postsPerDay>' . ($numPosts / (time() - $timeStartScrape) / SECONDS_IN_DAY ) . '</postsPerDay>';
 		
 		// number of posts in the last 24 hours
 		$q = 'SELECT COUNT(*) 
