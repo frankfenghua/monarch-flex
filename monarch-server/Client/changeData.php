@@ -19,6 +19,21 @@ if($type === "rk") {
 	$query = "DELETE FROM allowedkeywords WHERE community = '" .
 			  $communityId . "' AND word = '" . $name . "'";
 	$database->query($query);
+
+	$xml = new cXmlWriter();
+	$xml->push("RemovedKeyword");
+	$xml->push("Information");
+	
+	$id = mysql_result($result, 0, "id");
+
+	$xml->element("id", "-1");
+	$xml->element("communityId", $communityId);
+	$xml->element("name", $name);
+	$xml->element("type", "rk");
+
+	$xml->pop();
+	$xml->pop();
+	echo $xml->getXML();
 }
 // add keyword to community
 else if($type === "ak") {
