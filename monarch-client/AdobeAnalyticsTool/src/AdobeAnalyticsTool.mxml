@@ -193,12 +193,33 @@
 				}	
 			}
 			
+			/**
+			 * 	Event handler which signals to the main window that the engine has recieved
+			 * 	a keywordRemovedEvent.
+			 */
+			private function keywordRemovedHandler(event:cNewKeywordEvent):void
+			{								
+				for(var i:int = 0; i < mAccountInformation.mCommunities.length; i++) {
+					var community:cCommunityGroupEntry = cCommunityGroupEntry(mAccountInformation.mCommunities.getItemAt(i));
+					if(event.mKeywordEntry.mCommunityGroupId == community.mId) {
+						for(var j:int = 0; j < community.mKeywords.length; j++) {
+							var keyword:cKeywordEntry = cKeywordEntry(community.mKeywords.getItemAt(j));
+							if(keyword.mName == event.mKeywordEntry.mName) {
+								community.mKeywords.removeItemAt(j);
+								return;
+							}
+						}
+					}
+				}	
+			}
+			
 			
 			///////////////////////////////////////////////////////////////////////////////////
 			//
 			//							ENGINE EVENT HANDLERS
 			//
 			///////////////////////////////////////////////////////////////////////////////////
+			
 			
 			/**
 			 * 	Event handler which signals to the main window that the engine has recieved
@@ -403,7 +424,8 @@
 													RequestWebsiteStatsEvent="requestWebsiteStatHandler(event)" 
 													CreateCommunityGroupEvent="createCommunityGroupEventHandler(event)"
 													OpenAddWebsiteWindowEvent="openWebsiteCreatorWindowHandler(event)"
-													NewKeywordAddedEvent="newKeywordAddedEvent(event)">
+													NewKeywordAddedEvent="newKeywordAddedEvent(event)"
+													KeywordRemovedEvent="keywordRemovedHandler(event)">
 		</local:cLoggedInCanvas>
 	</mx:ViewStack>
 	<local:cEngine id="mEngine" LoggedInCreatedEvent="loggedInServiceHandler(event)"
@@ -412,7 +434,7 @@
 							  	AnalyticsReadyEvent="analyticsReadyServiceHandler(event)"
 							  	FailedEvent="failedServiceHandler(event)"
 							  	NewWebsiteCreatedEvent="newWebsiteCreatedServiceHandler(event)" verticalCenter="-354" horizontalCenter="-519">
-							  	
+							    
 	</local:cEngine>
 	<!--
 	I forgot where Puneet said to put this:

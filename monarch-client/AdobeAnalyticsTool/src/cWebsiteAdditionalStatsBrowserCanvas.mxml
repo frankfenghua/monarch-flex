@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="showCanvasHandler(event)" show="showCanvasHandler(event)" width="1012" height="616">
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" hide="canvasHideHandler(event)" creationComplete="showCanvasHandler(event)" show="showCanvasHandler(event)" width="1012" height="616">
 
 	<mx:Metadata>
 		[Event(name="OpenCommunityGroupSelectionClickedEvent", type="flash.events.Event")]
@@ -301,6 +301,14 @@
 					mEditWebsiteButton.visible = true;
 					mCommunityGroupLabel.label = "My Community Group";
 				}
+			}
+			
+			/**
+			 * 	Called when the canvas is hidden.
+			 */
+			private function canvasHideHandler(event:Event):void
+			{
+				this.cursorManager.removeBusyCursor();
 			}
 			
 			

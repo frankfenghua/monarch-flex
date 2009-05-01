@@ -26,6 +26,7 @@
 			private function canvasShowHandler(event:Event):void
 			{
 				mNameLabel.text = mName;
+				mRemoveButton.toolTip = "Permanently remove keyword [" + mNameLabel.text + "] from this community";  
 			}
 			
 			/**

@@ -9,6 +9,7 @@
 		[Event(name="RemoveWebsiteEntryFromCommunityEvent", type="cCreateWebsiteEvent")]
 		[Event(name="RemoveKeywordEntryFromCommunityEvent", type="cAllPurposeEvent")]
 		[Event(name="NewKeywordAddedEvent", type="cNewKeywordEvent")]
+		[Event(name="KeywordRemovedEvent", type="cNewKeywordEvent")]
 	</mx:Metadata>
 	<mx:Script>
 		<![CDATA[
@@ -100,6 +101,7 @@
 			}	
 			
 			mEngine.changeData(mCommunityGroupId, mKeywordsTextBox.text, "ak");
+			mKeywordsTextBox.text = "";
 		}
 		
 		/**
@@ -125,6 +127,16 @@
 			mKeywordsVBox.addChild(keywordGraphic);
 			var e:cNewKeywordEvent = new cNewKeywordEvent("NewKeywordAddedEvent");
 			e.mKeywordEntry = event.mKeywordEntry
+			this.dispatchEvent(e);
+		}
+		
+		/**
+		 * 
+		 */
+		private function keywordRemovedHandler(event:cNewKeywordEvent):void
+		{
+			var e:cNewKeywordEvent = new cNewKeywordEvent("KeywordRemovedEvent");
+			e.mKeywordEntry = event.mKeywordEntry;
 			this.dispatchEvent(e);
 		}
 		
@@ -305,7 +317,7 @@
 		</mx:VBox>
 
 	</mx:Panel>
-	<local:cEngine id="mEngine" NewKeywordAddedEvent="newKeywordAddedHandler(event)">
+	<local:cEngine id="mEngine" KeywordRemovedEvent="keywordRemovedHandler(event)" NewKeywordAddedEvent="newKeywordAddedHandler(event)">
 		
 	</local:cEngine>
 </mx:Canvas>

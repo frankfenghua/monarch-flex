@@ -7,6 +7,7 @@
 		[Event(name="EditWebsiteLabelClickedEvent", type="cEditWebsiteEvent")]
 		[Event(name="OpenAddWebsiteWindowEvent", type="cCreateWebsiteEvent")]
 		[Event(name="NewKeywordAddedEvent", type="cNewKeywordEvent")]
+		[Event(name="KeywordRemovedEvent", type="cNewKeywordEvent")]
 	</mx:Metadata>
 	
 	<mx:Script>
@@ -362,6 +363,16 @@
 				}	
 			}
 			
+			/**
+		 	* 
+			*/
+			private function keywordRemovedHandler(event:cNewKeywordEvent):void
+			{
+				var e:cNewKeywordEvent = new cNewKeywordEvent("KeywordRemovedEvent");
+				e.mKeywordEntry = event.mKeywordEntry;
+				this.dispatchEvent(e);
+			}
+			
 			///////////////////////////////////////////////////////////////////////////////////
 			//
 			//						   MEMBER FUNCTIONS
@@ -481,7 +492,8 @@
 				                   			   OpenCommunityGroupBrowserCanvasEvent="reOpenCommunityGroupBrowserCanvasHandler(event)" 
 				                   			   OpenCommunityGroupHomeCanvasEvent="openCommunityGroupHomeCanvas(event)" 
 				                   			   OpenCommunityGroupSelectionClickedEvent="openCommunityGroupSelectionCanvas(event)"
-				                   			   NewKeywordAddedEvent="newKeywordAddedEvent(event)">
+				                   			   NewKeywordAddedEvent="newKeywordAddedEvent(event)"
+				                   			   KeywordRemovedEvent="keywordRemovedHandler(event)">
 				                   			   
 			</local:cCommunityGroupEditorCanvas>
 			<local:cRegularExpressionEditorCanvas id="mRegularExpressionEditorCanvas" 

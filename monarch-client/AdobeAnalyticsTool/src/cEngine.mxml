@@ -10,6 +10,7 @@
 		[Event(name="AllWebsitesReadyEvent", type="cNewWebsitesEvent")]
 		[Event(name="FailedEvent", type="flash.events.Event")]
 		[Event(name="NewKeywordAddedEvent", type="cNewKeywordEvent")]
+		[Event(name="KeywordRemovedEvent", type="cNewKeywordEvent")]
 	</mx:Metadata>
 
     <mx:Script>
@@ -360,6 +361,7 @@
     			}
     			else {
     				var failed:Event = new Event("FailedEvent");
+    				this.cursorManager.removeBusyCursor();
     				this.dispatchEvent(failed);
     				Alert.show("The username or password is incorrect.\nLoggin Failed.", 
     				           "Loggin Failed");
@@ -452,6 +454,7 @@
     			}
     			else {
     				var failed:Event = new Event("FailedEvent");
+    				this.cursorManager.removeBusyCursor();
     				this.dispatchEvent(failed);
     				Alert.show("There was an error in trying to create an account.\nPlease try again.", 
     				           "Account Creation Failed Message");
@@ -486,7 +489,7 @@
 						var keyword:cKeywordEntry = new cKeywordEntry(keywordId, keywordName, 0, -1);
 						keywords.addItem(keyword);	
 					}
-					Alert.show(communityGroupCreator);
+					
 					var community:cCommunityGroupEntry = new cCommunityGroupEntry(communityId, 
 																				  communityName, 
 																				  communityCreatedTime, 
@@ -502,6 +505,7 @@
     			}
     			else {
     				var failed:Event = new Event("FailedEvent");
+    				this.cursorManager.removeBusyCursor();
     				this.dispatchEvent(failed);
     				Alert.show("The community name you chose is already in use.\Please choose a different community name.", 
     				           "Community Creation Failed Message");
@@ -617,6 +621,14 @@
     			// check if keyword was removed
     			else if(type == "rk") {
     				
+    				var e2:cNewKeywordEvent = new cNewKeywordEvent("KeywordRemovedEvent");
+    				var keywordEntry2:cKeywordEntry = new cKeywordEntry(-1, 
+    																   keywordName,
+    																   0,
+    																   communityId);
+    				keywordEntry2.mIsSelected = false;
+    				e2.mKeywordEntry = keywordEntry2;
+    				this.dispatchEvent(e2);
     			}
     			else {
     				

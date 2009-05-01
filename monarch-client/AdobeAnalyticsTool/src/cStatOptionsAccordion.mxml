@@ -36,8 +36,7 @@
 			{
 				mWebsites = websites;
 				mKeywords = keywords;
-				
-				
+						
 				if(mWebsites != null) {
 					if(mWebsites.length == 0) {
 						mNoWebsitesAvailableLabel.visible = true;
