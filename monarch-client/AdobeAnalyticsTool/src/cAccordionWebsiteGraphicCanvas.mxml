@@ -83,7 +83,7 @@
 			///////////////////////////////////////////////////////////////////////////////////
 			
 			// website name
-			private var mName:String = "";
+			public var mName:String = "";
 			
 		]]>
 	</mx:Script>

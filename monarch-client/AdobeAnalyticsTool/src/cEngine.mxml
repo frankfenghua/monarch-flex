@@ -356,6 +356,7 @@
     				e.mOtherCommunities = otherCommunities;    				
     				trace(communities.length);
 			 		dispatchEvent(e);
+			 		this.cursorManager.removeBusyCursor();
     			}
     			else {
     				var failed:Event = new Event("FailedEvent");
@@ -445,6 +446,7 @@
     				e.mCommunities = communities;
     				e.mOtherCommunities = otherCommunities;    				
 			 		dispatchEvent(e);
+			 		this.cursorManager.removeBusyCursor();
 			 		
 			 		Alert.show("Your account was successfully created.\nYou are now logged in.", "Account Created");
     			}
@@ -585,7 +587,7 @@
     		 */
     		private function addExistingWebsitesHTTPServiceResultHandler(event:ResultEvent):void
     		{
-    			Alert.show(event.result.toString());
+    			//Alert.show(event.result.toString());
     		}
     		
     		/**

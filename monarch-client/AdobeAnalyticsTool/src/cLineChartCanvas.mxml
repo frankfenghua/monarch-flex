@@ -164,7 +164,8 @@
 				this.mLineChart.series = seriesCollection;
 				this.mLineChart.dataProvider = mLineGraphData;	
 
-				this.mLineChartLegend.dataProvider = this.mLineChart;				
+				this.mLineChartLegend.dataProvider = this.mLineChart;	
+				this.mLineChartLegend.horizontalScrollPolicy = 			
 				
 				this.mLineChartLegend.toolTip = "legend";
 			}
@@ -235,6 +236,11 @@
 			 */
 			public function clearData():void
 			{
+				mLineChart.dataProvider = null;
+			}
+			
+			private function lineChartShowHandler(event:Event):void
+			{
 				
 			}
 			
@@ -281,6 +287,7 @@
 	<mx:LineChart 
 		id="mLineChart" 
 		creationComplete="lineChartCreationCompleteHandler(event)" 
+	 	show="lineChartShowHandler"
 		width="815" 
 		height="492" 
 		verticalCenter="-19" 
@@ -295,6 +302,6 @@
 		id="mLineChartLegend" 
 		verticalCenter="250" 
 		horizontalCenter="0"
-		/>
+		 autoLayout="true" direction="horizontal"/>
 	
 </mx:Canvas>

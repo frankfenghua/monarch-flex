@@ -73,8 +73,8 @@
 			///////////////////////////////////////////////////////////////////////////////////
 			
 			// website name
-			private var mName:String = "";
-			private var mIsSelected:Boolean = true;
+			public var mName:String = "";
+			public var mIsSelected:Boolean = true;
 			
 		]]>
 	</mx:Script>

@@ -161,7 +161,7 @@
 					mChartTimeSelectPanel.enabled = false;
 				}
 				else if(event.mType == event.WEBSITE_UNCHECKED) {
-					Alert.show("UnChecked");
+					mLineChartCanvas.clearData();
 				}
 			}
 			
@@ -359,7 +359,7 @@
 									     	  websites:ArrayCollection,
 									     	  keywords:ArrayCollection,
 									     	  canvasType:String):void
-			{
+			{				
 				mCanvasType = canvasType;
 				
 				if(mCommGroupId != commGroupId) {
@@ -367,8 +367,11 @@
 				}
 				
 				if(mStatOptionAccordion != null && mLineChartCanvas != null && mCommGroupName != commGroupName) {
+				//if(mStatOptionAccordion != null && mLineChartCanvas != null) {
 					mStatOptionAccordion.disableAll();
 					mLineChartCanvas.clearData();
+					mStatOptionAccordion.unselectWebsites();
+					mStatOptionAccordion.unselectKeywords();
 				}
 				
 				mCommGroupName = commGroupName;
@@ -408,7 +411,16 @@
 			{
 				mCommunityParserCollection.addItem(analyticsParser);
 				// 1. compute agregate
-				
+				for(var i:int = 0; i < mCommunityParserCollection.length; i++) {
+					/*if(mCommunityParserCollection.getItemAt(0) is cAnalyticsParser) {
+						var parser:cAnalyticsParser = cAnalyticsParser(mCommunityParserCollection.getItemAt(i));
+						var data:cKeywordAnalyticsEntry = cKeywordAnalyticsEntry(parser.mKeywordData);
+					
+						var time:String = String(data.mTimeCollection.getItemAt(0));
+						Alert.show(time);
+					}*/ 
+					
+				}
 				
 				// 2. update graphs
 				
@@ -541,6 +553,9 @@
 					mAddWebsiteButton.visible = true;
 					mCommunityGroupLabel.label = "My Community Group";
 				}
+				
+				mStatOptionAccordion.updateAccordionWebsites();
+				mStatOptionAccordion.updateAccordionKeywords();
 			}
 			
 			

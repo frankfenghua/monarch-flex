@@ -37,6 +37,7 @@
 			{
 				if(event.mType == event.SIGN_IN) {
 					mEngine.loginToAccount(event.mEmail, event.mPassword);
+					this.cursorManager.setBusyCursor();
 				}
 				this.enabled = true;
 			}

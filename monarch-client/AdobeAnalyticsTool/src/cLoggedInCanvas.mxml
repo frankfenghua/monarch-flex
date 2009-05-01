@@ -322,6 +322,7 @@
 				e.mCommGroupId = event.mCommGroupId;
 				this.dispatchEvent(e);
 			}
+		
 			
 			/**
 			 * Called when the mRegularExpressionEditorCanvas recieves the RegExProcessingCompleteEvent.
