@@ -289,9 +289,10 @@
 			{
 				mCommunityGroupNameLabel.label = mCommunityGroupName;
 				mWebsiteNameLabel.text = mWebsiteName;
-				mCommunityGroupNameLabel.x =+ mSep2.x + mSep2.measureText(mSep2.text).width + 10;
-				mSep3.x =+ mCommunityGroupNameLabel.x + mCommunityGroupNameLabel.width + 10;
-				mWebsiteNameLabel.x =+ mSep3.x + mSep3.measureText(mSep3.text).width + 10;
+				mCommunityGroupNameLabel.x += mSep2.x + mSep2.measureText(mSep2.text).width + 10;
+				mCommunityGroupNameLabel.y = mWebsiteNameLabel.y;
+				mSep3.x += mCommunityGroupNameLabel.x + mCommunityGroupNameLabel.measureText(mCommunityGroupNameLabel.label).width + 10;
+				mWebsiteNameLabel.x += mSep3.x + mSep3.measureText(mSep3.text).width + 10;
 				
 				// hide certain components if mCanvasType is ALL_COMMUNITY
 				if((new cCommunityGroupSelectionCanvas()).OTHER_COMMUNITY == mCanvasType) {
@@ -450,11 +451,11 @@
 	<mx:HTTPService id="statRequester" method="GET" url="{SERVER_URL}detailStats.php" result="statResultHandler(event)" fault="statRetrievalErrorHandler(event)" resultFormat="e4x"/>	
 	<mx:LinkButton click="homeLabelClickHandler(event)" label="Home" id="mHomeLabel" top="2" left="0" />
 	<mx:LinkButton click="communityLabelClickHandler(event)" label="My Community Groups" id="mCommunityGroupLabel" top="1" left="79" />
-	<mx:LinkButton click="communityNameLabelClickHandler(event)" id="mCommunityGroupNameLabel" top="2" left="267" />
+	<mx:LinkButton click="communityNameLabelClickHandler(event)" id="mCommunityGroupNameLabel" top="1" left="250"  label="label"/>
 	<mx:Label text="Website Name" id="mWebsiteNameLabel" styleName="pageTitle"  top="1" left="358.5"/>
 	<mx:Label text="&gt;" styleName="breadCrumbSeparator"  top="-1" left="58" id="mSep1"/>
-	<mx:Label text="&gt;" styleName="breadCrumbSeparator"  top="-1" left="240" id="mSep2"/>
-	<mx:Label text="&gt;" styleName="breadCrumbSeparator"  id="mSep3" top="0" left="335"/>
+	<mx:Label text="&gt;" styleName="breadCrumbSeparator"  top="1" left="230" id="mSep2"/>
+	<mx:Label text="&gt;" styleName="breadCrumbSeparator"  id="mSep3" top="2" left="330"/>
 	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" label="Edit Website" styleName="buttonBlack" click="editWebsiteButtonClickHandler(event)" id="mEditWebsiteButton" horizontalCenter="447" verticalCenter="-293" fontWeight="bold" fontStyle="normal" cornerRadius="5" icon="@Embed(source='../images/pencil.png')"/>
 	<mx:Panel x="6" y="50" width="494.5" height="349" layout="absolute" title="General" id="mGeneralPanel" enabled="false">
 		<mx:Label 

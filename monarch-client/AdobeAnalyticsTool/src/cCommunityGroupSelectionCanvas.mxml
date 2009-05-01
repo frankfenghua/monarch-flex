@@ -173,6 +173,14 @@
 												
 					mMyCommVBox.addChild(commGroupGraphicEntry);
 				}	
+				
+				if(mMyCommVBox.getChildren().length > 5) {
+					mMyCommVBox.verticalScrollPolicy = "on";
+				}
+				else {
+					mMyCommVBox.verticalScrollPolicy = "off";
+				}
+				
 				showCommunities();
 				
 			}
@@ -217,7 +225,12 @@
 			 */
 			public function sortCommunities(sortFunction:Object):void 
 			{
-				mUserAccountInformation.mCommunities.source.sort(sortFunction);	
+				if(mCanvasType == MY_COMMUNITY) {
+					mUserAccountInformation.mCommunities.source.sort(sortFunction);	
+				}
+				else {
+					mUserAccountInformation.mOtherCommunities.source.sort(sortFunction);	
+				}
 			}
 			
 			
@@ -269,7 +282,7 @@
 		]]>
 	</mx:Script>
 	<mx:Label text="My Community Groups" id="mHomeLoggedOutAccountLabel" styleName="pageTitle"  x="90" y="4"/>
-	<mx:VBox height="523" width="390" id="mMyCommVBox" verticalScrollPolicy="off" x="312" y="82">
+	<mx:VBox height="523" width="409" id="mMyCommVBox" verticalScrollPolicy="off" horizontalCenter="1" verticalCenter="36">
 	</mx:VBox>
 	<mx:LinkButton label="Home" styleName="breadCrumb" click="homeLabelClickHandler(event)" horizontalCenter="-473" verticalCenter="-291" id="mHomeButton"/>
 	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" label="Create Community Group" click="createCommClickHandler(event)" id="mCreateCommButton" verticalCenter="-292" horizontalCenter="412" styleName="buttonBlack">

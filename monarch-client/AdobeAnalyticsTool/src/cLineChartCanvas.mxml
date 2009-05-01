@@ -144,14 +144,14 @@
 						}		
 						
 						trace("timeCollection length = "+keyword.mTimeCollection.length);
-						/*
+						
 						var stroke:Stroke = new Stroke();
 						// move this out 
 		        		
 		        		stroke.color = keyword.mColor;
 		        		stroke.weight = 3;
 		 				series.setStyle("lineStroke", stroke);
-		 				*/
+		 				
 		        		series.xField = i.toString();
 		        		series.yField = i.toString()+"b";  
 		        		
@@ -165,9 +165,9 @@
 				this.mLineChart.dataProvider = mLineGraphData;	
 
 				this.mLineChartLegend.dataProvider = this.mLineChart;	
-				this.mLineChartLegend.horizontalScrollPolicy = 			
+				this.mLineChartLegend.horizontalScrollPolicy = "true";		
 				
-				this.mLineChartLegend.toolTip = "legend";
+				this.mLineChartLegend.toolTip = "Community Keywords";
 			}
 			
 			
@@ -237,6 +237,7 @@
 			public function clearData():void
 			{
 				mLineChart.dataProvider = null;
+				mLineChartLegend.dataProvider = null
 			}
 			
 			private function lineChartShowHandler(event:Event):void

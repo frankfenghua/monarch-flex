@@ -526,7 +526,7 @@
     		 */
     		private function addWebsiteHTTPServiceResultHandler(event:ResultEvent):void
     		{        		    					    	    							    			    			    			
-    			/*var xmlTree:XML = XML(event.result);
+    			var xmlTree:XML = XML(event.result);
     			var  newWebsiteInformationList:XMLListCollection = new XMLListCollection(xmlTree.elements("WebsiteInformation"));
 				if(newWebsiteInformationList.children().length() > 0) { 
 					var e:cNewWebsitesEvent = new cNewWebsitesEvent("NewWebsiteCreatedEvent");
@@ -535,7 +535,8 @@
 					var URL:String = newWebsiteInformationList.elements("websiteURL");
 					var type:String = newWebsiteInformationList.elements("websiteType");
 					var time:int = int(newWebsiteInformationList.elements("websiteCreatedTime"));
-			 		e.mWebsiteEntry = new cWebsiteEntry(id, name, URL, type, time);
+			 		var website:cWebsiteEntry = new cWebsiteEntry(id, name, URL, type, time);
+			 		e.mWebsites.addItem(website);
 			 		dispatchEvent(e);
 			 		
 			 		Alert.show("The website was successfully created.", "Website Created Message");
@@ -546,7 +547,7 @@
     				Alert.show("The website name you chose is already in use. Please choose a different website name.", 
     				           "Website Creation Failed Message");
     			}
-    			return;*/
+    			return;
     		}
     		
     		/**
@@ -591,7 +592,7 @@
     		 */
     		private function addExistingWebsitesHTTPServiceResultHandler(event:ResultEvent):void
     		{
-    			//Alert.show(event.result.toString());
+    			// add code here
     		}
     		
     		/**
