@@ -147,10 +147,8 @@
 	// you are editing an existing website
 	else
 	{	
-		// Error on this line !!
-		$q = $database->fetch($q);
-		
-		$websiteId = $q['id'];
+		$row = mysql_fetch_row($q);
+		$websiteId = $row[0];
 		
 		$q = 'UPDATE websites
 			SET
@@ -158,8 +156,6 @@
 			scrapeInterval    = "' . $scrapeInterval    . '"
 			WHERE id = ' . $websiteId;
 
-		echo "Query ".$q."\n";
-			
 		$database->query($q);
 		
 		// TODO: you can't change the website name, because starting with MySQL 5, 
@@ -183,7 +179,6 @@
 			replyAuthorUrl    = "' . $replyAuthorUrl    . '",
 			replyTime         = "' . $replyTime         . '",
 			replyMessage      = "' . $replyMessage      . '"';
-		echo "Query ".$q."\n";
 			
 		$database->query($q);
 	}
