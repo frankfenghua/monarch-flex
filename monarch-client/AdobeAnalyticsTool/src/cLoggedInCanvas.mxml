@@ -181,6 +181,7 @@
 				// Set this variable so we know which community is selected to show in
 				// the breadcrumbs
 				mCommunitySelectedName = event.mCommunityGroupName;
+				mWebsiteSelectedName = event.mWebsiteName;
 			}
 			
 			/**
@@ -196,6 +197,7 @@
 				// handler
 				var evt:cCreateWebsiteEvent = new cCreateWebsiteEvent("edit");
 				evt.mWebsiteURL = websiteSettings["startPage"];
+				evt.mWebsiteName = mWebsiteSelectedName;
 				evt.mCommunityGroupName = mCommunitySelectedName;
 				
 				var regexList:Array = RegexUtilities.getAllRegexFieldnames();
@@ -336,8 +338,6 @@
 				
 				// Package up data and ship it to the server
 				websiteSettingsSetter.send(settingsObj);
-				// TODO: Return user to the screen that they were viewing prior to entering the regular expression
-				//  editor
 			}
 			
 			private function setSettingsReplyHandler(event:ResultEvent):void 
@@ -454,7 +454,7 @@
 		]]>
 	</mx:Script>
 	<mx:HTTPService id="websiteSettingsRequester" url="{Constants.SERVER_URL}monarch/Client/getWebsiteSettings.php" resultFormat="text" result="settingsResultHandler(event)" fault="faultHandler(event)"/>
-	<mx:HTTPService id="websiteSettingsSetter" url="{Constants.SERVER_URL}monarch/Client/setWebsiteSettings.php" resultFormat="text" result="setSettingsReplyHandler(event)" fault="faultHandler(event)"/>
+	<mx:HTTPService id="websiteSettingsSetter" url="{Constants.SERVER_URL}testmon/Client/setWebsiteSettings.php" resultFormat="text" result="setSettingsReplyHandler(event)" fault="faultHandler(event)"/>
 	<mx:ViewStack x="0" y="0" id="mNavigatorViewStack" width="1013" height="625">
 		<mx:ViewStack id="mMyCommViewStack" label="My Community Groups" width="1013" height="625">
 			<local:cCommunityGroupHomeCanvas id="mMyCommunityGroupHomeCanvas" 

@@ -95,6 +95,7 @@
 				urlContents = "<html>No website loaded</html>";
 				pageOfPostsContents = "<html>No website loaded</html>";
 				trace("wizard inited");
+				trace("Url: "+urlToLoad);
 				pageLoader = new URLLoader(new URLRequest(urlToLoad));
 				pageLoader.addEventListener(Event.COMPLETE, handlePageLoaded);
 				pageIsLoading = true;
@@ -650,7 +651,7 @@
 			</mx:Canvas>
 		</mx:Canvas>
 		<mx:Canvas label="" width="100%" height="100%" id="finalView">
-			<mx:Text x="10" y="10" text="This is the last step!!\nPlease select your crawling preferences:" width="441" fontSize="12" styleName="subHead" />
+			<mx:Text x="10" y="10" text="This is the last step!! Please select your crawling preferences:" width="441" fontSize="12" styleName="subHead" />
 			<mx:HBox x="91" y="71" width="100%" height="22">
 				<mx:Text text="Minutes to wait between crawls:" width="393" fontSize="12"/>
 				<mx:NumericStepper id="mMinutesBetweenCrawlsTextInput"  value="{RegExProcessingCompleteEvent.crawlingPeriod}" minimum="5" maximum="255" stepSize="1"/>

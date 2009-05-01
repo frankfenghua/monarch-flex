@@ -270,6 +270,7 @@
 			private function editWebsiteButtonClickHandler(event:Event):void
 			{
 				var e:cEditWebsiteEvent = new cEditWebsiteEvent("OpenRegExCanvasEvent");
+				trace("Website name = " + mWebsiteName);
 				e.mWebsiteName = mWebsiteName;
 				e.mCommunityGroupName = mCommunityGroupName;
 				this.dispatchEvent(e);
