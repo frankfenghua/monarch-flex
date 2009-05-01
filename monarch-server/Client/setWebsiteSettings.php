@@ -97,11 +97,13 @@
 		FROM websites 
 		WHERE name = "' . $websiteName . '"';
 		
+	echo "Query: ".$q."\n";
 	$q = $database->query($q);
 	
 	// you are creating the website from scratch
 	if(mysql_num_rows($q) == 0)
 	{
+		echo "New website\n";
 		$q = 'INSERT INTO websites (user, community, name, created, type, scrapeNumTopLevel, scrapeInterval) 
 			VALUES (
 			"' . $userId            . '", 
@@ -145,6 +147,7 @@
 	// you are editing an existing website
 	else
 	{	
+		// Error on this line !!
 		$q = $database->fetch($q);
 		
 		$websiteId = $q['id'];
@@ -154,6 +157,8 @@
 			scrapeNumTopLevel = "' . $scrapeNumTopLevel . '",
 			scrapeInterval    = "' . $scrapeInterval    . '"
 			WHERE id = ' . $websiteId;
+
+		echo "Query ".$q."\n";
 			
 		$database->query($q);
 		
@@ -178,6 +183,7 @@
 			replyAuthorUrl    = "' . $replyAuthorUrl    . '",
 			replyTime         = "' . $replyTime         . '",
 			replyMessage      = "' . $replyMessage      . '"';
+		echo "Query ".$q."\n";
 			
 		$database->query($q);
 	}
