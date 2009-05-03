@@ -62,7 +62,7 @@ else if($type === "ak") {
 }
 // remove website from community
 else if($type === "rw") {
-	
+	$database->query("REMOVE * FROM websites WHERE community = " . $communityId . " AND name = " . $name);
 }
 else {
 	echo "-1";
