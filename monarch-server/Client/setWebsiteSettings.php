@@ -9,6 +9,7 @@
 	ini_set('display_errors','1');
 
 	require_once('../database/Database.php');
+	require_once("./xmlWriter.php");
 
 	// ======================================================
 	// Function definitions
@@ -97,19 +98,21 @@
 		FROM websites 
 		WHERE name = "' . $websiteName . '"';
 		
-	echo "Query: ".$q."\n";
+	//echo "Query: ".$q."\n";
 	$q = $database->query($q);
 	
 	// you are creating the website from scratch
 	if(mysql_num_rows($q) == 0)
 	{
-		echo "New website\n";
+		$time = time();
+
+		//echo "New website\n";
 		$q = 'INSERT INTO websites (user, community, name, created, type, scrapeNumTopLevel, scrapeInterval) 
 			VALUES (
 			"' . $userId            . '", 
 			"' . $communityId       . '", 
 			"' . $websiteName       . '", 
-			"' . time()             . '", 
+			"' . $time             . '", 
 			"' . $type              . '", 
 			"' . $scrapeNumTopLevel . '", 
 			"' . $scrapeInterval    . '")';
@@ -117,6 +120,17 @@
 		$database->query($q);
 		
 		$websiteId = mysql_insert_id();
+
+		// declare the return storage XML object
+		$xml = new cXmlWriter();
+		$xml->push("head");
+		$xml->push("WebsiteInformation");
+		// store the website information in the XML return object
+		$xml->element("id", $websiteId);
+		$xml->element("communityId", $communityId);
+		$xml->element("name", $websiteName);
+		$xml->element("createdTime", $time);
+		$xml->element("type", $type);
 		
 		// create the database for this new website
 		$database = new Database('root');
@@ -142,7 +156,12 @@
 			"' . $replyTime         . '",
 			"' . $replyMessage      . '")';
 			
-		$database->query($q);			
+		$database->query($q);	
+
+		// return the XML object to the caller (GUI)
+		$xml->pop();
+		$xml->pop();
+		echo $xml->getXML();		
 	}
 	// you are editing an existing website
 	else
@@ -156,7 +175,7 @@
 			scrapeInterval    = "' . $scrapeInterval    . '"
 			WHERE id = ' . $websiteId;
 
-		$database->query($q);
+		$database->query($q);	
 		
 		// TODO: you can't change the website name, because starting with MySQL 5, 
 		// there is some security lock on changing database names
@@ -181,9 +200,11 @@
 			replyMessage      = "' . $replyMessage      . '"';
 			
 		$database->query($q);
+
+		echo "update";
 	}
-	
-	echo 'website info succesfully saved';
+
+	//echo 'website info succesfully saved';
 
 
 ?>
