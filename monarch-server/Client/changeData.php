@@ -62,7 +62,21 @@ else if($type === "ak") {
 }
 // remove website from community
 else if($type === "rw") {
-	$database->query("DELETE * FROM websites WHERE community = " . $communityId . " AND name = " . $name);
+	$database->query("DELETE FROM websites WHERE community = '" . $communityId . "' AND name = '" . $name . "'");
+	
+	$database = new Database('root');
+	$database->query("DROP DATABASE " . $name);
+
+	$xml = new cXmlWriter();
+	$xml->push("RemoveWebsite");
+	$xml->push("Information");
+	
+	$xml->element("name", $name);
+	$xml->element("communityId", $communityId);
+
+	$xml->pop();
+	$xml->pop();
+	echo $xml->getXML();
 }
 else {
 	echo "-1";
