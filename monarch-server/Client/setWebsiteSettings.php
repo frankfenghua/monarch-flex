@@ -55,7 +55,7 @@
 	// Using these values, it either initializes the new website
 	// or updates information for an existing website
 	
-	print_r($_GET);
+	//print_r($_GET);
 	$database = new Database('master');
 	
 	// Remove all hacks and decode anything that could have had the entities for anything 
