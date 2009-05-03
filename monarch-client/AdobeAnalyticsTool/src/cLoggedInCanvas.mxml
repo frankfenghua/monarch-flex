@@ -8,6 +8,8 @@
 		[Event(name="OpenAddWebsiteWindowEvent", type="cCreateWebsiteEvent")]
 		[Event(name="NewKeywordAddedEvent", type="cNewKeywordEvent")]
 		[Event(name="KeywordRemovedEvent", type="cNewKeywordEvent")]
+		[Event(name="WebsiteCreatedEvent", type="cNewWebsitesEvent")]
+		[Event(name="WebsiteRemovedEvent", type="cNewKeywordEvent")]
 	</mx:Metadata>
 	
 	<mx:Script>
@@ -15,6 +17,7 @@
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
 			import mx.collections.ArrayCollection;
+			import mx.collections.XMLListCollection;
 			import mx.controls.Alert;
 		
 			///////////////////////////////////////////////////////////////////////////////////
@@ -343,6 +346,29 @@
 			private function setSettingsReplyHandler(event:ResultEvent):void 
 			{
 				trace("Server reply:"+event.result);
+				
+				if(event.result.toString() == "update") {
+					return;
+				}
+				
+				var xmlTree:XML = XML(event.result);
+				trace(xmlTree);
+    			var  websiteInformation:XMLListCollection = new XMLListCollection(xmlTree.elements("WebsiteInformation"));
+    			var e:cNewWebsitesEvent = new cNewWebsitesEvent("WebsiteCreatedEvent");
+    			
+    			var websiteId:int = int(websiteInformation.elements("id"));
+    			var websiteName:String = websiteInformation.elements("name");
+    			var websiteCreatedTime:int = int(websiteInformation.elements("createdTime"));
+    			var websiteType:String = websiteInformation.elements("type");
+    			
+    			var websiteEntry:cWebsiteEntry = new cWebsiteEntry(websiteId,
+    															   websiteName,
+    															   "",
+    															   websiteType,
+    															   websiteCreatedTime);
+    			
+    			e.mWebsites.addItem(websiteEntry);
+    			this.dispatchEvent(e);
 			}
 			
 			/**
@@ -373,6 +399,16 @@
 				this.dispatchEvent(e);
 			}
 			
+			/**
+			 * 
+			 */
+			private function websiteRemovedHandler(event:cNewKeywordEvent):void
+			{
+				var e:cNewKeywordEvent = new cNewKeywordEvent("WebsiteRemovedEvent");
+				e.mKeywordEntry = event.mKeywordEntry;
+				this.dispatchEvent(e);
+			}
+			
 			///////////////////////////////////////////////////////////////////////////////////
 			//
 			//						   MEMBER FUNCTIONS
@@ -396,6 +432,15 @@
 			public function updateInformation(userAccountInformation:cAccountInformation):void
 			{
 				mUserAccountInformation = userAccountInformation;	
+			}
+			
+			/**
+			 * 
+			 */
+			public function updateWebsites(websites:ArrayCollection):void
+			{
+				mCommunityGroupBrowserCanvas.updateWebsites(websites);
+				communityGroupEditorCanvas.updateWebsites(websites);
 			}
 			
 			/**
@@ -493,7 +538,8 @@
 				                   			   OpenCommunityGroupHomeCanvasEvent="openCommunityGroupHomeCanvas(event)" 
 				                   			   OpenCommunityGroupSelectionClickedEvent="openCommunityGroupSelectionCanvas(event)"
 				                   			   NewKeywordAddedEvent="newKeywordAddedEvent(event)"
-				                   			   KeywordRemovedEvent="keywordRemovedHandler(event)">
+				                   			   KeywordRemovedEvent="keywordRemovedHandler(event)"
+				                   			   WebsiteRemovedEvent="websiteRemovedHandler(event)">
 				                   			   
 			</local:cCommunityGroupEditorCanvas>
 			<local:cRegularExpressionEditorCanvas id="mRegularExpressionEditorCanvas" 

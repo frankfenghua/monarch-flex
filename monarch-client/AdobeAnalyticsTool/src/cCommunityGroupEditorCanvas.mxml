@@ -10,6 +10,7 @@
 		[Event(name="RemoveKeywordEntryFromCommunityEvent", type="cAllPurposeEvent")]
 		[Event(name="NewKeywordAddedEvent", type="cNewKeywordEvent")]
 		[Event(name="KeywordRemovedEvent", type="cNewKeywordEvent")]
+		[Event(name="WebsiteRemovedEvent", type="cNewKeywordEvent")]
 	</mx:Metadata>
 	<mx:Script>
 		<![CDATA[
@@ -140,6 +141,16 @@
 			this.dispatchEvent(e);
 		}
 		
+		/**
+		 * 
+		 */
+		private function websiteRemoveEvent(event:cNewKeywordEvent):void
+		{
+			var e:cNewKeywordEvent = new cNewKeywordEvent("WebsiteRemovedEvent");
+			e.mKeywordEntry = event.mKeywordEntry;
+			this.dispatchEvent(e);
+		}
+		
 		
 		///////////////////////////////////////////////////////////////////////////////////
 		//
@@ -245,6 +256,25 @@
 			mWebsites = websites;
 		}
 		
+		/**
+		 * 
+		 */
+		public function updateWebsites(websites:ArrayCollection):void
+		{
+			mWebsites = websites;
+			if(mWebsitesVBox != null) {
+				// place the community website in the mWebsitesVBox
+				mWebsitesVBox.removeAllChildren();
+				for(var j:int = 0; j < mWebsites.length; j++) {
+					var website:cWebsiteEntry = cWebsiteEntry(mWebsites.getItemAt(j));
+					var websiteGraphic:cLabelEntryGraphic = new cLabelEntryGraphic();
+					websiteGraphic.updateInformation(website.mName);
+					websiteGraphic.addEventListener("cLabelEntryClickedEvent", removeWebsiteClickedEvent);
+					mWebsitesVBox.addChild(websiteGraphic);
+				}
+			}
+		}
+		
 		
 		///////////////////////////////////////////////////////////////////////////////////
 		//
@@ -317,7 +347,7 @@
 		</mx:VBox>
 
 	</mx:Panel>
-	<local:cEngine id="mEngine" KeywordRemovedEvent="keywordRemovedHandler(event)" NewKeywordAddedEvent="newKeywordAddedHandler(event)">
+	<local:cEngine id="mEngine" WebsiteRemovedEvent="websiteRemoveEvent(event)" KeywordRemovedEvent="keywordRemovedHandler(event)" NewKeywordAddedEvent="newKeywordAddedHandler(event)">
 		
 	</local:cEngine>
 </mx:Canvas>

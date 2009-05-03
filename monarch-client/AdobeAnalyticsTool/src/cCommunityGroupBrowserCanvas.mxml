@@ -404,6 +404,15 @@
 			}
 			
 			/**
+			 * 
+			 */
+			public function updateWebsites(websites:ArrayCollection):void
+			{
+				mWebsites = websites;
+				mStatOptionAccordion.updateInformation(mWebsites, mKeywords);
+			}
+			
+			/**
 			 *	update the analytics information - called when new website statistics have been
 			 * 	fetched. 
 			 */

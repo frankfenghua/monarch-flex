@@ -7,6 +7,7 @@
 
 	<mx:Script>
 		<![CDATA[
+			import mx.events.CloseEvent;
 			import mx.events.EffectEvent;
 			import mx.controls.Alert;
 			import mx.effects.Fade;
@@ -26,7 +27,19 @@
 			private function canvasShowHandler(event:Event):void
 			{
 				mNameLabel.text = mName;
-				mRemoveButton.toolTip = "Permanently remove keyword [" + mNameLabel.text + "] from this community";  
+				mRemoveButton.toolTip = "Permanently remove [" + mNameLabel.text + "] from this community";  
+			}
+			
+			/**
+			 * 
+			 */
+			private function alertCloseHandler(event:CloseEvent):void
+			{
+				if(event.detail == Alert.YES) {
+					var e:cAllPurposeEvent = new cAllPurposeEvent("cLabelEntryClickedEvent");
+					e.mName = mName;
+					this.dispatchEvent(e);
+				}
 			}
 			
 			/**
@@ -34,9 +47,11 @@
 			 */
 			private function removeLabelClickedHandler(event:Event):void
 			{
-				var e:cAllPurposeEvent = new cAllPurposeEvent("cLabelEntryClickedEvent");
-				e.mName = mName;
-				this.dispatchEvent(e);
+				Alert.show("Are you sure you want to remove [" + mName + "] permanently?",
+	    					 "Remove from Community?",
+		 					 Alert.YES | Alert.NO,
+		 					 null,
+							 alertCloseHandler);
 			}
 			
 			

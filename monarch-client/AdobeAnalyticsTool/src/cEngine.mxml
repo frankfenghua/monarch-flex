@@ -11,6 +11,7 @@
 		[Event(name="FailedEvent", type="flash.events.Event")]
 		[Event(name="NewKeywordAddedEvent", type="cNewKeywordEvent")]
 		[Event(name="KeywordRemovedEvent", type="cNewKeywordEvent")]
+		[Event(name="WebsiteRemovedEvent", type="cNewKeywordEvent")]
 	</mx:Metadata>
 
     <mx:Script>
@@ -539,7 +540,7 @@
 			 		e.mWebsites.addItem(website);
 			 		dispatchEvent(e);
 			 		
-			 		Alert.show("The website was successfully created.", "Website Created Message");
+			 		Alert.show("The website [" + name + "] was successfully created.", "Website Created Message");
     			}
     			else {
     				var failed:Event = new Event("FailedEvent");
@@ -632,7 +633,13 @@
     				this.dispatchEvent(e2);
     			}
     			else {
-    				
+    				var e3:cNewKeywordEvent = new cNewKeywordEvent("WebsiteRemovedEvent");
+    				var keywordEntry3:cKeywordEntry = new cKeywordEntry(-1, 
+    																   keywordName,
+    																   0,
+    																   communityId);
+    				e3.mKeywordEntry = keywordEntry3;
+    				this.dispatchEvent(e3);
     			}
     		}
     		

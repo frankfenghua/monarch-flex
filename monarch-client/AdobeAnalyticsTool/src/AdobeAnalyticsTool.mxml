@@ -89,8 +89,6 @@
 										  event.mWebsiteName,
 										  event.mWebsiteURL,
 										  event.mWebsiteType);*/
-					//mLoader.visible = true;
-	            	//mLoader.play();
 				}
 				else if(event.mType == event.ADD_WEBSITES) {
 					mEngine.addWebsites(mAccountInformation.mSelectedCommunityId, event.mWebsiteIds);
@@ -211,6 +209,47 @@
 						}
 					}
 				}	
+			}
+			
+			/**
+			 * 
+			 */
+			private function websiteRemovedHandler(event:cNewKeywordEvent):void
+			{
+				for(var i:int = 0; i < mAccountInformation.mCommunities.length; i++) {
+					var community:cCommunityGroupEntry = cCommunityGroupEntry(mAccountInformation.mCommunities.getItemAt(i));
+					if(event.mKeywordEntry.mCommunityGroupId == community.mId) {
+						for(var j:int = 0; j < community.mWebsites.length; j++) {
+							var website:cWebsiteEntry = cWebsiteEntry(community.mWebsites.getItemAt(j));
+							if(website.mName == event.mKeywordEntry.mName) {
+								community.mWebsites.removeItemAt(j);
+								mLoggedInCanvas.updateInformation(mAccountInformation);
+								mLoggedInCanvas.updateWebsites(community.mWebsites);
+								return;
+							}
+						}
+					}
+				}	
+			}
+			
+			/**
+			 * 
+			 */
+			private function websiteCreatedHandler(event:cNewWebsitesEvent):void
+			{
+				var websiteEntry:cWebsiteEntry = cWebsiteEntry(event.mWebsites[0]);
+				for(var i:int = 0; i < mAccountInformation.mCommunities.length; i++) {
+					if(mAccountInformation.mCommunities.getItemAt(i) is cCommunityGroupEntry) {
+						var commEntry:cCommunityGroupEntry = cCommunityGroupEntry(mAccountInformation.mCommunities.getItemAt(i));
+						if(commEntry.mId == mAccountInformation.mSelectedCommunityId) {
+							commEntry.mWebsites.addItem(websiteEntry);
+							// update the community browser and editor with the new website
+							mLoggedInCanvas.updateInformation(mAccountInformation);
+							mLoggedInCanvas.updateWebsites(commEntry.mWebsites);
+							return;
+						}
+					}
+				}
 			}
 			
 			
@@ -425,7 +464,9 @@
 													CreateCommunityGroupEvent="createCommunityGroupEventHandler(event)"
 													OpenAddWebsiteWindowEvent="openWebsiteCreatorWindowHandler(event)"
 													NewKeywordAddedEvent="newKeywordAddedEvent(event)"
-													KeywordRemovedEvent="keywordRemovedHandler(event)">
+													KeywordRemovedEvent="keywordRemovedHandler(event)"
+												 	WebsiteCreatedEvent="websiteCreatedHandler(event)"
+												    WebsiteRemovedEvent="websiteRemovedHandler(event)">
 		</local:cLoggedInCanvas>
 	</mx:ViewStack>
 	<local:cEngine id="mEngine" LoggedInCreatedEvent="loggedInServiceHandler(event)"
