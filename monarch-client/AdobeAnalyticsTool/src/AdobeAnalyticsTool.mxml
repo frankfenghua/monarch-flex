@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="creationCompleteHandler(event)" close="closeHandler(event)" layout="absolute" width="1040" height="710" title="Monarch" showGripper="false" xmlns:local="*" viewSourceURL="srcview/index.html">
+<mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="creationCompleteHandler(event)" close="closeHandler(event)" layout="absolute" width="1040" height="710" title="Monarch" showGripper="false" xmlns:local="*">
 <mx:Style source="../skin/src/style/style.css"/>	
 	<mx:Metadata>
 		[Event(name="OpenCommunityGroupHomeCanvasEvent", type="flash.events.Event")]

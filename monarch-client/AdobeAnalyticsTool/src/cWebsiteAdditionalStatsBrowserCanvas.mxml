@@ -157,9 +157,9 @@
 			{
 				// allow the user to use the page when things finally get loaded
 				CursorManager.removeBusyCursor();
-				mGeneralPanel.enabled = true;
-				mLinksPanel.enabled = true;
-				mKeywordsPanel.enabled = true;
+				mGeneralPanel.visible = true;
+				mLinksPanel.visible = true;
+				mKeywordsPanel.visible = true;
 				
 				var i:int = 0; // used as counter in this function
 
@@ -338,11 +338,11 @@
 				trace("Sent stats request");
 				// Disable panel until we have received stats
 				if(mGeneralPanel)
-					mGeneralPanel.enabled = false;
+					mGeneralPanel.visible = false;
 				if(mLinksPanel)
-					mLinksPanel.enabled = false;
+					mLinksPanel.visible = false;
 				if(mKeywordsPanel)
-					mKeywordsPanel.enabled = false;
+					mKeywordsPanel.visible = false;
 				
 				statRequester.send({"websiteName":mWebsiteName});
 			}
@@ -457,7 +457,7 @@
 	<mx:Label text="&gt;" styleName="breadCrumbSeparator"  top="1" left="230" id="mSep2"/>
 	<mx:Label text="&gt;" styleName="breadCrumbSeparator"  id="mSep3" top="2" left="330"/>
 	<mx:Button useHandCursor="true" buttonMode="true" mouseChildren="false" label="Edit Website" styleName="buttonBlack" click="editWebsiteButtonClickHandler(event)" id="mEditWebsiteButton" horizontalCenter="447" verticalCenter="-293" fontWeight="bold" fontStyle="normal" cornerRadius="5" icon="@Embed(source='../images/pencil.png')"/>
-	<mx:Panel x="6" y="50" width="494.5" height="349" layout="absolute" title="General" id="mGeneralPanel" enabled="false">
+	<mx:Panel x="6" y="50" width="494.5" height="349" layout="absolute" title="General" id="mGeneralPanel" visible="false">
 		<mx:Label 
 			text="website URL:" 
 			x="10" 
@@ -648,7 +648,7 @@
 			click="goMostViewedThread()"
 		/>
 	</mx:Panel>
-	<mx:Panel x="6" y="407" width="494.5" height="200" layout="absolute" title="Links Spoken" id="mLinksPanel" enabled="false">
+	<mx:Panel x="6" y="407" width="494.5" height="200" layout="absolute" title="Links Spoken" id="mLinksPanel" visible="false">
 		<mx:Label 
 			text="most mentioned:" 
 			x="10"
@@ -713,7 +713,7 @@
 			click="goLeastLikedBaseUrl()"
 		/>
 	</mx:Panel>
-	<mx:Panel x="508" y="50" width="494" height="556" layout="absolute" title="Keywords" id="mKeywordsPanel" enabled="false">
+	<mx:Panel x="508" y="50" width="494" height="556" layout="absolute" title="Keywords" id="mKeywordsPanel" visible="false">
 		<mx:Tree id="tree" top="10" left="10" dataProvider="{keywordsTree}" labelFunction="treeLabel" itemClick="treeClickHandler(event)" width="470" height="505" showRoot="true"/>	
 	</mx:Panel>
 	
