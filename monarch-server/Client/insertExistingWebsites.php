@@ -16,6 +16,7 @@
 	$communityId = mysql_real_escape_string($_GET['communityId']);
 	$websiteIds  = explode(',', mysql_real_escape_string($_GET['websiteIds']));
 	
+	$counter = 0
 	foreach($websiteIds as $websiteId)
 	{
 		if(!is_numeric($websiteId))
@@ -39,22 +40,16 @@
 				"' . $q['scrapeInterval']    . '")';
 		
 		$database->query($z);
+
+		$counter = $counter + 1;
 	}
 
-	/*
-   // extract the all of the website ids from the string
-   $ids = Array();
-   $array[0] = strtok($websiteIds, ',');
-
-   $counter = 1;
-   while(FALSE !== ($token = strtok(',')))
-   {
-     $array[$counter] = $token;
-     $counter++;
-   }
 
    $xml = new cXMLWriter();
    $xml->push("ids");
+   $xml->element("counter", $counter);
+	$xml->element("communityId", $communityId);
+	$xml->element("userId", $userId);
    
    for($i = 0; $i < sizeof($array); $i++)
    {
@@ -64,6 +59,5 @@
 
    $xml->pop();
    echo $xml->getXML();
-   */
 
 ?>
