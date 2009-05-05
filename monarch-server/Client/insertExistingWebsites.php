@@ -48,14 +48,9 @@
    $xml = new cXMLWriter();
    $xml->push("ids");
    $xml->element("counter", $counter);
-	$xml->element("communityId", $communityId);
-	$xml->element("userId", $userId);
-   
-   for($i = 0; $i < sizeof($array); $i++)
-   {
-     $id = $array[$i];
-     $xml->element("id", $id);
-   }
+   $xml->element("communityId", $communityId);
+   $xml->element("userId", $userId);
+
 
    $xml->pop();
    echo $xml->getXML();
