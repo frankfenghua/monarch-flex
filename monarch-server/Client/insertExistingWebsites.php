@@ -16,7 +16,7 @@
 	$communityId = mysql_real_escape_string($_GET['communityId']);
 	$websiteIds  = explode(',', mysql_real_escape_string($_GET['websiteIds']));
 	
-	$counter = 0
+	$counter = 0;
 	foreach($websiteIds as $websiteId)
 	{
 		if(!is_numeric($websiteId))
@@ -44,8 +44,9 @@
 		$counter = $counter + 1;
 	}
 
+	echo "Success";
 
-   $xml = new cXMLWriter();
+   /*$xml = new cXMLWriter();
    $xml->push("ids");
    $xml->element("counter", $counter);
    $xml->element("communityId", $communityId);
@@ -53,6 +54,6 @@
 
 
    $xml->pop();
-   echo $xml->getXML();
+   echo $xml->getXML();*/
 
 ?>
