@@ -149,14 +149,16 @@
 						// move this out 
 		        		
 		        		stroke.color = keyword.mColor;
-		        		stroke.weight = 3;
+		        		stroke.weight = 2;
+		        		stroke.alpha = 0.6;
 		 				series.setStyle("lineStroke", stroke);
+		 				series.setStyle("form", "curve");
 		 				
 		        		series.xField = i.toString();
 		        		series.yField = i.toString()+"b";  
 		        		
 		        		series.displayName = keyword.mName; 
-						
+						series.interpolateValues = true;		
 						seriesCollection.push(series);	
 					}
 				}
@@ -288,11 +290,10 @@
 	<mx:LineChart 
 		id="mLineChart" 
 		creationComplete="lineChartCreationCompleteHandler(event)" 
-	 	show="lineChartShowHandler"
+	 	show="lineChartShowHandler(event)"
 		width="815" 
 		height="492" 
-		verticalCenter="-19" 
-		horizontalCenter="0">
+		verticalCenter="-19" horizontalCenter="0">
 		<mx:series>
 			<mx:LineSeries displayName="Series 1" id="lineChartSeries" />
 		</mx:series>

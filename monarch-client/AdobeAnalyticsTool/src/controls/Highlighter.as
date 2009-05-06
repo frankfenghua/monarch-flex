@@ -24,14 +24,14 @@ Modified to support regular expression matching by Andrew Spencer, February 2009
 */
 package controls
 {
-    import flash.text.TextField;
-    import flash.events.Event;
-    import flash.display.BitmapData;
-    import flash.display.Bitmap;
-    import flash.geom.Rectangle;
-    
-    import controls.textClasses.StringBoundaries;
     import controls.textClasses.Finder;
+    import controls.textClasses.StringBoundaries;
+    
+    import flash.display.Bitmap;
+    import flash.display.BitmapData;
+    import flash.events.Event;
+    import flash.geom.Rectangle;
+    import flash.text.TextField;
     
     public class Highlighter
     {   
