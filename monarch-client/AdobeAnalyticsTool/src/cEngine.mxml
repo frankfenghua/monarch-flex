@@ -653,7 +653,7 @@
 			<password>{mPassword}</password>
 		</mx:request>
 	</mx:HTTPService>	
-	<mx:HTTPService id="mLogInRequestHTTPService" result="logInHTTPServiceResultHandler(event)" url="{Constants.SERVER_URL}testmon/Client/login.php" resultFormat="e4x" method="GET" useProxy="false">
+	<mx:HTTPService id="mLogInRequestHTTPService" result="logInHTTPServiceResultHandler(event)" url="{Constants.SERVER_URL}monarch/Client/login.php" resultFormat="e4x" method="GET" useProxy="false">
 		<mx:request xmlns="">
 			<email>{mEmail}</email>
 			<password>{mPassword}</password>
