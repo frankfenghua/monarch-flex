@@ -150,7 +150,7 @@
 		        		
 		        		stroke.color = keyword.mColor;
 		        		stroke.weight = 2;
-		        		stroke.alpha = 0.6;
+		        		stroke.alpha = 1.0;
 		 				series.setStyle("lineStroke", stroke);
 		 				series.setStyle("form", "curve");
 		 				
@@ -294,6 +294,13 @@
 		width="815" 
 		height="492" 
 		verticalCenter="-19" horizontalCenter="0">
+		<mx:backgroundElements>
+            <mx:GridLines id="gridLines" direction="horizontal">
+                <mx:horizontalStroke>
+                    <mx:Stroke color="black" weight="0" alpha="0.3" />
+                </mx:horizontalStroke>
+            </mx:GridLines>
+        </mx:backgroundElements>
 		<mx:series>
 			<mx:LineSeries displayName="Series 1" id="lineChartSeries" />
 		</mx:series>
@@ -304,6 +311,7 @@
 		id="mLineChartLegend" 
 		verticalCenter="250" 
 		horizontalCenter="0"
-		 autoLayout="true" direction="horizontal"/>
-	
+		autoLayout="true" 
+		direction="horizontal"
+	/>
 </mx:Canvas>
