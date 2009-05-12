@@ -142,7 +142,7 @@
 			}
 	
 		// TODO: make the base URL global so we don't have 100 pages with hardcoded URL's
-		private var IMAGE_URL:String = Constants.SERVER_URL+"images/";
+		private var IMAGE_URL:String = Constants.SERVER_URL+"monarch/Client/images/";
 		
 		]]>
 	</mx:Script>

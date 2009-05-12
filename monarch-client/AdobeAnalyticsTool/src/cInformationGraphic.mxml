@@ -3,45 +3,6 @@
 	
 	<mx:Script>
 		<![CDATA[
-		
-			//import mx.effects.Fade;
-			//import mx.controls.Alert;
-			
-			///////////////////////////////////////////////////////////////////////////////////
-			//
-			//							EVENT HANDLERS
-			//
-			///////////////////////////////////////////////////////////////////////////////////
-			
-			/**
-			 * 
-			 */
-			/*
-			private function rollOverHandler(event:Event):void
-			{
-				var fade:Fade = new Fade();
-				fade.alphaFrom = 0.3;
-				fade.alphaTo = 0.8;
-				fade.duration = 500;
-				fade.target = this;
-				fade.play();
-			}
-			*/
-			
-			/**
-			 * 
-			 */
-			/*
-			private function rollOutHandler(event:Event):void
-			{
-				var fade:Fade = new Fade();
-				fade.alphaFrom = 0.8;
-				fade.alphaTo = 0.3;
-				fade.duration = 500;
-				fade.target = this;
-				fade.play();
-			}
-			*/
 			
 			
 			///////////////////////////////////////////////////////////////////////////////////
@@ -71,7 +32,7 @@
 			 */
 			public function setIcon(path:String):void
 			{
-				mIconPath = Constants.SERVER_URL+"images/" + path;
+				mIconPath = Constants.SERVER_URL+"monarch/Client/images/" + path;
 			}
 			
 			
