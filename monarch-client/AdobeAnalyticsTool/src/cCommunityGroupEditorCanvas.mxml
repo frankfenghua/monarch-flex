@@ -293,8 +293,6 @@
 		// community group websites
 		public var mWebsites:ArrayCollection = null;
 		// Constant specifying URL of the script to use to upload images; 
-		// TODO: make this a shared constant; also used in cCommGroupLargeGraphic.mxml
-		// TODO: unhardcode this URL. Not going to work when they move it to Puneet's lair. 
 		public var IMAGE_UPLOAD_URL:String = Constants.SERVER_URL+"monarch/Client/imageUpload.php";
 			
 		]]>
