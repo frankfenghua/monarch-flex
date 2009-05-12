@@ -1,0 +1,60 @@
+<mockup version="1.0" skin="sketch" measuredW="858" measuredH="636">
+  <controls>
+    <control controlID="32" controlTypeID="com.balsamiq.mockups::Label" x="238" y="399" w="481" h="45" measuredW="557" measuredH="26" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <size>14</size>
+        <text>SHOW%20RENDERED%20PAGE%20HERE%20WITH%20MATCHES%20HIGHLIGHTED%20IN%20REALTIME</text>
+      </controlProperties>
+    </control>
+    <control controlID="33" controlTypeID="com.balsamiq.mockups::Label" x="134" y="156" w="429" h="25" measuredW="429" measuredH="25" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Enter%20a%20regular%20expression%20that%20matches%20%3Ctype%20of%20input%20required%3E%3A</text>
+      </controlProperties>
+    </control>
+    <control controlID="34" controlTypeID="com.balsamiq.mockups::TextInput" x="134" y="181" w="156" h="-1" measuredW="79" measuredH="29" zOrder="8" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text/>
+      </controlProperties>
+    </control>
+    <control controlID="23" controlTypeID="com.balsamiq.mockups::TitleWindow" x="119" y="59" w="729" h="567" measuredW="450" measuredH="400" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <topheight>26</topheight>
+        <text>Monarch%20-%20Adapter%20Creation%20Wizard%20%28step%20X%20of%20XX%29</text>
+        <close>true</close>
+        <maximizeRestore>true</maximizeRestore>
+        <minimize>true</minimize>
+      </controlProperties>
+    </control>
+    <control controlID="27" controlTypeID="com.balsamiq.mockups::IconLabel" x="331" y="100" w="54" h="-1" measuredW="54" measuredH="49" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <icon>LeftArrowIcon%7Csmall</icon>
+        <text>Previous</text>
+      </controlProperties>
+    </control>
+    <control controlID="28" controlTypeID="com.balsamiq.mockups::IconLabel" x="469" y="100" w="54" h="-1" measuredW="38" measuredH="49" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <icon>RightArrowIcon%7Csmall</icon>
+        <text>Next</text>
+      </controlProperties>
+    </control>
+    <control controlID="29" controlTypeID="com.balsamiq.mockups::IconLabel" x="400" y="100" w="54" h="-1" measuredW="46" measuredH="49" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <icon>CircledXIcon%7Csmall</icon>
+        <text>Cancel</text>
+      </controlProperties>
+    </control>
+    <control controlID="30" controlTypeID="com.balsamiq.mockups::TabBar" x="134" y="218" w="699" h="376" measuredW="361" measuredH="100" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <tabVPosition>top</tabVPosition>
+        <verticalScrollbar>false</verticalScrollbar>
+        <selectedIndex>0</selectedIndex>
+        <text>Page%20View%2C%20Page%20Source%2C%20Matching%20Text</text>
+      </controlProperties>
+    </control>
+    <control controlID="31" controlTypeID="com.balsamiq.mockups::Canvas" x="149" y="269" w="670" h="312" measuredW="100" measuredH="70" zOrder="5" locked="false" isInGroup="-1">
+      <controlProperties>
+        <verticalScrollbar>true</verticalScrollbar>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>

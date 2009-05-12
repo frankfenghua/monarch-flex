@@ -1,0 +1,18 @@
+* the graph controls should be in always visible.
+* label the graph lines clearly: always visible legend or on lines themselves.
+* Need context sensitive help on the accordian because:
+  * the sliders are not easily understandable 
+  * "websites in community" is not understandable in the accordian.
+* change "goodness" to "sentiment".
+* ask for the password twice when registering.
+* have a defalt added innocuous community under "my communities" for new users.
+* Matt doesn't like the word "spoken" in the accordian. (generally, focus on
+  using clearer language)
+* the accordian needs to be split up into two groups: keywords/links & graph controls/websites in community.
+  * Ideas: make legend that also allows for editing of keywords and links shown
+    in graph
+* change eye icon to a magnifying glass (or something suggesting "drilling
+  down" into a website).
+* when you log-in, stay on the homepage.
+* Incorporate "My Communities" and "Other Communities" links into the homepagee
+* combine the two registration steps.
