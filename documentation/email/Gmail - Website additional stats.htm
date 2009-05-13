@@ -1,0 +1,183 @@
+
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=UTF-8">
+<title>Gmail - Website additional stats</title>
+<style type="text/css">
+body, td{font-family:arial,sans-serif;font-size:80%} a:link, a:active, a:visited{color:#0000CC} img{border:0} pre { white-space: pre; white-space: -moz-pre-wrap; white-space: -o-pre-wrap; white-space: pre-wrap; word-wrap: break-word; width: 800px; overflow: auto;}
+</style>
+<script>
+function Print(){document.body.offsetHeight;window.print()}
+</script>
+</head>
+<body onload="Print()">
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td width=143>
+<img src="/mail/help/images/logo1.gif"
+width=143 height=59 alt="Gmail">
+</td>
+<td align=right>
+<font size=-1><b>
+Ryan Lin
+&lt;tokyotech@gmail.com&gt;
+</b></td>
+</tr>
+</table>
+<hr>
+<font size=+2>
+<b>Website additional stats</b></font><br>
+<font size=-1>5 messages</font>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Andrew Spencer
+&lt;andrewpspencer@gmail.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Tue, Apr 14, 2009 at 5:00 PM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+Ryan Lin &lt;tokyotech@gmail.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1>Hi Ryan,<br>A couple of things:<br>1) When you make a commit to the Google svn repository, the server software on csil-srprj-2 will automatically be updated. This was instant when I tried it.<br>2) If you get the chance, could you help me with <a href="http://code.google.com/p/monarch-flex/source/browse/trunk/monarch-server/Client/detailStats.php" target="_blank">monarch-server/Client/<WBR>detailStats.php</a>? This is the server-side script needed for the additional stats page. As of right now, it only calculates a Posts/Day and this is the only thing that the GUI is displaying. We need queries for all of the statistics for that page and then I can do all of the front-end integration.<br>
+<br>Thanks,<br><font color=#888888>Andrew<br>
+</font></font>
+</table>
+</table>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Ryan Lin
+&lt;tokyotech@gmail.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Tue, Apr 14, 2009 at 5:57 PM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+Andrew Spencer &lt;andrewpspencer@gmail.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1>Will start working on it now.<br clear="all"><font color=#888888>Ryan Lin</font><div style='padding:5 0'><font size=1 color=#888888>[Quoted text hidden]</font></div></font>
+</table>
+</table>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Ryan Lin
+&lt;tokyotech@gmail.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Tue, Apr 14, 2009 at 8:21 PM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+Andrew Spencer &lt;andrewpspencer@gmail.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1>Finished.<br><ul><li>Included more &quot;general&quot; stuff that Puneet asked for.<br></li><li>Posts per day will be inaccurate because a really old thread could be resurrected by someone bumping up that thread.  The current formula is assuming that we only scraped posts that were made after our scraper started. </li>
+<li>Links have no user/thread talker stats like threads.  This was purposely left out because there are like 100 times more links than keywords. </li><li>Why do we have two copies of Database.php in the server folder?<br>
+</li></ul>To avoid long awkward names:<br><ul><li><i>parrots</i>: people who talk a lot</li><li><i>veterans</i>: people who signed up on the site a long time ago</li><li><i>newbies</i>: people who signed up on the site recently</li>
+<li><i>sophisticated orators</i>: people who use good English.</li><li><i>ass kissers</i>: people who talk positively about a keyword</li><li><i>trash talkers</i>: people who talk negatively about a keyword<br></li></ul><font color=#888888>Ryan Lin</font><div style='padding:5 0'><font size=1 color=#888888>[Quoted text hidden]</font></div></font>
+</table>
+</table>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Andrew Spencer
+&lt;andrewpspencer@gmail.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Tue, Apr 14, 2009 at 8:47 PM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+Ryan Lin &lt;tokyotech@gmail.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1>Great. Could you please add &#39;constants.php&#39; to the repo?<div style='padding:5 0'><font size=1 color=#888888>[Quoted text hidden]</font></div></font>
+</table>
+</table>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Andrew Spencer
+&lt;andrewpspencer@gmail.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Tue, Apr 14, 2009 at 9:18 PM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+Ryan Lin &lt;tokyotech@gmail.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1>nevermind.<div style='padding:5 0'><font size=1 color=#888888>[Quoted text hidden]</font></div></font>
+</table>
+</table>
+<hr>
+</body>
+</html>

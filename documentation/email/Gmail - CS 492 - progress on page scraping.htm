@@ -1,0 +1,197 @@
+
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=UTF-8">
+<title>Gmail - CS 492 - progress on page scraping</title>
+<style type="text/css">
+body, td{font-family:arial,sans-serif;font-size:80%} a:link, a:active, a:visited{color:#0000CC} img{border:0} pre { white-space: pre; white-space: -moz-pre-wrap; white-space: -o-pre-wrap; white-space: pre-wrap; word-wrap: break-word; width: 800px; overflow: auto;}
+</style>
+<script>
+function Print(){document.body.offsetHeight;window.print()}
+</script>
+</head>
+<body onload="Print()">
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td width=143>
+<img src="/mail/help/images/logo1.gif"
+width=143 height=59 alt="Gmail">
+</td>
+<td align=right>
+<font size=-1><b>
+Ryan Lin
+&lt;tokyotech@gmail.com&gt;
+</b></td>
+</tr>
+</table>
+<hr>
+<font size=+2>
+<b>CS 492 - progress on page scraping</b></font><br>
+<font size=-1>4 messages</font>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Ryan Lin
+&lt;tokyotech@gmail.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Wed, Sep 17, 2008 at 9:42 PM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+Andrew Spencer &lt;andrewpspencer@gmail.com&gt;, Doo Yong Chung &lt;dyongstar@gmail.com&gt;, Mariusz Choroszy &lt;choroszm@yahoo.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><div dir="ltr"><a href="http://levichi.com/storage/" target="_blank">http://levichi.com/storage/</a><br><br>I just scraped a page and printed out one stat: the number of designs someone has. It took me a while to figure out PHP&#39;s regular expression engine. Turns out that it is similar to the notation we learned in the compilers/languages class. <br>
+<br><span style="color:rgb(204, 0, 0)">&lt;?php</span><br style="color:rgb(204, 0, 0)"><span style="color:rgb(204, 0, 0)">    </span><br style="color:rgb(204, 0, 0)"><span style="color:rgb(204, 0, 0)">    $file = file_get_contents(&#39;<a href="http://www.threadless.com/profile/298651/Kojima&#39;" target="_blank">http://www.<WBR>threadless.com/profile/298651/<WBR>Kojima&#39;</a>);</span><br style="color:rgb(204, 0, 0)">
+<span style="color:rgb(204, 0, 0)">    </span><br style="color:rgb(204, 0, 0)"><span style="color:rgb(204, 0, 0)">    // &lt;a href=&quot;/submission/170427/From_<WBR>Creation_to_Death/showmore,<WBR>designs&quot;&gt;</span><br style="color:rgb(204, 0, 0)">
+<span style="color:rgb(204, 0, 0)">    </span><br style="color:rgb(204, 0, 0)"><span style="color:rgb(204, 0, 0)">    preg_match_all(&#39;#a[\s]+href[\<WBR>s]?=&quot;/submission/(.*?)&quot;&gt;(.*?)&lt;<WBR>\/a&gt;#i&#39;, $file, $matches);  </span><br style="color:rgb(204, 0, 0)">
+<span style="color:rgb(204, 0, 0)">    </span><br style="color:rgb(204, 0, 0)"><span style="color:rgb(204, 0, 0)">    printf(&#39;&lt;h1&gt;Ryan has %d designs on Threadless&lt;/h1&gt;&#39;, sizeof($matches[0]));</span><br style="color:rgb(204, 0, 0)">
+<span style="color:rgb(204, 0, 0)">    </span><br style="color:rgb(204, 0, 0)"><span style="color:rgb(204, 0, 0)">    echo &#39;&lt;pre&gt;&#39;;</span><br style="color:rgb(204, 0, 0)"><span style="color:rgb(204, 0, 0)">    </span><br style="color:rgb(204, 0, 0)">
+<span style="color:rgb(204, 0, 0)">    print_r($matches);</span><br style="color:rgb(204, 0, 0)"><span style="color:rgb(204, 0, 0)">    </span><br style="color:rgb(204, 0, 0)"><span style="color:rgb(204, 0, 0)">    echo &#39;&lt;/pre&gt;&#39;;</span><br style="color:rgb(204, 0, 0)">
+<br style="color:rgb(204, 0, 0)"><span style="color:rgb(204, 0, 0)">?&gt;</span><br><br>As you can see, PHP has a lot of powerful library functions which will allow us to write short code to gather stats. <br><br clear="all">
+<br>-- <br>Ryan Lin<br>
+</div>
+</font>
+</table>
+</table>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Andrew Spencer
+&lt;andrewpspencer@gmail.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Thu, Sep 18, 2008 at 4:37 PM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+Ryan Lin &lt;tokyotech@gmail.com&gt;
+</div>
+<div>
+Cc:
+Doo Yong Chung &lt;dyongstar@gmail.com&gt;, Mariusz Choroszy &lt;choroszm@yahoo.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><div dir="ltr">Most of the scripting languages can do similar things. In Python (it requires the BeautifulSoup library):<br>
+<br>
+<span style="font-family:courier new,monospace">from BeautifulSoup import BeautifulSoup</span><br style="font-family:courier new,monospace">
+<span style="font-family:courier new,monospace">import re</span><br style="font-family:courier new,monospace">
+<span style="font-family:courier new,monospace">import urllib2</span><br style="font-family:courier new,monospace">
+<br style="font-family:courier new,monospace">
+<span style="font-family:courier new,monospace">page = urllib2.urlopen(&quot;<a href="http://www.mail-archive.com/flexcoders@yahoogroups.com/" target="_blank">http://www.<WBR>mail-archive.com/flexcoders@<WBR>yahoogroups.com/</a>&quot;)</span><br style="font-family:courier new,monospace">
+<span style="font-family:courier new,monospace">soup = BeautifulSoup(page)</span><br style="font-family:courier new,monospace">
+<br style="font-family:courier new,monospace">
+<span style="font-family:courier new,monospace">for sender in soup.findAll(attrs={&#39;class&#39;:&#39;<WBR>sender&#39;}):</span><br style="font-family:courier new,monospace">
+<span style="font-family:courier new,monospace">  print sender.contents[0]</span><br style="font-family:courier new,monospace">
+<br>
+<font face="arial,helvetica,sans-serif">This code lists all the senders
+for posts on the flexcoders site. However, I&#39;m wondering if a
+scripting/interpreted language will give us the performance we need.
+I&#39;ll run some tests on high-volume stuff and see how it does. </font><br><font color=#888888>
+<br>
+Andrew</font><div style='padding:5 0'><font size=1 color=#888888>[Quoted text hidden]</font></div></div>
+</font>
+</table>
+</table>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Ryan Lin
+&lt;tokyotech@gmail.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Thu, Sep 18, 2008 at 5:14 PM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+Andrew Spencer &lt;andrewpspencer@gmail.com&gt;
+</div>
+<div>
+Cc:
+Doo Yong Chung &lt;dyongstar@gmail.com&gt;, Mariusz Choroszy &lt;choroszm@yahoo.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><div dir="ltr">More progress on scraping:<br><br>I decided to scrape this guy <a href="http://www.threadless.com/profile/331713/eown" target="_blank">http://www.threadless.com/<WBR>profile/331713/eown</a> , instead of my own profile, since my profile has a ton of designs. Threadless might ban my server&#39;s IP if I thrash their server too much. This is something we have to keep in mind - do not scrape more than you need to. So I scraped his profile and recursively (sort of) scraped the links to his designs. I then analyzed it for some averages, minimums, maximums, etc...<br>
+<br><a href="http://levichi.com/storage/" target="_blank">http://levichi.com/storage/</a><br><br>Andrew, how are you going to gauge the speed of an interpreted language? The bulk of the time (probably 90% of the time) will be downloading the pages, which is determined by the scrapee&#39;s and scraper&#39;s relative server speed, not the type of language you use. If we follow Amdahl&#39;s Law, we should be focusing on being smart about when and what to scrape as opposed to optimizing our analysis. <br><div style='padding:5 0'><font size=1 color=#888888>[Quoted text hidden]</font></div>-- <br>Ryan Lin<br>
+</div>
+</font>
+<br clear=all>
+<div style="width:50%;border-top:2px #AAAAAA solid"></div>
+<table class=att cellspacing=0 cellpadding=5 border=0><tr><td><table cellspacing=0 cellpadding=0><tr><td align=center><a target=_blank href="?ui=2&ik=bb1119a0ec&view=att&th=11c77877015b4af0&attid=0.1&disp=inline&realattid=f_fl9xx1k10&zw"><img class=thi src=?ui=2&ik=bb1119a0ec&view=att&th=11c77877015b4af0&attid=0.1&disp=thd&realattid=f_fl9xx1k10&zw></a></td><td width=7></td><td><b>php.png</b><br/>15K </td></tr></table></td></tr></table>
+</table>
+</table>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Andrew Spencer
+&lt;andrewpspencer@gmail.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Thu, Sep 18, 2008 at 9:16 PM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+Ryan Lin &lt;tokyotech@gmail.com&gt;
+</div>
+<div>
+Cc:
+Doo Yong Chung &lt;dyongstar@gmail.com&gt;, Mariusz Choroszy &lt;choroszm@yahoo.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><div dir="ltr">Just using the &#39;time&#39; command on my home machine (Ubuntu), wget-ing the flexcoders page from before gives the stats: <br><br>real     0m0.643s<br>user    0m0.008s<br>sys      0m0.008s<br><br>and the python script from before gives:<br>
+<br>real     0m2.647s<br>user    0m1.016s<br>sys      0m0.012s<br><br>So using BeautifulSoup may be overkill. I agree that if we are just matching a few regex&#39;s on the page then network I/O will be very slow in comparison. However, I think if we are doing more analysis on a page (i.e. logging keywords in DB, etc.) then this part might be more of a factor. In such a case it would be nice to have a good thread model available to make the script multi-threaded. To be honest, I don&#39;t much want to work with PHP. For scraping, I was picturing a daemon (or better, a cron job, as you suggested) that runs locally on the server. Such a script populates the database and has nothing to do with generating HTML, Flex code, or whatever-the-hell-else. PHP could have a role, though, in the way we serve out this content. Let me know what you think.<div style='padding:5 0'><font size=1 color=#888888>[Quoted text hidden]</font></div></div>
+</font>
+</table>
+</table>
+<hr>
+</body>
+</html>

@@ -1,0 +1,383 @@
+
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=UTF-8">
+<title>Gmail - CS492 - queries for A features we&#39;re missing</title>
+<style type="text/css">
+body, td{font-family:arial,sans-serif;font-size:80%} a:link, a:active, a:visited{color:#0000CC} img{border:0} pre { white-space: pre; white-space: -moz-pre-wrap; white-space: -o-pre-wrap; white-space: pre-wrap; word-wrap: break-word; width: 800px; overflow: auto;}
+</style>
+<script>
+function Print(){document.body.offsetHeight;window.print()}
+</script>
+</head>
+<body onload="Print()">
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td width=143>
+<img src="/mail/help/images/logo1.gif"
+width=143 height=59 alt="Gmail">
+</td>
+<td align=right>
+<font size=-1><b>
+Ryan Lin
+&lt;tokyotech@gmail.com&gt;
+</b></td>
+</tr>
+</table>
+<hr>
+<font size=+2>
+<b>CS492 - queries for A features we're missing</b></font><br>
+<font size=-1>11 messages</font>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Ryan Lin
+&lt;tokyotech@gmail.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Thu, Feb 19, 2009 at 12:16 AM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+Andrew Spencer &lt;andrewpspencer@gmail.com&gt;, Mariusz Choroszy &lt;choroszm@yahoo.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1>There are some A feature stats that we may not have in the GUI.  Puneet had them listed on the Buzzword when he first created that document. These would go under the page after you click the eye/&quot;i&quot; (or whatever it is now) icon.<br>
+<br><font size="4">frequency of posts (average posts per day)</font><br><i><span style="color:rgb(255, 0, 0)">this will work accurately if MIN(time) wouldn&#39;t return 0 all the time (error on regex or english time -&gt; unix time conversion). </span><br>
+</i><br><div style="margin-left:40px"><span style="font-family:courier new,monospace">SELECT COUNT(*) / ((MAX(time) - MIN(time)) / 86400) </span><br style="font-family:courier new,monospace"><span style="font-family:courier new,monospace">FROM posts</span><br>
+</div><br><font size="4"><br>graph of how the frequency of posts is changing day by day (number of posts VS days since epoch)</font><br><i style="color:rgb(255, 0, 0)">the results are weird. Some days are skipped and some days only have 1 post. Don&#39;t know what&#39;s going on</i>...<br>
+<br><div style="margin-left:40px"><span style="font-family:courier new,monospace">SELECT ROUND(time / 86400) AS daysSinceEpoch, COUNT(*) AS postsInThisDay</span><br style="font-family:courier new,monospace"><span style="font-family:courier new,monospace">FROM posts </span><br style="font-family:courier new,monospace">
+<span style="font-family:courier new,monospace">GROUP BY daysSinceEpoch</span><br style="font-family:courier new,monospace"><span style="font-family:courier new,monospace">ORDER BY daysSinceEpoch ASC</span><br></div>
+<br><br><font size="4">posts per author</font><br>
+<i style="color:rgb(255, 0, 0)">the url is here so you can link to their profile</i><br><br>
+<div style="margin-left:40px"><span style="font-family:courier new,monospace">SELECT posts, name, url </span><br style="font-family:courier new,monospace"><span style="font-family:courier new,monospace">FROM users</span><br>
+</div>
+<br>
+<br>
+<font size="4">number of authors</font><br>
+<br>
+<div style="margin-left:40px"><span style="font-family:courier new,monospace">SELECT COUNT(*) </span><br style="font-family:courier new,monospace"><span style="font-family:courier new,monospace">FROM users</span><br>
+</div>
+<br clear="all">Ryan Lin<br>
+</font>
+</table>
+</table>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Andrew Spencer
+&lt;andrewpspencer@gmail.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Thu, Feb 19, 2009 at 12:46 AM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+Ryan Lin &lt;tokyotech@gmail.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1>I looked through the database and there are some strange things going on. However, I traced a post back to the original page and the time seemed to have been converted to a timestamp correctly. If the posts in the DB are sorted by time in some places there are relatively large time jumps during which there are no posts. I&#39;ll look at it when I check in on the scheduler.<div style='padding:5 0'><font size=1 color=#888888>[Quoted text hidden]</font></div></font>
+</table>
+</table>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Ryan Lin
+&lt;tokyotech@gmail.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Thu, Feb 19, 2009 at 10:43 AM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+Andrew Spencer &lt;andrewpspencer@gmail.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1>Yes, the daysSinceEpoch query is either a faulty query or it is revealing that the scraping is not working.  There should definitely be new posts stored for each day, but some days don&#39;t have any posts at all and some days only have 1 post!<br>
+<br>Also, there&#39;s only one post with the time of &quot;0&quot;.  I&#39;m guessing that may be a program execution fault rather than code logic error. <br><font color=#888888><br clear="all">Ryan Lin</font><div style='padding:5 0'><font size=1 color=#888888>[Quoted text hidden]</font></div></font>
+</table>
+</table>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Andrew Spencer
+&lt;andrewpspencer@gmail.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Fri, Feb 20, 2009 at 2:38 PM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+Ryan Lin &lt;tokyotech@gmail.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1>I think the posts/day actually seems okay. If you look at later days, there are many more posts. Earlier days will be lucky to have a post, but some that do may appear to have a lot because there was a flurry of activity on some thread for that day. The only data that we can trust for posts/day is for days when our scraping had already begun. We have no way of seeing dead threads without giving our scrape unlimited depth at some point.<div style='padding:5 0'><font size=1 color=#888888>[Quoted text hidden]</font></div></font>
+</table>
+</table>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Ryan Lin
+&lt;tokyotech@gmail.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Sat, Feb 21, 2009 at 12:35 AM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+Andrew Spencer &lt;andrewpspencer@gmail.com&gt;, Mariusz Choroszy &lt;choroszm@yahoo.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><font size="4">To All,</font><br><br>Several database columns deleted. The files in the &quot;database&quot; folder have all been updated to reflect this.  The GUI needs to be adjusted to not access:<br><ul><li>website-&gt;regexes-&gt;id - is useless and even caused us to waste time debugging<br>
+</li><li>website-&gt;regexes-&gt;<WBR>threadNumPosts - was not flexible with all website types<br></li></ul>The goodness algorithm was changed.  It now only searches a small vicinity around a keyword for potential adjectives.  This will make our scrapes go faster and also goodness will be more accurate. I was thinking of the case where there are like 100 bad words located many paragraphs away from a keyword.  These 100 bad words may be unrelated to the keyword and their distance away from the keyword does not allow them to significantly affect the keyword individually, but when summed up together, they could wrongfully sway the keyword&#39;s rating. <br>
+<br><font size="4">Mariusz,</font><br><br>Andrew and I added NYTimes&#39; politics news section with proper regexes and allowed keywords to the database.  You can start viewing that site on your GUI.<br><br><font size="4">Andrew,</font><br>
+<ul><li>Often ran into this problem when running testcrawl.php on my localhost on NYTimes:<i>Fatal error: Call to a member function output() on a non-object in C:\Program Files\WAMP\www\monarch\trunk\</i><i>m<WBR>onarch\StructuredCrawl.php on line 206</i><b>.</b></li>
+<li>The new <span style="color:rgb(255, 0, 0)">threadUrl </span>you pass into <span style="color:rgb(255, 0, 0)">ForumPostProcessor-&gt;process()</span> is the full URL.  <span style="color:rgb(255, 0, 0)">WebsiteDB-&gt;threads-&gt;url</span> does not store the full URL, so finding the <span style="color:rgb(255, 0, 0)">threadId</span> will always fail.  If you view the last page of <span style="color:rgb(255, 0, 0)">websiteDB-&gt;posts</span> on the server, all of them are listed as children of thread 0, which is wrong.  Once this gets fixed, my new post count updating should work.</li>
+<li>When these two things are fixed, upload the new code, then send me an email so I can modify the server&#39;s database.</li></ul>Ryan Lin<div style='padding:5 0'><font size=1 color=#888888>[Quoted text hidden]</font></div></font>
+</table>
+</table>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Andrew Spencer
+&lt;andrewpspencer@gmail.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Sat, Feb 21, 2009 at 6:54 PM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+Ryan Lin &lt;tokyotech@gmail.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1>Ryan,<div>I have checked in a fix for the <span style="font-style:italic">output() </span>bug. The other problem is not as trivial to fix. Thread information is collected from a page of threads so in order to associate a page of posts with a thread, there must be some identifying characteristic in the page of posts to link it back to the thread that it appears under. This is why the &quot;parentUrl&quot; was necessary. It allows every page to be processed independently of any other so that the crawl could one day be parallelized if necessary. But it is true that not all sites will have a link to the threadUrl from all pages of the thread. I can fix it for nytimes by using the print link in pages of posts but I haven&#39;t thought of a more robust solution. Changes:<br>
+-parentUrl regex in server database <br>-once again using parentUrl to identify thread for page of posts<br><font color=#888888><br>Andrew</font><div style='padding:5 0'><font size=1 color=#888888>[Quoted text hidden]</font></div></div>
+</font>
+</table>
+</table>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Ryan Lin
+&lt;tokyotech@gmail.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Sun, Feb 22, 2009 at 11:00 AM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+Andrew Spencer &lt;andrewpspencer@gmail.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1>Andrew,<br><br>I&#39;m not saying it should be removed.  It&#39;s just not working now. $threadUrl is something like <i><a href="http://www.threadless.com/folder/site.html" target="_blank">http://www.threadless.com/<WBR>folder/site.html</a></i> but the threads table stores URL&#39;s as <i>folder/site.html</i> (for Threadless only).  So searching for the thread using $threadUrl will fail.  This is indirectly causing the posts table to not show the correct thread that it belongs to (they are listed as belonging to thread 0).  Although the GUI is not currently using this information, it would be better to have correct data.  It&#39;s nothing mission critical though.<br><font color=#888888>
+<br clear="all">Ryan Lin</font><div style='padding:5 0'><font size=1 color=#888888>[Quoted text hidden]</font></div></font>
+</table>
+</table>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Andrew Spencer
+&lt;andrewpspencer@gmail.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Sun, Feb 22, 2009 at 4:26 PM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+Ryan Lin &lt;tokyotech@gmail.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><div>Ryan,</div>The problem I was trying to fix related to nytimespolitics which now seems to be working. Threadless scrapes started having threadID=0 after we made changes on Friday. One fix would be to store the full url as the threadUrl in the threads table. I can&#39;t think of any other quick fix. <div>
+<br></div><div><font color=#888888>Andrew</font><div style='padding:5 0'><font size=1 color=#888888>[Quoted text hidden]</font></div></div>
+</font>
+</table>
+</table>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Ryan Lin
+&lt;tokyotech@gmail.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Sun, Feb 22, 2009 at 4:28 PM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+Andrew Spencer &lt;andrewpspencer@gmail.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1>Yeah, that should work.<br><br>I tried to run the Flex GUI yesterday and it didn&#39;t run.  Do you need the Air SDK?  I only installed the Air for normal users.<br><font color=#888888><br clear="all">Ryan Lin</font><div style='padding:5 0'><font size=1 color=#888888>[Quoted text hidden]</font></div></font>
+</table>
+</table>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Andrew Spencer
+&lt;andrewpspencer@gmail.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Sun, Feb 22, 2009 at 6:52 PM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+Ryan Lin &lt;tokyotech@gmail.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><div>Ryan,</div>So you installed the builder and checked out/imported the AdobeAnalyticsTool project and it gave an error when you tried to run it? If so, you need to change the following line in AdobeAnalyticsTool-app.xml:<div>
+<br></div><div>&lt;application xmlns=&quot;<a href="http://ns.adobe.com/air/application/1.1" target="_blank">http://ns.adobe.com/<WBR>air/application/1.1</a>&quot;&gt;</div><div><br></div><div>to</div><div><br></div><div>&lt;application xmlns=&quot;<a href="http://ns.adobe.com/air/application/1.5" target="_blank">http://ns.adobe.com/<WBR>air/application/1.5</a>&quot;&gt;</div>
+<div><br></div><div>I told Mariusz to update his version of Air but I don&#39;t think he&#39;s done it yet.</div><div><br></div><div><font color=#888888>Andrew</font><div style='padding:5 0'><font size=1 color=#888888>[Quoted text hidden]</font></div></div>
+</font>
+</table>
+</table>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Ryan Lin
+&lt;tokyotech@gmail.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Sun, Feb 22, 2009 at 7:00 PM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+Andrew Spencer &lt;andrewpspencer@gmail.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1>No, after clicking the run button, nothing happens. No error is shown.<br><br>I&#39;m able to run Flex apps in the builder but not Air apps.<br><font color=#888888><br clear="all">Ryan Lin</font><div style='padding:5 0'><font size=1 color=#888888>[Quoted text hidden]</font></div></font>
+</table>
+</table>
+<hr>
+</body>
+</html>

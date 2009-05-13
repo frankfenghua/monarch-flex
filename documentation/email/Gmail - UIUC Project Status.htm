@@ -1,0 +1,788 @@
+
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=UTF-8">
+<title>Gmail - UIUC Project Status</title>
+<style type="text/css">
+body, td{font-family:arial,sans-serif;font-size:80%} a:link, a:active, a:visited{color:#0000CC} img{border:0} pre { white-space: pre; white-space: -moz-pre-wrap; white-space: -o-pre-wrap; white-space: pre-wrap; word-wrap: break-word; width: 800px; overflow: auto;}
+</style>
+<script>
+function Print(){document.body.offsetHeight;window.print()}
+</script>
+</head>
+<body onload="Print()">
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td width=143>
+<img src="/mail/help/images/logo1.gif"
+width=143 height=59 alt="Gmail">
+</td>
+<td align=right>
+<font size=-1><b>
+Ryan Lin
+&lt;tokyotech@gmail.com&gt;
+</b></td>
+</tr>
+</table>
+<hr>
+<font size=+2>
+<b>UIUC Project Status</b></font><br>
+<font size=-1>21 messages</font>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Andrew Spencer
+&lt;andrewpspencer@gmail.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Tue, Dec 30, 2008 at 4:25 AM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+Puneet Goel &lt;pugoel@adobe.com&gt;
+</div>
+<div>
+Cc:
+Doo Chung &lt;dyongstar@gmail.com&gt;, Mariusz Choroszy &lt;choroszm@yahoo.com&gt;, Ryan Lin &lt;tokyotech@gmail.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1>Hi Puneet,<br><br>I hope you have enjoyed some time off during this holiday season. I have been in direct communication with Ryan of our group and we have been working on the following since leaving for Christmas break:<br>
+<br>- Adding support for linking back to an exemplary thread for a given thread. I changed the crawling to support this and also made a fix to some strange behavior of links in a page. Ryan has added a &#39;userstats&#39; table to the database and has written code to collect these stats because they are needed for linking back.<br>
+<br>- Mariusz is working on restructuring the GUI based on discussions we had with you and Vera.<br><br>- I thought it would be cool to provide more visual feedback through the Regular Expression Editor so I have been working on a new and improved regular expression editor that leverages the ability of the AIR runtime to access the DOM of a loaded page. You can see the attached images for what is working. &quot;mistake.JPG&quot; shows an almost correct regular expression that matches all of the subject links on a Google Groups page but also matches an email address. The other image shows matches for the subject links on FlexCoders. If you want to try this out I can send you a link to download the .air file but it is not yet integrated with the DB and the main GUI. Highlighting of matches should allow the user to have a better idea of the type of coverage that a given regular expression gives of page contents.<br>
+<br>I have not heard anything from Doo Yong.<br><br>Please let us know if you have any questions or suggestions.<br><br>Thanks,<br><font color=#888888>Andrew Spencer<br>
+</font></font>
+<br clear=all>
+<div style="width:50%;border-top:2px #AAAAAA solid"></div>
+<table class=att cellspacing=0 cellpadding=5 border=0><tr><td colspan=2><b style="padding-left:3">2 attachments</b><tr><td><table cellspacing=0 cellpadding=0><tr><td align=center><a target=_blank href="?ui=2&ik=bb1119a0ec&view=att&th=11e8736975a6d6ad&attid=0.1&disp=inline&realattid=f_fpcc1ly80&zw"><img class=thi src=?ui=2&ik=bb1119a0ec&view=att&th=11e8736975a6d6ad&attid=0.1&disp=thd&realattid=f_fpcc1ly80&zw></a></td><td width=7></td><td><b>mistake.JPG</b><br/>148K </td></tr></table></td></tr><tr><td><table cellspacing=0 cellpadding=0><tr><td align=center><a target=_blank href="?ui=2&ik=bb1119a0ec&view=att&th=11e8736975a6d6ad&attid=0.2&disp=inline&realattid=f_fpcc245b1&zw"><img class=thi src=?ui=2&ik=bb1119a0ec&view=att&th=11e8736975a6d6ad&attid=0.2&disp=thd&realattid=f_fpcc245b1&zw></a></td><td width=7></td><td><b>regexEditor_subject.JPG</b><br/>268K </td></tr></table></td></tr></table>
+</table>
+</table>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Ryan Lin
+&lt;tokyotech@gmail.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Tue, Dec 30, 2008 at 1:27 PM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+Andrew Spencer &lt;andrewpspencer@gmail.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1>Looks very good.<br><br>May I suggest a split screen mode. The left side being the source code and the right side being what you have right now. The source code could be highlighted similarly. Or put the two sides in tabs if you detect that the user&#39;s screen is too small.<br><font color=#888888>
+<br clear="all">Ryan Lin</font><div style='padding:5 0'><font size=1 color=#888888>[Quoted text hidden]</font></div></font>
+</table>
+</table>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Andrew Spencer
+&lt;andrewpspencer@gmail.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Tue, Dec 30, 2008 at 2:36 PM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+Ryan Lin &lt;tokyotech@gmail.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1>We can do that (split screen). I&#39;m not sure how we should fit in input for the various regex&#39;s that we need. A webpage view takes up a lot of room so it should be an option. The page source should also be optional. I&#39;ll add the features and we can rearrange things afterward.<div style='padding:5 0'><font size=1 color=#888888>[Quoted text hidden]</font></div></font>
+</table>
+</table>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Ryan Lin
+&lt;tokyotech@gmail.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Tue, Dec 30, 2008 at 2:48 PM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+Andrew Spencer &lt;andrewpspencer@gmail.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1>Is the new crawler code working on your computer?<br><font color=#888888><br clear="all">Ryan Lin</font><div style='padding:5 0'><font size=1 color=#888888>[Quoted text hidden]</font></div></font>
+</table>
+</table>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Andrew Spencer
+&lt;andrewpspencer@gmail.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Tue, Dec 30, 2008 at 7:51 PM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+Ryan Lin &lt;tokyotech@gmail.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1>It works on the csil machine (<a href="http://csil-srprj-2.cs.uiuc.edu/monarch/tests/testcrawl.php" target="_blank">http://csil-srprj-2.cs.uiuc.<WBR>edu/monarch/tests/testcrawl.<WBR>php</a>). It seemed to work, albeit very slowly when using the processors. Even when using throttle=0 it is very slow. Without processors, it finishes in 1-2 minutes.<div style='padding:5 0'><font size=1 color=#888888>[Quoted text hidden]</font></div></font>
+</table>
+</table>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Ryan Lin
+&lt;tokyotech@gmail.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Tue, Dec 30, 2008 at 8:03 PM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+Andrew Spencer &lt;andrewpspencer@gmail.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1>Hmm... this will be hard to debug on my home PC&#39;s Pentium 4 @ 3.2Ghz and 1 GB RAM.<br><br>As for other things we were questioning before: <br><ul><li>array_walk() is PHP&#39;s version of &quot;map&quot;. <br></li><li>Specifying a large length for a varchar column will not increase the space to store each entry - varchar has 1 byte to store the actual length and the 1 byte per character.<br>
+</li></ul>Ryan Lin<div style='padding:5 0'><font size=1 color=#888888>[Quoted text hidden]</font></div></font>
+</table>
+</table>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Ryan Lin
+&lt;tokyotech@gmail.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Wed, Dec 31, 2008 at 2:46 PM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+Andrew Spencer &lt;andrewpspencer@gmail.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1>I&#39;m not understanding how the new crawl code works. I ran testcrawl.php for like 20 minutes on 2 threads before stopping it early. It seems weird that all this was inserted into the Threadless db when only 2 threads should have been inserted:<br>
+<ul><li>30 threads in table &quot;threads&quot;. I think that&#39;s the whole page 1...<br></li><li>posts coming from 8 distinct threads in table &quot;posts&quot;<br></li></ul><font color=#888888><br clear="all">Ryan Lin</font><div style='padding:5 0'><font size=1 color=#888888>[Quoted text hidden]</font></div></font>
+</table>
+</table>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Ryan Lin
+&lt;tokyotech@gmail.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Thu, Jan 1, 2009 at 3:34 PM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+Andrew Spencer &lt;andrewpspencer@gmail.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1>I think I may be misinterpreting what your definition of &quot;top level&quot; page is. Is it a page of threads or a thread by itself? If it&#39;s the whole page of threads, then which constant is for the threads themselves? Also, I&#39;ve been getting this error sometimes:<br>
+<br><b>Fatal error</b>: Call to a member function output() on a non-object in <b>C:\Program Files\wamp\www\seniorProject\<WBR>trunk\monarch\StructuredCrawl.<WBR>php</b> on line <b>199</b><br><font color=#888888><br clear="all">Ryan Lin</font><div style='padding:5 0'><font size=1 color=#888888>[Quoted text hidden]</font></div></font>
+</table>
+</table>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Andrew Spencer
+&lt;andrewpspencer@gmail.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Sat, Jan 3, 2009 at 1:33 AM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+Ryan Lin &lt;tokyotech@gmail.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1>Sorry for taking awhile to respond. Top-level page will be a page of threads (e.g. <a href="http://threadless.com/blogs/blogs" target="_blank">threadless.com/blogs/blogs</a>) when the crawl is run on Threadless. If a crawl is begun from some page, it is assumed that this page is a top-level page. I think I was thinking one thing and you were thinking another. In order to define the crawl in terms of the number of threads crawled, I can define a function called something like &#39;definePageLimit($pagelevel, $numPages)&#39;. This will preserve generality but also allow specific behavior in this case. I&#39;ll make the fix here in a couple of minutes.<div style='padding:5 0'><font size=1 color=#888888>[Quoted text hidden]</font></div></font>
+</table>
+</table>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Ryan Lin
+&lt;tokyotech@gmail.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Sat, Jan 3, 2009 at 2:21 AM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+Andrew Spencer &lt;andrewpspencer@gmail.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1>I think the &quot;page of threads&quot; is fine. There will no need to specify the number of threads to scrape, except for testing purposes. <br><br>So basically, all the main things are done. Usersstats and threadsstats tables will be able to tell you who and what thread is talking badly/good about a keyword. <br><font color=#888888>
+<br clear="all">Ryan Lin</font><div style='padding:5 0'><font size=1 color=#888888>[Quoted text hidden]</font></div></font>
+</table>
+</table>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Ryan Lin
+&lt;tokyotech@gmail.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Sun, Jan 4, 2009 at 1:34 AM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+Andrew Spencer &lt;andrewpspencer@gmail.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1>Now it just crawls pages without echoing anything from forumPostProcessor... ???<br><font color=#888888><br clear="all">Ryan Lin</font><div style='padding:5 0'><font size=1 color=#888888>[Quoted text hidden]</font></div></font>
+</table>
+</table>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Puneet Goel
+&lt;pugoel@adobe.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Wed, Jan 7, 2009 at 12:04 PM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+Andrew Spencer &lt;andrewpspencer@gmail.com&gt;
+</div>
+<div>
+Cc:
+Doo Chung &lt;dyongstar@gmail.com&gt;, Mariusz Choroszy &lt;choroszm@yahoo.com&gt;, Ryan Lin &lt;tokyotech@gmail.com&gt;, Vera Carr &lt;verac@adobe.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1>
+<div lang="EN-US" link="blue" vlink="purple">
+<div>
+<p><span style="font-size:11.0pt;color:#1F497D">Hi Guys,</span></p>
+<p><span style="font-size:11.0pt;color:#1F497D"> </span></p>
+<p><span style="font-size:11.0pt;color:#1F497D">I apologize for the late response. We had a winter shutdown at
+Adobe and I just got back today. Hope you had a great break.</span></p>
+<p><span style="font-size:11.0pt;color:#1F497D"> </span></p>
+<p><span style="font-size:11.0pt;color:#1F497D">I had a discussion with Vera before we went on break. We both
+agreed that you were being innovative and were putting in great features.
+However, the thing that was apparent was that we did not have a clear sense of
+what we would get when the project was over. For the next week or two I would
+like you to stop the programming effort and </span></p>
+<p><span style="font-size:11.0pt;color:#1F497D">1. Prepare a list of features that you will deliver. The one on
+the Buzzword doc is not comprehensive enough. Once you have decided on the
+feature list, <b>stop</b> coming up with new feature ideas.</span></p>
+<p><span style="font-size:11.0pt;color:#1F497D">2. Prioritize features into A, B or C categories. A features
+have to be delivered for the product to be viable. B features are nice to have
+and will be delivered only if there is time. C features are features that you
+thought of but decided that you were not going to be able to put them in the
+product at this time.</span></p>
+<p><span style="font-size:11.0pt;color:#1F497D">3. Give us a time schedule of when the A features will be delivered.
+You should plan to leave at least 2 months for testing.</span></p>
+<p><span style="font-size:11.0pt;color:#1F497D"> </span></p>
+<p><span style="font-size:11.0pt;color:#1F497D">Let me know if you have questions. </span></p>
+<p><span style="font-size:11.0pt;color:#1F497D"> </span></p>
+<p><span style="font-size:11.0pt;color:#1F497D">This week is really busy for me but I would like us to get
+together early next week. Can you give me a couple of time slots that work well
+for you.</span></p>
+<p><span style="font-size:11.0pt;color:#1F497D"> </span></p>
+<p><span style="font-size:11.0pt;color:#1F497D">Thanks,</span></p>
+<p><span style="font-size:11.0pt;color:#1F497D">Puneet</span></p>
+<p><span style="font-size:11.0pt;color:#1F497D"> </span></p>
+<div style="border:none;border-top:solid #B5C4DF 1.0pt;padding:3.0pt 0in 0in 0in">
+<p><b><span style="font-size:10.0pt">From:</span></b><span style="font-size:10.0pt"> Andrew Spencer
+[mailto:<a href="mailto:andrewpspencer@gmail.com" target="_blank">andrewpspencer@gmail.<WBR>com</a>] <br>
+<b>Sent:</b> Tuesday, December 30, 2008 1:26 AM<br>
+<b>To:</b> Puneet Goel<br>
+<b>Cc:</b> Doo Chung; Mariusz Choroszy; Ryan Lin<br>
+<b>Subject:</b> UIUC Project Status</span></p>
+</div><div style='padding:5 0'><font size=1 color=#888888>[Quoted text hidden]</font></div></div>
+</div>
+</font>
+</table>
+</table>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Ryan Lin
+&lt;tokyotech@gmail.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Fri, Jan 9, 2009 at 2:31 AM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+Puneet Goel &lt;pugoel@adobe.com&gt;
+</div>
+<div>
+Cc:
+Andrew Spencer &lt;andrewpspencer@gmail.com&gt;, Doo Chung &lt;dyongstar@gmail.com&gt;, Mariusz Choroszy &lt;choroszm@yahoo.com&gt;, Vera Carr &lt;verac@adobe.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1>Puneet and Vera,<br><br>The <a href="https://buzzword.acrobat.com/#d=-7bwVGZb20G9mQbPVDWW6w" target="_blank">Buzzword document&#39;s</a> sections on the features have been doubled in length, elaborating on specifically what will be offered. &quot;A&quot; features are in section III. &quot;B&quot; and &quot;C&quot; features start in section IV. The &quot;A&quot; features will be completed by the end of February. <br>
+<br>We would like to meet with you, but unfortunately, our second semester does not start until the 20th. Let us decide on a meeting time when all our group members have settled in.<br><br>Have a good day. <br><font color=#888888><br clear="all">
+Ryan Lin</font><div style='padding:5 0'><font size=1 color=#888888>[Quoted text hidden]</font></div></font>
+</table>
+</table>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Puneet Goel
+&lt;pugoel@adobe.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Tue, Jan 20, 2009 at 5:57 PM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+Ryan Lin &lt;tokyotech@gmail.com&gt;
+</div>
+<div>
+Cc:
+Andrew Spencer &lt;andrewpspencer@gmail.com&gt;, Doo Chung &lt;dyongstar@gmail.com&gt;, Mariusz Choroszy &lt;choroszm@yahoo.com&gt;, Vera Carr &lt;verac@adobe.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1>
+<div lang="EN-US" link="blue" vlink="purple">
+<div>
+<p><span style="font-size:11.0pt;color:#1F497D">Are you available to chat this Friday?</span></p>
+<p><span style="font-size:11.0pt;color:#1F497D"> </span></p>
+<div style="border:none;border-top:solid #B5C4DF 1.0pt;padding:3.0pt 0in 0in 0in">
+<p><b><span style="font-size:10.0pt">From:</span></b><span style="font-size:10.0pt"> Ryan Lin
+[mailto:<a href="mailto:tokyotech@gmail.com" target="_blank">tokyotech@gmail.com</a>] <br>
+<b>Sent:</b> Thursday, January 08, 2009 11:31 PM<br>
+<b>To:</b> Puneet Goel<br>
+<b>Cc:</b> Andrew Spencer; Doo Chung; Mariusz Choroszy; Vera Carr<br>
+<b>Subject:</b> Re: UIUC Project Status</span></p>
+</div><div style='padding:5 0'><font size=1 color=#888888>[Quoted text hidden]</font></div></div>
+</div>
+</font>
+</table>
+</table>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Vera Carr
+&lt;verac@adobe.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Tue, Jan 20, 2009 at 6:46 PM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+Puneet Goel &lt;pugoel@adobe.com&gt;, Ryan Lin &lt;tokyotech@gmail.com&gt;
+</div>
+<div>
+Cc:
+Andrew Spencer &lt;andrewpspencer@gmail.com&gt;, Doo Chung &lt;dyongstar@gmail.com&gt;, Mariusz Choroszy &lt;choroszm@yahoo.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1>I'll be around, feel free to include me.<br />
+<font color=#550055><br />
+<br />
+On 1/20/09 2:57 PM, &quot;Puneet Goel&quot; &lt;<a href="mailto:pugoel@adobe.com">pugoel@adobe.com</a>&gt; wrote:<br />
+<br />
+Are you available to chat this Friday?<br />
+<br />
+<br />
+From: Ryan Lin [mailto:<a href="mailto:tokyotech@gmail.com">tokyotech@gmail.com</a>]<br />
+Sent: Thursday, January 08, 2009 11:31 PM<br />
+To: Puneet Goel<br />
+Cc: Andrew Spencer; Doo Chung; Mariusz Choroszy; Vera Carr<br />
+Subject: Re: UIUC Project Status<br />
+<br />
+Puneet and Vera,<br />
+<br />
+</font>The Buzzword document's &lt;<a href="https://buzzword.acrobat.com/#d=-7bwVGZb20G9mQbPVDWW6w" target="_blank">https://buzzword.acrobat.com/<wbr />#d=-7bwVGZb20G9mQbPVDWW6w</a>&gt; &nbsp;sections on the features have been doubled in length, elaborating on specifically what will be offered. &quot;A&quot; features are in section III. &quot;B&quot; and &quot;C&quot; features start in section IV. The &quot;A&quot; features will be completed by the end of February.<br />
+<div style='padding:5 0'><font size=1 color=#888888>[Quoted text hidden]</font></div></font>
+</table>
+</table>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Ryan Lin
+&lt;tokyotech@gmail.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Wed, Jan 21, 2009 at 6:37 PM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+Vera Carr &lt;verac@adobe.com&gt;
+</div>
+<div>
+Cc:
+Puneet Goel &lt;pugoel@adobe.com&gt;, Andrew Spencer &lt;andrewpspencer@gmail.com&gt;, Doo Chung &lt;dyongstar@gmail.com&gt;, Mariusz Choroszy &lt;choroszm@yahoo.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1>Puneet and Vera,<br><br>We are back at school and can meet on Friday at 2:30 pm Central / 12:30 pm Pacific.  Is this time good for you? <br><br>We can discuss the specifics of the A/B/C features and show you the major breakthroughs over Winter break. After going to our first Senior Project class of the semester, we have learned of scheduling requirements and have changed the last page of the Buzzword calendar accordingly. <br>
+<br>Regards,<br><font color=#888888><br clear="all">Ryan Lin</font><div style='padding:5 0'><font size=1 color=#888888>[Quoted text hidden]</font></div></font>
+</table>
+</table>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Puneet Goel
+&lt;pugoel@adobe.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Thu, Jan 22, 2009 at 12:17 PM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+Ryan Lin &lt;tokyotech@gmail.com&gt;, Vera Carr &lt;verac@adobe.com&gt;
+</div>
+<div>
+Cc:
+Andrew Spencer &lt;andrewpspencer@gmail.com&gt;, Doo Chung &lt;dyongstar@gmail.com&gt;, Mariusz Choroszy &lt;choroszm@yahoo.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1>
+<div lang="EN-US" link="blue" vlink="purple">
+<div>
+<p><span style="font-size:11.0pt;color:#1F497D">Can we do this at 4 PM Central/2 PM Pacific?</span></p>
+<p><span style="font-size:11.0pt;color:#1F497D"> </span></p>
+<p><span style="font-size:11.0pt;color:#1F497D">Thanks,</span></p>
+<p><span style="font-size:11.0pt;color:#1F497D">Puneet</span></p>
+<p><span style="font-size:11.0pt;color:#1F497D"> </span></p>
+<div style="border:none;border-top:solid #B5C4DF 1.0pt;padding:3.0pt 0in 0in 0in">
+<p><b><span style="font-size:10.0pt">From:</span></b><span style="font-size:10.0pt"> Ryan Lin
+[mailto:<a href="mailto:tokyotech@gmail.com" target="_blank">tokyotech@gmail.com</a>] <br>
+<b>Sent:</b> Wednesday, January 21, 2009 3:38 PM<br>
+<b>To:</b> Vera Carr<br>
+<b>Cc:</b> Puneet Goel; Andrew Spencer; Doo Chung; Mariusz Choroszy<div style='padding:5 0'><font size=1 color=#888888>[Quoted text hidden]</font></div></span></p>
+</div><div style='padding:5 0'><font size=1 color=#888888>[Quoted text hidden]</font></div></div>
+</div>
+</font>
+</table>
+</table>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Ryan Lin
+&lt;tokyotech@gmail.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Thu, Jan 22, 2009 at 12:26 PM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+Andrew Spencer &lt;andrewpspencer@gmail.com&gt;, Mariusz Choroszy &lt;choroszm@yahoo.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1>I can. How about you guys?<br><font color=#888888><br clear="all">Ryan Lin</font><div style='padding:5 0'><font size=1 color=#888888>[Quoted text hidden]</font></div></font>
+</table>
+</table>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Vera Carr
+&lt;verac@adobe.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Thu, Jan 22, 2009 at 12:31 PM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+Puneet Goel &lt;pugoel@adobe.com&gt;, Ryan Lin &lt;tokyotech@gmail.com&gt;
+</div>
+<div>
+Cc:
+Andrew Spencer &lt;andrewpspencer@gmail.com&gt;, Doo Chung &lt;dyongstar@gmail.com&gt;, Mariusz Choroszy &lt;choroszm@yahoo.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1>Sounds good to me.<br />
+<div style='padding:5 0'><font size=1 color=#888888>[Quoted text hidden]</font></div></font>
+</table>
+</table>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Andrew Spencer
+&lt;andrewpspencer@gmail.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Thu, Jan 22, 2009 at 12:55 PM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+Vera Carr &lt;verac@adobe.com&gt;
+</div>
+<div>
+Cc:
+Puneet Goel &lt;pugoel@adobe.com&gt;, Ryan Lin &lt;tokyotech@gmail.com&gt;, Doo Chung &lt;dyongstar@gmail.com&gt;, Mariusz Choroszy &lt;choroszm@yahoo.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1>I am also available at that time.<div style='padding:5 0'><font size=1 color=#888888>[Quoted text hidden]</font></div></font>
+</table>
+</table>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Mariusz Choroszy
+&lt;choroszm@yahoo.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Thu, Jan 22, 2009 at 6:45 PM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+Reply-To:
+choroszm@yahoo.com
+</div>
+<div>
+To:
+Andrew Spencer &lt;andrewpspencer@gmail.com&gt;, Ryan Lin &lt;tokyotech@gmail.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><table cellspacing="0" cellpadding="0" border="0"><tr><td valign="top" style="font:inherit">Ok. I&#39;ll be there at 4 tomorrow.<br>Mariusz<br><br>--- On <b>Thu, 1/22/09, Ryan Lin <i>&lt;<a href="mailto:tokyotech@gmail.com" target="_blank">tokyotech@gmail.com</a>&gt;</i></b> wrote:<br><blockquote style="border-left:2px solid rgb(16, 16, 255);margin-left:5px;padding-left:5px">From: Ryan Lin &lt;<a href="mailto:tokyotech@gmail.com" target="_blank">tokyotech@gmail.com</a>&gt;<font color=#550055><br>Subject: Re: UIUC Project Status<br></font>To: &quot;Andrew Spencer&quot; &lt;<a href="mailto:andrewpspencer@gmail.com" target="_blank">andrewpspencer@gmail.com</a>&gt;, &quot;Mariusz Choroszy&quot; &lt;<a href="mailto:choroszm@yahoo.com" target="_blank">choroszm@yahoo.com</a>&gt;<br>Date: Thursday, January 22, 2009, 11:26 AM<div style='padding:5 0'><font size=1 color=#888888>[Quoted text hidden]</font></div></blockquote></td></tr></table><br>
+</font>
+</table>
+</table>
+<hr>
+</body>
+</html>

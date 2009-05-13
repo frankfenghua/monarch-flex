@@ -1,0 +1,247 @@
+
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=UTF-8">
+<title>Gmail - CS492 - backend almost done</title>
+<style type="text/css">
+body, td{font-family:arial,sans-serif;font-size:80%} a:link, a:active, a:visited{color:#0000CC} img{border:0} pre { white-space: pre; white-space: -moz-pre-wrap; white-space: -o-pre-wrap; white-space: pre-wrap; word-wrap: break-word; width: 800px; overflow: auto;}
+</style>
+<script>
+function Print(){document.body.offsetHeight;window.print()}
+</script>
+</head>
+<body onload="Print()">
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td width=143>
+<img src="/mail/help/images/logo1.gif"
+width=143 height=59 alt="Gmail">
+</td>
+<td align=right>
+<font size=-1><b>
+Ryan Lin
+&lt;tokyotech@gmail.com&gt;
+</b></td>
+</tr>
+</table>
+<hr>
+<font size=+2>
+<b>CS492 - backend almost done</b></font><br>
+<font size=-1>5 messages</font>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Ryan Lin
+&lt;tokyotech@gmail.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Wed, Oct 8, 2008 at 8:57 PM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+Andrew Spencer &lt;andrewpspencer@gmail.com&gt;, Doo Yong Chung &lt;dyongstar@gmail.com&gt;, Mariusz Choroszy &lt;choroszm@yahoo.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><div dir="ltr"><font size="4">Info</font><br><ul><li><font size="4"><font size="2">I&#39;ve attached a screenshot (<span style="color:rgb(204, 0, 0)">filled.png</span>) of everything I was able to scrape. Even though the data may be inaccurate (overcounting or wrong math), Maurice can still use that data for his GUI because my database structure won&#39;t change much in the near future. MySQL has a bunch of built in functions like MAX, MIN, AVG, ... so don&#39;t go coding those yourself...<br>
+</font></font></li><li><font size="4"><font size="2">In <span style="color:rgb(204, 0, 0)">cs492.rar</span>, I have new database generation scripts in folder &quot;database&quot;. The master database has a new column specifying if the community is a blog, news site, or forum. I&#39;ve added default values to some of the columns in the Threadless database to make my PHP scripts shorter. For example, newly created users have a post count defaulting to 1.</font></font></li>
+<li><font size="4"><font size="2">All columns labeled &quot;created&quot; are Unix timestamps (seconds since Epoch).<br></font></font></li></ul><font size="4">Completed </font><br><ul><li>keyword counting and peak time<br>
+</li><li>threads stats<br></li><li>posts stats</li><li>users&#39; names, best known join date (to our knowledge), and post count</li></ul><font size="4">Bugs</font><br><ul><li>math behind keyword peak time is wrong</li><li>
+single space is counted as a keyword even though I tested against that (???)</li><li>non dictionary words are recorded as keywords</li><li>I have not implemented the scraping of links (URL&#39;s in post body).<br></li></ul>
+<div class="gmail_quote">On Mon, Oct 6, 2008 at 9:31 AM, Ryan Lin <span dir="ltr">&lt;<a href="mailto:tokyotech@gmail.com" target="_blank">tokyotech@gmail.com</a>&gt;</span> wrote:<br><blockquote class="gmail_quote" style="border-left:1px solid rgb(204, 204, 204);margin:0pt 0pt 0pt 0.8ex;padding-left:1ex">
+<div dir="ltr">I will add that in.<div><div></div><div><br><br><div class="gmail_quote">On Mon, Oct 6, 2008 at 12:04 AM, Mariusz Choroszy <span dir="ltr">&lt;<a href="mailto:choroszm@yahoo.com" target="_blank">choroszm@yahoo.com</a>&gt;</span> wrote:<br>
+<blockquote class="gmail_quote" style="border-left:1px solid rgb(204, 204, 204);margin:0pt 0pt 0pt 0.8ex;padding-left:1ex">
+<table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td style="font-family:inherit;font-style:inherit;font-variant:inherit;font-weight:inherit;font-size:inherit;line-height:inherit;font-size-adjust:inherit;font-stretch:inherit" valign="top">
+Hey,<br>How come the table entries in your master.txt don&#39;t have a column for what type of community we&#39;re dealing with - forum, blog, ...<div><br>Mariusz<br><br>--- On <b>Sun, 10/5/08, Ryan Lin <i>&lt;<a href="mailto:tokyotech@gmail.com" target="_blank">tokyotech@gmail.com</a>&gt;</i></b> wrote:<br>
+</div><blockquote style="border-left:2px solid rgb(16, 16, 255);margin-left:5px;padding-left:5px"><div>From: Ryan Lin &lt;<a href="mailto:tokyotech@gmail.com" target="_blank">tokyotech@gmail.com</a>&gt;<br>
+Subject: Re: Database Structure<br></div>To: <a href="mailto:choroszm@yahoo.com" target="_blank">choroszm@yahoo.com</a><br>Date: Sunday, October 5, 2008, 11:45 PM<div><div></div><div><br><br><div><div dir="ltr">
+If you mean my web server login info, see the attached image. There is a warning saying you can&#39;t connect from a home PC. I don&#39;t know if they enforce it.<br><br>And when you ask Munwar for the server, can you ask him to get me a Logitech Revolution MX? My mouse can&#39;t click+drag anymore and will slow down project development by 50%.<br>
+<br><div class="gmail_quote">On Sun, Oct 5, 2008 at 11:35 PM, Ryan Lin <span dir="ltr">&lt;<a rel="nofollow" href="mailto:tokyotech@gmail.com" target="_blank">tokyotech@gmail.com</a>&gt;</span> wrote:<br><blockquote class="gmail_quote" style="border-left:1px solid rgb(204, 204, 204);margin:0pt 0pt 0pt 0.8ex;padding-left:1ex">
+<div dir="ltr">I don&#39;t know what my server name is. It&#39;s just a computer. It&#39;s not on 24/7. <br><div><div></div><div><br><div class="gmail_quote">On Sun, Oct 5, 2008 at 11:09 PM, Mariusz Choroszy <span dir="ltr">&lt;<a rel="nofollow" href="mailto:choroszm@yahoo.com" target="_blank">choroszm@yahoo.com</a>&gt;</span> wrote:<br>
+<blockquote class="gmail_quote" style="border-left:1px solid rgb(204, 204, 204);margin:0pt 0pt 0pt 0.8ex;padding-left:1ex"><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td style="font-family:inherit;font-style:inherit;font-variant:inherit;font-weight:inherit;font-size:inherit;line-height:inherit;font-size-adjust:inherit;font-stretch:inherit" valign="top">
+Since you have already set up your database why not just give me you server address, user name, and password so I can access it directly - instead of setting everything up from scratch.<br>Mariusz<br><br>--- On <b>Sun, 10/5/08, Ryan Lin <i>&lt;<a rel="nofollow" href="mailto:tokyotech@gmail.com" target="_blank">tokyotech@gmail.com</a>&gt;</i></b> wrote:<br>
+<blockquote style="border-left:2px solid rgb(16, 16, 255);margin-left:5px;padding-left:5px">From: Ryan Lin &lt;<a rel="nofollow" href="mailto:tokyotech@gmail.com" target="_blank">tokyotech@gmail.com</a>&gt;<br>Subject: Re: Database Structure<br>
+To: &quot;Andrew Spencer&quot; &lt;<a rel="nofollow" href="mailto:andrewpspencer@gmail.com" target="_blank">andrewpspencer@gmail.com</a>&gt;, &quot;Doo Yong Chung&quot; &lt;<a rel="nofollow" href="mailto:dyongstar@gmail.com" target="_blank">dyongstar@gmail.com</a>&gt;, &quot;Mariusz Choroszy&quot; &lt;<a rel="nofollow" href="mailto:choroszm@yahoo.com" target="_blank">choroszm@yahoo.com</a>&gt;<br>
+Date: Sunday, October 5, 2008, 7:51 PM<div><div></div><div><br><br><div><div dir="ltr"><u><font size="4">Installation instructions:</font></u><br><ol><li>Install phpMyAdmin so you don&#39;t have to do all these following steps with command line. It preinstalls for
+you in WAMP.<br></li><li>Create a new DB named &quot;threadless&quot;. Import <span style="color:rgb(0, 153, 0)">database/threadless.txt</span> on it.</li>
+<li>Open database/master.txt and change the last line with the DB name, username, password, host (<span style="color:rgb(204, 0, 0)">localhost</span>), and unix timestamp (just run <span style="color:rgb(204, 0, 0)">&lt;?php echo time(); ?&gt;</span> to find that out).</li>
+<li>Create a new DB named &quot;communityanalysis&quot;. Import <span style="color:rgb(0, 153, 0)">database/master.txt</span>, which you just edited, on it.</li><li>Open database.php and edit the lines [24 - 25] with your MySQL username and password. </li>
+<li>Run <span style="color:rgb(0, 153, 0)">index.php</span> to populate the threadless DB.</li></ol><span style="color:rgb(51, 51, 255)">The program only populate&#39;s the thread table of the threadless DB, because no one answered my question about how Threadless&#39; link structure works (I mean I know how it works but don&#39;t know why are they doing this). I also asked on an HTML forum and no one replied.</span><br>
+<u><font size="4"><br>Description of the system:</font></u><br><ul><li>Plugins for sites you write should be stored in folder &quot;<span style="color:rgb(0, 153, 0)">plugins</span>&quot;. Copy the structure of <span style="color:rgb(0, 153, 0)">plugins/threadless.php</span> to create a new plugin. You must name your file with the base domain of the site minus the suffix and <i><a rel="nofollow" href="http://www" target="_blank">http://www</a></i> part.</li>
+<li>We have one master database called &quot;communityanalysis&quot; that stores information on how to connect to the specific sites&#39; databases. This is not useful when you&#39;re developing on your home PC, but will be useful when we move to a real web host, because web hosts determine new username, password, and server location everytime you create a new database. Unless we get a $99 / mo dedicated server which we can have total control over a we would have over a &quot;home PC&quot;, we can forget about this master database. But I highly doubt we will get anything good. </li>
+<li>Each specific site&#39;s database must contain these following basic tables. More tables can be added for specific functions of the site. For example, Threadless could have a &quot;t-shirt designs&quot; table addon.<br>
+</li><ul><li>keywords</li><li>links</li><li>posts</li><li>threads</li><li>users</li></ul><li>I have an incomplete <span style="color:rgb(0, 153, 0)">scrape.php</span> class which only scrapes the outer threads right now. It will eventually go into the thread and scrape the replies.</li>
+<li>We will need to create an <span style="color:rgb(0, 153, 0)">analyze.php</span>, which computes averages, standard deviation, and other various stats from the the info that <span style="color:rgb(0, 153, 0)">scrape.php</span> injects into the database.</li>
+<li><span style="color:rgb(0, 153, 0)">index.php</span> is analogous to <i>main</i> of a C language. Currently, it has no preloader bar thing, so just watch the browser circly GIF rotate to see when it&#39;s done working.<br>
+</li></ul><br><div class="gmail_quote">On Sun, Oct 5, 2008 at 5:56 PM, Mariusz Choroszy <span dir="ltr">&lt;<a rel="nofollow" href="mailto:choroszm@yahoo.com" target="_blank">choroszm@yahoo.com</a>&gt;</span> wrote:<br><blockquote class="gmail_quote" style="border-left:1px solid rgb(204, 204, 204);margin:0pt 0pt 0pt 0.8ex;padding-left:1ex">
+<table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td style="font-family:inherit;font-style:inherit;font-variant:inherit;font-weight:inherit;font-size:inherit;line-height:inherit;font-size-adjust:inherit;font-stretch:inherit" valign="top">
+Hey Ryan,<br>Did you square everything away with the setting up your database? If so, can you send me the structure you&#39;re using to store the various statistical information so that I can write the appropriate xml packaging code and parser.<br>
+Mariusz <br></td></tr></tbody></table><br>
+</blockquote></div><br><br clear="all"><br>-- <br>Ryan Lin<br>
+</div>
+</div></div></div></blockquote></td></tr></tbody></table><br>
+</blockquote></div><br><br clear="all"><br></div></div>-- <br>Ryan Lin<br>
+</div>
+</blockquote></div><br><br clear="all"><br>-- <br>Ryan Lin<br>
+</div>
+</div></div></div></blockquote></td></tr></tbody></table><br>
+</blockquote></div><br><br clear="all"><br></div></div>-- <br>Ryan Lin<br>
+</div>
+</blockquote></div><br><br clear="all"><br>-- <br>Ryan Lin<br>
+</div>
+</font>
+<br clear=all>
+<div style="width:50%;border-top:2px #AAAAAA solid"></div>
+<table class=att cellspacing=0 cellpadding=5 border=0><tr><td colspan=2><b style="padding-left:3">2 attachments</b><tr><td><table cellspacing=0 cellpadding=0><tr><td align=center><a target=_blank href="?ui=2&ik=bb1119a0ec&view=att&th=11cdf528ab1ec305&attid=0.1&disp=inline&realattid=f_fm2q2xe70&zw"><img class=thi src=?ui=2&ik=bb1119a0ec&view=att&th=11cdf528ab1ec305&attid=0.1&disp=thd&realattid=f_fm2q2xe70&zw></a></td><td width=7></td><td><b>filled.png</b><br/>75K </td></tr></table></td></tr><tr><td><table cellspacing=0 cellpadding=0><tr><td><a target=_blank href="?ui=2&ik=bb1119a0ec&view=att&th=11cdf528ab1ec305&attid=0.2&disp=attd&realattid=f_fm2q31qf1&zw"><img width=16 height=16 src="/mail/images/generic.gif"></a></td><td width=7></td><td><b>cs492.rar</b><br/>6K </td></tr></table></td></tr></table>
+</table>
+</table>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Andrew Spencer
+&lt;andrewpspencer@gmail.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Wed, Oct 8, 2008 at 10:38 PM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+Ryan Lin &lt;tokyotech@gmail.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><div dir="ltr">Looks great, Ryan.<div style='padding:5 0'><font size=1 color=#888888>[Quoted text hidden]</font></div></div>
+</font>
+</table>
+</table>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Ryan Lin
+&lt;tokyotech@gmail.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Wed, Oct 8, 2008 at 10:38 PM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+Andrew Spencer &lt;andrewpspencer@gmail.com&gt;, Doo Yong Chung &lt;dyongstar@gmail.com&gt;, Mariusz Choroszy &lt;choroszm@yahoo.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><div dir="ltr">The code I attached only scrapes the 3 newest threads. I had to stop scraping early because I got this &quot;timed out at 30 seconds&quot; error. I changed php.ini&#39;s <i>max_execution_time</i> to 99 and it didn&#39;t fix it. Maybe I need to restart Apache or something.<font color=#550055><br>
+<br><div class="gmail_quote">On Wed, Oct 8, 2008 at 8:57 PM, Ryan Lin <span dir="ltr">&lt;<a href="mailto:tokyotech@gmail.com" target="_blank">tokyotech@gmail.com</a>&gt;</span> wrote:<br><blockquote class="gmail_quote" style="border-left:1px solid rgb(204, 204, 204);margin:0pt 0pt 0pt 0.8ex;padding-left:1ex">
+<div dir="ltr"><font size="4">Info</font><br><ul><li><font size="4"><font size="2">I&#39;ve attached a screenshot (<span style="color:rgb(204, 0, 0)">filled.png</span>) of everything I was able to scrape. Even though the data may be inaccurate (overcounting or wrong math), Maurice can still use that data for his GUI because my database structure won&#39;t change much in the near future. MySQL has a bunch of built in functions like MAX, MIN, AVG, ... so don&#39;t go coding those yourself...<br>
+</font></font></li><li><font size="4"><font size="2">In <span style="color:rgb(204, 0, 0)">cs492.rar</span>, I have new database generation scripts in folder &quot;database&quot;. The master database has a new column specifying if the community is a blog, news site, or forum. I&#39;ve added default values to some of the columns in the Threadless database to make my PHP scripts shorter. For example, newly created users have a post count defaulting to 1.</font></font></li>
+<li><font size="4"><font size="2">All columns labeled &quot;created&quot; are Unix timestamps (seconds since Epoch).<br></font></font></li></ul><font size="4">Completed </font><br><ul><li>keyword counting and peak time<br>
+</li><li>threads stats<br></li><li>posts stats</li><li>users&#39; names, best known join date (to our knowledge), and post count</li></ul><font size="4">Bugs</font><br><ul><li>math behind keyword peak time is wrong</li><li>
+single space is counted as a keyword even though I tested against that (???)</li><li>non dictionary words are recorded as keywords</li><li>I have not implemented the scraping of links (URL&#39;s in post body).<br></li></ul>
+</div></blockquote></div><br>
+</font></div>
+</font>
+</table>
+</table>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Ryan Lin
+&lt;tokyotech@gmail.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Tue, Oct 14, 2008 at 3:11 PM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+Andrew Spencer &lt;andrewpspencer@gmail.com&gt;, Doo Yong Chung &lt;dyongstar@gmail.com&gt;, Mariusz Choroszy &lt;choroszm@yahoo.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><div dir="ltr">Fixes:<br><ul><li>store keywords as lowercase so &quot;Playstation&quot; and &quot;playstation&quot; are counted as one word.</li><li>can at least scrape a full page of threads <span style="color:rgb(0, 153, 0)">(remember to increase the max script time in php.ini so the program doesn&#39;t halt after 30 seconds. Then restart all services for the setting to take effect)</span>. Could not go to 2nd page of threads. I put in a shitload of debug echoes in the Scrape constructor, but couldn&#39;t figure out what was wrong.<br>
+</li></ul>Doo Yong and Andrew, figure out how to do the following:<br>
+<ul><li>Install this shit for the demo tomorrow <span style="color:rgb(0, 153, 0)">(the two database scripts are in folder &quot;database&quot;. The only entry in master.sql needs to be changed to correctly point to threadless.sql)</span>. I don&#39;t know how to access the database on our server without phpMyAdmin.</li>
+<li>Make it demo-able to Puneet tomorow. Either someone learn old-school MySQL commands so the tables can be outputted in his face or just install phpMyAdmin so you can show him graphically what&#39;s going on in the database. <br>
+</li><li>Given a post&#39;s body and a keyword in that body, find out if the keyword is spoken with a negative or positive light. </li><li>Email Puneet an agenda. <br></li></ul></div>
+</font>
+<br clear=all>
+<div style="width:50%;border-top:2px #AAAAAA solid"></div>
+<table class=att cellspacing=0 cellpadding=5 border=0><tr><td><table cellspacing=0 cellpadding=0><tr><td><a target=_blank href="?ui=2&ik=bb1119a0ec&view=att&th=11cfcfbbcd6a9cf8&attid=0.1&disp=attd&realattid=f_fmaynd1c0&zw"><img width=16 height=16 src="/mail/images/generic.gif"></a></td><td width=7></td><td><b>cs492.rar</b><br/>7K </td></tr></table></td></tr></table>
+</table>
+</table>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Andrew Spencer
+&lt;andrewpspencer@gmail.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Tue, Oct 14, 2008 at 11:17 PM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+Ryan Lin &lt;tokyotech@gmail.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><div dir="ltr">Ryan,<br>I&#39;ve gotten phpmyadmin installed . Things are pretty lax security-wise but everything should be working.<br><br><a href="http://csil-srprj-2.cs.uiuc.edu/phpmyadmin/index.php" target="_blank">http://csil-srprj-2.cs.uiuc.<WBR>edu/phpmyadmin/index.php</a><br>
+<br>Database accounts: <br>User: root       Password: HeavyD<br>User: ryan      Password: password<br><br>See you guys tomorrow.<br><font color=#888888><br>Andrew</font><div style='padding:5 0'><font size=1 color=#888888>[Quoted text hidden]</font></div></div>
+</font>
+</table>
+</table>
+<hr>
+</body>
+</html>

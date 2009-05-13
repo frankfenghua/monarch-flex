@@ -1,0 +1,470 @@
+
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=UTF-8">
+<title>Gmail - Technical Questions</title>
+<style type="text/css">
+body, td{font-family:arial,sans-serif;font-size:80%} a:link, a:active, a:visited{color:#0000CC} img{border:0} pre { white-space: pre; white-space: -moz-pre-wrap; white-space: -o-pre-wrap; white-space: pre-wrap; word-wrap: break-word; width: 800px; overflow: auto;}
+</style>
+<script>
+function Print(){document.body.offsetHeight;window.print()}
+</script>
+</head>
+<body onload="Print()">
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td width=143>
+<img src="/mail/help/images/logo1.gif"
+width=143 height=59 alt="Gmail">
+</td>
+<td align=right>
+<font size=-1><b>
+Ryan Lin
+&lt;tokyotech@gmail.com&gt;
+</b></td>
+</tr>
+</table>
+<hr>
+<font size=+2>
+<b>Technical Questions</b></font><br>
+<font size=-1>10 messages</font>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Mariusz Choroszy
+&lt;choroszm@yahoo.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Tue, Mar 10, 2009 at 10:26 AM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+Vera Carr &lt;verac@adobe.com&gt;
+</div>
+<div>
+Cc:
+Puneet Goel &lt;pugoel@adobe.com&gt;, &quot;andrewpspencer@gmail.com&quot; &lt;andrewpspencer@gmail.com&gt;, &quot;tokyotech@gmail.com&quot; &lt;tokyotech@gmail.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><table cellspacing="0" cellpadding="0" border="0"><tr><td valign="top" style="font:inherit">Hi Vera,<br><br>These are the two main questions we had from our last meeting:<br><br>(1)<br>There is an issue with plotting multiple subsequent line series within the <span>line chart component</span>.
+Attached is a snippet of code I use for plotting multiple lines. The
+noticed behavior is that some combinations of lines plot together fine
+but others don&#39;t. For example, if I have line series A, B, C, and D
+which all contain their own set of <span>data points</span>,
+and I push each of them onto an array collection and then proceed to
+set the lineChart.series attribute equal to the array collection, I
+might observe the following behavior : if all lines are selected then A
+is the only line which is displayed until B is deselected, in which
+case C might show up with A. Furthermore, if C is deselected then line
+D might show up with A. <br>The bottom line is that A,B,C, and D never display simultaneously.<br><br>(2)<br>For real-time highlighting of <span>regular expression</span> matches in a TextArea we have adapted code from the FlexLib <span style="border-bottom:1px dashed rgb(0, 102, 204)">Highlighter</span> class (<a rel="nofollow" href="http://code.google.com/p/flexlib/source/browse/trunk/src/flexlib/controls/Highlighter.as" target="_blank"><span>link</span></a>).
+Our code extracts the underlying TextField of a TextArea, draws a
+transparent bitmap on top, and draws rectangles on the bitmap
+corresponding to visible matches. In attempting to adapt the same
+technique for HTML we have added a bitmap as the child of an mx:HTML
+component but highlights do not show correctly. <span>Rectangles</span> are found using the location and offset properties of the matching <span>HTML elements</span>. The questions are: <b>should this be possible?</b> <b>Can you think of another approach that makes more sense? </b>There
+seem to be issues with drawing on top of rendered HTML for some reason.
+Our original approach for HTML highlighting modified the styles of the
+HTMLElement objects in the page but this did not seem to perform well
+in real-time. In a search, all examples are using javascript to modify
+the object model of the page rather than drawing on a layer above the
+page. <br><br>Also, would it be possible to move the meeting to tomorrow (Wed.) between 1 CT and 4 CT. We would like to get these issues resolved before we have something valuable to show both you and Puneet.<br><br>Thanks<br><br>UIUC Team<br></td></tr></table><br>
+</font>
+<br clear=all>
+<div style="width:50%;border-top:2px #AAAAAA solid"></div>
+<table class=att cellspacing=0 cellpadding=5 border=0><tr><td><table cellspacing=0 cellpadding=0><tr><td><a target=_blank href="?ui=2&ik=bb1119a0ec&view=att&th=11ff0fe60fd898fd&attid=0.1&disp=attd&zw"><img width=16 height=16 src="/mail/images/doc.gif"></a></td><td width=7></td><td><b>snippet.doc</b><br/>24K </td></tr></table></td></tr></table>
+</table>
+</table>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Vera Carr
+&lt;verac@adobe.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Tue, Mar 10, 2009 at 11:44 AM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+Mariusz Choroszy &lt;choroszm@yahoo.com&gt;
+</div>
+<div>
+Cc:
+Puneet Goel &lt;pugoel@adobe.com&gt;, &quot;andrewpspencer@gmail.com&quot; &lt;andrewpspencer@gmail.com&gt;, &quot;tokyotech@gmail.com&quot; &lt;tokyotech@gmail.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1>
+<div>
+<font face="Calibri, Verdana, Helvetica, Arial"><span style="font-size:11pt"><br>
+Hi Mariusz,<br>
+<br>
+I’ve been investigating the first issue, it sounds like a charting bug, I can’t see that you’re doing anything wrong in the code. I’ll query some more people about this, but it would be incredibly helpful if you could provide me with small samples which demo both of these issues. It’ll be easier if I can compile the code. <br>
+<br>
+Thanks,<br>
+Vera<font color=#550055><br>
+<br>
+On 3/10/09 8:26 AM, &quot;Mariusz Choroszy&quot; &lt;<a href="http://choroszm@yahoo.com" target="_blank">choroszm@yahoo.com</a>&gt; wrote:<br>
+<br>
+</font></span></font><blockquote><font face="Calibri, Verdana, Helvetica, Arial"><span style="font-size:11pt"><font color=#550055>Hi Vera,<br>
+<br>
+These are the two main questions we had from our last meeting:<br>
+<br>
+(1)<br>
+There is an issue with plotting multiple subsequent line series within the line chart component. Attached is a snippet of code I use for plotting multiple lines. The noticed behavior is that some combinations of lines plot together fine but others don&#39;t. For example, if I have line series A, B, C, and D which all contain their own set of data points, and I push each of them onto an array collection and then proceed to set the lineChart.series attribute equal to the array collection, I might observe the following behavior : if all lines are selected then A is the only line which is displayed until B is deselected, in which case C might show up with A. Furthermore, if C is deselected then line D might show up with A. <br>
+The bottom line is that A,B,C, and D never display simultaneously.<br>
+<br>
+(2)<br></font>
+For real-time highlighting of regular expression matches in a TextArea we have adapted code from the FlexLib Highlighter class (link &lt;<a href="http://code.google.com/p/flexlib/source/browse/trunk/src/flexlib/controls/Highlighter.as" target="_blank">http://code.google.com/p/<WBR>flexlib/source/browse/trunk/<WBR>src/flexlib/controls/<WBR>Highlighter.as</a>&gt; ). Our code extracts the underlying TextField of a TextArea, draws a transparent bitmap on top, and draws rectangles on the bitmap corresponding to visible matches. In attempting to adapt the same technique for HTML we have added a bitmap as the child of an mx:HTML component but highlights do not show correctly. Rectangles are found using the location and offset properties of the matching HTML elements. The questions are: <b>should this be possible?</b> <b>Can you think of another approach that makes more sense? </b>There seem to be issues with drawing on top of rendered HTML for some reason. Our original approach for HTML highlighting modified the styles of the HTMLElement objects in the page but this did not seem to perform well in real-time. In a search, all examples are using javascript to modify the object model of the page rather than drawing on a layer above the page. <br><font color=#550055>
+<br>
+Also, would it be possible to move the meeting to tomorrow (Wed.) between 1 CT and 4 CT. We would like to get these issues resolved before we have something valuable to show both you and Puneet.<br>
+<br>
+Thanks<br>
+<br>
+UIUC Team<br>
+<br>
+<br>
+</font></span></font></blockquote>
+</div>
+</font>
+</table>
+</table>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Mariusz Choroszy
+&lt;choroszm@yahoo.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Tue, Mar 10, 2009 at 2:55 PM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+Vera Carr &lt;verac@adobe.com&gt;
+</div>
+<div>
+Cc:
+Puneet Goel &lt;pugoel@adobe.com&gt;, &quot;andrewpspencer@gmail.com&quot; &lt;andrewpspencer@gmail.com&gt;, &quot;tokyotech@gmail.com&quot; &lt;tokyotech@gmail.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><table cellspacing="0" cellpadding="0" border="0"><tr><td valign="top" style="font:inherit">Hi Vera,<br>Attached is our tool (very rough cut) exported as an AIR application. Please install it and launch it.<br><br>When the app launches click : <br><br>(1) Sign In button on the top right and use &quot;mchoro2&quot; , without the quotes, as the email and password.<br>(2) Click on the My Community Groups button.<br>(3) Click on the first community which right now is the first bright red graphic (due to CSS issues).<br>(4) In the accordion component on the left, under Websites in Community, click the threadless radio button and wait until the stats load.<br>(5) At the bottom select the 1 Month time frame for better visibility.<br>(6) Under the accordion component select the Keywords Spoken folder.<br>(7) Within this folder you will see keywords for the community such as threadleass, photoshop, etc. These words are all checked and should appear in the line
+chart.<br>(8) Now, try to deselect a keyword (such as Photoshop) and observe that Illustrator shows up in the line chart along with Threadless.<br><br>If you need any additional information please let me know.<br><br>Thanks.<br><br>Mariusz<br><br>--- On <b>Tue, 3/10/09, Vera Carr <i>&lt;<a href="mailto:verac@adobe.com" target="_blank">verac@adobe.com</a>&gt;</i></b> wrote:<br><blockquote style="border-left:2px solid rgb(16, 16, 255);margin-left:5px;padding-left:5px">From: Vera Carr &lt;<a href="mailto:verac@adobe.com" target="_blank">verac@adobe.com</a>&gt;<br>Subject: Re: Technical Questions<br>To: &quot;Mariusz Choroszy&quot; &lt;<a href="mailto:choroszm@yahoo.com" target="_blank">choroszm@yahoo.com</a>&gt;<br>Cc: &quot;Puneet Goel&quot; &lt;<a href="mailto:pugoel@adobe.com" target="_blank">pugoel@adobe.com</a>&gt;, &quot;<a href="mailto:andrewpspencer@gmail.com" target="_blank">andrewpspencer@gmail.com</a>&quot; &lt;<a href="mailto:andrewpspencer@gmail.com" target="_blank">andrewpspencer@gmail.com</a>&gt;, &quot;<a href="mailto:tokyotech@gmail.com" target="_blank">tokyotech@gmail.com</a>&quot; &lt;<a href="mailto:tokyotech@gmail.com" target="_blank">tokyotech@gmail.com</a>&gt;<br>Date: Tuesday, March 10, 2009, 11:44 AM<div style='padding:5 0'><font size=1 color=#888888>[Quoted text hidden]</font></div></blockquote></td></tr></table><br>
+</font>
+<br clear=all>
+<div style="width:50%;border-top:2px #AAAAAA solid"></div>
+<table class=att cellspacing=0 cellpadding=5 border=0><tr><td><table cellspacing=0 cellpadding=0><tr><td><a target=_blank href="?ui=2&ik=bb1119a0ec&view=att&th=11ff1f4869ca6772&attid=0.1&disp=attd&zw"><img width=16 height=16 src="/mail/images/zip.gif"></a></td><td width=7></td><td><b>AdobeAnalyticsTool.air</b><br/>931K </td></tr></table></td></tr></table>
+</table>
+</table>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Andrew Spencer
+&lt;andrewpspencer@gmail.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Tue, Mar 10, 2009 at 4:47 PM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+Mariusz Choroszy &lt;choroszm@yahoo.com&gt;
+</div>
+<div>
+Cc:
+Vera Carr &lt;verac@adobe.com&gt;, Puneet Goel &lt;pugoel@adobe.com&gt;, &quot;tokyotech@gmail.com&quot; &lt;tokyotech@gmail.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1>Hi Vera,<br>In addition to what Mariusz sent, for access to all of the code, please see our svn repository:<br><a href="http://csil-srprj-2.cs.uiuc.edu/repos/" target="_blank">http://csil-srprj-2.cs.uiuc.<WBR>edu/repos/</a> (U: ryan P: adobe)<br>
+<br>For issue 1) please see the file here (the code sample that Mariusz sent starts on line 114): <br><a href="http://csil-srprj-2.cs.uiuc.edu/repos/branches/Mariusz/AdobeAnalyticsTool/src/cLineChartCanvas.mxml" target="_blank">http://csil-srprj-2.cs.uiuc.<WBR>edu/repos/branches/Mariusz/<WBR>AdobeAnalyticsTool/src/<WBR>cLineChartCanvas.mxml</a><br>
+<br>The current GUI can be checked out as a Flex project from here:<br><a href="http://csil-srprj-2.cs.uiuc.edu/repos/branches/Mariusz/AdobeAnalyticsTool/" target="_blank">http://csil-srprj-2.cs.uiuc.<WBR>edu/repos/branches/Mariusz/<WBR>AdobeAnalyticsTool/</a><br>
+<br>For issue 2) please see the project here (specifically <a href="http://csil-srprj-2.cs.uiuc.edu/repos/branches/HTMLHighlight/src/controls/" target="_blank">src/controls/HTMLHighlighter.<WBR>as</a>):<br><a href="http://csil-srprj-2.cs.uiuc.edu/repos/branches/HTMLHighlight/" target="_blank">http://csil-srprj-2.cs.uiuc.<WBR>edu/repos/branches/<WBR>HTMLHighlight/</a>. Unfortunately this version is not the latest because our server was out for about a day but no version is currently working.<br>
+<br>Sorry for the poor organization of the repository. Several experimental paths have been taken and things have yet to fully crystallize.<br><br>Thanks,<br>UIUC Team<div style='padding:5 0'><font size=1 color=#888888>[Quoted text hidden]</font></div></font>
+</table>
+</table>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Mariusz Choroszy
+&lt;choroszm@yahoo.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Thu, Mar 19, 2009 at 3:17 PM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+Reply-To:
+choroszm@yahoo.com
+</div>
+<div>
+To:
+Vera Carr &lt;verac@adobe.com&gt;
+</div>
+<div>
+Cc:
+Puneet Goel &lt;pugoel@adobe.com&gt;, &quot;andrewpspencer@gmail.com&quot; &lt;andrewpspencer@gmail.com&gt;, &quot;tokyotech@gmail.com&quot; &lt;tokyotech@gmail.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><table cellspacing="0" cellpadding="0" border="0"><tr><td valign="top" style="font:inherit">Hi Vera,<br>We where just wondering if any new information had surfaced regarding our technical questions - or if you needed any additional information from us.<br>Thanks<br>UIUC Team<br><br></td></tr></table><br>
+</font>
+</table>
+</table>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Ryan Lin
+&lt;tokyotech@gmail.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Thu, Mar 19, 2009 at 5:29 PM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+choroszm@yahoo.com, Andrew Spencer &lt;andrewpspencer@gmail.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1>Response from a forum I got when asking about CSS styles not showing up in Flex Builder&#39;s design mode:<br><br style="color:rgb(102, 102, 102)"><div style="margin-left:40px"><span style="color:rgb(102, 102, 102)"><font size="6">&quot;</font>As far as I know, you can&#39;t. The design view in flex builder is pretty
+limited, as you have found out. Start developing complicated
+applications and it becomes totally useless. My advice would be to stop
+using it as soon as possible. Understand the code, and you soon won&#39;t
+need the design view.<font size="6">&quot;</font></span><br></div><font color=#888888><br clear="all">Ryan Lin</font><div style='padding:5 0'><font size=1 color=#888888>[Quoted text hidden]</font></div></font>
+</table>
+</table>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Mariusz Choroszy
+&lt;choroszm@yahoo.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Thu, Mar 26, 2009 at 2:11 PM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+Reply-To:
+choroszm@yahoo.com
+</div>
+<div>
+To:
+Ryan Lin &lt;ryanlin2@uiuc.edu&gt;, Andrew Spencer &lt;andrewpspencer@gmail.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><table cellspacing="0" cellpadding="0" border="0"><tr><td valign="top" style="font:inherit"><font color=#550055><br><br>--- On <b>Thu, 3/26/09, Vera Carr <i>&lt;<a href="mailto:verac@adobe.com" target="_blank">verac@adobe.com</a>&gt;</i></b> wrote:<br></font><blockquote style="border-left:2px solid rgb(16, 16, 255);margin-left:5px;padding-left:5px"><font color=#550055>From: Vera Carr &lt;<a href="mailto:verac@adobe.com" target="_blank">verac@adobe.com</a>&gt;<br>Subject: Re: Technical Questions<br></font>To: &quot;Mariusz Choroszy&quot; &lt;<a href="mailto:choroszm@yahoo.com" target="_blank">choroszm@yahoo.com</a>&gt;<br>Date: Thursday, March 26, 2009, 2:08 PM<br><br><div>
+<font face="Calibri, Verdana, Helvetica, Arial"><span style="font-size:11pt">Hey Mariusz,<br>
+<br>
+Apologies for the delayed response, things have been a bit crazy over here. With regards to the first issue, I tried to duplicate it myself and wasn’t able to. Unfortunately, I can’t find a bug in your code and I queried over here, doesn’t seem like a bug we’ve run into before. As I mentioned before, if you can provide me with a small example demonstrating this problem, I might be able someone to look at it to determine if it’s an SDK bug. <br>
+<br>
+With regards to highlighting in the HTML component... Other individuals have come across an AIR bug that puts the HTML page essentially into a new operating system window – on top of the AIR window. The workaround they used was to set the wmode to transparent on the SWF. I hope that helps.<br>
+<br>
+Also, a really great source for technical Flex questions is Flex Coders ( <a rel="nofollow" href="http://tech.groups.yahoo.com/group/flexcoders/" target="_blank">http://tech.groups.yahoo.com/<WBR>group/flexcoders/</a>), it goes out to a large audience and the people are really responsive. <br>
+<br>
+Vera<font color=#550055><br>
+<br>
+<br>
+On 3/10/09 8:26 AM, &quot;Mariusz Choroszy&quot; &lt;<a rel="nofollow">choroszm@yahoo.com</a>&gt; wrote:<br>
+<br>
+</font></span></font><blockquote><font face="Calibri, Verdana, Helvetica, Arial"><span style="font-size:11pt">Hi Vera,<br>
+<br><font color=#550055>
+These are the two main questions we had from our last meeting:<br>
+<br>
+(1)<br>
+There is an issue with plotting multiple subsequent line series within the line chart component. Attached is a snippet of code I use for plotting multiple lines. The noticed behavior is that some combinations of lines plot together fine but others don&#39;t. For example, if I have line series A, B, C, and D which all contain their own set of data points, and I push each of them onto an array collection and then proceed to set the lineChart.series attribute equal to the array collection, I might observe the following behavior : if all lines are selected then A is the only line which is displayed until B is deselected, in which case C might show up with A. Furthermore, if C is deselected then line D might show up with A. <br>
+The bottom line is that A,B,C, and D never display simultaneously.<br>
+<br>
+(2)<br>
+For real-time highlighting of regular expression matches in a TextArea we have adapted code from the FlexLib Highlighter class (link &lt;<a rel="nofollow" href="http://code.google.com/p/flexlib/source/browse/trunk/src/flexlib/controls/Highlighter.as" target="_blank">http://code.google.com/p/<WBR>flexlib/source/browse/trunk/<WBR>src/flexlib/controls/<WBR>Highlighter.as</a>&gt; ). Our code extracts the underlying TextField of a TextArea, draws a transparent bitmap on top, and draws rectangles on the bitmap corresponding to visible matches. In attempting to adapt the same technique for HTML we have added a bitmap as the child of an mx:HTML component but highlights do not show correctly. Rectangles are found using the location and offset properties of the matching HTML elements. The questions are: <b>should this be possible?</b> <b>Can you think of another approach that makes more sense? </b>There seem to be issues with drawing on top of rendered HTML for some reason. Our
+original approach for HTML highlighting modified the styles of the HTMLElement objects in the page but this did not seem to perform well in real-time. In a search, all examples are using javascript to modify the object model of the page rather than drawing on a layer above the page. <br>
+<br>
+Also, would it be possible to move the meeting to tomorrow (Wed.) between 1 CT and 4 CT. We would like to get these issues resolved before we have something valuable to show both you and Puneet.<br>
+<br>
+Thanks<br>
+<br>
+UIUC Team<br>
+<br>
+<br>
+</font></span></font></blockquote>
+</div></blockquote></td></tr></table><br>
+</font>
+</table>
+</table>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Ryan Lin
+&lt;tokyotech@gmail.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Thu, Mar 26, 2009 at 2:21 PM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+choroszm@yahoo.com
+</div>
+<div>
+Cc:
+Ryan Lin &lt;ryanlin2@uiuc.edu&gt;, Andrew Spencer &lt;andrewpspencer@gmail.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1>Just export an AIR app and send it to her so she can see the graph line error.<br><font color=#888888><br clear="all">Ryan Lin</font><div style='padding:5 0'><font size=1 color=#888888>[Quoted text hidden]</font></div></font>
+</table>
+</table>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Mariusz Choroszy
+&lt;choroszm@yahoo.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Thu, Mar 26, 2009 at 2:33 PM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+Reply-To:
+choroszm@yahoo.com
+</div>
+<div>
+To:
+Ryan Lin &lt;tokyotech@gmail.com&gt;
+</div>
+<div>
+Cc:
+Ryan Lin &lt;ryanlin2@uiuc.edu&gt;, Andrew Spencer &lt;andrewpspencer@gmail.com&gt;
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><table cellspacing="0" cellpadding="0" border="0"><tr><td valign="top" style="font:inherit">Strange, because I thought that&#39;s what we did about three weeks ago.<br>Let&#39;s try it again then.<br><br>--- On <b>Thu, 3/26/09, Ryan Lin <i>&lt;<a href="mailto:tokyotech@gmail.com" target="_blank">tokyotech@gmail.com</a>&gt;</i></b> wrote:<br><blockquote style="border-left:2px solid rgb(16, 16, 255);margin-left:5px;padding-left:5px">From: Ryan Lin &lt;<a href="mailto:tokyotech@gmail.com" target="_blank">tokyotech@gmail.com</a>&gt;<br>Subject: Re: Fw: Re: Technical Questions<br>To: <a href="mailto:choroszm@yahoo.com" target="_blank">choroszm@yahoo.com</a><br>Cc: &quot;Ryan Lin&quot; &lt;<a href="mailto:ryanlin2@uiuc.edu" target="_blank">ryanlin2@uiuc.edu</a>&gt;, &quot;Andrew Spencer&quot; &lt;<a href="mailto:andrewpspencer@gmail.com" target="_blank">andrewpspencer@gmail.com</a>&gt;<br>Date: Thursday, March 26, 2009, 2:21 PM<div style='padding:5 0'><font size=1 color=#888888>[Quoted text hidden]</font></div></blockquote></td></tr></table><br>
+</font>
+</table>
+</table>
+<hr>
+<table width=100% cellpadding=0 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1><b>
+Ryan Lin
+&lt;tokyotech@gmail.com&gt;
+</b></font>
+</td>
+<td align=right>
+<font size=-1><b>
+Thu, Mar 26, 2009 at 3:43 PM
+</b></font>
+<tr>
+<td colspan=2>
+<font size=-1>
+<div>
+To:
+choroszm@yahoo.com
+</div>
+</font>
+<tr>
+<td colspan=2>
+<table width=100% cellpadding=12 cellspacing=0 border=0>
+<tr>
+<td>
+<font size=-1>Then I have no idea what she means by &quot;<font face="Calibri, Verdana, Helvetica, Arial"><span style="font-size:11pt">if you can provide me with a small example demonstrating this problem&quot;.<br><br clear="all"></span></font>Ryan Lin<div style='padding:5 0'><font size=1 color=#888888>[Quoted text hidden]</font></div></font>
+</table>
+</table>
+<hr>
+</body>
+</html>
